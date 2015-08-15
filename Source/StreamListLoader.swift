@@ -153,11 +153,10 @@ public class StreamListLoader {
         return nil
     }
 
-    public func subscribeTo(subscribable: Subscribable, categories: [FeedlyKit.Category]) -> SignalProducer<Subscription, NSError> {
-        let s = subscribable.toSubscription()
-        var c = categories
-        c.extend(s.categories)
-        return subscribeTo(Subscription(id: s.id, title: s.title, categories: c))
+    public func subscribeTo(stream: Stream, categories: [FeedlyKit.Category]) -> SignalProducer<Subscription, NSError> {
+        return subscribeTo(Subscription(id: stream.streamId,
+                                     title: stream.streamTitle,
+                                categories: categories))
     }
 
     public func subscribeTo(subscription: Subscription) -> SignalProducer<Subscription, NSError> {
