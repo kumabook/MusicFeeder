@@ -166,6 +166,7 @@ public class StreamLoader {
                     }, error: { error in
                         println(error)
                     }, completed: {
+                        self.sink.put(.Next(Box(.CompleteLoadingPlaylist(playlist, entry))))
                 })
                 self.loaderOfPlaylist[playlist] = (loader, disposable)
                 return ()
