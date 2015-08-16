@@ -13,6 +13,7 @@ import Box
 import XCDYouTubeKit
 import UIKit
 import PlayerKit
+import Breit
 
 public enum Provider: String {
     case Youtube    = "YouTube"
