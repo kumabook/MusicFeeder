@@ -35,7 +35,6 @@
 		679C52DA1B70F3DD00BE6614 /* StreamLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A31B6E1398006EAA84 /* StreamLoader.swift */; };
 		679C52DB1B70F3DD00BE6614 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A41B6E1398006EAA84 /* Track.swift */; };
 		679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A51B6E1398006EAA84 /* TrackStore.swift */; };
-		679C52DD1B70F3DD00BE6614 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE641B6D8DE000B567CB /* StringExtension.swift */; };
 		679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE321B6CE76300B567CB /* Category.swift */; };
 		679C52DF1B70F3DD00BE6614 /* DummyStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE331B6CE76300B567CB /* DummyStream.swift */; };
 		679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
@@ -112,7 +111,6 @@
 		67FBBE391B6CE76300B567CB /* RecommendFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecommendFeed.swift; path = Source/RecommendFeed.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE3B1B6CE76300B567CB /* StreamListLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamListLoader.swift; path = Source/StreamListLoader.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCDYouTubeClient.swift; path = Source/XCDYouTubeClient.swift; sourceTree = SOURCE_ROOT; };
-		67FBBE641B6D8DE000B567CB /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtension.swift; path = Source/StringExtension.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,7 +211,6 @@
 				670505A21B6E1398006EAA84 /* SoundCloudAPIClient.swift */,
 				670505A41B6E1398006EAA84 /* Track.swift */,
 				670505A51B6E1398006EAA84 /* TrackStore.swift */,
-				67FBBE641B6D8DE000B567CB /* StringExtension.swift */,
 				67FBBE321B6CE76300B567CB /* Category.swift */,
 				67FBBE331B6CE76300B567CB /* DummyStream.swift */,
 				67FBBE341B6CE76300B567CB /* Entry.swift */,
@@ -358,7 +355,6 @@
 				679C52DA1B70F3DD00BE6614 /* StreamLoader.swift in Sources */,
 				679C52DB1B70F3DD00BE6614 /* Track.swift in Sources */,
 				679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */,
-				679C52DD1B70F3DD00BE6614 /* StringExtension.swift in Sources */,
 				679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */,
 				679C52DF1B70F3DD00BE6614 /* DummyStream.swift in Sources */,
 				679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */,
