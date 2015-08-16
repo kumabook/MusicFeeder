@@ -31,3 +31,11 @@
 [submodule "Carthage/Checkouts/FeedlyKit"]
 	path = Carthage/Checkouts/FeedlyKit
 	url = ssh://git@github.com/kumabook/FeedlyKit.git
+[submodule "Carthage/Checkouts/Breit"]
+	path = Carthage/Checkouts/Breit
+	url = ssh://git@github.com/kumabook/Breit.git
+[submodule "Carthage/Checkouts/SDWebImage"]
+	url = ssh://git@github.com/rs/SDWebImage.git
+[submodule "Carthage/Checkouts/SnapKit"]
+	path = Carthage/Checkouts/SnapKit
+	url = ssh://git@github.com/SnapKit/SnapKit.git
