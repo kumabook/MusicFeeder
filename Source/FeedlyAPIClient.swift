@@ -15,14 +15,15 @@ import FeedlyKit
 import Alamofire
 
 extension CloudAPIClient {
-    public static var perPage      = 15
-    public static var clientId     = "sandbox"
-    public static var clientSecret = ""
-    public static let authPath     = "/v3/auth/auth"
-    public static let tokenPath    = "/v3/auth/token"
-    public static let accountType  = "Feedly"
-    public static let redirectUrl  = "http://localhost"
-    public static let scopeUrl     = "https://cloud.feedly.com/subscriptions"
+    public static var perPage       = 15
+    public static var clientId      = "sandbox"
+    public static var clientSecret  = ""
+    public static let authPath      = "/v3/auth/auth"
+    public static let tokenPath     = "/v3/auth/token"
+    public static let accountType   = "Feedly"
+    public static let redirectUrl   = "http://localhost"
+    public static let scopeUrl      = "https://cloud.feedly.com/subscriptions"
+    public static let keyChainGroup = "Feedly"
 
     public static var sharedInstance: CloudAPIClient = CloudAPIClient(target: Target.Sandbox)
     static let errorResponseKey = "com.alamofire.serialization.response.error.response"
