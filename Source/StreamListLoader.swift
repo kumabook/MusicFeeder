@@ -34,6 +34,7 @@ public class StreamListLoader {
     public var signal:               Signal<Event, NSError>
     private var sink:                SinkOf<ReactiveCocoa.Event<Event, NSError>>
     private var disposable:          Disposable?
+    public var subscriptions:        [Subscription]
     public var streamListOfCategory: [FeedlyKit.Category: [Stream]]
     public var uncategorized:        FeedlyKit.Category
     public var categories: [FeedlyKit.Category] {
@@ -45,20 +46,14 @@ public class StreamListLoader {
         return streamListOfCategory[uncategorized]!
     }
 
-    public class func sampleSubscriptions() -> [Subscription] {
-        return [Subscription(id: "feed/http://spincoaster.com/feed",
-                          title: "Spincoaster (sample)",
-                     categories: []),
-                Subscription(id: "feed/http://matome.naver.jp/feed/topic/1Hinb",
-                          title: "Naver matome (sample)",
-                     categories: [])]
-    }
-
     public class func defaultStream() -> Stream {
         if let profile = CloudAPIClient.profile {
             return FeedlyKit.Category.All(profile.id)
         } else {
-            return StreamListLoader.sampleSubscriptions()[0]
+            return Subscription(id: "feed/http://spincoaster.com/feed",
+                             title: "Spincoaster (sample)",
+                         visualUrl: nil,
+                        categories: [])
         }
     }
 
@@ -73,6 +68,7 @@ public class StreamListLoader {
             uncategorized = FeedlyKit.Category.Uncategorized(userId)
         }
         streamListOfCategory[uncategorized] = []
+        subscriptions                       = []
     }
 
     deinit {
@@ -84,11 +80,19 @@ public class StreamListLoader {
         disposable = nil
     }
 
+    public func getStream(#id: String) -> Stream? {
+        return flatMap(streamListOfCategory.values) { $0 }.filter { $0.streamId == id }.first
+    }
+
     private func addSubscription(subscription: Subscription) {
         var categories = subscription.categories.count > 0 ? subscription.categories : [uncategorized]
         for category in categories {
             if find(streamListOfCategory[category]!, subscription) == nil {
-                streamListOfCategory[category]!.append(subscription)
+                if !CloudAPIClient.isLoggedIn {
+                    subscriptions.append(subscription)
+                } else {
+                    streamListOfCategory[category]!.append(subscription)
+                }
             }
         }
     }
@@ -104,20 +108,18 @@ public class StreamListLoader {
     }
 
     public func refresh() {
+        var signal: SignalProducer<[FeedlyKit.Category: [Stream]], NSError>
         if !CloudAPIClient.isLoggedIn {
-            sink.put(.Next(Box(.StartLoading)))
-            if streamListOfCategory[uncategorized]!.count == 0 {
-                streamListOfCategory[uncategorized]?.extend(StreamListLoader.sampleSubscriptions() as [Stream])
-            }
-            self.sink.put(.Next(Box(.CompleteLoading)))
-            return
+            signal = self.fetchRecommendedSubscriptions()
+        } else {
+            signal = self.fetchSubscriptions()
         }
         streamListOfCategory                = [:]
-        streamListOfCategory[uncategorized] = []
+        streamListOfCategory[uncategorized] = subscriptions
         state = .Fetching
         sink.put(.Next(Box(.StartLoading)))
         disposable?.dispose()
-        disposable = self.fetchSubscriptions() |> startOn(UIScheduler()) |> start(
+        disposable = signal |> startOn(UIScheduler()) |> start(
             next: { dic in
                 self.sink.put(.Next(Box(.StartLoading)))
             }, error: { error in
@@ -128,6 +130,13 @@ public class StreamListLoader {
                 self.state = .Normal
                 self.sink.put(.Next(Box(.CompleteLoading)))
         })
+    }
+
+    public func fetchRecommendedSubscriptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
+        return CloudAPIClient.sharedInstance.fetchFeedsByIds(RecommendFeed.ids) |> map { subscriptions in
+            self.streamListOfCategory[self.uncategorized]!.extend(subscriptions as [Stream])
+            return self.streamListOfCategory
+        }
     }
 
     public func fetchSubscriptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
@@ -156,6 +165,7 @@ public class StreamListLoader {
     public func subscribeTo(stream: Stream, categories: [FeedlyKit.Category]) -> SignalProducer<Subscription, NSError> {
         return subscribeTo(Subscription(id: stream.streamId,
                                      title: stream.streamTitle,
+                                 visualUrl: stream.thumbnailURL?.absoluteString,
                                 categories: categories))
     }
 
