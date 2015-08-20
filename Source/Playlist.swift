@@ -93,6 +93,15 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         self.sink    = pipe.1
     }
 
+    public init(title: String, tracks: [Track]) {
+        self._id     = "created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
+        self.title   = title
+        self._tracks = tracks
+        let pipe     = Signal<PlaylistEvent, NSError>.pipe()
+        self.signal  = pipe.0
+        self.sink    = pipe.1
+    }
+
     public init(json: JSON) {
         _id         = json["url"].stringValue
         title       = json["title"].stringValue
