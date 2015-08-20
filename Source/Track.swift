@@ -53,7 +53,7 @@ public enum YouTubeVideoQuality: UInt {
     }
 }
 
-@objc public class Track: PlayerKit.Track {
+@objc public class Track: PlayerKit.Track, Equatable, Hashable {
     private static let userDefaults = NSUserDefaults.standardUserDefaults()
     public static var youTubeVideoQuality: YouTubeVideoQuality {
         get {
@@ -93,6 +93,10 @@ public enum YouTubeVideoQuality: UInt {
             return  url
         }
         return nil
+    }
+
+    public var hashValue: Int {
+        return "\(provider):\(identifier)".hashValue
     }
 
     public init(provider: Provider, url: String, identifier: String, title: String?) {
@@ -231,6 +235,10 @@ public enum YouTubeVideoQuality: UInt {
     public class func removeAll() {
         return TrackStore.removeAll()
     }
+}
+
+public func ==(lhs: Track, rhs: Track) -> Bool {
+    return lhs.hashValue == rhs.hashValue
 }
 
 public class SoundCloudAudio {
