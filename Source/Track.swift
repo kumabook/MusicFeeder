@@ -14,6 +14,7 @@ import XCDYouTubeKit
 import UIKit
 import PlayerKit
 import Breit
+import SoundCloudKit
 
 public enum Provider: String {
     case Youtube    = "YouTube"
@@ -142,15 +143,13 @@ public enum YouTubeVideoQuality: UInt {
         return TrackStore.save(self)
     }
 
-    public func updateProperties(soundCloudAudio: SoundCloudAudio) {
-        title        = soundCloudAudio.title
-        duration     = NSTimeInterval(soundCloudAudio.duration / 1000)
-        if let sUrl = soundCloudAudio.streamUrl {
-            _streamUrl = NSURL(string: sUrl)
-            _status    = .Available
-        }
-        if let aUrl = soundCloudAudio.artworkUrl {
-            thumbnailUrl = NSURL(string: aUrl)
+    public func updateProperties(track: SoundCloudKit.Track) {
+        title      = track.title
+        duration   = NSTimeInterval(track.duration / 1000)
+        _streamUrl = NSURL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
+        _status    = .Available
+        if let url = track.thumbnailURL {
+            thumbnailUrl = url
         }
 //      save()
     }
@@ -201,21 +200,19 @@ public enum YouTubeVideoQuality: UInt {
             }
         case .SoundCloud:
             return SignalProducer<Track, NSError> { (sink, disposable) in
-                SoundCloudAPIClient.sharedInstance.fetchTrack(self.identifier).start(
-                    next: { track in
-                        self.updateProperties(track)
-                        sink.put(.Next(Box(self)))
-                        sink.put(.Completed)
-                    }, error: { error in
+                let c = SoundCloudKit.APIClient()
+                typealias R = SoundCloudKit.APIClient.Router
+                c.fetchItem(R.Track(self.identifier)) { (req: NSURLRequest, res: NSHTTPURLResponse?, track: SoundCloudKit.Track?, error: NSError?) -> Void in
+                    if let e = error {
                         self._status = .Unavailable
                         sink.put(.Next(Box(self)))
                         sink.put(.Completed)
-                    }, completed: {
-                    }, interrupted: {
-                        self._status = .Unavailable
+                    } else {
+                        self.updateProperties(track!)
                         sink.put(.Next(Box(self)))
                         sink.put(.Completed)
-                })
+                    }
+                }
                 return
             }
         }
@@ -240,19 +237,3 @@ public enum YouTubeVideoQuality: UInt {
 public func ==(lhs: Track, rhs: Track) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }
-
-public class SoundCloudAudio {
-    let title:               String
-    let descriptionProperty: String
-    let artworkUrl:         String?
-    let streamUrl:          String?
-    let duration:           Int
-    init(json: JSON) {
-        title               = json["title"].stringValue
-        descriptionProperty = json["description"].stringValue
-        artworkUrl          = json["artwork_url"].string
-        streamUrl           = json["stream_url"].stringValue + "?client_id=" + SoundCloudAPIClient.sharedInstance.clientId
-        duration            = json["duration"].intValue
-    }
-}
-
