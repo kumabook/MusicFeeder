@@ -22,7 +22,7 @@ extension CloudAPIClient {
     public static let tokenPath     = "/v3/auth/token"
     public static let accountType   = "Feedly"
     public static let redirectUrl   = "http://localhost"
-    public static let scopeUrl      = "https://cloud.feedly.com/subscriptions"
+    public static let scope         = Set(["https://cloud.feedly.com/subscriptions"])
     public static let keyChainGroup = "Feedly"
 
     public static var sharedInstance: CloudAPIClient = CloudAPIClient(target: Target.Sandbox)
