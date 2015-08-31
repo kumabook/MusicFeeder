@@ -6,4 +6,4 @@ github "SwiftyJSON/SwiftyJSON"       == 2.2.0
 github "Alamofire/Alamofire"         == 1.2.1
 github "realm/realm-cocoa"           == 0.94.0
 github "kumabook/Breit"
-github "Spincoaster/SoundCloudKit"   == 0.0.2
+github "Spincoaster/SoundCloudKit"   == 0.0.3

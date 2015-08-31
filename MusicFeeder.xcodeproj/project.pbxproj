@@ -48,6 +48,7 @@
 		679C532F1B70F6A900BE6614 /* PlaylistSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D61B70E44000BE6614 /* PlaylistSpec.swift */; };
 		679C534C1B71019B00BE6614 /* MusicFeeder.h in Headers */ = {isa = PBXBuildFile; fileRef = 679C534B1B71019B00BE6614 /* MusicFeeder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		679C53521B72385900BE6614 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C53511B72385900BE6614 /* Player.swift */; };
+		67FCFAA11B946CED008359BB /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FCFAA01B946CED008359BB /* SoundCloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,7 +101,6 @@
 		679C52861B70F24A00BE6614 /* MusicFeeder-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MusicFeeder-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		679C534B1B71019B00BE6614 /* MusicFeeder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicFeeder.h; path = Source/MusicFeeder.h; sourceTree = SOURCE_ROOT; };
 		679C53511B72385900BE6614 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Player.swift; path = Source/Player.swift; sourceTree = SOURCE_ROOT; };
-		67D41CFC1B876AA00082454F /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = ../../Build/iOS/SoundCloudKit.framework; sourceTree = "<group>"; };
 		67FBBE271B6CE4EF00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Spec/Info.plist; sourceTree = SOURCE_ROOT; };
 		67FBBE2D1B6CE61C00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = SOURCE_ROOT; };
 		67FBBE321B6CE76300B567CB /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Category.swift; path = Source/Category.swift; sourceTree = SOURCE_ROOT; };
@@ -110,6 +110,7 @@
 		67FBBE391B6CE76300B567CB /* RecommendFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecommendFeed.swift; path = Source/RecommendFeed.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE3B1B6CE76300B567CB /* StreamListLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamListLoader.swift; path = Source/StreamListLoader.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCDYouTubeClient.swift; path = Source/XCDYouTubeClient.swift; sourceTree = SOURCE_ROOT; };
+		67FCFAA01B946CED008359BB /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/iOS/SoundCloudKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67FCFAA11B946CED008359BB /* SoundCloudKit.framework in Frameworks */,
 				6713B06A1B7379CB003A1450 /* Box.framework in Frameworks */,
 				6713B06B1B7379CB003A1450 /* FeedlyKit.framework in Frameworks */,
 				6713B06C1B7379CB003A1450 /* PlayerKit.framework in Frameworks */,
@@ -163,7 +165,7 @@
 		679C52751B70F16800BE6614 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				67D41CFC1B876AA00082454F /* SoundCloudKit.framework */,
+				67FCFAA01B946CED008359BB /* SoundCloudKit.framework */,
 				6713B07B1B7379DD003A1450 /* Nimble.framework */,
 				6713B07C1B7379DD003A1450 /* Quick.framework */,
 				6713B0621B7379CB003A1450 /* Box.framework */,
