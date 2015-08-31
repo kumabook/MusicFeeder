@@ -85,7 +85,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     }
 
     public init(title: String) {
-        self._id     = "created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
+        self._id     = "\(title)-created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
         self.title   = title
         self._tracks = []
         let pipe     = Signal<PlaylistEvent, NSError>.pipe()
@@ -93,8 +93,8 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         self.sink    = pipe.1
     }
 
-    public init(title: String, tracks: [Track]) {
-        self._id     = "created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
+    public init(id: String, title: String, tracks: [Track]) {
+        self._id     = id
         self.title   = title
         self._tracks = tracks
         let pipe     = Signal<PlaylistEvent, NSError>.pipe()
