@@ -19,6 +19,7 @@ import SoundCloudKit
 public enum Provider: String {
     case Youtube    = "YouTube"
     case SoundCloud = "SoundCloud"
+    case Raw        = "Raw"
 }
 
 public enum YouTubeVideoQuality: UInt {
@@ -215,6 +216,10 @@ public enum YouTubeVideoQuality: UInt {
                 }
                 return
             }
+        case .Raw:
+            _streamUrl = self.identifier.toURL()
+            _status    = .Available
+            return SignalProducer<Track, NSError>.empty
         }
     }
 

@@ -153,7 +153,10 @@ public class StreamLoader {
 
     public func loadPlaylistOfEntry(entry: Entry) -> SignalProducer<Void, NSError> {
         if let url = entry.url {
-            return musicfavClient.playlistify(url, errorOnFailure: false) |> map({ playlist in
+            return musicfavClient.playlistify(url, errorOnFailure: false) |> map({ pl in
+                var tracks = entry.enclosureTracks
+                tracks.extend(pl.getTracks())
+                let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
                 self.playlistsOfEntry[entry] = playlist
                 UIScheduler().schedule {
                     self.sink.put(.Next(Box(.CompleteLoadingPlaylist(playlist, entry))))

@@ -18,6 +18,13 @@ extension Entry {
         }
         return nil
     }
+    public var enclosureTracks: [Track] {
+        return enclosure.map {
+            $0.filter { $0.type.contains("audio") }.map {
+                Track(provider: .Raw, url: $0.href, identifier: $0.href, title: self.title)
+            }
+        } ?? []
+    }
     public var passedTime: String {
         let now           = NSDate()
         let publishedDate = NSDate(timeIntervalSince1970: NSTimeInterval(Double(published)/1000))
