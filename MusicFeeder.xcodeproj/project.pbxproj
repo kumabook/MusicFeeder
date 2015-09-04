@@ -27,6 +27,8 @@
 		6713B07A1B7379DD003A1450 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */; };
 		6713B07D1B7379DD003A1450 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B07B1B7379DD003A1450 /* Nimble.framework */; };
 		6713B07E1B7379DD003A1450 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B07C1B7379DD003A1450 /* Quick.framework */; };
+		678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
+		678305851B9897A000A83F52 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
 		679C52D51B70F3DD00BE6614 /* MusicFavAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059D1B6E1398006EAA84 /* MusicFavAPIClient.swift */; };
 		679C52D61B70F3DD00BE6614 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059F1B6E1398006EAA84 /* Playlist.swift */; };
 		679C52D71B70F3DD00BE6614 /* PlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A01B6E1398006EAA84 /* PlaylistLoader.swift */; };
@@ -35,7 +37,6 @@
 		679C52DB1B70F3DD00BE6614 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A41B6E1398006EAA84 /* Track.swift */; };
 		679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A51B6E1398006EAA84 /* TrackStore.swift */; };
 		679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE321B6CE76300B567CB /* Category.swift */; };
-		679C52DF1B70F3DD00BE6614 /* DummyStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE331B6CE76300B567CB /* DummyStream.swift */; };
 		679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
 		679C52E11B70F3DD00BE6614 /* FeedlyAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* FeedlyAPIClient.swift */; };
 		679C52E21B70F3DD00BE6614 /* RecommendFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE391B6CE76300B567CB /* RecommendFeed.swift */; };
@@ -92,6 +93,8 @@
 		6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
 		6713B07B1B7379DD003A1450 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		6713B07C1B7379DD003A1450 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		678305821B987B9600A83F52 /* SubscriptionStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionStore.swift; path = Source/SubscriptionStore.swift; sourceTree = SOURCE_ROOT; };
+		678305841B9897A000A83F52 /* CategoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryStore.swift; path = Source/CategoryStore.swift; sourceTree = SOURCE_ROOT; };
 		679C51D61B70E44000BE6614 /* PlaylistSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistSpec.swift; path = Spec/PlaylistSpec.swift; sourceTree = SOURCE_ROOT; };
 		679C51D71B70E44000BE6614 /* SpecHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpecHelper.swift; path = Spec/SpecHelper.swift; sourceTree = SOURCE_ROOT; };
 		679C51D81B70E44000BE6614 /* TrackSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackSpec.swift; path = Spec/TrackSpec.swift; sourceTree = SOURCE_ROOT; };
@@ -104,7 +107,6 @@
 		67FBBE271B6CE4EF00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Spec/Info.plist; sourceTree = SOURCE_ROOT; };
 		67FBBE2D1B6CE61C00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = SOURCE_ROOT; };
 		67FBBE321B6CE76300B567CB /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Category.swift; path = Source/Category.swift; sourceTree = SOURCE_ROOT; };
-		67FBBE331B6CE76300B567CB /* DummyStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DummyStream.swift; path = Source/DummyStream.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE341B6CE76300B567CB /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entry.swift; path = Source/Entry.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE351B6CE76300B567CB /* FeedlyAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedlyAPIClient.swift; path = Source/FeedlyAPIClient.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE391B6CE76300B567CB /* RecommendFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecommendFeed.swift; path = Source/RecommendFeed.swift; sourceTree = SOURCE_ROOT; };
@@ -213,7 +215,6 @@
 				670505A41B6E1398006EAA84 /* Track.swift */,
 				670505A51B6E1398006EAA84 /* TrackStore.swift */,
 				67FBBE321B6CE76300B567CB /* Category.swift */,
-				67FBBE331B6CE76300B567CB /* DummyStream.swift */,
 				67FBBE341B6CE76300B567CB /* Entry.swift */,
 				67FBBE351B6CE76300B567CB /* FeedlyAPIClient.swift */,
 				67FBBE391B6CE76300B567CB /* RecommendFeed.swift */,
@@ -221,6 +222,8 @@
 				67FBBE3B1B6CE76300B567CB /* StreamListLoader.swift */,
 				67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */,
 				67FBBE2D1B6CE61C00B567CB /* Info.plist */,
+				678305821B987B9600A83F52 /* SubscriptionStore.swift */,
+				678305841B9897A000A83F52 /* CategoryStore.swift */,
 			);
 			name = Source;
 			path = FeedlyClient;
@@ -353,10 +356,11 @@
 				679C52D71B70F3DD00BE6614 /* PlaylistLoader.swift in Sources */,
 				679C52D81B70F3DD00BE6614 /* PlaylistStore.swift in Sources */,
 				679C52DA1B70F3DD00BE6614 /* StreamLoader.swift in Sources */,
+				678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */,
 				679C52DB1B70F3DD00BE6614 /* Track.swift in Sources */,
 				679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */,
 				679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */,
-				679C52DF1B70F3DD00BE6614 /* DummyStream.swift in Sources */,
+				678305851B9897A000A83F52 /* CategoryStore.swift in Sources */,
 				679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */,
 				679C52E11B70F3DD00BE6614 /* FeedlyAPIClient.swift in Sources */,
 				679C52E21B70F3DD00BE6614 /* RecommendFeed.swift in Sources */,
