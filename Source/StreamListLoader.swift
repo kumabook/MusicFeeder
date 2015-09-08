@@ -125,7 +125,9 @@ public class StreamListLoader {
             }
             for key in self.streamListOfCategory.keys.array {
                 if self.streamListOfCategory[key]!.isEmpty {
-                    self.streamListOfCategory.removeValueForKey(key)
+                    if key != self.uncategorized {
+                        self.streamListOfCategory.removeValueForKey(key)
+                    }
                 }
             }
             sink.put(.Next(Box(self.streamListOfCategory)))
