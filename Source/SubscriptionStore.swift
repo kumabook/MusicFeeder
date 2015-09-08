@@ -15,7 +15,7 @@ extension Subscription {
         let store       = SubscriptionStore()
         store.id        = streamId
         store.title     = streamTitle
-        store.visualUrl = visualUrl
+        store.visualUrl = visualUrl ?? ""
         store.categories.addObjects(categories.map { $0.toStoreObject() })
         return store
     }
@@ -24,7 +24,7 @@ extension Subscription {
 class SubscriptionStore: RLMObject {
     dynamic var id:         String = ""
     dynamic var title:      String = ""
-    dynamic var visualUrl:  String?
+    dynamic var visualUrl:  String = ""
     dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
     internal override class func primaryKey() -> String {
         return "id"
