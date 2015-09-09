@@ -178,6 +178,9 @@ public enum YouTubeVideoQuality: UInt {
     }
 
     public func fetchTrackDetail(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
+        if _status == .Available {
+            return SignalProducer<Track, NSError>.empty
+        }
         _status = .Loading
         switch provider {
         case .Youtube:
