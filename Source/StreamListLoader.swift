@@ -33,7 +33,6 @@ public class StreamListLoader {
     public var state:                State
     public var signal:               Signal<Event, NSError>
     private var sink:                SinkOf<ReactiveCocoa.Event<Event, NSError>>
-    private var disposable:          Disposable?
     public var streamListOfCategory: [FeedlyKit.Category: [Stream]]
     public var uncategorized:        FeedlyKit.Category
     public var categories: [FeedlyKit.Category] {
@@ -62,10 +61,7 @@ public class StreamListLoader {
         dispose()
     }
 
-    public func dispose() {
-        disposable?.dispose()
-        disposable = nil
-    }
+    public func dispose() {}
 
     public func getStream(#id: String) -> Stream? {
         return flatMap(streamListOfCategory.values) { $0 }.filter { $0.streamId == id }.first
@@ -90,7 +86,7 @@ public class StreamListLoader {
         }
     }
 
-    public func refresh() {
+    public func refresh() -> SignalProducer<Void, NSError> {
         var signal: SignalProducer<[FeedlyKit.Category: [Stream]], NSError>
         if !CloudAPIClient.isLoggedIn {
             signal = self.fetchLocalSubscrptions()
@@ -101,18 +97,16 @@ public class StreamListLoader {
         streamListOfCategory[uncategorized] = []
         state = .Fetching
         sink.put(.Next(Box(.StartLoading)))
-        disposable?.dispose()
-        disposable = signal |> startOn(UIScheduler()) |> start(
-            next: { dic in
-                self.sink.put(.Next(Box(.StartLoading)))
-            }, error: { error in
+        return signal |> map { (table: [FeedlyKit.Category: [Stream]]) -> Void in
+            self.state = .Normal
+            self.sink.put(.Next(Box(.CompleteLoading)))
+            return
+            } |> mapError { (error: NSError) in
                 CloudAPIClient.handleError(error: error)
                 self.state = .Error
                 self.sink.put(.Next(Box(.FailToLoad(error))))
-            }, completed: {
-                self.state = .Normal
-                self.sink.put(.Next(Box(.CompleteLoading)))
-        })
+                return error
+        }
     }
 
     public func fetchLocalSubscrptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
