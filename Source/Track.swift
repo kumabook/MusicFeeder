@@ -82,6 +82,9 @@ public enum YouTubeVideoQuality: UInt {
     public var title:        String?
     public var thumbnailUrl: NSURL?
     public var duration:     NSTimeInterval
+    public var isVideo:      Bool {
+        return provider == Provider.Youtube && Track.youTubeVideoQuality != YouTubeVideoQuality.AudioOnly
+    }
 
     public var status:   Status { return _status }
     private var _status: Status
