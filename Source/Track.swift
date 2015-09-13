@@ -128,11 +128,12 @@ public enum YouTubeVideoQuality: UInt {
         url         = store.url
         identifier  = store.identifier
         duration    = NSTimeInterval(store.duration)
+        _status     = .Init
         if let url = NSURL(string: store.streamUrl) {
-            _streamUrl    = url
-            _status       = .Available
-        } else {
-            _status       = .Init
+            _streamUrl = url
+            if provider != .Youtube {
+                _status = .Available
+            }
         }
         if let url = NSURL(string: store.thumbnailUrl) {
             thumbnailUrl = url
@@ -173,8 +174,10 @@ public enum YouTubeVideoQuality: UInt {
         store.providerRaw    = provider.rawValue
         store.identifier     = identifier
         if let _title        = title                        { store.title        = _title }
-        if let _streamUrl    = streamUrl?.absoluteString    { store.streamUrl    = _streamUrl }
         if let _thumbnailUrl = thumbnailUrl?.absoluteString { store.thumbnailUrl = _thumbnailUrl }
+        if provider != .Youtube {
+            if let _streamUrl = streamUrl?.absoluteString    { store.streamUrl    = _streamUrl }
+        }
         store.duration       = Int(duration)
 
         return store
