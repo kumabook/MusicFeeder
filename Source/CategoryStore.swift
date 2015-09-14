@@ -54,7 +54,7 @@ class CategoryStore: RLMObject {
     internal class func findAll() -> [FeedlyKit.Category] {
         var categories: [FeedlyKit.Category] = []
         for store in CategoryStore.allObjectsInRealm(realm) {
-            let category = FeedlyKit.Category(id: store.id, label: store.label)
+            let category: FeedlyKit.Category = FeedlyKit.Category(id: store.id, label: store.label)
             categories.append(category)
         }
         return categories

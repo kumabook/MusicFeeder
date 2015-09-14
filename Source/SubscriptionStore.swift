@@ -55,16 +55,16 @@ class SubscriptionStore: RLMObject {
     internal class func findAll() -> [Subscription] {
         var subscriptions: [Subscription] = []
         for store in SubscriptionStore.allObjectsInRealm(realm) {
-            var categories = [] as [FeedlyKit.Category]
+            var categories: [FeedlyKit.Category] = []
             for c in store.categories {
-                if let categoryStore = c as? CategoryStore {
+                if let categoryStore: CategoryStore = c as? CategoryStore {
                     categories.append(FeedlyKit.Category(id: categoryStore.id, label: categoryStore.label))
                 }
             }
-            let subscription = Subscription(id: store.id,
-                                         title: store.title,
-                                     visualUrl: store.visualUrl,
-                                    categories: categories)
+            let subscription: Subscription = Subscription(id: store.id,
+                                                       title: store.title,
+                                                   visualUrl: store.visualUrl,
+                                                  categories: categories)
             subscriptions.append(subscription)
         }
         return subscriptions
