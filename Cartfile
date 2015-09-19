@@ -1,9 +1,9 @@
-github "ReactiveCocoa/ReactiveCocoa" "v3.0-RC.1"
-github "kumabook/FeedlyKit"          == 0.3.7
-github "kumabook/XCDYouTubeKit"      == 2.1.3
-github "kumabook/PlayerKit"          == 0.0.5
-github "SwiftyJSON/SwiftyJSON"       == 2.2.1
-github "Alamofire/Alamofire"         == 1.2.1
-github "realm/realm-cocoa"           == 0.94.0
+github "ReactiveCocoa/ReactiveCocoa" == 4.0
+github "kumabook/FeedlyKit"
+github "kumabook/XCDYouTubeKit" == 2.3.1
+github "kumabook/PlayerKit"
+github "SwiftyJSON/SwiftyJSON"
+github "Alamofire/Alamofire"
+github "realm/realm-cocoa"
 github "kumabook/Breit"
-github "Spincoaster/SoundCloudKit"   == 0.0.4
+github "Spincoaster/SoundCloudKit"

@@ -10,7 +10,6 @@ import UIKit
 import SwiftyJSON
 import ReactiveCocoa
 import Result
-import Box
 import FeedlyKit
 import Alamofire
 
@@ -31,15 +30,16 @@ extension CloudAPIClient {
     public static var _profile: Profile?
     public static var profile: Profile? { return _profile }
 
-    public static var sharedPipe: (ReactiveCocoa.Signal<AccountEvent, NSError>, SinkOf<ReactiveCocoa.Event<AccountEvent, NSError>>)! = Signal<AccountEvent, NSError>.pipe()
+    public static var sharedPipe: (Signal<AccountEvent, NSError>, Signal<AccountEvent, NSError>.Observer)! = Signal<AccountEvent, NSError>.pipe()
 
     public enum AccountEvent {
         case Login(Profile)
         case Logout
     }
 
-    public class func handleError(#error:NSError) {
-        if let dic = error.userInfo as NSDictionary? {
+    public class func handleError(error error:ErrorType) {
+        let e = error as NSError
+        if let dic = e.userInfo as NSDictionary? {
             if let response:NSHTTPURLResponse = dic[errorResponseKey] as? NSHTTPURLResponse {
                 if response.statusCode == 401 {
                     if isLoggedIn { logout() }
@@ -48,7 +48,7 @@ extension CloudAPIClient {
         }
     }
 
-    public class func alertController(#error:NSError, handler: (UIAlertAction!) -> Void) -> UIAlertController {
+    public class func alertController(error error:NSError, handler: (UIAlertAction!) -> Void) -> UIAlertController {
         let ac = UIAlertController(title: "Network error".localize(),
             message: "Sorry, network error occured.".localize(),
             preferredStyle: UIAlertControllerStyle.Alert)
@@ -68,41 +68,41 @@ extension CloudAPIClient {
     public class func login(profile: Profile, token: String) {
         _profile = profile
         setAccessToken(token)
-        sharedPipe.1.put(ReactiveCocoa.Event<AccountEvent, NSError>.Next(Box(AccountEvent.Login(profile))))
+        sharedPipe.1(ReactiveCocoa.Event<AccountEvent, NSError>.Next(AccountEvent.Login(profile)))
     }
 
     public class func logout() {
         _profile = nil
         setAccessToken("")
-        sharedPipe.1.put(ReactiveCocoa.Event<AccountEvent, NSError>.Next(Box(AccountEvent.Logout)))
+        sharedPipe.1(ReactiveCocoa.Event<AccountEvent, NSError>.Next(AccountEvent.Logout))
     }
 
     public var authUrl:  String {
         let url = String(format: "%@%@", target.baseUrl, CloudAPIClient.authPath)
         return url.stringByReplacingOccurrencesOfString("http",
                                            withString: "https",
-                                              options: nil,
+                                              options: [],
                                                 range: nil)
     }
     public var tokenUrl: String { return String(format: "%@%@", target.baseUrl, CloudAPIClient.tokenPath) }
 
-    public func buildError(error: NSError, response: NSHTTPURLResponse?) -> NSError {
+    public func buildError(error: ErrorType, response: NSHTTPURLResponse?) -> NSError {
         if let r = response {
-            return NSError(domain: error.domain,
-                            code: error.code,
+            return NSError(domain: error._domain,
+                            code: error._code,
                         userInfo: [CloudAPIClient.errorResponseKey: r])
         }
-        return error
+        return error as NSError
     }
 
     public func fetchProfile() -> SignalProducer<Profile, NSError> {
         return SignalProducer { (sink, disposable) in
-            let req = self.fetchProfile({ (req, res, profile, error) -> Void in
-                if let e = error {
-                    sink.put(.Error(Box(self.buildError(e, response: res))))
-                } else {
-                    sink.put(Event.Next(Box(profile!)))
-                    sink.put(.Completed)
+            let req = self.fetchProfile({ (req, res, result) -> Void in
+                if let e = result.error {
+                    sink(.Error(self.buildError(e, response: res)))
+                } else if let profile = result.value {
+                    sink(.Next(profile))
+                    sink(.Completed)
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -111,42 +111,42 @@ extension CloudAPIClient {
 
     public func fetchSubscriptions() -> SignalProducer<[Subscription], NSError> {
         return SignalProducer { (sink, disposable) in
-            let req = self.fetchSubscriptions({ (req, res, subscriptions, error) -> Void in
-                if let e = error {
-                    sink.put(.Error(Box(self.buildError(e, response: res))))
-                } else {
-                    sink.put(.Next(Box(subscriptions!)))
-                    sink.put(.Completed)
+            let req = self.fetchSubscriptions({ (req, res, result) -> Void in
+                if let e = result.error {
+                    sink(.Error(self.buildError(e, response: res)))
+                } else if let subscriptions = result.value {
+                    sink(.Next(subscriptions))
+                    sink(.Completed)
                 }
             })
             disposable.addDisposable({ req.cancel() })
         }
     }
 
-    public func fetchEntries(#streamId: String, newerThan: Int64, unreadOnly: Bool) -> SignalProducer<PaginatedEntryCollection, NSError> {
-        var paginationParams        = PaginationParams()
+    public func fetchEntries(streamId streamId: String, newerThan: Int64, unreadOnly: Bool) -> SignalProducer<PaginatedEntryCollection, NSError> {
+        let paginationParams        = PaginationParams()
         paginationParams.unreadOnly = unreadOnly
         paginationParams.count      = CloudAPIClient.perPage
         paginationParams.newerThan  = newerThan
         return fetchEntries(streamId: streamId, paginationParams: paginationParams)
     }
 
-    public func fetchEntries(#streamId: String, continuation: String?, unreadOnly: Bool) -> SignalProducer<PaginatedEntryCollection, NSError> {
-        var paginationParams          = PaginationParams()
+    public func fetchEntries(streamId streamId: String, continuation: String?, unreadOnly: Bool) -> SignalProducer<PaginatedEntryCollection, NSError> {
+        let paginationParams          = PaginationParams()
         paginationParams.unreadOnly   = unreadOnly
         paginationParams.count        = CloudAPIClient.perPage
         paginationParams.continuation = continuation
         return fetchEntries(streamId: streamId, paginationParams: paginationParams)
     }
 
-    public func fetchEntries(#streamId: String, paginationParams: PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchEntries(streamId streamId: String, paginationParams: PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
         return SignalProducer { (sink, disposable) in
-            let req = self.fetchContents(streamId, paginationParams: paginationParams, completionHandler: { (req, res, entries, error) -> Void in
-                if let e = error {
-                    sink.put(.Error(Box(self.buildError(e, response: res))))
-                } else {
-                    sink.put(.Next(Box(entries!)))
-                    sink.put(.Completed)
+            let req = self.fetchContents(streamId, paginationParams: paginationParams, completionHandler: { (req, res, result) -> Void in
+                if let e = result.error {
+                    sink(.Error(self.buildError(e, response: res)))
+                } else if let entries = result.value {
+                    sink(.Next(entries))
+                    sink(.Completed)
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -155,12 +155,12 @@ extension CloudAPIClient {
 
     public func fetchFeedsByIds(feedIds: [String]) -> SignalProducer<[Feed], NSError> {
         return SignalProducer { (sink, disposable) in
-            let req = self.fetchFeeds(feedIds, completionHandler: { (req, res, feeds, error) -> Void in
-                if let e = error {
-                    sink.put(.Error(Box(self.buildError(e, response: res))))
-                } else {
-                    sink.put(.Next(Box(feeds!)))
-                    sink.put(.Completed)
+            let req = self.fetchFeeds(feedIds, completionHandler: { (req, res, result) -> Void in
+                if let e = result.error {
+                    sink(.Error(self.buildError(e, response: res)))
+                } else if let feeds = result.value {
+                    sink(.Next(feeds))
+                    sink(.Completed)
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -169,12 +169,12 @@ extension CloudAPIClient {
 
     public func fetchCategories() -> SignalProducer<[FeedlyKit.Category], NSError> {
         return SignalProducer { (sink, disposable) in
-            let req = self.fetchCategories({ (req, res, categories, error) -> Void in
-                if let e = error {
-                    sink.put(.Error(Box(self.buildError(e, response: res))))
-                } else {
-                    sink.put(.Next(Box(categories!)))
-                    sink.put(.Completed)
+            let req = self.fetchCategories({ (req, res, result) -> Void in
+                if let e = result.error {
+                    sink(.Error(self.buildError(e, response: res)))
+                } else if let categories = result.value {
+                    sink(.Next(categories))
+                    sink(.Completed)
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -183,13 +183,13 @@ extension CloudAPIClient {
 
     public func searchFeeds(query: SearchQueryOfFeed) -> SignalProducer<[Feed], NSError> {
         return SignalProducer { (sink, disposable) in
-            let req = self.searchFeeds(query, completionHandler: { (req, res, feedResults, error) -> Void in
-                if let e = error {
-                    sink.put(.Error(Box(self.buildError(e, response: res))))
+            let req = self.searchFeeds(query, completionHandler: { (req, res, result) -> Void in
+                if let e = result.error {
+                    sink(.Error(self.buildError(e, response: res)))
                 } else {
-                    if let _feedResults = feedResults {
-                        sink.put(.Next(Box(_feedResults.results)))
-                        sink.put(.Completed)
+                    if let feedResults = result.value {
+                        sink(.Next(feedResults.results))
+                        sink(.Completed)
                     }
                 }
             })

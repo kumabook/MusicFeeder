@@ -33,7 +33,7 @@ class SubscriptionStore: RLMObject {
     class var realm: RLMRealm { return RLMRealm.defaultRealm() }
 
     internal class func create(subscription: Subscription) -> PersistentResult {
-        if let store = findBy(id: subscription.streamId) { return .Failure }
+        if let _ = findBy(id: subscription.streamId) { return .Failure }
         let store = subscription.toStoreObject()
         realm.transactionWithBlock() {
             self.realm.addObject(store)
@@ -70,7 +70,7 @@ class SubscriptionStore: RLMObject {
         return subscriptions
     }
 
-    internal class func findBy(#id: String) -> SubscriptionStore? {
+    internal class func findBy(id id: String) -> SubscriptionStore? {
         let results = SubscriptionStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil

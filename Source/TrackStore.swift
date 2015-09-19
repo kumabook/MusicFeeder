@@ -28,7 +28,7 @@ public class TrackStore: RLMObject {
     override public class func primaryKey() -> String {
         return "url"
     }
-    internal class func findBy(#url: String) -> TrackStore? {
+    internal class func findBy(url url: String) -> TrackStore? {
         let results = TrackStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "url = %@", url))
         if results.count == 0 {
             return nil
@@ -47,7 +47,7 @@ public class TrackStore: RLMObject {
     }
 
     internal class func create(track: Track) -> Bool {
-        if let store = findBy(url: track.url) { return false }
+        if let _ = findBy(url: track.url) { return false }
         let store = track.toStoreObject()
         realm.transactionWithBlock() {
             self.realm.addObject(store)

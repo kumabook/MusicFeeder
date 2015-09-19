@@ -10,7 +10,6 @@ import Foundation
 import SwiftyJSON
 import ReactiveCocoa
 import Result
-import Box
 import Alamofire
 import FeedlyKit
 
@@ -22,15 +21,13 @@ public class MusicFavAPIClient {
             let manager = Alamofire.Manager()
             let url = String(format: "%@/playlistify", MusicFavAPIClient.baseUrl)
             let request = manager.request(.GET, url, parameters: ["url": targetUrl], encoding: ParameterEncoding.URL)
-            .responseJSON(options: NSJSONReadingOptions.allZeros) { (req, res, obj, error) -> Void in
-                if let e = error {
-                    println(error)
-                    println(res)
-                    if errorOnFailure { sink.put(.Error(Box(e))) }
-                    else              { sink.put(.Completed)     }
+            .responseJSON(options: NSJSONReadingOptions()) { (req, res, result) -> Void in
+                if let e = result.error {
+                    if errorOnFailure { sink(.Error(e as NSError)) }
+                    else              { sink(.Completed) }
                 } else {
-                    sink.put(.Next(Box(Playlist(json: JSON(obj!)))))
-                    sink.put(.Completed)
+                    sink(.Next(Playlist(json: JSON(result.value!))))
+                    sink(.Completed)
                 }
             }
             disposable.addDisposable {

@@ -15,7 +15,7 @@ extension FeedlyKit.Category {
         if let store = CategoryStore.findBy(id: id) {
             return store
         }
-        var store = CategoryStore()
+        let store = CategoryStore()
         store.id    = id
         store.label = label
         return store
@@ -32,7 +32,7 @@ class CategoryStore: RLMObject {
     class var realm: RLMRealm { return RLMRealm.defaultRealm() }
 
     internal class func create(category: FeedlyKit.Category) -> PersistentResult {
-        if let store = findBy(id: category.id) { return .Failure }
+        if let _ = findBy(id: category.id) { return .Failure }
         let store = category.toStoreObject()
         realm.transactionWithBlock() {
             self.realm.addObject(store)
@@ -60,7 +60,7 @@ class CategoryStore: RLMObject {
         return categories
     }
 
-    internal class func findBy(#id: String) -> CategoryStore? {
+    internal class func findBy(id id: String) -> CategoryStore? {
         let results = CategoryStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil

@@ -72,7 +72,7 @@ public class PlaylistStore: RLMObject {
         if PlaylistStore.findAll().count+1 > Playlist.playlistNumberLimit {
             return .ExceedLimit
         }
-        if let store = findBy(id: playlist.id) { return .Failure }
+        if let _ = findBy(id: playlist.id) { return .Failure }
         let store = playlist.toStoreObject()
         realm.transactionWithBlock() {
             self.realm.addObject(store)
@@ -99,7 +99,7 @@ public class PlaylistStore: RLMObject {
         return playlists
     }
 
-    internal class func findBy(#id: String) -> PlaylistStore? {
+    internal class func findBy(id id: String) -> PlaylistStore? {
         let results = PlaylistStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil

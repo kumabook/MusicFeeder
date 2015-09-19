@@ -9,7 +9,6 @@
 import Foundation
 import ReactiveCocoa
 import Result
-import Box
 
 public class PlaylistLoader {
     public let playlist: Playlist
@@ -33,18 +32,18 @@ public class PlaylistLoader {
         }
         signal = pairs.map {
             self.fetchTrack($0.0, track: $0.1)
-            }.reduce(SignalProducer<(Int, Track), NSError>.empty, combine: { (signal, nextSignal) in
-                signal |> concat(nextSignal)
+        }.reduce(SignalProducer<(Int, Track), NSError>.empty, combine: { (signal, nextSignal) in
+                signal.concat(nextSignal)
             })
         return signal!
     }
 
     public func fetchTrack(index: Int, track: Track) -> SignalProducer<(Int, Track), NSError> {
         weak var _self = self
-        return track.fetchTrackDetail(false) |> map { _track -> (Int, Track) in
+        return track.fetchTrackDetail(false).map { _track -> (Int, Track) in
             if let __self = _self {
                 Playlist.notifyChange(.TrackUpdated(__self.playlist, _track))
-                __self.playlist.sink.put(.Next(Box(PlaylistEvent.Load(index: index))))
+                __self.playlist.sink(.Next(PlaylistEvent.Load(index: index)))
             }
             return (index, _track)
         }

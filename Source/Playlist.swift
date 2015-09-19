@@ -9,7 +9,6 @@
 import SwiftyJSON
 import ReactiveCocoa
 import Result
-import Box
 import PlayerKit
 
 public enum PlaylistEvent {
@@ -24,11 +23,11 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public
     var thumbnailUrl: NSURL? { return _tracks.first?.thumbnailUrl }
     public var signal:       Signal<PlaylistEvent, NSError>
-    public var sink:         SinkOf<ReactiveCocoa.Event<PlaylistEvent, NSError>>
+    public var sink:         Signal<PlaylistEvent, NSError>.Observer
 
-    @objc public var id:     String { return _id }
-    @objc public var tracks: [PlayerKit.Track] { return _tracks }
-    @objc public var validTracksCount: Int {
+    public var id:     String { return _id }
+    public var tracks: [PlayerKit.Track] { return _tracks }
+    public var validTracksCount: Int {
         return tracks.filter({ $0.streamUrl != nil}).count
     }
 
@@ -37,7 +36,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public static var playlistNumberLimit: Int = 5
     public static var trackNumberLimit:    Int = 5
 
-    public static var sharedPipe: (ReactiveCocoa.Signal<Event, NSError>, SinkOf<ReactiveCocoa.Event<Event, NSError>>)! = Signal<Event, NSError>.pipe()
+    public static var sharedPipe: (Signal<Event, NSError>, Signal<Event, NSError>.Observer)! = Signal<Event, NSError>.pipe()
     public static var sharedList: [Playlist] = Playlist.findAll()
     
     public enum Event {
@@ -49,7 +48,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         case TrackUpdated(Playlist, Track)
     }
 
-    public class var shared: (signal: Signal<Event, NSError>, sink: SinkOf<ReactiveCocoa.Event<Event, NSError>>, current: [Playlist]) {
+    public class var shared: (signal: Signal<Event, NSError>, sink: ReactiveCocoa.Event<Event, NSError> -> (), current: [Playlist]) {
         get { return (signal: Playlist.sharedPipe.0,
                         sink: Playlist.sharedPipe.1,
                      current: Playlist.sharedList) }
@@ -60,22 +59,21 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         case .Created(let playlist):
             Playlist.sharedList.append(playlist)
         case .Removed(let playlist):
-            if let index = find(Playlist.sharedList, playlist) {
+            if let index = Playlist.sharedList.indexOf(playlist) {
                 Playlist.sharedList.removeAtIndex(index)
             }
         case .Updated(let playlist):
-            if let index = find(Playlist.sharedList, playlist) {
+            if let index = Playlist.sharedList.indexOf(playlist) {
                 Playlist.sharedList[index] = playlist
             }
-        case .TracksAdded(let playlist, let tracks):
+        case .TracksAdded(_, _):
             break
-        case .TrackRemoved(let playlist, let track, let index):
+        case .TrackRemoved(_, _, _):
             break
-        case .TrackUpdated(let playlist, let tracks):
+        case .TrackUpdated(_, _):
             break
         }
-
-        shared.sink.put(ReactiveCocoa.Event<Event, NSError>.Next(Box(event)))
+        shared.sink(ReactiveCocoa.Event<Event, NSError>.Next(event))
     }
 
     private class func dateFormatter() -> NSDateFormatter {
@@ -166,7 +164,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public func appendTracks(tracks: [Track]) -> PersistentResult {
         let result = PlaylistStore.appendTracks(tracks, playlist: self)
         if result == .Success {
-            self._tracks.extend(tracks)
+            self._tracks.appendContentsOf(tracks)
             Playlist.notifyChange(.TracksAdded(self, tracks))
         }
         return result

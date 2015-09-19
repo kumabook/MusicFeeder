@@ -9,7 +9,6 @@
 import FeedlyKit
 import ReactiveCocoa
 import Result
-import Box
 
 public class StreamLoader {
     public enum RemoveMark {
@@ -47,7 +46,7 @@ public class StreamLoader {
     public var playlistifier:      Disposable?
     public var streamContinuation: String?
     public var signal:             Signal<Event, NSError>
-    public var sink:               SinkOf<ReactiveCocoa.Event<Event, NSError>>
+    public var sink:               Signal<Event, NSError>.Observer
 
     public init(stream: Stream) {
         self.stream      = stream
@@ -95,24 +94,25 @@ public class StreamLoader {
         producer = feedlyClient.fetchEntries(streamId: stream.streamId,
                                           newerThan: lastUpdated,
                                          unreadOnly: unreadOnly)
-        sink.put(.Next(Box(.StartLoadingLatest)))
-        producer |> startOn(UIScheduler())
-               |> start(
+        sink(.Next(.StartLoadingLatest))
+        producer
+            .startOn(UIScheduler())
+            .on(
                 next: { paginatedCollection in
                     var latestEntries = paginatedCollection.items
                     self.playlistifier = latestEntries.map({
                         self.loadPlaylistOfEntry($0)
                     }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
-                        currentSignal |> concat(nextSignal)
-                    }).start(next: {}, error: {error in}, completed: {})
-                    latestEntries.extend(self.entries)
+                        currentSignal.concat(nextSignal)
+                    }).on(next: {}, error: {error in}, completed: {}).start()
+                    latestEntries.appendContentsOf(self.entries)
                     self.entries = latestEntries
                     self.updateLastUpdated(paginatedCollection.updated)
                 },
                 error: { error in CloudAPIClient.handleError(error: error) },
                 completed: {
-                    self.sink.put(.Next(Box(.CompleteLoadingLatest)))
-            })
+                    self.sink(.Next(.CompleteLoadingLatest))
+            }).start()
     }
 
     public func fetchEntries() {
@@ -120,22 +120,22 @@ public class StreamLoader {
             return
         }
         state = .Fetching
-        sink.put(.Next(Box(.StartLoadingNext)))
+        sink(.Next(.StartLoadingNext))
         var producer: SignalProducer<PaginatedEntryCollection, NSError>
         producer = feedlyClient.fetchEntries(streamId:stream.streamId, continuation: streamContinuation, unreadOnly: unreadOnly)
-        producer |> startOn(UIScheduler())
-               |> start(
-                next: {paginatedCollection in
-                    let entries = paginatedCollection.items
-                    self.entries.extend(entries)
-                    self.playlistifier = entries.map({
-                        self.loadPlaylistOfEntry($0)
-                    }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
-                        currentSignal |> concat(nextSignal)
-                    }) |> start(next: {}, error: {error in}, completed: {})
-                    self.streamContinuation = paginatedCollection.continuation
-                    self.updateLastUpdated(paginatedCollection.updated)
-                    self.sink.put(.Next(Box(.CompleteLoadingNext))) // First reload tableView,
+        producer
+            .startOn(UIScheduler())
+            .on(next: {paginatedCollection in
+                let entries = paginatedCollection.items
+                self.entries.appendContentsOf(entries)
+                self.playlistifier = entries.map({
+                    self.loadPlaylistOfEntry($0)
+                }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
+                    currentSignal.concat(nextSignal)
+                }).on(next: {}, error: {error in}, completed: {}).start()
+                self.streamContinuation = paginatedCollection.continuation
+                self.updateLastUpdated(paginatedCollection.updated)
+                    self.sink(.Next(.CompleteLoadingNext)) // First reload tableView,
                     if paginatedCollection.continuation == nil {    // then wait for next load
                         self.state = .Complete
                     } else {
@@ -145,32 +145,32 @@ public class StreamLoader {
                 error: {error in
                     CloudAPIClient.handleError(error: error)
                     self.state = State.Error
-                    self.sink.put(.Next(Box(.FailToLoadNext)))
+                    self.sink(.Next(.FailToLoadNext))
                 },
                 completed: {
             })
+            .start()
     }
 
     public func loadPlaylistOfEntry(entry: Entry) -> SignalProducer<Void, NSError> {
         if let url = entry.url {
-            return musicfavClient.playlistify(url, errorOnFailure: false) |> map({ pl in
+            return musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
                 var tracks = entry.enclosureTracks
-                tracks.extend(pl.getTracks())
+                tracks.appendContentsOf(pl.getTracks())
                 let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
                 self.playlistsOfEntry[entry] = playlist
                 UIScheduler().schedule {
-                    self.sink.put(.Next(Box(.CompleteLoadingPlaylist(playlist, entry))))
+                    self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
                 }
                 if let _disposable = self.loaderOfPlaylist[playlist] {
                     _disposable.1.dispose()
                 }
                 let loader = PlaylistLoader(playlist: playlist)
-                let disposable = loader.fetchTracks().start(next: { track in
-                    }, error: { error in
-                        println(error)
-                    }, completed: {
-                        self.sink.put(.Next(Box(.CompleteLoadingPlaylist(playlist, entry))))
-                })
+                let disposable = loader.fetchTracks().on(
+                         next: { track in },
+                        error: { error in print(error) },
+                    completed: { self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry))) }
+                ).start()
                 self.loaderOfPlaylist[playlist] = (loader, disposable)
                 return ()
             })
@@ -197,40 +197,41 @@ public class StreamLoader {
     public func markAsRead(index: Int) {
         let entry = entries[index]
         if CloudAPIClient.isLoggedIn {
-            feedlyClient.markEntriesAsRead([entry.id], completionHandler: { (req, res, error) -> Void in
-                if let e = error { println("Failed to mark as read") }
-                else             { println("Succeeded in marking as read") }
-            })
+            feedlyClient.markEntriesAsRead([entry.id]) { (req, res, result) in
+                if result.isFailure { print("Failed to mark as read") }
+                else                { print("Succeeded in marking as read") }
+            }
         }
         entries.removeAtIndex(index)
-        sink.put(.Next(Box(.RemoveAt(index))))
+        sink(.Next(.RemoveAt(index)))
     }
 
     public func markAsUnread(index: Int) {
         let entry = entries[index]
         if CloudAPIClient.isLoggedIn {
-            feedlyClient.keepEntriesAsUnread([entry.id], completionHandler: { (req, res, error) -> Void in
-                if let e = error { println("Failed to mark as unread") }
-                else             { println("Succeeded in marking as unread") }
+            feedlyClient.keepEntriesAsUnread([entry.id], completionHandler: { (req, res, result) in
+                if result.isFailure { print("Failed to mark as unread") }
+                else                { print("Succeeded in marking as unread") }
             })
         }
         entries.removeAtIndex(index)
-        sink.put(.Next(Box(.RemoveAt(index))))
+        sink(.Next(.RemoveAt(index)))
     }
 
     public func markAsUnsaved(index: Int) {
         let entry = entries[index]
         if CloudAPIClient.isLoggedIn {
-            feedlyClient.markEntriesAsUnsaved([entry.id], completionHandler: { (req, res, error) -> Void in
-                if let e = error { println("Failed to mark as unsaved") }
-                else             { println("Succeeded in marking as unsaved") }
-            })
-            feedlyClient.markEntriesAsRead([entry.id], completionHandler: { (req, res, error) -> Void in
-                if let e = error { println("Failed to mark as read") }
-                else             { println("Succeeded in marking as read") }
-            })
+            feedlyClient.markEntriesAsUnsaved([entry.id]) { (req, res, result) in
+                if result.isFailure { print("Failed to mark as unsaved") }
+                else                { print("Succeeded in marking as unsaved") }
+            }
+
+            feedlyClient.markEntriesAsRead([entry.id]) { (req, res, result) in
+                if result.isFailure { print("Failed to mark as read") }
+                else                { print("Succeeded in marking as read") }
+            }
         }
         entries.removeAtIndex(index)
-        sink.put(.Next(Box(.RemoveAt(index))))
+        sink(.Next(.RemoveAt(index)))
     }
 }
