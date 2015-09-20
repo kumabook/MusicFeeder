@@ -83,7 +83,9 @@ public class TrackStore: RLMObject {
     }
 
     public class func migration() -> Void {
-        RLMRealm.setSchemaVersion(2, forRealmAtPath: RLMRealm.defaultRealmPath()) { (migration, oldVersion) -> Void in
+        let config = RLMRealmConfiguration.defaultConfiguration()
+        config.schemaVersion = 2
+        config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
                     if let old = oldObject, new =  newObject {
@@ -102,5 +104,7 @@ public class TrackStore: RLMObject {
                 }
             }
         }
+        RLMRealmConfiguration.setDefaultConfiguration(config)
+        RLMRealm.defaultRealm()
     }
 }
