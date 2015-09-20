@@ -48,7 +48,7 @@ extension CloudAPIClient {
         }
     }
 
-    public class func alertController(error error:NSError, handler: (UIAlertAction!) -> Void) -> UIAlertController {
+    public class func alertController(error error:ErrorType, handler: (UIAlertAction!) -> Void) -> UIAlertController {
         let ac = UIAlertController(title: "Network error".localize(),
             message: "Sorry, network error occured.".localize(),
             preferredStyle: UIAlertControllerStyle.Alert)
