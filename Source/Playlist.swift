@@ -20,13 +20,12 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public let _id:          String
     public var title:        String
     private var _tracks:     [Track]
-    public
-    var thumbnailUrl: NSURL? { return _tracks.first?.thumbnailUrl }
+    public var thumbnailUrl: NSURL? { return _tracks.first?.thumbnailUrl }
     public var signal:       Signal<PlaylistEvent, NSError>
     public var sink:         Signal<PlaylistEvent, NSError>.Observer
 
     public var id:     String { return _id }
-    public var tracks: [PlayerKit.Track] { return _tracks }
+    public var tracks: [PlayerKit.Track] { return _tracks.map { $0 as PlayerKit.Track }}
     public var validTracksCount: Int {
         return tracks.filter({ $0.streamUrl != nil}).count
     }
