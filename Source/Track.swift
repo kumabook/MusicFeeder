@@ -17,7 +17,7 @@ import SoundCloudKit
 import Alamofire
 
 public enum Provider: String {
-    case Youtube    = "YouTube"
+    case YouTube    = "YouTube"
     case SoundCloud = "SoundCloud"
     case Raw        = "Raw"
 }
@@ -82,7 +82,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
     @objc public var thumbnailUrl: NSURL?
     public var duration:     NSTimeInterval
     @objc public var isVideo:      Bool {
-        return provider == Provider.Youtube && Track.youTubeVideoQuality != YouTubeVideoQuality.AudioOnly
+        return provider == Provider.YouTube && Track.youTubeVideoQuality != YouTubeVideoQuality.AudioOnly
     }
 
     public var status:   Status { return _status }
@@ -130,7 +130,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         _status     = .Init
         if let url = NSURL(string: store.streamUrl) {
             _streamUrl = url
-            if provider != .Youtube {
+            if provider != .YouTube {
                 _status = .Available
             }
         }
@@ -174,7 +174,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         store.identifier     = identifier
         if let _title        = title                        { store.title        = _title }
         if let _thumbnailUrl = thumbnailUrl?.absoluteString { store.thumbnailUrl = _thumbnailUrl }
-        if provider != .Youtube {
+        if provider != .YouTube {
             if let _streamUrl = streamUrl?.absoluteString    { store.streamUrl    = _streamUrl }
         }
         store.duration       = Int(duration)
@@ -188,7 +188,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         }
         _status = .Loading
         switch provider {
-        case .Youtube:
+        case .YouTube:
             return SignalProducer<Track, NSError> { (sink, disposable) in
                 XCDYouTubeClient.defaultClient().fetchVideo(self.identifier).on(
                     next: { video in
