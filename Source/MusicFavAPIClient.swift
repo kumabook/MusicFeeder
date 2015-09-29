@@ -16,11 +16,12 @@ import FeedlyKit
 public class MusicFavAPIClient {
     static let baseUrl   = "http://musicfav-cloud.herokuapp.com"
     public static var sharedInstance = MusicFavAPIClient()
+    static var sharedManager: Alamofire.Manager! = Alamofire.Manager()
+
     public func playlistify(targetUrl: NSURL, errorOnFailure: Bool) -> SignalProducer<Playlist, NSError> {
         return SignalProducer { (sink, disposable) in
-            let manager = Alamofire.Manager()
             let url = String(format: "%@/playlistify", MusicFavAPIClient.baseUrl)
-            let request = manager.request(.GET, url, parameters: ["url": targetUrl], encoding: ParameterEncoding.URL)
+            let request = MusicFavAPIClient.sharedManager.request(.GET, url, parameters: ["url": targetUrl], encoding: ParameterEncoding.URL)
             .responseJSON(options: NSJSONReadingOptions()) { (req, res, result) -> Void in
                 if let e = result.error {
                     if errorOnFailure { sink(.Error(e as NSError)) }
