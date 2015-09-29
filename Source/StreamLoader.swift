@@ -162,20 +162,20 @@ public class StreamLoader {
                 UIScheduler().schedule {
                     self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
                 }
-                if let _disposable = self.loaderOfPlaylist[playlist] {
-                    _disposable.1.dispose()
-                }
-                let loader = PlaylistLoader(playlist: playlist)
-                let disposable = loader.fetchTracks().on(
-                         next: { track in },
-                        error: { error in print(error) },
-                    completed: { self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry))) }
-                ).start()
-                self.loaderOfPlaylist[playlist] = (loader, disposable)
+                self.fetchTracks(playlist, entry: entry)
                 return ()
             })
         }
         return SignalProducer<Void, NSError>.empty
+    }
+
+    public func fetchTracks(playlist: Playlist, entry: Entry) {
+        loaderOfPlaylist[playlist]?.1.dispose()
+        let loader = PlaylistLoader(playlist: playlist)
+        let disposable = loader.fetchTracks().on(completed: {
+            self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
+        }).start()
+        loaderOfPlaylist[playlist] = (loader, disposable)
     }
 
     public var unreadOnly: Bool {
