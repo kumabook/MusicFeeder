@@ -139,6 +139,16 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         }
     }
 
+    public func checkExpire() {
+        if let expirationDate = youtubeVideo?.expirationDate where provider == .YouTube {
+            if expirationDate.timestamp < NSDate().timestamp {
+                _status = .Init
+                _streamUrl = nil
+                youtubeVideo = nil
+            }
+        }
+    }
+
     public func create() -> Bool {
         return TrackStore.create(self)
     }
@@ -155,7 +165,6 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         if let url = track.thumbnailURL {
             thumbnailUrl = url
         }
-//      save()
     }
     
     public func updatePropertiesWithYouTubeVideo(video: XCDYouTubeVideo) {
@@ -164,7 +173,6 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         duration       = video.duration
         thumbnailUrl   = video.mediumThumbnailURL
         _status        = .Available
-//      save()
     }
 
     internal func toStoreObject() -> TrackStore {
@@ -183,7 +191,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
     }
 
     public func fetchTrackDetail(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
-        if _status == .Available {
+        if _status == .Available || _status == .Loading {
             return SignalProducer<Track, NSError>.empty
         }
         _status = .Loading

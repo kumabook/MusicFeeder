@@ -25,6 +25,9 @@ public class PlaylistLoader {
     }
 
     public func fetchTracks() -> SignalProducer<(Int, Track), NSError> {
+        for track in playlist.getTracks() {
+            track.checkExpire()
+        }
         var pairs: [(Int, Track)] = []
         for i in 0..<playlist.getTracks().count {
             let pair = (i, playlist.getTracks()[i])
@@ -47,9 +50,5 @@ public class PlaylistLoader {
             }
             return (index, _track)
         }
-    }
-
-    func uploadTrackToCacheServer() {
-        
     }
 }
