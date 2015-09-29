@@ -12,7 +12,6 @@ import Result
 
 public class PlaylistLoader {
     public let playlist: Playlist
-    public var signal:   SignalProducer<(Int, Track), NSError>?
     public init(playlist: Playlist) {
         self.playlist = playlist
     }
@@ -33,12 +32,12 @@ public class PlaylistLoader {
             let pair = (i, playlist.getTracks()[i])
             pairs.append(pair)
         }
-        signal = pairs.map {
+        let signal = pairs.map {
             self.fetchTrack($0.0, track: $0.1)
         }.reduce(SignalProducer<(Int, Track), NSError>.empty, combine: { (signal, nextSignal) in
                 signal.concat(nextSignal)
-            })
-        return signal!
+        })
+        return signal
     }
 
     public func fetchTrack(index: Int, track: Track) -> SignalProducer<(Int, Track), NSError> {
