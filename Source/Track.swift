@@ -217,9 +217,8 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
             }
         case .SoundCloud:
             return SignalProducer<Track, NSError> { (sink, disposable) in
-                let c = SoundCloudKit.APIClient()
                 typealias R = SoundCloudKit.APIClient.Router
-                c.fetchItem(R.Track(self.identifier)) { (req: NSURLRequest?, res: NSHTTPURLResponse?, result: Alamofire.Result<SoundCloudKit.Track>) -> Void in
+                SoundCloudKit.APIClient.sharedInstance.fetchItem(R.Track(self.identifier)) { (req: NSURLRequest?, res: NSHTTPURLResponse?, result: Alamofire.Result<SoundCloudKit.Track>) -> Void in
                     if let track = result.value {
                         self.updateProperties(track)
                         sink(.Next(self))
