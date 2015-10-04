@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		671132821BC1212E00A036B0 /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132801BC1212E00A036B0 /* EntryStore.swift */; settings = {ASSET_TAGS = (); }; };
+		671132831BC1212E00A036B0 /* SavedStreamLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamLoader.swift */; settings = {ASSET_TAGS = (); }; };
 		678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
 		678305851B9897A000A83F52 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
 		67916DB01BAEB767004419B0 /* Breit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67D2657E1BACE16B000240FB /* Breit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -114,6 +116,8 @@
 		670505A31B6E1398006EAA84 /* StreamLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamLoader.swift; path = Source/StreamLoader.swift; sourceTree = SOURCE_ROOT; };
 		670505A41B6E1398006EAA84 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Track.swift; path = Source/Track.swift; sourceTree = SOURCE_ROOT; };
 		670505A51B6E1398006EAA84 /* TrackStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackStore.swift; path = Source/TrackStore.swift; sourceTree = SOURCE_ROOT; };
+		671132801BC1212E00A036B0 /* EntryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryStore.swift; path = Source/EntryStore.swift; sourceTree = SOURCE_ROOT; };
+		671132811BC1212E00A036B0 /* SavedStreamLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SavedStreamLoader.swift; path = Source/SavedStreamLoader.swift; sourceTree = SOURCE_ROOT; };
 		6713B0601B73798E003A1450 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		6713B0631B7379CB003A1450 /* FeedlyKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedlyKit.framework; path = Carthage/Build/iOS/FeedlyKit.framework; sourceTree = "<group>"; };
 		6713B0641B7379CB003A1450 /* PlayerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PlayerKit.framework; path = Carthage/Build/iOS/PlayerKit.framework; sourceTree = "<group>"; };
@@ -246,6 +250,8 @@
 		67FBBE081B6CE43100B567CB /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				671132801BC1212E00A036B0 /* EntryStore.swift */,
+				671132811BC1212E00A036B0 /* SavedStreamLoader.swift */,
 				679C53511B72385900BE6614 /* Player.swift */,
 				679C534B1B71019B00BE6614 /* MusicFeeder.h */,
 				6705059D1B6E1398006EAA84 /* MusicFavAPIClient.swift */,
@@ -402,6 +408,8 @@
 				679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */,
 				679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */,
 				678305851B9897A000A83F52 /* CategoryStore.swift in Sources */,
+				671132831BC1212E00A036B0 /* SavedStreamLoader.swift in Sources */,
+				671132821BC1212E00A036B0 /* EntryStore.swift in Sources */,
 				679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */,
 				679C52E11B70F3DD00BE6614 /* FeedlyAPIClient.swift in Sources */,
 				679C52E31B70F3DD00BE6614 /* StreamListLoader.swift in Sources */,
