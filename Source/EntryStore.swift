@@ -64,10 +64,15 @@ extension Entry {
         store.summary       = summary?.toStoreObject()
 
         store.alternate  = RLMArray(objectClassName: LinkStore.className())
+        for item in alternate ?? [] { store.alternate.addObject(item.toStoreObject()) }
         store.keywords   = RLMArray(objectClassName: KeywordStore.className())
+        for item in keywords  ?? [] { store.keywords.addObject(KeywordStore(name: item)) }
         store.tags       = RLMArray(objectClassName: TagStore.className())
+        for item in tags      ?? [] { store.alternate.addObject(item.toStoreObject()) }
         store.categories = RLMArray(objectClassName: CategoryStore.className())
+        for item in categories      { store.categories.addObject(item.toStoreObject()) }
         store.enclusure  = RLMArray(objectClassName: LinkStore.className())
+        for item in enclosure ?? [] { store.enclusure.addObject(item.toStoreObject()) }
     }
 }
 
@@ -151,6 +156,13 @@ public class TagStore:      RLMObject {
 }
 public class KeywordStore:  RLMObject {
     dynamic var name: String = ""
+    override init() {
+        super.init()
+    }
+    convenience init(name: String) {
+        self.init()
+        self.name = name
+    }
 }
 
 public class OriginStore: RLMObject {

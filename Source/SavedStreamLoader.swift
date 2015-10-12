@@ -12,11 +12,19 @@ import FeedlyKit
 
 public class SavedStreamLoader: StreamLoader {
     public class SavedStream: Stream {
+        let id:    String
+        let title: String
+
+        init(id: String, title: String) {
+            self.id    = id
+            self.title = title
+        }
+
         override public var streamId: String {
-            return "saved_stream"
+            return id
         }
         override public var streamTitle: String {
-            return "Clipped Entries"
+            return title
         }
         override public var thumbnailURL: NSURL? {
             return nil
@@ -27,7 +35,11 @@ public class SavedStreamLoader: StreamLoader {
     }
 
     public convenience init() {
-        self.init(stream: SavedStream())
+        self.init(stream: SavedStream(id: "saved_stream", title: "Saved"))
+    }
+
+    public convenience init(id: String, title: String) {
+        self.init(stream: SavedStream(id: id, title: title))
     }
 
     public override func fetchEntries() {
