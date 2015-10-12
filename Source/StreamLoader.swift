@@ -230,6 +230,8 @@ public class StreamLoader {
                 if result.isFailure { print("Failed to mark as read") }
                 else                { print("Succeeded in marking as read") }
             }
+        } else {
+            EntryStore.remove(entry.toStoreObject())
         }
         entries.removeAtIndex(index)
         sink(.Next(.RemoveAt(index)))
