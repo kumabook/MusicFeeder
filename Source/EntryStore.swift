@@ -222,11 +222,11 @@ public class EntryStore: RLMObject {
 
     public class func findAll() -> [EntryStore] {
         let results = EntryStore.allObjectsInRealm(realm)
-        var trackStores: [EntryStore] = []
+        var entryStores: [EntryStore] = []
         for result in results {
-            trackStores.append(result as! EntryStore)
+            entryStores.append(result as! EntryStore)
         }
-        return trackStores
+        return entryStores
     }
 
     public class func create(entry: Entry) -> Bool {
