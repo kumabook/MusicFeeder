@@ -10,30 +10,29 @@ import Foundation
 import ReactiveCocoa
 import FeedlyKit
 
-public class SavedStreamLoader: StreamLoader {
-    public class SavedStream: Stream {
-        let id:    String
-        let title: String
+public class SavedStream: Stream {
+    let id:    String
+    let title: String
 
-        init(id: String, title: String) {
-            self.id    = id
-            self.title = title
-        }
-
-        override public var streamId: String {
-            return id
-        }
-        override public var streamTitle: String {
-            return title
-        }
-        override public var thumbnailURL: NSURL? {
-            return nil
-        }
-        override public var hashValue: Int {
-           return streamId.hashValue
-        }
+    init(id: String, title: String) {
+        self.id    = id
+        self.title = title
     }
+    override public var streamId: String {
+        return id
+    }
+    override public var streamTitle: String {
+        return title
+    }
+    override public var thumbnailURL: NSURL? {
+        return nil
+    }
+    override public var hashValue: Int {
+        return streamId.hashValue
+    }
+}
 
+public class SavedStreamLoader: StreamLoader {
     public convenience init() {
         self.init(stream: SavedStream(id: "saved_stream", title: "Saved"))
     }
