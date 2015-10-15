@@ -125,7 +125,7 @@ public class StreamLoader {
         producer = feedlyClient.fetchEntries(streamId:stream.streamId, continuation: streamContinuation, unreadOnly: unreadOnly)
         producer
             .startOn(UIScheduler())
-            .on(next: {paginatedCollection in
+            .on(next: { paginatedCollection in
                 let entries = paginatedCollection.items
                 self.entries.appendContentsOf(entries)
                 self.playlistifier = entries.map({
@@ -135,12 +135,12 @@ public class StreamLoader {
                 }).on(next: {}, error: {error in}, completed: {}).start()
                 self.streamContinuation = paginatedCollection.continuation
                 self.updateLastUpdated(paginatedCollection.updated)
-                    self.sink(.Next(.CompleteLoadingNext)) // First reload tableView,
-                    if paginatedCollection.continuation == nil {    // then wait for next load
-                        self.state = .Complete
-                    } else {
-                        self.state = .Normal
-                    }
+                self.sink(.Next(.CompleteLoadingNext)) // First reload tableView,
+                if paginatedCollection.continuation == nil {    // then wait for next load
+                    self.state = .Complete
+                } else {
+                    self.state = .Normal
+                }
                 },
                 error: {error in
                     CloudAPIClient.handleError(error: error)
