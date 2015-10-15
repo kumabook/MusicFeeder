@@ -147,6 +147,8 @@ extension CloudAPIClient {
                 } else if let entries = result.value {
                     sink(.Next(entries))
                     sink(.Completed)
+                } else {
+                    sink(.Error(self.buildError(NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: res)))
                 }
             })
             disposable.addDisposable({ req.cancel() })
