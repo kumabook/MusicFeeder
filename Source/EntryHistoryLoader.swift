@@ -12,7 +12,7 @@ import FeedlyKit
 
 public class EntryHistoryLoader: StreamLoader {
     var offset: UInt = 0
-    public var timestampOfEntry: [Entry: Int64] = [:]
+    public var historyOfEntry: [Entry: EntryHistoryStore] = [:]
     public convenience init() {
         self.init(stream: SavedStream(id: "history", title: "History"))
         reset()
@@ -26,7 +26,7 @@ public class EntryHistoryLoader: StreamLoader {
     private func reset() {
         self.offset           = 0
         self.entries          = []
-        self.timestampOfEntry = [:]
+        self.historyOfEntry   = [:]
         self.state            = .Normal
     }
 
@@ -40,7 +40,7 @@ public class EntryHistoryLoader: StreamLoader {
             let histories = EntryHistoryStore.find(range)
             let entries = histories.map { Entry(store: $0.entry) }
             for h in histories {
-                self.timestampOfEntry[Entry(store: h.entry)] = h.timestamp
+                self.historyOfEntry[Entry(store: h.entry)] = h
             }
             self.offset += EntryHistoryStore.limit
             self.playlistifier = entries.map({
