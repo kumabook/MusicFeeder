@@ -12,7 +12,7 @@ import FeedlyKit
 
 public class EntryHistoryLoader: StreamLoader {
     var offset: UInt = 0
-    public var historyOfEntry: [Entry: EntryHistoryStore] = [:]
+    public var histories: [EntryHistory] = []
     public convenience init() {
         self.init(stream: SavedStream(id: "history", title: "History"))
         reset()
@@ -26,7 +26,7 @@ public class EntryHistoryLoader: StreamLoader {
     private func reset() {
         self.offset           = 0
         self.entries          = []
-        self.historyOfEntry   = [:]
+        self.histories        = []
         self.state            = .Normal
     }
 
@@ -35,13 +35,10 @@ public class EntryHistoryLoader: StreamLoader {
             return
         }
         state = .Fetching
-        QueueScheduler().schedule {
+        UIScheduler().schedule {
             let range = Range<UInt>(start: self.offset, end: self.offset + EntryHistoryStore.limit)
             let histories = EntryHistoryStore.find(range)
             let entries = histories.map { Entry(store: $0.entry) }
-            for h in histories {
-                self.historyOfEntry[Entry(store: h.entry)] = h
-            }
             self.offset += EntryHistoryStore.limit
             self.playlistifier = entries.map({
                 self.loadPlaylistOfEntry($0)
@@ -49,8 +46,10 @@ public class EntryHistoryLoader: StreamLoader {
                 currentSignal.concat(nextSignal)
             }).on(next: {}, error: {error in}, completed: {}).start()
             self.entries.appendContentsOf(entries)
+            self.histories.appendContentsOf(histories.map { EntryHistory(store: $0) })
+            let count = EntryHistoryStore.count()
             dispatch_async(dispatch_get_main_queue()) {
-                if self.offset >= EntryHistoryStore.count() {
+                if self.offset >= count {
                     self.state = .Complete
                 } else {
                     self.state = .Normal
