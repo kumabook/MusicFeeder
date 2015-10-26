@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		670576021BDD03AF0087063A /* TrackHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576011BDD03AF0087063A /* TrackHistory.swift */; settings = {ASSET_TAGS = (); }; };
+		670576041BDD04290087063A /* TrackHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576031BDD04290087063A /* TrackHistoryStore.swift */; settings = {ASSET_TAGS = (); }; };
+		670576141BDD2A2F0087063A /* TrackHistoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576131BDD2A2F0087063A /* TrackHistoryLoader.swift */; settings = {ASSET_TAGS = (); }; };
 		671132821BC1212E00A036B0 /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132801BC1212E00A036B0 /* EntryStore.swift */; settings = {ASSET_TAGS = (); }; };
 		671132831BC1212E00A036B0 /* SavedStreamLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamLoader.swift */; settings = {ASSET_TAGS = (); }; };
 		6762EE071BCABA8700EA90DC /* EntryHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6762EE061BCABA8700EA90DC /* EntryHistoryStore.swift */; settings = {ASSET_TAGS = (); }; };
@@ -119,6 +122,9 @@
 		670505A31B6E1398006EAA84 /* StreamLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamLoader.swift; path = Source/StreamLoader.swift; sourceTree = SOURCE_ROOT; };
 		670505A41B6E1398006EAA84 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Track.swift; path = Source/Track.swift; sourceTree = SOURCE_ROOT; };
 		670505A51B6E1398006EAA84 /* TrackStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackStore.swift; path = Source/TrackStore.swift; sourceTree = SOURCE_ROOT; };
+		670576011BDD03AF0087063A /* TrackHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackHistory.swift; path = Source/TrackHistory.swift; sourceTree = SOURCE_ROOT; };
+		670576031BDD04290087063A /* TrackHistoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackHistoryStore.swift; path = Source/TrackHistoryStore.swift; sourceTree = SOURCE_ROOT; };
+		670576131BDD2A2F0087063A /* TrackHistoryLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackHistoryLoader.swift; path = Source/TrackHistoryLoader.swift; sourceTree = SOURCE_ROOT; };
 		671132801BC1212E00A036B0 /* EntryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryStore.swift; path = Source/EntryStore.swift; sourceTree = SOURCE_ROOT; };
 		671132811BC1212E00A036B0 /* SavedStreamLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SavedStreamLoader.swift; path = Source/SavedStreamLoader.swift; sourceTree = SOURCE_ROOT; };
 		6713B0601B73798E003A1450 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
@@ -260,6 +266,9 @@
 				67AD00D61BD21C2300C61561 /* EntryHistory.swift */,
 				6762EE061BCABA8700EA90DC /* EntryHistoryStore.swift */,
 				6762EE0E1BCB6D2300EA90DC /* EntryHistoryLoader.swift */,
+				670576011BDD03AF0087063A /* TrackHistory.swift */,
+				670576031BDD04290087063A /* TrackHistoryStore.swift */,
+				670576131BDD2A2F0087063A /* TrackHistoryLoader.swift */,
 				671132811BC1212E00A036B0 /* SavedStreamLoader.swift */,
 				679C53511B72385900BE6614 /* Player.swift */,
 				679C534B1B71019B00BE6614 /* MusicFeeder.h */,
@@ -408,7 +417,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				679C52D51B70F3DD00BE6614 /* MusicFavAPIClient.swift in Sources */,
+				670576141BDD2A2F0087063A /* TrackHistoryLoader.swift in Sources */,
 				679C52D61B70F3DD00BE6614 /* Playlist.swift in Sources */,
+				670576021BDD03AF0087063A /* TrackHistory.swift in Sources */,
 				679C52D71B70F3DD00BE6614 /* PlaylistLoader.swift in Sources */,
 				679C52D81B70F3DD00BE6614 /* PlaylistStore.swift in Sources */,
 				679C52DA1B70F3DD00BE6614 /* StreamLoader.swift in Sources */,
@@ -418,6 +429,7 @@
 				6762EE071BCABA8700EA90DC /* EntryHistoryStore.swift in Sources */,
 				679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */,
 				679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */,
+				670576041BDD04290087063A /* TrackHistoryStore.swift in Sources */,
 				678305851B9897A000A83F52 /* CategoryStore.swift in Sources */,
 				671132831BC1212E00A036B0 /* SavedStreamLoader.swift in Sources */,
 				67AD00D71BD21C2300C61561 /* EntryHistory.swift in Sources */,
