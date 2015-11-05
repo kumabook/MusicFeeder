@@ -47,6 +47,7 @@ public class StreamLoader {
     public var streamContinuation: String?
     public var signal:             Signal<Event, NSError>
     public var sink:               Signal<Event, NSError>.Observer
+    private var _unreadOnly:        Bool
 
     public init(stream: Stream) {
         self.stream      = stream
@@ -58,6 +59,12 @@ public class StreamLoader {
         let pipe         = Signal<Event, NSError>.pipe()
         signal           = pipe.0
         sink             = pipe.1
+        _unreadOnly      = false
+    }
+
+    public convenience init(stream: Stream, unreadOnly: Bool) {
+        self.init(stream: stream)
+        _unreadOnly = unreadOnly
     }
 
     deinit {
@@ -92,8 +99,8 @@ public class StreamLoader {
 
         var producer: SignalProducer<PaginatedEntryCollection, NSError>
         producer = feedlyClient.fetchEntries(streamId: stream.streamId,
-                                          newerThan: lastUpdated,
-                                         unreadOnly: unreadOnly)
+                                            newerThan: lastUpdated,
+                                           unreadOnly: unreadOnly)
         sink(.Next(.StartLoadingLatest))
         producer
             .startOn(UIScheduler())
@@ -183,7 +190,7 @@ public class StreamLoader {
             if stream == Tag.Saved(userId) { return false }
             if stream == Tag.Read(userId) {  return false }
         }
-        return true
+        return _unreadOnly
     }
 
     public var removeMark: RemoveMark {
