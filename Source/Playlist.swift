@@ -173,6 +173,14 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         return PlaylistStore.findAll()
     }
 
+    public class func findBy(id id: String) -> Playlist? {
+        if let store = PlaylistStore.findBy(id: id) {
+            return Playlist(store: store)
+        } else {
+            return nil
+        }
+    }
+
     public class func removeAll() {
         PlaylistStore.removeAll()
     }
