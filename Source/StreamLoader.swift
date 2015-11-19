@@ -123,7 +123,7 @@ public class StreamLoader {
     }
 
     public func fetchEntries() {
-        if state != .Normal {
+        if state != .Normal && state != .Error {
             return
         }
         state = .Fetching
@@ -151,8 +151,8 @@ public class StreamLoader {
                 },
                 error: {error in
                     CloudAPIClient.handleError(error: error)
-                    self.state = State.Error
                     self.sink(.Next(.FailToLoadNext))
+                    self.state = State.Error
                 },
                 completed: {
             })
