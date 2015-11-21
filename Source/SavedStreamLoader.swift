@@ -47,7 +47,7 @@ public class SavedStreamLoader: StreamLoader {
         }
         state = .Fetching
         QueueScheduler().schedule {
-            let entries = EntryStore.findAll().map { Entry(store: $0) }
+            let entries: [Entry] = EntryStore.findAll().map { Entry(store: $0) }.reverse()
             self.playlistifier = entries.map({
                 self.loadPlaylistOfEntry($0)
             }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
