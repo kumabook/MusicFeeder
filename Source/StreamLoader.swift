@@ -49,6 +49,7 @@ public class StreamLoader {
     public var sink:               Signal<Event, NSError>.Observer
     private var _unreadOnly:       Bool
     private var _perPage:          Int
+    private var _needsTracks:      Bool
 
     public init(stream: Stream) {
         self.stream      = stream
@@ -62,6 +63,7 @@ public class StreamLoader {
         sink             = pipe.1
         _unreadOnly      = false
         _perPage         = CloudAPIClient.perPage
+        _needsTracks     = true
     }
 
     public convenience init(stream: Stream, unreadOnly: Bool) {
@@ -69,9 +71,17 @@ public class StreamLoader {
         _unreadOnly = unreadOnly
     }
 
-    public convenience init(stream: Stream, perPage: Int) {
+    public convenience init(stream: Stream, perPage: Int, needsTracks: Bool) {
         self.init(stream: stream)
-        _perPage    = perPage
+        _perPage     = perPage
+        _needsTracks = needsTracks
+    }
+
+    public convenience init(stream: Stream, unreadOnly: Bool, perPage: Int, needsTracks: Bool) {
+        self.init(stream: stream)
+        _unreadOnly  = unreadOnly
+        _perPage     = perPage
+        _needsTracks = needsTracks
     }
 
     deinit {
@@ -180,7 +190,9 @@ public class StreamLoader {
                 UIScheduler().schedule {
                     self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
                 }
-                self.fetchTracks(playlist, entry: entry)
+                if self._needsTracks {
+                    self.fetchTracks(playlist, entry: entry)
+                }
                 return ()
             })
         }
