@@ -47,7 +47,8 @@ public class StreamLoader {
     public var streamContinuation: String?
     public var signal:             Signal<Event, NSError>
     public var sink:               Signal<Event, NSError>.Observer
-    private var _unreadOnly:        Bool
+    private var _unreadOnly:       Bool
+    private var _perPage:          Int
 
     public init(stream: Stream) {
         self.stream      = stream
@@ -60,11 +61,17 @@ public class StreamLoader {
         signal           = pipe.0
         sink             = pipe.1
         _unreadOnly      = false
+        _perPage         = CloudAPIClient.perPage
     }
 
     public convenience init(stream: Stream, unreadOnly: Bool) {
         self.init(stream: stream)
         _unreadOnly = unreadOnly
+    }
+
+    public convenience init(stream: Stream, perPage: Int) {
+        self.init(stream: stream)
+        _perPage    = perPage
     }
 
     deinit {
@@ -100,7 +107,8 @@ public class StreamLoader {
         var producer: SignalProducer<PaginatedEntryCollection, NSError>
         producer = feedlyClient.fetchEntries(streamId: stream.streamId,
                                             newerThan: lastUpdated,
-                                           unreadOnly: unreadOnly)
+                                           unreadOnly: unreadOnly,
+                                              perPage: _perPage)
         sink(.Next(.StartLoadingLatest))
         producer
             .startOn(UIScheduler())
@@ -129,7 +137,10 @@ public class StreamLoader {
         state = .Fetching
         sink(.Next(.StartLoadingNext))
         var producer: SignalProducer<PaginatedEntryCollection, NSError>
-        producer = feedlyClient.fetchEntries(streamId:stream.streamId, continuation: streamContinuation, unreadOnly: unreadOnly)
+        producer = feedlyClient.fetchEntries(streamId:stream.streamId,
+                                         continuation: streamContinuation,
+                                           unreadOnly: unreadOnly,
+                                              perPage: _perPage)
         producer
             .startOn(UIScheduler())
             .on(next: { paginatedCollection in

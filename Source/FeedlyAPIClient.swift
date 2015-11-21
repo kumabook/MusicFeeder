@@ -123,18 +123,18 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchEntries(streamId streamId: String, newerThan: Int64, unreadOnly: Bool) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchEntries(streamId streamId: String, newerThan: Int64, unreadOnly: Bool, perPage: Int) -> SignalProducer<PaginatedEntryCollection, NSError> {
         let paginationParams        = PaginationParams()
         paginationParams.unreadOnly = unreadOnly
-        paginationParams.count      = CloudAPIClient.perPage
+        paginationParams.count      = perPage
         paginationParams.newerThan  = newerThan
         return fetchEntries(streamId: streamId, paginationParams: paginationParams)
     }
 
-    public func fetchEntries(streamId streamId: String, continuation: String?, unreadOnly: Bool) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchEntries(streamId streamId: String, continuation: String?, unreadOnly: Bool, perPage: Int) -> SignalProducer<PaginatedEntryCollection, NSError> {
         let paginationParams          = PaginationParams()
         paginationParams.unreadOnly   = unreadOnly
-        paginationParams.count        = CloudAPIClient.perPage
+        paginationParams.count        = perPage
         paginationParams.continuation = continuation
         return fetchEntries(streamId: streamId, paginationParams: paginationParams)
     }
