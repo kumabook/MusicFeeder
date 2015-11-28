@@ -39,7 +39,12 @@ extension Entry {
         enclosure  = store.enclusure.map  { return Link(store: $0 as! LinkStore) }
     }
     func toStoreObject() -> EntryStore {
-        let store    = EntryStore()
+        var store: EntryStore
+        if let e = EntryStore.findBy(id: id) {
+            store = e
+        } else {
+            store = EntryStore()
+        }
         updateProperties(store)
         return store
     }
