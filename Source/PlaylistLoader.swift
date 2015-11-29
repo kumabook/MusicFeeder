@@ -11,19 +11,25 @@ import ReactiveCocoa
 import Result
 
 public class PlaylistLoader {
-    public let playlist: Playlist
+    public let playlist:    Playlist
+    public var disposables: [Disposable]
     public init(playlist: Playlist) {
         self.playlist = playlist
+        disposables   = []
     }
 
     deinit {
-        
+        dispose()
     }
 
     public func dispose() {
+        disposables.forEach {
+            $0.dispose()
+        }
+        disposables = []
     }
 
-    public func fetchTracks() -> SignalProducer<(Int, Track), NSError> {
+    public func fetchTracks() {
         for track in playlist.getTracks() {
             track.checkExpire()
         }
@@ -32,12 +38,10 @@ public class PlaylistLoader {
             let pair = (i, playlist.getTracks()[i])
             pairs.append(pair)
         }
-        let signal = pairs.map {
-            self.fetchTrack($0.0, track: $0.1)
-        }.reduce(SignalProducer<(Int, Track), NSError>.empty, combine: { (signal, nextSignal) in
-                signal.concat(nextSignal)
-        })
-        return signal
+
+        pairs.forEach {
+            disposables.append(self.fetchTrack($0.0, track: $0.1).start())
+        }
     }
 
     public func fetchTrack(index: Int, track: Track) -> SignalProducer<(Int, Track), NSError> {

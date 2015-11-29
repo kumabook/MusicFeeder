@@ -42,14 +42,14 @@ public class StreamLoader {
     public var state:              State
     public var entries:            [Entry]
     public var playlistsOfEntry:   [Entry:Playlist]
-    public var loaderOfPlaylist:   [Playlist:(PlaylistLoader, Disposable)]
+    public var loaderOfPlaylist:   [Playlist: PlaylistLoader]
     public var playlistifier:      Disposable?
     public var streamContinuation: String?
     public var signal:             Signal<Event, NSError>
     public var sink:               Signal<Event, NSError>.Observer
     private var _unreadOnly:       Bool
     private var _perPage:          Int
-    private var _needsTracks:      Bool
+    private var _needsPlaylist:    Bool
 
     public init(stream: Stream) {
         self.stream      = stream
@@ -63,7 +63,7 @@ public class StreamLoader {
         sink             = pipe.1
         _unreadOnly      = false
         _perPage         = CloudAPIClient.perPage
-        _needsTracks     = true
+        _needsPlaylist   = true
     }
 
     public convenience init(stream: Stream, unreadOnly: Bool) {
@@ -71,17 +71,17 @@ public class StreamLoader {
         _unreadOnly = unreadOnly
     }
 
-    public convenience init(stream: Stream, perPage: Int, needsTracks: Bool) {
+    public convenience init(stream: Stream, perPage: Int, needsPlaylist: Bool) {
         self.init(stream: stream)
-        _perPage     = perPage
-        _needsTracks = needsTracks
+        _perPage       = perPage
+        _needsPlaylist = needsPlaylist
     }
 
-    public convenience init(stream: Stream, unreadOnly: Bool, perPage: Int, needsTracks: Bool) {
+    public convenience init(stream: Stream, unreadOnly: Bool, perPage: Int, needsPlaylist: Bool) {
         self.init(stream: stream)
-        _unreadOnly  = unreadOnly
-        _perPage     = perPage
-        _needsTracks = needsTracks
+        _unreadOnly    = unreadOnly
+        _perPage       = perPage
+        _needsPlaylist = needsPlaylist
     }
 
     deinit {
@@ -90,7 +90,7 @@ public class StreamLoader {
 
     public func dispose() {
         for loader in loaderOfPlaylist {
-            loader.1.1.dispose()
+            loader.1.dispose()
         }
         playlistifier?.dispose()
     }
@@ -125,14 +125,12 @@ public class StreamLoader {
             .on(
                 next: { paginatedCollection in
                     var latestEntries = paginatedCollection.items
-                    self.playlistifier = latestEntries.map({
-                        self.loadPlaylistOfEntry($0)
-                    }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
-                        currentSignal.concat(nextSignal)
-                    }).on(next: {}, error: {error in}, completed: {}).start()
                     latestEntries.appendContentsOf(self.entries)
                     self.entries = latestEntries
                     self.updateLastUpdated(paginatedCollection.updated)
+                    if self._needsPlaylist {
+                        self.fetchAllPlaylists()
+                    }
                 },
                 error: { error in CloudAPIClient.handleError(error: error) },
                 completed: {
@@ -156,13 +154,11 @@ public class StreamLoader {
             .on(next: { paginatedCollection in
                 let entries = paginatedCollection.items
                 self.entries.appendContentsOf(entries)
-                self.playlistifier = entries.map({
-                    self.loadPlaylistOfEntry($0)
-                }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
-                    currentSignal.concat(nextSignal)
-                }).on(next: {}, error: {error in}, completed: {}).start()
                 self.streamContinuation = paginatedCollection.continuation
                 self.updateLastUpdated(paginatedCollection.updated)
+                if self._needsPlaylist {
+                    self.fetchAllPlaylists()
+                }
                 self.sink(.Next(.CompleteLoadingNext)) // First reload tableView,
                 if paginatedCollection.continuation == nil {    // then wait for next load
                     self.state = .Complete
@@ -180,32 +176,63 @@ public class StreamLoader {
             .start()
     }
 
+    // This method needs to be fixed, but currently ReactiveCocoa has problem about cancelling inner signal
+    // So, we check if playlistifier is disposed before proceed the next signal
     public func loadPlaylistOfEntry(entry: Entry) -> SignalProducer<Void, NSError> {
         if let url = entry.url {
-            return musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
-                var tracks = entry.enclosureTracks
-                tracks.appendContentsOf(pl.getTracks())
-                let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
-                self.playlistsOfEntry[entry] = playlist
-                UIScheduler().schedule {
-                    self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
-                }
-                if self._needsTracks {
-                    self.fetchTracks(playlist, entry: entry)
-                }
-                return ()
-            })
+            if let playlist = self.playlistsOfEntry[entry] {
+                fetchTracks(playlist, entry: entry)
+                return SignalProducer<Void, NSError>.empty
+            } else {
+                let signal: SignalProducer<SignalProducer<Void, NSError>, NSError> = musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
+                    var tracks = entry.enclosureTracks
+                    tracks.appendContentsOf(pl.getTracks())
+                    let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
+                    self.playlistsOfEntry[entry] = playlist
+                    UIScheduler().schedule {
+                        self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
+                    }
+                    // Check if it is disposed
+                    if let disposed = self.playlistifier?.disposed where !disposed {
+                        self.fetchTracks(playlist, entry: entry)
+                    }
+                    return SignalProducer<Void, NSError>.empty
+                })
+                return signal.flatten(.Merge)
+            }
         }
         return SignalProducer<Void, NSError>.empty
     }
 
-    public func fetchTracks(playlist: Playlist, entry: Entry) {
-        loaderOfPlaylist[playlist]?.1.dispose()
+    internal func fetchTracks(playlist: Playlist, entry: Entry) {
         let loader = PlaylistLoader(playlist: playlist)
-        let disposable = loader.fetchTracks().on(completed: {
-            self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
-        }).start()
-        loaderOfPlaylist[playlist] = (loader, disposable)
+        loader.fetchTracks()
+        loaderOfPlaylist[playlist]?.dispose()
+        loaderOfPlaylist[playlist] = loader
+    }
+
+    public func fetchAllPlaylists() {
+        cancelFetchingPlaylists()
+        fetchPlaylistsOfEntries(entries)
+    }
+
+    public func fetchPlaylistsOfEntries(_entries: [Entry]) {
+        self.playlistifier?.dispose()
+        self.playlistifier = _entries.map({
+            self.loadPlaylistOfEntry($0)
+        }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
+            currentSignal.concat(nextSignal)
+        }).on().start()
+    }
+
+    public func cancelFetchingPlaylists() {
+        if let p = playlistifier {
+            p.dispose()
+            self.playlistifier?.dispose()
+        }
+        self.playlistifier = nil
+        loaderOfPlaylist.forEach { $1.dispose() }
+
     }
 
     public var unreadOnly: Bool {

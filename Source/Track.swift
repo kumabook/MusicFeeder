@@ -203,9 +203,11 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         switch provider {
         case .YouTube:
             return SignalProducer<Track, NSError> { (sink, disposable) in
-                XCDYouTubeClient.defaultClient().fetchVideo(self.identifier).on(
+                var completed = false
+                let disp = XCDYouTubeClient.defaultClient().fetchVideo(self.identifier).on(
                     next: { video in
                         self.updatePropertiesWithYouTubeVideo(video)
+                        completed = true
                         sink(.Next(self))
                         sink(.Completed)
                     }, error: { error in
@@ -213,11 +215,17 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
                         sink(.Next(self))
                         sink(.Completed)
                     }, completed: {
+                        self._status = .Available
                     }, interrupted: {
                         self._status = .Unavailable
                         sink(.Next(self))
                         sink(.Completed)
                     }).start()
+                disposable.addDisposable {
+                    if !completed {
+                        disp.dispose()
+                    }
+                }
                 return
             }
         case .SoundCloud:
