@@ -176,19 +176,14 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
     }
 
     internal func toStoreObject() -> TrackStore {
-        var store: TrackStore
-        if let s = TrackStore.findBy(url: url) {
-            store            = s
-        } else {
-            store            = TrackStore()
-            store.url        = url
-        }
+        let store            = TrackStore()
+        store.url            = url
         store.providerRaw    = provider.rawValue
         store.identifier     = identifier
         if let _title        = title                        { store.title        = _title }
         if let _thumbnailUrl = thumbnailUrl?.absoluteString { store.thumbnailUrl = _thumbnailUrl }
         if provider != .YouTube {
-            if let _streamUrl = streamUrl?.absoluteString    { store.streamUrl    = _streamUrl }
+            if let _streamUrl = streamUrl?.absoluteString   { store.streamUrl    = _streamUrl }
         }
         store.duration       = Int(duration)
 

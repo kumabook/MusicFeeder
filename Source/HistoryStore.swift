@@ -75,7 +75,7 @@ public class HistoryStore: RLMObject {
                             timestamp: NSDate().timestamp,
                                  type: HistoryType.Entry.rawValue)
         realm.transactionWithBlock() {
-            self.realm.addOrUpdateObject(entry.toStoreObject())
+            self.realm.addOrUpdateObject(findOrCreateEntryStore(entry))
             self.realm.addOrUpdateObject(history)
         }
         return history
@@ -94,7 +94,7 @@ public class HistoryStore: RLMObject {
                             timestamp: NSDate().timestamp,
                                  type: HistoryType.Track.rawValue)
         realm.transactionWithBlock() {
-            self.realm.addOrUpdateObject(track.toStoreObject())
+            self.realm.addOrUpdateObject(findOrCreateTrackStore(track))
             self.realm.addOrUpdateObject(history)
         }
         return history
@@ -159,5 +159,22 @@ public class HistoryStore: RLMObject {
         realm.transactionWithBlock() {
             self.realm.deleteAllObjects()
         }
+    }
+
+    private class func findOrCreateEntryStore(entry: Entry) -> EntryStore {
+        let results = EntryStore.objectsInRealm(HistoryStore.realm, withPredicate: NSPredicate(format: "id = %@", entry.id))
+        if results.count > 0 {
+            return results[0] as! EntryStore
+        }
+        return entry.toStoreObject()
+    }
+
+    private class func findOrCreateTrackStore(track: Track) -> TrackStore {
+        let results = TrackStore.objectsInRealm(HistoryStore.realm, withPredicate: NSPredicate(format: "url = %@", track.url))
+        if results.count > 0 {
+            return results[0] as! TrackStore
+        }
+        return track.toStoreObject()
+
     }
 }

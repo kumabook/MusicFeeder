@@ -28,6 +28,14 @@ public class TrackStore: RLMObject {
     override public class func primaryKey() -> String {
         return "url"
     }
+
+    internal class func findOrCreate(track: Track) -> TrackStore? {
+        if let store = findBy(url: track.url) {
+            return store
+        }
+        return track.toStoreObject()
+    }
+
     internal class func findBy(url url: String) -> TrackStore? {
         let results = TrackStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "url = %@", url))
         if results.count == 0 {

@@ -39,12 +39,7 @@ extension Entry {
         enclosure  = store.enclusure.map  { return Link(store: $0 as! LinkStore) }
     }
     func toStoreObject() -> EntryStore {
-        var store: EntryStore
-        if let e = EntryStore.findBy(id: id) {
-            store = e
-        } else {
-            store = EntryStore()
-        }
+        let store = EntryStore()
         updateProperties(store)
         return store
     }
@@ -214,6 +209,13 @@ public class EntryStore: RLMObject {
 
     override public class func primaryKey() -> String {
         return "id"
+    }
+
+    public class func findOrCreate(entry: Entry) -> EntryStore {
+        if let store = findBy(id: entry.id) {
+            return store
+        }
+        return entry.toStoreObject()
     }
 
     public class func findBy(id id: String) -> EntryStore? {
