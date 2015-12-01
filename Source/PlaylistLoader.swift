@@ -45,12 +45,9 @@ public class PlaylistLoader {
     }
 
     public func fetchTrack(index: Int, track: Track) -> SignalProducer<(Int, Track), NSError> {
-        weak var _self = self
         return track.fetchTrackDetail(false).map { _track -> (Int, Track) in
-            if let __self = _self {
-                Playlist.notifyChange(.TrackUpdated(__self.playlist, _track))
-                __self.playlist.sink(.Next(PlaylistEvent.Load(index: index)))
-            }
+            Playlist.notifyChange(.TrackUpdated(self.playlist, _track))
+            self.playlist.sink(.Next(PlaylistEvent.Load(index: index)))
             return (index, _track)
         }
     }
