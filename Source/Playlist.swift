@@ -22,7 +22,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     private var _tracks:     [Track]
     public var thumbnailUrl: NSURL? { return _tracks.first?.thumbnailUrl }
     public var signal:       Signal<PlaylistEvent, NSError>
-    public var sink:         Signal<PlaylistEvent, NSError>.Observer
+    public var observer:     Signal<PlaylistEvent, NSError>.Observer
 
     public var id:     String { return _id }
     public var tracks: [PlayerKit.Track] { return _tracks.map { $0 as PlayerKit.Track }}
@@ -47,9 +47,9 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         case TrackUpdated(Playlist, Track)
     }
 
-    public class var shared: (signal: Signal<Event, NSError>, sink: ReactiveCocoa.Event<Event, NSError> -> (), current: [Playlist]) {
+    public class var shared: (signal: Signal<Event, NSError>, observer: Signal<Event, NSError>.Observer, current: [Playlist]) {
         get { return (signal: Playlist.sharedPipe.0,
-                        sink: Playlist.sharedPipe.1,
+                    observer: Playlist.sharedPipe.1,
                      current: Playlist.sharedList) }
     }
 
@@ -72,7 +72,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         case .TrackUpdated(_, _):
             break
         }
-        shared.sink(ReactiveCocoa.Event<Event, NSError>.Next(event))
+        shared.observer.sendNext(event)
     }
 
     private class func dateFormatter() -> NSDateFormatter {
@@ -82,30 +82,30 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     }
 
     public init(title: String) {
-        self._id     = "\(title)-created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
-        self.title   = title
-        self._tracks = []
-        let pipe     = Signal<PlaylistEvent, NSError>.pipe()
-        self.signal  = pipe.0
-        self.sink    = pipe.1
+        self._id      = "\(title)-created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
+        self.title    = title
+        self._tracks  = []
+        let pipe      = Signal<PlaylistEvent, NSError>.pipe()
+        self.signal   = pipe.0
+        self.observer = pipe.1
     }
 
     public init(id: String, title: String, tracks: [Track]) {
-        self._id     = id
-        self.title   = title
-        self._tracks = tracks
-        let pipe     = Signal<PlaylistEvent, NSError>.pipe()
-        self.signal  = pipe.0
-        self.sink    = pipe.1
+        self._id      = id
+        self.title    = title
+        self._tracks  = tracks
+        let pipe      = Signal<PlaylistEvent, NSError>.pipe()
+        self.signal   = pipe.0
+        self.observer = pipe.1
     }
 
     public init(json: JSON) {
-        _id         = json["url"].stringValue
-        title       = json["title"].stringValue
-        _tracks     = json["tracks"].arrayValue.map({ Track(json: $0) })
-        let pipe    = Signal<PlaylistEvent, NSError>.pipe()
-        self.signal = pipe.0
-        self.sink   = pipe.1
+        _id           = json["url"].stringValue
+        title         = json["title"].stringValue
+        _tracks       = json["tracks"].arrayValue.map({ Track(json: $0) })
+        let pipe      = Signal<PlaylistEvent, NSError>.pipe()
+        self.signal   = pipe.0
+        self.observer = pipe.1
     }
 
     public init(store: PlaylistStore) {
@@ -115,9 +115,9 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         for trackStore in store.tracks {
             _tracks.append(Track(store:trackStore as! TrackStore))
         }
-        let pipe    = Signal<PlaylistEvent, NSError>.pipe()
-        self.signal = pipe.0
-        self.sink   = pipe.1
+        let pipe      = Signal<PlaylistEvent, NSError>.pipe()
+        self.signal   = pipe.0
+        self.observer = pipe.1
     }
 
     public var hashValue: Int {

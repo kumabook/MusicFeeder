@@ -57,7 +57,7 @@ public class TrackStore: RLMObject {
     internal class func create(track: Track) -> Bool {
         if let _ = findBy(url: track.url) { return false }
         let store = track.toStoreObject()
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.addObject(store)
         }
         return true
@@ -65,7 +65,7 @@ public class TrackStore: RLMObject {
 
     internal class func save(track: Track) -> Bool {
         if let store = findBy(url: track.url) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 if let title        = track.title                        { store.title        = title }
                 if let streamUrl    = track.streamUrl?.absoluteString    { store.streamUrl    = streamUrl }
                 if let thumbnailUrl = track.thumbnailUrl?.absoluteString { store.thumbnailUrl = thumbnailUrl }
@@ -78,14 +78,14 @@ public class TrackStore: RLMObject {
 
     internal class func remove(track: TrackStore) {
         if let store = findBy(url: track.url) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 self.realm.deleteObject(store)
             }
         }
     }
 
     internal class func removeAll() {
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.deleteAllObjects()
         }
     }

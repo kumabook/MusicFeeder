@@ -56,7 +56,7 @@ public class HistoryLoader: StreamLoader {
                 } else {
                     self.state = .Normal
                 }
-                self.sink(.Next(.CompleteLoadingNext))
+                self.observer.sendNext(.CompleteLoadingNext)
             }
         }
     }
@@ -69,7 +69,7 @@ public class HistoryLoader: StreamLoader {
                 let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
                 self.playlistsOfHistory[history] = playlist
                 UIScheduler().schedule {
-                    self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
+                    self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
                 }
                 self.fetchTracks(playlist, entry: entry)
                 return ()
@@ -88,7 +88,7 @@ public class HistoryLoader: StreamLoader {
             return
         }
         reset()
-        self.sink(.Next(.CompleteLoadingLatest))
+        observer.sendNext(.CompleteLoadingLatest)
         fetchEntries()
     }
 }

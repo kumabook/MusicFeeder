@@ -46,7 +46,7 @@ public class StreamLoader {
     public var playlistifier:      Disposable?
     public var streamContinuation: String?
     public var signal:             Signal<Event, NSError>
-    public var sink:               Signal<Event, NSError>.Observer
+    public var observer:           Signal<Event, NSError>.Observer
     private var _unreadOnly:       Bool
     private var _perPage:          Int
     private var _needsPlaylist:    Bool
@@ -60,7 +60,7 @@ public class StreamLoader {
         loaderOfPlaylist = [:]
         let pipe         = Signal<Event, NSError>.pipe()
         signal           = pipe.0
-        sink             = pipe.1
+        observer         = pipe.1
         _unreadOnly      = false
         _perPage         = CloudAPIClient.perPage
         _needsPlaylist   = true
@@ -119,7 +119,7 @@ public class StreamLoader {
                                             newerThan: lastUpdated,
                                            unreadOnly: unreadOnly,
                                               perPage: _perPage)
-        sink(.Next(.StartLoadingLatest))
+        observer.sendNext(.StartLoadingLatest)
         producer
             .startOn(UIScheduler())
             .on(
@@ -132,9 +132,9 @@ public class StreamLoader {
                         self.fetchAllPlaylists()
                     }
                 },
-                error: { error in CloudAPIClient.handleError(error: error) },
+                failed: { error in CloudAPIClient.handleError(error: error) },
                 completed: {
-                    self.sink(.Next(.CompleteLoadingLatest))
+                    self.observer.sendNext(.CompleteLoadingLatest)
             }).start()
     }
 
@@ -143,7 +143,7 @@ public class StreamLoader {
             return
         }
         state = .Fetching
-        sink(.Next(.StartLoadingNext))
+        observer.sendNext(.StartLoadingNext)
         var producer: SignalProducer<PaginatedEntryCollection, NSError>
         producer = feedlyClient.fetchEntries(streamId:stream.streamId,
                                          continuation: streamContinuation,
@@ -159,16 +159,16 @@ public class StreamLoader {
                 if self._needsPlaylist {
                     self.fetchAllPlaylists()
                 }
-                self.sink(.Next(.CompleteLoadingNext)) // First reload tableView,
+                self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
                 if paginatedCollection.continuation == nil {    // then wait for next load
                     self.state = .Complete
                 } else {
                     self.state = .Normal
                 }
                 },
-                error: {error in
+                failed: {error in
                     CloudAPIClient.handleError(error: error)
-                    self.sink(.Next(.FailToLoadNext))
+                    self.observer.sendNext(.FailToLoadNext)
                     self.state = State.Error
                 },
                 completed: {
@@ -190,7 +190,7 @@ public class StreamLoader {
                     let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
                     self.playlistsOfEntry[entry] = playlist
                     UIScheduler().schedule {
-                        self.sink(.Next(.CompleteLoadingPlaylist(playlist, entry)))
+                        self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
                     }
                     // Check if it is disposed
                     if let disposed = self.playlistifier?.disposed where !disposed {
@@ -254,43 +254,43 @@ public class StreamLoader {
     public func markAsRead(index: Int) {
         let entry = entries[index]
         if CloudAPIClient.isLoggedIn {
-            feedlyClient.markEntriesAsRead([entry.id]) { (req, res, result) in
-                if result.isFailure { print("Failed to mark as read") }
+            feedlyClient.markEntriesAsRead([entry.id]) { response in
+                if response.result.isFailure { print("Failed to mark as read") }
                 else                { print("Succeeded in marking as read") }
             }
         }
         entries.removeAtIndex(index)
-        sink(.Next(.RemoveAt(index)))
+        observer.sendNext(.RemoveAt(index))
     }
 
     public func markAsUnread(index: Int) {
         let entry = entries[index]
         if CloudAPIClient.isLoggedIn {
-            feedlyClient.keepEntriesAsUnread([entry.id], completionHandler: { (req, res, result) in
-                if result.isFailure { print("Failed to mark as unread") }
+            feedlyClient.keepEntriesAsUnread([entry.id], completionHandler: { response in
+                if response.result.isFailure { print("Failed to mark as unread") }
                 else                { print("Succeeded in marking as unread") }
             })
         }
         entries.removeAtIndex(index)
-        sink(.Next(.RemoveAt(index)))
+        observer.sendNext(.RemoveAt(index))
     }
 
     public func markAsUnsaved(index: Int) {
         let entry = entries[index]
         if CloudAPIClient.isLoggedIn {
-            feedlyClient.markEntriesAsUnsaved([entry.id]) { (req, res, result) in
-                if result.isFailure { print("Failed to mark as unsaved") }
+            feedlyClient.markEntriesAsUnsaved([entry.id]) { response in
+                if response.result.isFailure { print("Failed to mark as unsaved") }
                 else                { print("Succeeded in marking as unsaved") }
             }
 
-            feedlyClient.markEntriesAsRead([entry.id]) { (req, res, result) in
-                if result.isFailure { print("Failed to mark as read") }
+            feedlyClient.markEntriesAsRead([entry.id]) { response in
+                if response.result.isFailure { print("Failed to mark as read") }
                 else                { print("Succeeded in marking as read") }
             }
         } else {
             EntryStore.remove(entry.toStoreObject())
         }
         entries.removeAtIndex(index)
-        sink(.Next(.RemoveAt(index)))
+        observer.sendNext(.RemoveAt(index))
     }
 }

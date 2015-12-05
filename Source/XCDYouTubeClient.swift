@@ -12,13 +12,13 @@ import Result
 
 extension XCDYouTubeClient {
     public func fetchVideo(identifier: String) -> SignalProducer<XCDYouTubeVideo, NSError> {
-        return SignalProducer { (sink, disposable) in
+        return SignalProducer { (observer, disposable) in
             let operation = self.getVideoWithIdentifier(identifier, completionHandler: { (video, error) -> Void in
                 if let e = error {
-                    sink(.Error(e))
+                    observer.sendFailed(e)
                 } else if let v = video {
-                    sink(.Next(v))
-                    sink(.Completed)
+                    observer.sendNext(v)
+                    observer.sendCompleted()
                 }
             })
             disposable.addDisposable {

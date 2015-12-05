@@ -68,13 +68,13 @@ extension CloudAPIClient {
     public class func login(profile: Profile, token: String) {
         _profile = profile
         setAccessToken(token)
-        sharedPipe.1(ReactiveCocoa.Event<AccountEvent, NSError>.Next(AccountEvent.Login(profile)))
+        sharedPipe.1.sendNext(AccountEvent.Login(profile))
     }
 
     public class func logout() {
         _profile = nil
         setAccessToken("")
-        sharedPipe.1(ReactiveCocoa.Event<AccountEvent, NSError>.Next(AccountEvent.Logout))
+        sharedPipe.1.sendNext(AccountEvent.Logout)
     }
 
     public var authUrl:  String {
@@ -96,13 +96,13 @@ extension CloudAPIClient {
     }
 
     public func fetchProfile() -> SignalProducer<Profile, NSError> {
-        return SignalProducer { (sink, disposable) in
-            let req = self.fetchProfile({ (req, res, result) -> Void in
-                if let e = result.error {
-                    sink(.Error(self.buildError(e, response: res)))
-                } else if let profile = result.value {
-                    sink(.Next(profile))
-                    sink(.Completed)
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchProfile({ response -> Void in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else if let profile = response.result.value {
+                    observer.sendNext(profile)
+                    observer.sendCompleted()
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -110,13 +110,13 @@ extension CloudAPIClient {
     }
 
     public func fetchSubscriptions() -> SignalProducer<[Subscription], NSError> {
-        return SignalProducer { (sink, disposable) in
-            let req = self.fetchSubscriptions({ (req, res, result) -> Void in
-                if let e = result.error {
-                    sink(.Error(self.buildError(e, response: res)))
-                } else if let subscriptions = result.value {
-                    sink(.Next(subscriptions))
-                    sink(.Completed)
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchSubscriptions({ response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else if let subscriptions = response.result.value {
+                    observer.sendNext(subscriptions)
+                    observer.sendCompleted()
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -140,15 +140,15 @@ extension CloudAPIClient {
     }
 
     public func fetchEntries(streamId streamId: String, paginationParams: PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
-        return SignalProducer { (sink, disposable) in
-            let req = self.fetchContents(streamId, paginationParams: paginationParams, completionHandler: { (req, res, result) -> Void in
-                if let e = result.error {
-                    sink(.Error(self.buildError(e, response: res)))
-                } else if let entries = result.value {
-                    sink(.Next(entries))
-                    sink(.Completed)
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchContents(streamId, paginationParams: paginationParams, completionHandler: { response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else if let entries = response.result.value {
+                    observer.sendNext(entries)
+                    observer.sendCompleted()
                 } else {
-                    sink(.Error(self.buildError(NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: res)))
+                    observer.sendFailed(self.buildError(NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -156,13 +156,13 @@ extension CloudAPIClient {
     }
 
     public func fetchFeedsByIds(feedIds: [String]) -> SignalProducer<[Feed], NSError> {
-        return SignalProducer { (sink, disposable) in
-            let req = self.fetchFeeds(feedIds, completionHandler: { (req, res, result) -> Void in
-                if let e = result.error {
-                    sink(.Error(self.buildError(e, response: res)))
-                } else if let feeds = result.value {
-                    sink(.Next(feeds))
-                    sink(.Completed)
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchFeeds(feedIds, completionHandler: { response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else if let feeds = response.result.value {
+                    observer.sendNext(feeds)
+                    observer.sendCompleted()
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -170,13 +170,13 @@ extension CloudAPIClient {
     }
 
     public func fetchCategories() -> SignalProducer<[FeedlyKit.Category], NSError> {
-        return SignalProducer { (sink, disposable) in
-            let req = self.fetchCategories({ (req, res, result) -> Void in
-                if let e = result.error {
-                    sink(.Error(self.buildError(e, response: res)))
-                } else if let categories = result.value {
-                    sink(.Next(categories))
-                    sink(.Completed)
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchCategories({ response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else if let categories = response.result.value {
+                    observer.sendNext(categories)
+                    observer.sendCompleted()
                 }
             })
             disposable.addDisposable({ req.cancel() })
@@ -184,14 +184,14 @@ extension CloudAPIClient {
     }
 
     public func searchFeeds(query: SearchQueryOfFeed) -> SignalProducer<[Feed], NSError> {
-        return SignalProducer { (sink, disposable) in
-            let req = self.searchFeeds(query, completionHandler: { (req, res, result) -> Void in
-                if let e = result.error {
-                    sink(.Error(self.buildError(e, response: res)))
+        return SignalProducer { (observer, disposable) in
+            let req = self.searchFeeds(query, completionHandler: { response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
                 } else {
-                    if let feedResults = result.value {
-                        sink(.Next(feedResults.results))
-                        sink(.Completed)
+                    if let feedResults = response.result.value {
+                        observer.sendNext(feedResults.results)
+                        observer.sendCompleted()
                     }
                 }
             })

@@ -35,7 +35,7 @@ class SubscriptionStore: RLMObject {
     internal class func create(subscription: Subscription) -> PersistentResult {
         if let _ = findBy(id: subscription.streamId) { return .Failure }
         let store = subscription.toStoreObject()
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.addObject(store)
         }
         return .Success
@@ -43,7 +43,7 @@ class SubscriptionStore: RLMObject {
 
     internal class func save(subscription: Subscription) -> Bool {
         if let store = findBy(id: subscription.streamId) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 store.title = subscription.streamTitle
             }
             return true
@@ -81,14 +81,14 @@ class SubscriptionStore: RLMObject {
 
     internal class func remove(stream: Subscription) {
         if let store = findBy(id: stream.streamId) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 self.realm.deleteObject(store)
             }
         }
     }
 
     internal class func removeAll() {
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.deleteAllObjects()
         }
     }

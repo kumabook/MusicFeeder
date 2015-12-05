@@ -197,24 +197,24 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         _status = .Loading
         switch provider {
         case .YouTube:
-            return SignalProducer<Track, NSError> { (sink, disposable) in
+            return SignalProducer<Track, NSError> { (observer, disposable) in
                 var completed = false
                 let disp = XCDYouTubeClient.defaultClient().fetchVideo(self.identifier).on(
                     next: { video in
                         self.updatePropertiesWithYouTubeVideo(video)
                         completed = true
-                        sink(.Next(self))
-                        sink(.Completed)
-                    }, error: { error in
+                        observer.sendNext(self)
+                        observer.sendCompleted()
+                    }, failed: { error in
                         self._status = .Unavailable
-                        sink(.Next(self))
-                        sink(.Completed)
+                        observer.sendNext(self)
+                        observer.sendCompleted()
                     }, completed: {
                         self._status = .Available
                     }, interrupted: {
                         self._status = .Unavailable
-                        sink(.Next(self))
-                        sink(.Completed)
+                        observer.sendNext(self)
+                        observer.sendCompleted()
                     }).start()
                 disposable.addDisposable {
                     if !completed {
@@ -224,17 +224,17 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
                 return
             }
         case .SoundCloud:
-            return SignalProducer<Track, NSError> { (sink, disposable) in
+            return SignalProducer<Track, NSError> { (observer, disposable) in
                 typealias R = SoundCloudKit.APIClient.Router
-                SoundCloudKit.APIClient.sharedInstance.fetchItem(R.Track(self.identifier)) { (req: NSURLRequest?, res: NSHTTPURLResponse?, result: Alamofire.Result<SoundCloudKit.Track>) -> Void in
+                SoundCloudKit.APIClient.sharedInstance.fetchItem(R.Track(self.identifier)) { (req: NSURLRequest?, res: NSHTTPURLResponse?, result: Alamofire.Result<SoundCloudKit.Track, NSError>) -> Void in
                     if let track = result.value {
                         self.updateProperties(track)
-                        sink(.Next(self))
-                        sink(.Completed)
+                        observer.sendNext(self)
+                        observer.sendCompleted()
                     } else {
                         self._status = .Unavailable
-                        sink(.Next(self))
-                        sink(.Completed)
+                        observer.sendNext(self)
+                        observer.sendCompleted()
                     }
                 }
                 return

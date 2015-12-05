@@ -37,7 +37,7 @@ public class CategoryStore: RLMObject {
     public class func create(category: FeedlyKit.Category) -> PersistentResult {
         if let _ = findBy(id: category.id) { return .Failure }
         let store = category.toStoreObject()
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.addObject(store)
         }
         return .Success
@@ -45,7 +45,7 @@ public class CategoryStore: RLMObject {
 
     public class func save(category: FeedlyKit.Category) -> Bool {
         if let store = findBy(id: category.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 store.label = category.label
             }
             return true
@@ -74,14 +74,14 @@ public class CategoryStore: RLMObject {
 
     public class func remove(category: FeedlyKit.Category) {
         if let store = findBy(id: category.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 self.realm.deleteObject(store)
             }
         }
     }
 
     public class func removeAll() {
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.deleteAllObjects()
         }
     }

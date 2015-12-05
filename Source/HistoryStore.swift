@@ -65,7 +65,7 @@ public class HistoryStore: RLMObject {
     public class func add(entry: Entry) -> HistoryStore {
         removeOldestIfExceed()
         if let history = HistoryStore.findBy(id: entry.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 history.timestamp = NSDate().timestamp
                 self.realm.addOrUpdateObject(history)
             }
@@ -74,7 +74,7 @@ public class HistoryStore: RLMObject {
         let history = HistoryStore(id: entry.id,
                             timestamp: NSDate().timestamp,
                                  type: HistoryType.Entry.rawValue)
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.addOrUpdateObject(findOrCreateEntryStore(entry))
             self.realm.addOrUpdateObject(history)
         }
@@ -84,7 +84,7 @@ public class HistoryStore: RLMObject {
     public class func add(track: Track) -> HistoryStore {
         removeOldestIfExceed()
         if let history = HistoryStore.findBy(id: track.url) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 history.timestamp = NSDate().timestamp
                 self.realm.addOrUpdateObject(history)
             }
@@ -93,7 +93,7 @@ public class HistoryStore: RLMObject {
         let history = HistoryStore(id: track.url,
                             timestamp: NSDate().timestamp,
                                  type: HistoryType.Track.rawValue)
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.addOrUpdateObject(findOrCreateTrackStore(track))
             self.realm.addOrUpdateObject(history)
         }
@@ -149,14 +149,14 @@ public class HistoryStore: RLMObject {
 
     public class func remove(history: HistoryStore) {
         if let store = findBy(id: history.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 self.realm.deleteObject(store)
             }
         }
     }
 
     public class func removeAll() {
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.deleteAllObjects()
         }
     }

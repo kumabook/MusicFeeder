@@ -52,11 +52,11 @@ public class SavedStreamLoader: StreamLoader {
                 self.loadPlaylistOfEntry($0)
             }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
                 currentSignal.concat(nextSignal)
-            }).on(next: {}, error: {error in}, completed: {}).start()
+            }).on(next: {}, failed: {error in}, completed: {}).start()
             self.entries = entries
             UIScheduler().schedule {
                 self.state = .Complete
-                self.sink(.Next(.CompleteLoadingLatest))
+                self.observer.sendNext(.CompleteLoadingLatest)
             }
         }
     }

@@ -44,7 +44,7 @@ public class PlaylistStore: RLMObject {
 
     internal class func removeTrackAtIndex(index: UInt, playlist: Playlist) {
         if let store = findBy(id: playlist.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 store.tracks.removeObjectAtIndex(index)
             }
         }
@@ -60,7 +60,7 @@ public class PlaylistStore: RLMObject {
             if Int(store.tracks.count) + trackStores.count > Playlist.trackNumberLimit {
                 return .ExceedLimit
             }
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 store.tracks.addObjects(trackStores)
             }
             return .Success
@@ -74,7 +74,7 @@ public class PlaylistStore: RLMObject {
         }
         if let _ = findBy(id: playlist.id) { return .Failure }
         let store = playlist.toStoreObject()
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.addObject(store)
         }
         return .Success
@@ -82,7 +82,7 @@ public class PlaylistStore: RLMObject {
 
     internal class func save(playlist: Playlist) -> Bool {
         if let store = findBy(id: playlist.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 store.title = playlist.title
             }
             return true
@@ -110,14 +110,14 @@ public class PlaylistStore: RLMObject {
 
     internal class func remove(playlist: Playlist) {
         if let store = findBy(id: playlist.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 self.realm.deleteObject(store)
             }
         }
     }
 
     internal class func removeAll() {
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.deleteAllObjects()
         }
     }

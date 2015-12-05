@@ -33,7 +33,7 @@ public class StreamListLoader {
 
     public var state:                State
     public var signal:               Signal<Event, NSError>
-    private var sink:                Signal<Event, NSError>.Observer
+    private var observer:            Signal<Event, NSError>.Observer
     public var streamListOfCategory: [FeedlyKit.Category: [Stream]]
     public var uncategorized:        FeedlyKit.Category
     public var categories: [FeedlyKit.Category] {
@@ -50,7 +50,7 @@ public class StreamListLoader {
         streamListOfCategory = [:]
         let pipe = Signal<Event, NSError>.pipe()
         signal               = pipe.0
-        sink                 = pipe.1
+        observer             = pipe.1
         uncategorized        = FeedlyKit.Category.Uncategorized()
         if let userId = CloudAPIClient.profile?.id {
             uncategorized = FeedlyKit.Category.Uncategorized(userId)
@@ -97,21 +97,21 @@ public class StreamListLoader {
         streamListOfCategory                = [:]
         streamListOfCategory[uncategorized] = []
         state = .Fetching
-        sink(.Next(.StartLoading))
+        observer.sendNext(.StartLoading)
         return signal.map { (table: [FeedlyKit.Category: [Stream]]) -> Void in
                 self.state = .Normal
-                self.sink(.Next(.CompleteLoading))
+                self.observer.sendNext(.CompleteLoading)
                 return
             }.mapError { (error: NSError) in
                 CloudAPIClient.handleError(error: error)
                 self.state = .Error
-                self.sink(.Next(.FailToLoad(error)))
+                self.observer.sendNext(.FailToLoad(error))
                 return error
         }
     }
 
     public func fetchLocalSubscrptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
-        return SignalProducer { (sink, disposable) in
+        return SignalProducer { (_observer, disposable) in
             for category in CategoryStore.findAll() {
                 self.streamListOfCategory[category] = [] as [Stream]
             }
@@ -125,8 +125,8 @@ public class StreamListLoader {
                     }
                 }
             }
-            sink(.Next(self.streamListOfCategory))
-            sink(.Completed)
+            _observer.sendNext(self.streamListOfCategory)
+            _observer.sendCompleted()
             return
         }
     }
@@ -166,25 +166,25 @@ public class StreamListLoader {
     }
 
     public func subscribeTo(subscription: Subscription) -> SignalProducer<Subscription, NSError> {
-        return SignalProducer<Subscription, NSError> { (sink, disposable) in
+        return SignalProducer<Subscription, NSError> { (_observer, disposable) in
             if !CloudAPIClient.isLoggedIn {
                 SubscriptionStore.create(subscription)
                 self.addSubscription(subscription)
                 self.state = .Normal
-                sink(.Next(subscription))
-                sink(.Completed)
+                _observer.sendNext(subscription)
+                _observer.sendCompleted()
             } else {
-                CloudAPIClient.sharedInstance.subscribeTo(subscription) { (req, res, result) -> Void in
-                    if let e = result.error {
+                CloudAPIClient.sharedInstance.subscribeTo(subscription) { response in
+                    if let e = response.result.error {
                         CloudAPIClient.handleError(error: e)
                         self.state = .Error
-                        self.sink(.Next(.FailToUpdate(e)))
-                        sink(.Error(CloudAPIClient.sharedInstance.buildError(e, response: res)))
+                        self.observer.sendNext(.FailToUpdate(e))
+                        _observer.sendFailed(CloudAPIClient.sharedInstance.buildError(e, response: response.response))
                     } else {
                         self.addSubscription(subscription)
                         self.state = .Normal
-                        sink(.Next(subscription))
-                        sink(.Completed)
+                        _observer.sendNext(subscription)
+                        _observer.sendCompleted()
                     }
                 }
             }
@@ -193,22 +193,22 @@ public class StreamListLoader {
 
     public func unsubscribeTo(subscription: Subscription, index: Int, category: FeedlyKit.Category) {
         state = .Updating
-        self.sink(.Next(.StartUpdating))
+        observer.sendNext(.StartUpdating)
         if !CloudAPIClient.isLoggedIn {
             SubscriptionStore.remove(subscription)
             self.removeSubscription(subscription)
             self.state = .Normal
-            self.sink(.Next(.RemoveAt(index, subscription, category)))
+            self.observer.sendNext(.RemoveAt(index, subscription, category))
             return
         }
-        apiClient.unsubscribeTo(subscription.id, completionHandler: { (req, res, result) -> Void in
-            if let e = result.error {
+        apiClient.unsubscribeTo(subscription.id, completionHandler: { response in
+            if let e = response.result.error {
                 self.state = .Error
-                self.sink(.Next(.FailToUpdate(e)))
+                self.observer.sendNext(.FailToUpdate(e))
             } else {
                 self.removeSubscription(subscription)
                 self.state = .Normal
-                self.sink(.Next(.RemoveAt(index, subscription, category)))
+                self.observer.sendNext(.RemoveAt(index, subscription, category))
             }
         })
     }

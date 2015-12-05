@@ -19,16 +19,16 @@ public class MusicFavAPIClient {
     static var sharedManager: Alamofire.Manager! = Alamofire.Manager()
 
     public func playlistify(targetUrl: NSURL, errorOnFailure: Bool) -> SignalProducer<Playlist, NSError> {
-        return SignalProducer { (sink, disposable) in
+        return SignalProducer { (observer, disposable) in
             let url = String(format: "%@/playlistify", MusicFavAPIClient.baseUrl)
             let request = MusicFavAPIClient.sharedManager.request(.GET, url, parameters: ["url": targetUrl], encoding: ParameterEncoding.URL)
-            .responseJSON(options: NSJSONReadingOptions()) { (req, res, result) -> Void in
-                if let e = result.error {
-                    if errorOnFailure { sink(.Error(e as NSError)) }
-                    else              { sink(.Completed) }
+            .responseJSON(options: NSJSONReadingOptions()) { response in
+                if let e = response.result.error {
+                    if errorOnFailure { observer.sendFailed(e as NSError) }
+                    else              { observer.sendCompleted() }
                 } else {
-                    sink(.Next(Playlist(json: JSON(result.value!))))
-                    sink(.Completed)
+                    observer.sendNext(Playlist(json: JSON(response.result.value!)))
+                    observer.sendCompleted()
                 }
             }
             disposable.addDisposable {

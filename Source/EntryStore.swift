@@ -239,7 +239,7 @@ public class EntryStore: RLMObject {
     public class func create(entry: Entry) -> Bool {
         if let _ = findBy(id: entry.id) { return false }
         let store = entry.toStoreObject()
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.addObject(store)
         }
         return true
@@ -247,7 +247,7 @@ public class EntryStore: RLMObject {
 
     public class func save(entry: Entry) -> Bool {
         if let store = findBy(id: entry.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 entry.updateProperties(store)
             }
             return true
@@ -258,14 +258,14 @@ public class EntryStore: RLMObject {
 
     public class func remove(entry: EntryStore) {
         if let store = findBy(id: entry.id) {
-            realm.transactionWithBlock() {
+            try! realm.transactionWithBlock() {
                 self.realm.deleteObject(store)
             }
         }
     }
 
     public class func removeAll() {
-        realm.transactionWithBlock() {
+        try! realm.transactionWithBlock() {
             self.realm.deleteAllObjects()
         }
     }
