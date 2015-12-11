@@ -45,8 +45,8 @@ extension Entry {
     }
     func updateProperties(store: EntryStore) {
         store.id              = id
-        store.title           = title ?? ""
-        store.author          = author ?? ""
+        store.title           = title
+        store.author          = author
         store.crawled         = crawled
         store.recrawled       = recrawled
         store.published       = published
@@ -54,9 +54,9 @@ extension Entry {
         store.unread          = unread
         store.engagement      = engagement ?? 0
         store.actionTimestamp = actionTimestamp ?? 0
-        store.fingerprint     = fingerprint ?? ""
-        store.originId        = originId ?? ""
-        store.sid             = sid ?? ""
+        store.fingerprint     = fingerprint
+        store.originId        = originId
+        store.sid             = sid
 
         store.content       = content?.toStoreObject()
         store.origin        = origin?.toStoreObject()
@@ -144,15 +144,24 @@ extension Visual {
 public class ContentStore: RLMObject {
     dynamic var direction: String = ""
     dynamic var content:   String = ""
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["direction", "content"]
+    }
 }
 public class LinkStore: RLMObject {
     dynamic var href:   String = ""
     dynamic var type:   String = ""
     dynamic var length: Int    = 0
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["href", "type"]
+    }
 }
 public class TagStore:      RLMObject {
     dynamic var id:    String = ""
     dynamic var label: String = ""
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["id", "label"]
+    }
 }
 public class KeywordStore:  RLMObject {
     dynamic var name: String = ""
@@ -163,24 +172,33 @@ public class KeywordStore:  RLMObject {
         self.init()
         self.name = name
     }
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["name"]
+    }
 }
 
 public class OriginStore: RLMObject {
     dynamic var streamId: String = ""
     dynamic var title:    String = ""
     dynamic var htmlUrl:  String = ""
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["streamId", "title", "htmlUrl"]
+    }
 }
 public class VisualStore: RLMObject {
     dynamic var url:         String = ""
     dynamic var width:       Int    = 0
     dynamic var height:      Int    = 0
     dynamic var contentType: String = ""
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["url", "contentType"]
+    }
 }
 
 public class EntryStore: RLMObject {
-    dynamic var id:              String        = ""
-    dynamic var title:           String        = ""
-    dynamic var author:          String        = ""
+    dynamic var id:              String = ""
+    dynamic var title:           String?
+    dynamic var author:          String?
     dynamic var crawled:         Int64         = 0
     dynamic var recrawled:       Int64         = 0
     dynamic var published:       Int64         = 0
@@ -188,9 +206,9 @@ public class EntryStore: RLMObject {
     dynamic var unread:          Bool          = false
     dynamic var engagement:      Int           = 0
     dynamic var actionTimestamp: Int64         = 0
-    dynamic var fingerprint:     String        = ""
-    dynamic var originId:        String        = ""
-    dynamic var sid:             String        = ""
+    dynamic var fingerprint:     String?
+    dynamic var originId:        String?
+    dynamic var sid:             String?
     dynamic var content:         ContentStore?
     dynamic var summary:         ContentStore?
     dynamic var origin:          OriginStore?
@@ -209,6 +227,10 @@ public class EntryStore: RLMObject {
 
     override public class func primaryKey() -> String {
         return "id"
+    }
+
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["id"]
     }
 
     public class func findOrCreate(entry: Entry) -> EntryStore {

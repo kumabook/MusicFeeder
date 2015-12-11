@@ -11,21 +11,13 @@ import Realm
 import FeedlyKit
 
 public class ListenItLaterEntryStore: EntryStore {
-    static var groupIdentifier: String = "group.com.kumabook.MusicFav"
     override class var realm: RLMRealm {
-        get {
-            let fileManager = NSFileManager.defaultManager()
-            let directory = fileManager.containerURLForSecurityApplicationGroupIdentifier(groupIdentifier)!
-            let path: NSString = directory.path!
-            let realmPath = path.stringByAppendingPathComponent("db.realm")
-            return RLMRealm(path: realmPath as String)
-        }
+        return try! RLMRealm(configuration: RealmMigration.listenItLaterConfiguration())
     }
 
     public class func moveToSaved() {
         let entryStores = findAll()
         entryStores.forEach {
-            print("add \($0.id)")
             EntryStore.create(Entry(store: $0))
         }
         removeAll()

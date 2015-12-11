@@ -24,10 +24,14 @@ extension Subscription {
 class SubscriptionStore: RLMObject {
     dynamic var id:         String = ""
     dynamic var title:      String = ""
-    dynamic var visualUrl:  String = ""
+    dynamic var visualUrl:  String?
     dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
     internal override class func primaryKey() -> String {
         return "id"
+    }
+
+    internal override class func requiredProperties() -> [AnyObject] {
+        return ["id", "title"]
     }
 
     class var realm: RLMRealm { return RLMRealm.defaultRealm() }

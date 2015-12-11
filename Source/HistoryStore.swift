@@ -15,8 +15,16 @@ public class HistoryStore: RLMObject {
     static let maxLength:  UInt = 10
     static let limit:      UInt = 5
 
+    class var realm: RLMRealm {
+        return try! RLMRealm(configuration: RealmMigration.historyConfiguration())
+    }
+
     override public class func primaryKey() -> String {
         return "id"
+    }
+
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["id", "type"]
     }
 
     public dynamic var id:        String = ""
@@ -175,6 +183,5 @@ public class HistoryStore: RLMObject {
             return results[0] as! TrackStore
         }
         return track.toStoreObject()
-
     }
 }

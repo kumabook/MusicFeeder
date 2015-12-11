@@ -20,9 +20,11 @@ public class TrackStore: RLMObject {
     dynamic var duration:     Int = 0
 
     class var realm: RLMRealm {
-        get {
-            return RLMRealm.defaultRealm()
-        }
+        return RLMRealm.defaultRealm()
+    }
+
+    public override class func requiredProperties() -> [AnyObject] {
+        return ["url", "providerRaw", "identifier", "title", "streamUrl", "thumbnailUrl"]
     }
 
     override public class func primaryKey() -> String {
