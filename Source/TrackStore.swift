@@ -91,30 +91,4 @@ public class TrackStore: RLMObject {
             self.realm.deleteAllObjects()
         }
     }
-
-    public class func migration() -> Void {
-        let config = RLMRealmConfiguration.defaultConfiguration()
-        config.schemaVersion = 2
-        config.migrationBlock = { migration, oldVersion in
-            if (oldVersion < 1) {
-                migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
-                    if let old = oldObject, new =  newObject {
-                        new["identifier"] = old["serviceId"]
-                    }
-                }
-            }
-            if (oldVersion < 2) {
-                migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
-                    if let old = oldObject, new =  newObject {
-                        let properties = ["title", "streamUrl", "thumbnailUrl"]
-                        for prop in properties {
-                            new[prop] = old[prop]
-                        }
-                    }
-                }
-            }
-        }
-        RLMRealmConfiguration.setDefaultConfiguration(config)
-        RLMRealm.defaultRealm()
-    }
 }

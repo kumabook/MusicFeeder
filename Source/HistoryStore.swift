@@ -62,14 +62,6 @@ public class HistoryStore: RLMObject {
         self.type      = type
     }
 
-    class var realm: RLMRealm {
-        var path: NSString = RLMRealmConfiguration.defaultConfiguration().path!
-        path = path.stringByDeletingLastPathComponent
-        path = path.stringByAppendingPathComponent("history")
-        path = path.stringByAppendingPathExtension("realm")!
-        return RLMRealm(path: path as String)
-    }
-
     public class func add(entry: Entry) -> HistoryStore {
         removeOldestIfExceed()
         if let history = HistoryStore.findBy(id: entry.id) {
