@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6705761A1BDE60400087063A /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576191BDE60400087063A /* HistoryStore.swift */; settings = {ASSET_TAGS = (); }; };
-		6705761C1BDE73A00087063A /* HistoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705761B1BDE73A00087063A /* HistoryLoader.swift */; settings = {ASSET_TAGS = (); }; };
-		670576221BE4E9C60087063A /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576211BE4E9C60087063A /* History.swift */; settings = {ASSET_TAGS = (); }; };
-		671132821BC1212E00A036B0 /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132801BC1212E00A036B0 /* EntryStore.swift */; settings = {ASSET_TAGS = (); }; };
-		671132831BC1212E00A036B0 /* SavedStreamLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamLoader.swift */; settings = {ASSET_TAGS = (); }; };
+		6705761A1BDE60400087063A /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576191BDE60400087063A /* HistoryStore.swift */; };
+		6705761C1BDE73A00087063A /* HistoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705761B1BDE73A00087063A /* HistoryLoader.swift */; };
+		670576221BE4E9C60087063A /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576211BE4E9C60087063A /* History.swift */; };
+		671132821BC1212E00A036B0 /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132801BC1212E00A036B0 /* EntryStore.swift */; };
+		671132831BC1212E00A036B0 /* SavedStreamLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamLoader.swift */; };
+		67120B3F1C18821C00240F8B /* RealmMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67120B3E1C18821C00240F8B /* RealmMigration.swift */; };
 		678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
 		678305851B9897A000A83F52 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
 		67916DB01BAEB767004419B0 /* Breit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67D2657E1BACE16B000240FB /* Breit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -47,7 +48,7 @@
 		679C532F1B70F6A900BE6614 /* PlaylistSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D61B70E44000BE6614 /* PlaylistSpec.swift */; };
 		679C534C1B71019B00BE6614 /* MusicFeeder.h in Headers */ = {isa = PBXBuildFile; fileRef = 679C534B1B71019B00BE6614 /* MusicFeeder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		679C53521B72385900BE6614 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C53511B72385900BE6614 /* Player.swift */; };
-		67AD468C1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */; settings = {ASSET_TAGS = (); }; };
+		67AD468C1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */; };
 		67D265731BACE16A000240FB /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0601B73798E003A1450 /* Alamofire.framework */; };
 		67D265741BACE16A000240FB /* FeedlyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0631B7379CB003A1450 /* FeedlyKit.framework */; };
 		67D265751BACE16A000240FB /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B07B1B7379DD003A1450 /* Nimble.framework */; };
@@ -125,6 +126,7 @@
 		670576211BE4E9C60087063A /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = History.swift; path = Source/History.swift; sourceTree = SOURCE_ROOT; };
 		671132801BC1212E00A036B0 /* EntryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryStore.swift; path = Source/EntryStore.swift; sourceTree = SOURCE_ROOT; };
 		671132811BC1212E00A036B0 /* SavedStreamLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SavedStreamLoader.swift; path = Source/SavedStreamLoader.swift; sourceTree = SOURCE_ROOT; };
+		67120B3E1C18821C00240F8B /* RealmMigration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RealmMigration.swift; path = Source/RealmMigration.swift; sourceTree = SOURCE_ROOT; };
 		6713B0601B73798E003A1450 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		6713B0631B7379CB003A1450 /* FeedlyKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedlyKit.framework; path = Carthage/Build/iOS/FeedlyKit.framework; sourceTree = "<group>"; };
 		6713B0641B7379CB003A1450 /* PlayerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PlayerKit.framework; path = Carthage/Build/iOS/PlayerKit.framework; sourceTree = "<group>"; };
@@ -204,6 +206,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		67120B401C1884C600240F8B /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				67120B3E1C18821C00240F8B /* RealmMigration.swift */,
+				671132801BC1212E00A036B0 /* EntryStore.swift */,
+				670576191BDE60400087063A /* HistoryStore.swift */,
+				670505A51B6E1398006EAA84 /* TrackStore.swift */,
+				678305821B987B9600A83F52 /* SubscriptionStore.swift */,
+				67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */,
+			);
+			name = Store;
+			sourceTree = "<group>";
+		};
 		679C51DC1B70E44800BE6614 /* Fixture */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,10 +273,8 @@
 		67FBBE081B6CE43100B567CB /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				671132801BC1212E00A036B0 /* EntryStore.swift */,
-				67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */,
+				67120B401C1884C600240F8B /* Store */,
 				670576211BE4E9C60087063A /* History.swift */,
-				670576191BDE60400087063A /* HistoryStore.swift */,
 				6705761B1BDE73A00087063A /* HistoryLoader.swift */,
 				671132811BC1212E00A036B0 /* SavedStreamLoader.swift */,
 				679C53511B72385900BE6614 /* Player.swift */,
@@ -271,7 +284,6 @@
 				670505A01B6E1398006EAA84 /* PlaylistLoader.swift */,
 				670505A11B6E1398006EAA84 /* PlaylistStore.swift */,
 				670505A41B6E1398006EAA84 /* Track.swift */,
-				670505A51B6E1398006EAA84 /* TrackStore.swift */,
 				67FBBE321B6CE76300B567CB /* Category.swift */,
 				67FBBE341B6CE76300B567CB /* Entry.swift */,
 				67FBBE351B6CE76300B567CB /* FeedlyAPIClient.swift */,
@@ -279,7 +291,6 @@
 				67FBBE3B1B6CE76300B567CB /* StreamListLoader.swift */,
 				67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */,
 				67FBBE2D1B6CE61C00B567CB /* Info.plist */,
-				678305821B987B9600A83F52 /* SubscriptionStore.swift */,
 				678305841B9897A000A83F52 /* CategoryStore.swift */,
 			);
 			name = Source;
@@ -430,6 +441,7 @@
 				679C52E11B70F3DD00BE6614 /* FeedlyAPIClient.swift in Sources */,
 				679C52E31B70F3DD00BE6614 /* StreamListLoader.swift in Sources */,
 				679C53521B72385900BE6614 /* Player.swift in Sources */,
+				67120B3F1C18821C00240F8B /* RealmMigration.swift in Sources */,
 				679C52E51B70F3DD00BE6614 /* XCDYouTubeClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
