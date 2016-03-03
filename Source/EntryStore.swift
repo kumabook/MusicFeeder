@@ -144,7 +144,7 @@ extension Visual {
 public class ContentStore: RLMObject {
     dynamic var direction: String = ""
     dynamic var content:   String = ""
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["direction", "content"]
     }
 }
@@ -152,14 +152,14 @@ public class LinkStore: RLMObject {
     dynamic var href:   String = ""
     dynamic var type:   String = ""
     dynamic var length: Int    = 0
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["href", "type"]
     }
 }
 public class TagStore:      RLMObject {
     dynamic var id:    String = ""
     dynamic var label: String = ""
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["id", "label"]
     }
 }
@@ -172,7 +172,7 @@ public class KeywordStore:  RLMObject {
         self.init()
         self.name = name
     }
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["name"]
     }
 }
@@ -181,7 +181,7 @@ public class OriginStore: RLMObject {
     dynamic var streamId: String = ""
     dynamic var title:    String = ""
     dynamic var htmlUrl:  String = ""
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["streamId", "title", "htmlUrl"]
     }
 }
@@ -190,7 +190,7 @@ public class VisualStore: RLMObject {
     dynamic var width:       Int    = 0
     dynamic var height:      Int    = 0
     dynamic var contentType: String = ""
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["url", "contentType"]
     }
 }
@@ -229,7 +229,7 @@ public class EntryStore: RLMObject {
         return "id"
     }
 
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["id"]
     }
 

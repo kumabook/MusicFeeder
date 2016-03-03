@@ -30,7 +30,7 @@ class SubscriptionStore: RLMObject {
         return "id"
     }
 
-    internal override class func requiredProperties() -> [AnyObject] {
+    internal override class func requiredProperties() -> [String] {
         return ["id", "title"]
     }
 

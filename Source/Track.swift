@@ -92,7 +92,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
     private var youtubeVideo: XCDYouTubeVideo?
     @objc public var streamUrl: NSURL? {
         if let video = youtubeVideo {
-            return video.streamURLs[Track.youTubeVideoQuality.rawValue] as? NSURL
+            return video.streamURLs[Track.youTubeVideoQuality.rawValue]
         } else if let url = _streamUrl {
             return  url
         }

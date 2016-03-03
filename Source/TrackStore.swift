@@ -23,7 +23,7 @@ public class TrackStore: RLMObject {
         return RLMRealm.defaultRealm()
     }
 
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["url", "providerRaw", "identifier", "title", "streamUrl", "thumbnailUrl"]
     }
 

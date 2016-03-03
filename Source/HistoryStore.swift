@@ -23,7 +23,7 @@ public class HistoryStore: RLMObject {
         return "id"
     }
 
-    public override class func requiredProperties() -> [AnyObject] {
+    public override class func requiredProperties() -> [String] {
         return ["id", "type"]
     }
 
