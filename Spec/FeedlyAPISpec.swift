@@ -68,5 +68,21 @@ class FeedlyAPISpec: QuickSpec {
                 expect(_profile!.email!).to(equal(self.profile!.email))
             }
         }
+
+        describe("GET /v3/search/feeds") {
+            var feeds: [Feed]?
+            beforeEach {
+                let client = CloudAPIClient.sharedInstance
+                client.setAccessToken(self.accessToken!.accessToken)
+                client.searchFeeds(SearchQueryOfFeed(query: ""))
+                    .on(next: {
+                        feeds = $0
+                    }).start()
+            }
+            it("should fetch a user") {
+                expect(feeds).toEventuallyNot(beNil())
+                expect(feeds!.count).to(beGreaterThan(0))
+            }
+        }
     }
 }
