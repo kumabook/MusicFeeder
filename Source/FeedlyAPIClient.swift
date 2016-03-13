@@ -109,6 +109,20 @@ extension CloudAPIClient {
         }
     }
 
+    public func updateProfile(params: [String:AnyObject]) -> SignalProducer<Profile, NSError>{
+        return SignalProducer { (observer, disposable) in
+            let req = self.updateProfile(params) { response -> Void in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else if let profile = response.result.value {
+                    observer.sendNext(profile)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
     public func fetchSubscriptions() -> SignalProducer<[Subscription], NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchSubscriptions({ response in
