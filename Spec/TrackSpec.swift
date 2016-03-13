@@ -24,7 +24,7 @@ class TrackSpec: QuickSpec {
         describe("A Track") {
             it("should be constructed with json") {
                 expect(track).notTo(beNil())
-                expect(track.provider).to(equal(Provider.Youtube))
+                expect(track.provider).to(equal(Provider.YouTube))
                 expect(track.identifier).to(equal("abcdefg"))
             }
 
@@ -38,7 +38,7 @@ class TrackSpec: QuickSpec {
             }
 
             it ("should save if exist") {
-                var tracks = Track.findAll()
+                let tracks = Track.findAll()
                 expect(tracks.count).to(equal(0))
                 expect(track.save()).to(equal(false))
                 expect(track.create()).to(equal(true))
