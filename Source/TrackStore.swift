@@ -11,20 +11,21 @@ import Realm
 import FeedlyKit
 
 public class TrackStore: RLMObject {
+    dynamic var id:           String = ""
     dynamic var url:          String = ""
     dynamic var providerRaw:  String = ""
     dynamic var identifier:   String = ""
     dynamic var title:        String = ""
     dynamic var streamUrl:    String = ""
     dynamic var thumbnailUrl: String = ""
-    dynamic var duration:     Int = 0
+    dynamic var duration:     Int    = 0
 
     class var realm: RLMRealm {
         return RLMRealm.defaultRealm()
     }
 
     public override class func requiredProperties() -> [String] {
-        return ["url", "providerRaw", "identifier", "title", "streamUrl", "thumbnailUrl"]
+        return ["id", "url", "providerRaw", "identifier", "title", "streamUrl", "thumbnailUrl"]
     }
 
     override public class func primaryKey() -> String {

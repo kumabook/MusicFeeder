@@ -19,7 +19,7 @@ public class RealmMigration {
 
     public class func mainConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration.defaultConfiguration()
-        config.schemaVersion = 7
+        config.schemaVersion = 8
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
@@ -57,6 +57,17 @@ public class RealmMigration {
                 migration.enumerateObjects(HistoryStore.className())      { oldObject, newObject in }
                 migration.enumerateObjects(SubscriptionStore.className()) { oldObject, newObject in }
                 migration.enumerateObjects(TrackStore.className())        { oldObject, newObject in }
+            }
+            if (oldVersion < 8) {
+                migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
+                    if let old = oldObject, new =  newObject {
+                        let properties = ["title", "streamUrl", "thumbnailUrl"]
+                        for prop in properties {
+                            new[prop] = old[prop]
+                        }
+                        new["id"] = "";
+                    }
+                }
             }
         }
         return config

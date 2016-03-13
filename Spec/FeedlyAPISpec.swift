@@ -19,6 +19,7 @@ class FeedlyAPISpec: QuickSpec {
 
     var profile:     Profile?
     var accessToken: MusicFeeder.AccessToken?
+
     var client: CloudAPIClient {
         let c = CloudAPIClient.sharedInstance
         c.setAccessToken(self.accessToken?.accessToken)
