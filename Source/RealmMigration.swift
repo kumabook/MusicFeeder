@@ -69,9 +69,12 @@ public class RealmMigration {
 
     public static var listenItLaterPath: String {
         let fileManager = NSFileManager.defaultManager()
-        let directory = fileManager.containerURLForSecurityApplicationGroupIdentifier(groupIdentifier)!
-        let path: NSString = directory.path!
-        return path.stringByAppendingPathComponent("db.realm")
+        if let directory = fileManager.containerURLForSecurityApplicationGroupIdentifier(groupIdentifier) {
+            let path: NSString = directory.path!
+            return path.stringByAppendingPathComponent("db.realm")
+        } else {
+            return RLMRealmConfiguration.defaultConfiguration().path!
+        }
     }
 
     public class func listenItLaterConfiguration() -> RLMRealmConfiguration {
