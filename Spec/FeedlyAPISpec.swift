@@ -19,13 +19,17 @@ class FeedlyAPISpec: QuickSpec {
 
     var profile:     Profile?
     var accessToken: MusicFeeder.AccessToken?
+    var client: CloudAPIClient {
+        let c = CloudAPIClient.sharedInstance
+        c.setAccessToken(self.accessToken?.accessToken)
+        return c
+    }
 
 
     override func spec() {
         describe("PUT /v3/profile") {
             beforeEach {
-                let client = CloudAPIClient.sharedInstance
-                client.createProfile(self.email, password: self.password)
+                self.client.createProfile(self.email, password: self.password)
                     .on(next: {
                        self.profile = $0
                     }).start()
@@ -39,8 +43,7 @@ class FeedlyAPISpec: QuickSpec {
 
         describe("POST /oauth/token") {
             beforeEach {
-                let client = CloudAPIClient.sharedInstance
-                client.fetchAccessToken(self.email, password: self.password)
+                self.client.fetchAccessToken(self.email, password: self.password)
                     .on(failed: {
                             print("error \($0.code)")
                         }, next: {
@@ -55,9 +58,7 @@ class FeedlyAPISpec: QuickSpec {
         describe("GET /v3/profile") {
             var _profile: Profile?
             beforeEach {
-                let client = CloudAPIClient.sharedInstance
-                client.setAccessToken(self.accessToken!.accessToken)
-                client.fetchProfile()
+                self.client.fetchProfile()
                     .on(next: {
                         _profile = $0
                     }).start()
@@ -72,9 +73,7 @@ class FeedlyAPISpec: QuickSpec {
         describe("GET /v3/search/feeds") {
             var feeds: [Feed]?
             beforeEach {
-                let client = CloudAPIClient.sharedInstance
-                client.setAccessToken(self.accessToken!.accessToken)
-                client.searchFeeds(SearchQueryOfFeed(query: ""))
+                self.client.searchFeeds(SearchQueryOfFeed(query: ""))
                     .on(next: {
                         feeds = $0
                     }).start()
