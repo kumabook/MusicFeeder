@@ -60,10 +60,14 @@ public class PlaylistStore: RLMObject {
             if Int(store.tracks.count) + trackStores.count > Playlist.trackNumberLimit {
                 return .ExceedLimit
             }
-            try! realm.transactionWithBlock() {
-                store.tracks.addObjects(trackStores)
+            do {
+                try realm.transactionWithBlock() {
+                    store.tracks.addObjects(trackStores)
+                }
+                return .Success
+            } catch {
+                return .Failure
             }
-            return .Success
         }
         return .Failure
     }
@@ -74,10 +78,14 @@ public class PlaylistStore: RLMObject {
         }
         if let _ = findBy(id: playlist.id) { return .Failure }
         let store = playlist.toStoreObject()
-        try! realm.transactionWithBlock() {
-            self.realm.addObject(store)
+        do {
+            try realm.transactionWithBlock() {
+                self.realm.addObject(store)
+            }
+            return .Success
+        } catch {
+            return .Failure
         }
-        return .Success
     }
 
     internal class func save(playlist: Playlist) -> Bool {

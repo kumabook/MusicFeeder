@@ -11,6 +11,7 @@ import ReactiveCocoa
 import Result
 
 public class StreamLoader {
+    static var includesTrack: Bool = true
     public enum RemoveMark {
         case Read
         case Unread
@@ -183,9 +184,12 @@ public class StreamLoader {
             if let playlist = self.playlistsOfEntry[entry] {
                 fetchTracks(playlist, entry: entry)
                 return SignalProducer<Void, NSError>.empty
+            } else if StreamLoader.includesTrack {
+                self.playlistsOfEntry[entry] = entry.playlist
+                return SignalProducer<Void, NSError>.empty
             } else {
                 let signal: SignalProducer<SignalProducer<Void, NSError>, NSError> = musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
-                    var tracks = entry.enclosureTracks
+                    var tracks = entry.audioTracks
                     tracks.appendContentsOf(pl.getTracks())
                     let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
                     self.playlistsOfEntry[entry] = playlist

@@ -22,6 +22,7 @@ class FeedlyAPISpec: QuickSpec {
     var profile: Profile?
     var feeds:   [Feed]?
     var entries: [Entry]?
+    var tracks:  [Track]?
 
     var client: CloudAPIClient {
         let c = CloudAPIClient.sharedInstance
@@ -97,6 +98,15 @@ class FeedlyAPISpec: QuickSpec {
             it("should fetch a user") {
                 expect(self.entries).toEventuallyNot(beNil())
                 expect(self.entries!.count).to(beGreaterThan(0))
+                expect(self.entries![0].engagement).notTo(beNil())
+                expect(self.entries![0].enclosure).notTo(beNil())
+
+                for e in self.entries! {
+                    for enc in e.enclosure! {
+                        expect(enc.type).notTo(beNil())
+                        expect(enc.href).notTo(beNil())
+                    }
+                }
             }
         }
     }
