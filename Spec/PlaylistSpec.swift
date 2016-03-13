@@ -54,7 +54,7 @@ class PlaylistSpec: QuickSpec {
             it("should append and remove track") {
                 expect(playlist.create()).to(equal(PersistentResult.Success))
                 expect(playlist.tracks.count).to(equal(2))
-                let track = Track(id: 1, provider: Provider.YouTube, url: "http://dummy.com", identifier: "12345", title: nil)
+                let track = Track(id: "", provider: Provider.YouTube, url: "http://dummy.com", identifier: "12345", title: nil)
                 playlist.appendTracks([track])
                 expect(playlist.tracks.count).to(equal(3))
                 expect(Track.findAll().count).to(equal(3))

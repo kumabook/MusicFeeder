@@ -11,7 +11,7 @@ import Realm
 import FeedlyKit
 
 public class TrackStore: RLMObject {
-    dynamic var id:           Int64  = 0
+    dynamic var id:           String = ""
     dynamic var url:          String = ""
     dynamic var providerRaw:  String = ""
     dynamic var identifier:   String = ""

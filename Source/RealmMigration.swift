@@ -59,14 +59,13 @@ public class RealmMigration {
                 migration.enumerateObjects(TrackStore.className())        { oldObject, newObject in }
             }
             if (oldVersion < 8) {
-                var i = -1
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
                     if let old = oldObject, new =  newObject {
                         let properties = ["title", "streamUrl", "thumbnailUrl"]
                         for prop in properties {
                             new[prop] = old[prop]
                         }
-                        new["id"] = i--;
+                        new["id"] = "";
                     }
                 }
             }

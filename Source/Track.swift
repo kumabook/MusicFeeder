@@ -54,7 +54,7 @@ public enum YouTubeVideoQuality: UInt {
     }
 }
 
-public class Track: PlayerKit.Track, Equatable, Hashable {
+final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
     private static let userDefaults = NSUserDefaults.standardUserDefaults()
     public static var youTubeVideoQuality: YouTubeVideoQuality {
         get {
@@ -75,7 +75,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         case Available
         case Unavailable
     }
-    public let id:           Int64
+    public let id:           String
     public let provider:     Provider
     public let url:          String
     public let identifier:   String
@@ -86,7 +86,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         return provider == Provider.YouTube && Track.youTubeVideoQuality != YouTubeVideoQuality.AudioOnly
     }
 
-    public var likable: Bool { return id > 0 }
+    public var likable: Bool { return !id.isEmpty }
 
     public var status:   Status { return _status }
     private var _status: Status
@@ -106,7 +106,17 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         return "\(provider):\(identifier)".hashValue
     }
 
-    public init(id: Int64, provider: Provider, url: String, identifier: String, title: String?) {
+    public class func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Track]? {
+        let json = JSON(representation)
+        return json.arrayValue.map({ Track(json: $0) })
+    }
+    
+    @objc required public convenience init?(response: NSHTTPURLResponse, representation: AnyObject) {
+        let json = JSON(representation)
+        self.init(json: json)
+    }
+
+    public init(id: String, provider: Provider, url: String, identifier: String, title: String?) {
         self.id         = id
         self.provider   = provider
         self.url        = url
@@ -117,11 +127,12 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
     }
 
     public init(json: JSON) {
-        id          = json["id"].int64Value
+        id          = json["id"].stringValue
         provider    = Provider(rawValue: json["provider"].stringValue)!
         title       = nil
         url         = json["url"].stringValue
         identifier  = json["identifier"].stringValue
+        likesCount  = json["likesCount"].int64Value
         duration    = 0 as NSTimeInterval
         _status     = .Init
     }
