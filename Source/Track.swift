@@ -75,6 +75,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         case Available
         case Unavailable
     }
+    public let id:           Int64
     public let provider:     Provider
     public let url:          String
     public let identifier:   String
@@ -84,6 +85,8 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
     @objc public var isVideo:      Bool {
         return provider == Provider.YouTube && Track.youTubeVideoQuality != YouTubeVideoQuality.AudioOnly
     }
+
+    public var likable: Bool { return id > 0 }
 
     public var status:   Status { return _status }
     private var _status: Status
@@ -103,7 +106,8 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
         return "\(provider):\(identifier)".hashValue
     }
 
-    public init(provider: Provider, url: String, identifier: String, title: String?) {
+    public init(id: Int64, provider: Provider, url: String, identifier: String, title: String?) {
+        self.id         = id
         self.provider   = provider
         self.url        = url
         self.identifier = identifier
@@ -113,6 +117,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
     }
 
     public init(json: JSON) {
+        id          = json["id"].int64Value
         provider    = Provider(rawValue: json["provider"].stringValue)!
         title       = nil
         url         = json["url"].stringValue
@@ -122,6 +127,7 @@ public class Track: PlayerKit.Track, Equatable, Hashable {
     }
 
     public init(store: TrackStore) {
+        id          = store.id
         provider    = Provider(rawValue: store.providerRaw)!
         title       = store.title
         url         = store.url
