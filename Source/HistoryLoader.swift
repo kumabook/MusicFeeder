@@ -63,17 +63,27 @@ public class HistoryLoader: StreamLoader {
 
     public func loadPlaylistOfHistory(history: History) -> SignalProducer<Void, NSError> {
         if let entry = history.entry, url = entry.url {
-            return musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
-                var tracks = entry.enclosureTracks
-                tracks.appendContentsOf(pl.getTracks())
-                let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
+            if StreamLoader.includesTrack {
+                let playlist = entry.playlist
                 self.playlistsOfHistory[history] = playlist
                 UIScheduler().schedule {
                     self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
                 }
-                self.fetchTracks(playlist, entry: entry)
-                return ()
-            })
+                self.fetchTracks(entry.playlist, entry: entry)
+                return SignalProducer<Void, NSError>.empty
+            } else {
+                return musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
+                    var tracks = entry.audioTracks
+                    tracks.appendContentsOf(pl.getTracks())
+                    let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
+                    self.playlistsOfHistory[history] = playlist
+                    UIScheduler().schedule {
+                        self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
+                    }
+                    self.fetchTracks(playlist, entry: entry)
+                    return ()
+                })
+            }
         } else if let track = history.track {
             self.playlistsOfHistory[history] = Playlist(id: "track_history_\(history.timestamp)",
                                                      title: track.title ?? "",

@@ -60,8 +60,12 @@ public class TrackStore: RLMObject {
     internal class func create(track: Track) -> Bool {
         if let _ = findBy(url: track.url) { return false }
         let store = track.toStoreObject()
-        try! realm.transactionWithBlock() {
-            self.realm.addObject(store)
+        do {
+            try realm.transactionWithBlock() {
+                self.realm.addObject(store)
+            }
+        } catch {
+            return false
         }
         return true
     }

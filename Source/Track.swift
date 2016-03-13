@@ -15,6 +15,7 @@ import PlayerKit
 import Breit
 import SoundCloudKit
 import Alamofire
+import FeedlyKit
 
 public enum Provider: String {
     case YouTube    = "YouTube"
@@ -79,6 +80,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public let provider:     Provider
     public let url:          String
     public let identifier:   String
+    public var likesCount:   Int64?
     @objc public var title:  String?
     @objc public var thumbnailUrl: NSURL?
     public var duration:     NSTimeInterval
@@ -156,6 +158,22 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         }
     }
 
+    public init(urlString: String) {
+        let components: NSURLComponents? = NSURLComponents(string: urlString)
+        var dic: [String:String] = [:]
+        components?.queryItems?.forEach {
+            dic[$0.name] = $0.value
+        }
+        id          = dic["id"].flatMap { $0 } ?? ""
+        provider    = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.YouTube
+        title       = dic["title"] ?? ""
+        url         = urlString
+        identifier  = dic["identifier"] ?? ""
+        duration    = dic["duration"].flatMap { Int64($0) }.flatMap { NSTimeInterval( $0 / 1000) } ?? 0
+        likesCount  = dic["likesCount"].flatMap { Int64($0) }
+        _status    = .Init
+    }
+
     public func checkExpire() {
         if let expirationDate = youtubeVideo?.expirationDate where provider == .YouTube {
             if expirationDate.timestamp < NSDate().timestamp {
@@ -194,6 +212,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
 
     internal func toStoreObject() -> TrackStore {
         let store            = TrackStore()
+        store.id             = id
         store.url            = url
         store.providerRaw    = provider.rawValue
         store.identifier     = identifier
