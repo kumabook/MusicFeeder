@@ -17,8 +17,11 @@ class FeedlyAPISpec: QuickSpec {
     var email:    String { return "test-\(uuid)" }
     var password: String { return "password-\(uuid)" }
 
-    var profile:     Profile?
     var accessToken: MusicFeeder.AccessToken?
+
+    var profile: Profile?
+    var feeds:   [Feed]?
+    var entries: [Entry]?
 
     var client: CloudAPIClient {
         let c = CloudAPIClient.sharedInstance
@@ -72,16 +75,28 @@ class FeedlyAPISpec: QuickSpec {
         }
 
         describe("GET /v3/search/feeds") {
-            var feeds: [Feed]?
             beforeEach {
                 self.client.searchFeeds(SearchQueryOfFeed(query: ""))
                     .on(next: {
-                        feeds = $0
+                        self.feeds = $0
                     }).start()
             }
             it("should fetch a user") {
-                expect(feeds).toEventuallyNot(beNil())
-                expect(feeds!.count).to(beGreaterThan(0))
+                expect(self.feeds).toEventuallyNot(beNil())
+                expect(self.feeds!.count).to(beGreaterThan(0))
+            }
+        }
+
+        describe("GET /v3/streams/:streamId/contents") {
+            beforeEach {
+                self.client.fetchEntries(streamId: self.feeds![0].id, paginationParams: PaginationParams())
+                    .on(next: {
+                        self.entries = $0.items
+                    }).start()
+            }
+            it("should fetch a user") {
+                expect(self.entries).toEventuallyNot(beNil())
+                expect(self.entries!.count).to(beGreaterThan(0))
             }
         }
     }
