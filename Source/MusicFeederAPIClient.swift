@@ -44,15 +44,17 @@ struct CreateProfileAPI: API {
 }
 
 struct FetchAccessTokenAPI: API {
-    var email:      String
-    var password:   String
+    var email:        String
+    var password:     String
+    var clientId:     String
+    var clientSecret: String
 
     var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/oauth/token" }
     var method:     Alamofire.Method { return .POST }
     var URLRequest: NSMutableURLRequest {
         let params = ["grant_type": "password",
-                       "client_id": CloudAPIClient.clientId,
-                   "client_secret": CloudAPIClient.clientSecret,
+                       "client_id": clientId,
+                   "client_secret": clientSecret,
                            "email": email,
                         "password": password]
         let U = Alamofire.ParameterEncoding.URL
@@ -129,8 +131,8 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchAccessToken(email: String, password: String) -> SignalProducer<AccessToken, NSError> {
-        let route = Router.Api(FetchAccessTokenAPI(email: email, password: password))
+    public func fetchAccessToken(email: String, password: String, clientId: String, clientSecret: String) -> SignalProducer<AccessToken, NSError> {
+        let route = Router.Api(FetchAccessTokenAPI(email: email, password: password, clientId: clientId, clientSecret: clientSecret))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().responseObject() { (r: Response<AccessToken, NSError>) -> Void in
                 if let e = r.result.error {
