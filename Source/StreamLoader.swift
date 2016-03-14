@@ -11,7 +11,6 @@ import ReactiveCocoa
 import Result
 
 public class StreamLoader {
-    static var includesTrack: Bool = true
     public enum RemoveMark {
         case Read
         case Unread
@@ -184,7 +183,7 @@ public class StreamLoader {
             if let playlist = self.playlistsOfEntry[entry] {
                 fetchTracks(playlist, entry: entry)
                 return SignalProducer<Void, NSError>.empty
-            } else if StreamLoader.includesTrack {
+            } else if CloudAPIClient.includesTrack {
                 self.playlistsOfEntry[entry] = entry.playlist
                 return SignalProducer<Void, NSError>.empty
             } else {

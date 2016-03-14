@@ -63,7 +63,7 @@ public class HistoryLoader: StreamLoader {
 
     public func loadPlaylistOfHistory(history: History) -> SignalProducer<Void, NSError> {
         if let entry = history.entry, url = entry.url {
-            if StreamLoader.includesTrack {
+            if CloudAPIClient.includesTrack {
                 let playlist = entry.playlist
                 self.playlistsOfHistory[history] = playlist
                 UIScheduler().schedule {
@@ -88,7 +88,7 @@ public class HistoryLoader: StreamLoader {
             self.playlistsOfHistory[history] = Playlist(id: "track_history_\(history.timestamp)",
                                                      title: track.title ?? "",
                                                     tracks: [track])
-            track.fetchTrackDetail(true).start()
+            track.fetchDetail().start()
         }
         return SignalProducer<Void, NSError>.empty
     }
