@@ -47,7 +47,7 @@ struct FetchAccessTokenAPI: API {
     var email:      String
     var password:   String
 
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/oauth/token" }
+    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/oauth/token" }
     var method:     Alamofire.Method { return .POST }
     var URLRequest: NSMutableURLRequest {
         let params = ["grant_type": "password",

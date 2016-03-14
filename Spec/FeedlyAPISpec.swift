@@ -47,7 +47,7 @@ class FeedlyAPISpec: QuickSpec {
             }
         }
 
-        describe("POST /oauth/token") {
+        describe("POST /v3/oauth/token") {
             beforeEach {
                 self.client.fetchAccessToken(self.email, password: self.password)
                     .on(failed: {
