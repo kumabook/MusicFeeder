@@ -49,7 +49,7 @@ class FeedlyAPISpec: QuickSpec {
 
         describe("POST /v3/oauth/token") {
             beforeEach {
-                self.client.fetchAccessToken(self.email, password: self.password)
+                self.client.fetchAccessToken(self.email, password: self.password, clientId: CloudAPIClient.clientId, clientSecret: CloudAPIClient.clientSecret)
                     .on(failed: {
                             print("error \($0.code)")
                         }, next: {
