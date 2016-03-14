@@ -228,6 +228,17 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         return store
     }
 
+    public func fetchDetail() -> SignalProducer<Void, NSError> {
+        if CloudAPIClient.includesTrack {
+            return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchTrackDetail(false)).map {
+                self.likesCount = $0.0.likesCount
+                return
+            }
+        } else {
+            return fetchTrackDetail(false).map { _ in () }
+        }
+    }
+
     public func fetchTrackDetail(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
         if _status == .Available || _status == .Loading {
             return SignalProducer<Track, NSError>.empty
