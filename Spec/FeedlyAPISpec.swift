@@ -11,6 +11,7 @@ import FeedlyKit
 import SwiftyJSON
 import Quick
 import Nimble
+import ReactiveCocoa
 
 class FeedlyAPISpec: QuickSpec {
     let uuid:     String = NSUUID().UUIDString
@@ -106,6 +107,73 @@ class FeedlyAPISpec: QuickSpec {
                         expect(enc.type).notTo(beNil())
                         expect(enc.href).notTo(beNil())
                     }
+                }
+
+                self.tracks = self.entries.flatMap { $0.map { $0.tracks }.flatMap { $0 } }.map { Array($0.prefix(1)) }
+                for t in self.tracks! {
+                    expect(t.id).notTo(beNil())
+                    expect(t.likesCount).to(beNil())
+                    expect(t.likers).to(beNil())
+                }
+            }
+        }
+
+        describe("POST /v3/markers") {
+            var isFinish = false
+            var oldLikesCount: Int64 = 0
+            var newLikesCount: Int64 = 0
+            beforeEach {
+                guard let ts = self.tracks else { return }
+                let track = ts[0]
+                self.client.markTracksAsUnliked(ts).flatMap(.Concat) {
+                    self.client.fetchTracks([track.id])
+                }.flatMap(.Concat) { (tracks: [Track]) -> SignalProducer<Void, NSError> in
+                    oldLikesCount = tracks[0].likesCount!
+                    return self.client.markTracksAsLiked(ts)
+                }.flatMap(.Concat) {(_: ()) -> SignalProducer<[Track], NSError> in
+                    self.client.fetchTracks([track.id])
+                }.on(next: { tracks in
+                    newLikesCount = tracks[0].likesCount!
+                }, disposed: {
+                    isFinish = true
+                }).start()
+            }
+            it("should fetch a user") {
+                expect(isFinish).toEventually(equal(true), timeout: 30)
+                expect(self.tracks).toEventuallyNot(beNil())
+                expect(newLikesCount).to(equal(oldLikesCount + 1))
+            }
+        }
+
+        describe("GET /v3/tracks/:id") {
+            var track: Track?
+            beforeEach {
+                self.client.fetchTrack(self.tracks![0].id)
+                    .on(next: {
+                        track = $0
+                    }).start()
+            }
+            it("should fetch a track") {
+                expect(track).toEventuallyNot(beNil())
+                expect(track!.likesCount).notTo(beNil())
+                expect(track!.likers).notTo(beNil())
+            }
+        }
+
+        describe("POST /v3/tracks/.mget") {
+            var tracks: [Track]?
+            beforeEach {
+                self.client.fetchTracks(self.tracks!.map { $0.id })
+                    .on(next: {
+                        tracks = $0
+                    }).start()
+            }
+            it("should fetch a track") {
+                expect(tracks).toEventuallyNot(beNil())
+                expect(tracks!.count).to(equal(self.tracks!.count))
+                for track in tracks! {
+                    expect(track.likesCount).notTo(beNil())
+                    expect(track.likers).notTo(beNil())
                 }
             }
         }
