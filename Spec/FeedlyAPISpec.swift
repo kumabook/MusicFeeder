@@ -26,13 +26,17 @@ class FeedlyAPISpec: QuickSpec {
     var tracks:  [Track]?
 
     var client: CloudAPIClient {
-        let c = CloudAPIClient.sharedInstance
-        c.setAccessToken(self.accessToken?.accessToken)
-        return c
+        return CloudAPIClient.sharedInstance
     }
 
-
     override func spec() {
+        beforeSuite {
+            let c = CloudAPIClient(target: CloudAPIClient.Target.Custom("http://localhost:3000"))
+            CloudAPIClient.sharedInstance = c
+        }
+        beforeEach {
+            CloudAPIClient.sharedInstance.setAccessToken(self.accessToken?.accessToken)
+        }
         describe("PUT /v3/profile") {
             beforeEach {
                 self.client.createProfile(self.email, password: self.password)
