@@ -48,7 +48,6 @@
 		679C532D1B70F68600BE6614 /* SpecHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D71B70E44000BE6614 /* SpecHelper.swift */; };
 		679C532E1B70F69500BE6614 /* TrackSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D81B70E44000BE6614 /* TrackSpec.swift */; };
 		679C532F1B70F6A900BE6614 /* PlaylistSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D61B70E44000BE6614 /* PlaylistSpec.swift */; };
-		679C534C1B71019B00BE6614 /* MusicFeeder.h in Headers */ = {isa = PBXBuildFile; fileRef = 679C534B1B71019B00BE6614 /* MusicFeeder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		679C53521B72385900BE6614 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C53511B72385900BE6614 /* Player.swift */; };
 		67AD468C1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */; };
 		67D265731BACE16A000240FB /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0601B73798E003A1450 /* Alamofire.framework */; };
@@ -150,7 +149,6 @@
 		679C51DE1B70E4B600BE6614 /* track.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = track.json; path = Fixtures/track.json; sourceTree = SOURCE_ROOT; };
 		679C527C1B70F24A00BE6614 /* MusicFeeder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicFeeder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		679C52861B70F24A00BE6614 /* MusicFeeder-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MusicFeeder-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		679C534B1B71019B00BE6614 /* MusicFeeder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicFeeder.h; path = Source/MusicFeeder.h; sourceTree = SOURCE_ROOT; };
 		679C53511B72385900BE6614 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Player.swift; path = Source/Player.swift; sourceTree = SOURCE_ROOT; };
 		67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListenItLaterEntryStore.swift; path = Source/ListenItLaterEntryStore.swift; sourceTree = SOURCE_ROOT; };
 		67D2657E1BACE16B000240FB /* Breit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Breit.framework; path = Carthage/Build/iOS/Breit.framework; sourceTree = "<group>"; };
@@ -282,7 +280,6 @@
 				6705761B1BDE73A00087063A /* HistoryLoader.swift */,
 				671132811BC1212E00A036B0 /* SavedStreamLoader.swift */,
 				679C53511B72385900BE6614 /* Player.swift */,
-				679C534B1B71019B00BE6614 /* MusicFeeder.h */,
 				6705059D1B6E1398006EAA84 /* MusicFavAPIClient.swift */,
 				6705059F1B6E1398006EAA84 /* Playlist.swift */,
 				670505A01B6E1398006EAA84 /* PlaylistLoader.swift */,
@@ -322,7 +319,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				679C534C1B71019B00BE6614 /* MusicFeeder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
