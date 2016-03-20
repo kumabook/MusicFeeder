@@ -209,9 +209,9 @@ public class StreamLoader {
 
     internal func fetchTracks(playlist: Playlist, entry: Entry) {
         let loader = PlaylistLoader(playlist: playlist)
-        loader.fetchTracks()
         loaderOfPlaylist[playlist]?.dispose()
         loaderOfPlaylist[playlist] = loader
+        loader.fetchTracks()
     }
 
     public func fetchAllPlaylists() {
@@ -229,13 +229,11 @@ public class StreamLoader {
     }
 
     public func cancelFetchingPlaylists() {
-        if let p = playlistifier {
-            p.dispose()
-            self.playlistifier?.dispose()
+        playlistifier?.dispose()
+        loaderOfPlaylist.forEach {
+            $1.dispose()
+            self.loaderOfPlaylist[$0] = nil
         }
-        self.playlistifier = nil
-        loaderOfPlaylist.forEach { $1.dispose() }
-
     }
 
     public var unreadOnly: Bool {
