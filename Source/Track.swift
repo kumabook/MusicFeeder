@@ -243,7 +243,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
 
     public func fetchTrackDetail(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
         if _status == .Available || _status == .Loading {
-            return SignalProducer<Track, NSError>.empty
+            return SignalProducer<Track, NSError>(value: self)
         }
         _status = .Loading
         switch provider {
