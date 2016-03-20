@@ -182,10 +182,10 @@ public class StreamLoader {
         if let url = entry.url {
             if let playlist = self.playlistsOfEntry[entry] {
                 fetchTracks(playlist, entry: entry)
-                return SignalProducer<Void, NSError>.empty
+                return SignalProducer<Void, NSError>(value: ())
             } else if CloudAPIClient.includesTrack {
                 self.playlistsOfEntry[entry] = entry.playlist
-                return SignalProducer<Void, NSError>.empty
+                return SignalProducer<Void, NSError>(value: ())
             } else {
                 let signal: SignalProducer<SignalProducer<Void, NSError>, NSError> = musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
                     var tracks = entry.audioTracks
