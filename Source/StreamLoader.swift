@@ -190,7 +190,7 @@ public class StreamLoader {
                 let signal: SignalProducer<SignalProducer<Void, NSError>, NSError> = musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
                     var tracks = entry.audioTracks
                     tracks.appendContentsOf(pl.getTracks())
-                    let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
+                    let playlist = Playlist(id: pl.id, title: entry.title!, tracks: tracks)
                     self.playlistsOfEntry[entry] = playlist
                     UIScheduler().schedule {
                         self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
