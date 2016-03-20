@@ -68,7 +68,7 @@ extension Entry {
         store.keywords   = RLMArray(objectClassName: KeywordStore.className())
         for item in keywords  ?? [] { store.keywords.addObject(KeywordStore(name: item)) }
         store.tags       = RLMArray(objectClassName: TagStore.className())
-        for item in tags      ?? [] { store.alternate.addObject(item.toStoreObject()) }
+        for item in tags      ?? [] { store.tags.addObject(item.toStoreObject()) }
         store.categories = RLMArray(objectClassName: CategoryStore.className())
         for item in categories      { store.categories.addObject(item.toStoreObject()) }
         store.enclusure  = RLMArray(objectClassName: LinkStore.className())
