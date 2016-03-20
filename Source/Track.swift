@@ -82,6 +82,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public let identifier:   String
     public var likesCount:   Int64?
     public var likers:       [Profile]?
+    public var entries:      [Entry]?
     @objc public var title:  String?
     @objc public var thumbnailUrl: NSURL?
     public var duration:     NSTimeInterval
@@ -138,7 +139,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         likesCount  = json["likesCount"].int64Value
         duration    = 0 as NSTimeInterval
         _status     = .Init
-        likers      = json["likers"].array?.map { Profile(json: $0) }
+        likers      = json["likers"].array?.map  { Profile(json: $0) }
+        entries     = json["entries"].array?.map { Entry(json: $0) }
     }
 
     public init(store: TrackStore) {
