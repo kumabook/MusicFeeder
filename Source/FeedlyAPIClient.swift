@@ -213,4 +213,65 @@ extension CloudAPIClient {
             disposable.addDisposable({ req.cancel() })
         }
     }
+
+    public func fetchEntry(entryId: String) -> SignalProducer<Entry, NSError> {
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchEntry(entryId) { response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else {
+                    if let entry = response.result.value {
+                        observer.sendNext(entry)
+                        observer.sendCompleted()
+                    }
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
+    public func fetchEntries(entryIds: [String]) -> SignalProducer<[Entry], NSError> {
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchEntries(entryIds) { response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else {
+                    if let entries = response.result.value {
+                        observer.sendNext(entries)
+                        observer.sendCompleted()
+                    }
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
+    public func markEntriesAsSaved(itemIds: [String]) -> SignalProducer<Void, NSError> {
+        return SignalProducer { (observer, disposable) in
+            let req = self.markEntriesAsSaved(itemIds) { response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else if let categories = response.result.value {
+                    observer.sendNext(categories)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
+    public func markEntriesAsUnsaved(itemIds: [String]) -> SignalProducer<Void, NSError> {
+        return SignalProducer { (observer, disposable) in
+            let req = self.markEntriesAsUnsaved(itemIds) { response in
+                if let e = response.result.error {
+                    observer.sendFailed(self.buildError(e, response: response.response))
+                } else if let categories = response.result.value {
+                    observer.sendNext(categories)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
 }
