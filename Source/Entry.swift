@@ -39,6 +39,10 @@ extension Entry {
     }
 
     public var playlist: Playlist {
-        return Playlist(id: "playlist_\(id)", title: "playlist_\(id)", tracks: tracks)
+        if let t = title {
+            return Playlist(id: "playlist_\(id)", title: t, tracks: tracks)
+        } else {
+            return Playlist(id: "playlist_\(id)", title: "", tracks: tracks)
+        }
     }
 }
