@@ -96,7 +96,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     private var _status: Status
 
     private var _streamUrl:  NSURL?
-    private var youtubeVideo: XCDYouTubeVideo?
+    public private(set) var youtubeVideo:    XCDYouTubeVideo?
+    public private(set) var soundcloudTrack: SoundCloudKit.Track?
+
     @objc public var streamUrl: NSURL? {
         if let video = youtubeVideo {
             return video.streamURLs[Track.youTubeVideoQuality.rawValue]
@@ -200,10 +202,11 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
 
     public func updateProperties(track: SoundCloudKit.Track) {
-        title      = track.title
-        duration   = NSTimeInterval(track.duration / 1000)
-        _streamUrl = NSURL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
-        _status    = .Available
+        soundcloudTrack = track
+        title           = track.title
+        duration        = NSTimeInterval(track.duration / 1000)
+        _streamUrl      = NSURL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
+        _status         = .Available
         if let url = track.thumbnailURL {
             thumbnailUrl = url
         }
