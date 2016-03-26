@@ -90,10 +90,21 @@ public class RealmMigration {
 
     public class func listenItLaterConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
-        config.schemaVersion = 1
+        config.schemaVersion = 2
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(ListenItLaterEntryStore.className()) { oldObject, newObject in }
+            }
+            if (oldVersion < 2) {
+                migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
+                    if let old = oldObject, new =  newObject {
+                        let properties = ["title", "streamUrl", "thumbnailUrl"]
+                        for prop in properties {
+                            new[prop] = old[prop]
+                        }
+                        new["id"] = "";
+                    }
+                }
             }
         }
         config.path = listenItLaterPath
