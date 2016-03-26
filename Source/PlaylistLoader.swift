@@ -30,9 +30,6 @@ public class PlaylistLoader {
     }
 
     public func fetchTracks() {
-        for track in playlist.getTracks() {
-            track.checkExpire()
-        }
         var pairs: [(Int, Track)] = []
         for i in 0..<playlist.getTracks().count {
             let pair = (i, playlist.getTracks()[i])

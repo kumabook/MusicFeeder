@@ -178,14 +178,17 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         _status    = .Init
     }
 
-    public func checkExpire() {
-        if let expirationDate = youtubeVideo?.expirationDate where provider == .YouTube {
+    public func reloadExpiredDetail() -> SignalProducer<Track, NSError> {
+        var signal = SignalProducer<Track, NSError>.empty
+        if let expirationDate = youtubeVideo?.expirationDate {
             if expirationDate.timestamp < NSDate().timestamp {
                 _status = .Init
                 _streamUrl = nil
                 youtubeVideo = nil
+                signal = signal.concat(fetchTrackDetail(false))
             }
         }
+        return signal
     }
 
     public func create() -> Bool {

@@ -190,6 +190,14 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
             Playlist(title: "Favorite").create()
         }
     }
+
+    public func reloadExpiredTracks() -> SignalProducer<Playlist, NSError> {
+        var signal = SignalProducer<Track, NSError>.empty
+        for track in getTracks() {
+            signal = signal.concat(track.reloadExpiredDetail())
+        }
+        return signal.map { _ in self }
+    }
 }
 
 public func ==(lhs: Playlist, rhs: Playlist) -> Bool {
