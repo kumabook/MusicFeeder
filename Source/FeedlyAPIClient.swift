@@ -23,7 +23,7 @@ extension CloudAPIClient {
     public static let redirectUrl   = "http://localhost"
     public static let scope         = Set(["https://cloud.feedly.com/subscriptions"])
     public static let keyChainGroup = "Feedly"
-    public static var includesTrack = true
+    public static var includesTrack = false
 
     public static var sharedInstance: CloudAPIClient = CloudAPIClient(target: Target.Sandbox)
     static let errorResponseKey = "com.alamofire.serialization.response.error.response"
