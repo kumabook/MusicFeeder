@@ -33,15 +33,19 @@ public class SavedStream: Stream {
 }
 
 public class SavedStreamLoader: StreamLoader {
+    public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
+        super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+    }
+
     public convenience init() {
-        self.init(stream: SavedStream(id: "saved_stream", title: "Saved"))
+        self.init(stream: SavedStream(id: "saved_stream", title: "Saved"), unreadOnly: false, perPage: CloudAPIClient.perPage)
     }
 
     public convenience init(id: String, title: String) {
-        self.init(stream: SavedStream(id: id, title: title))
+        self.init(stream: SavedStream(id: id, title: title), unreadOnly: false, perPage: CloudAPIClient.perPage)
     }
 
-    public override func fetchEntries() {
+    public override func fetchItems() {
         if state != .Normal {
             return
         }
@@ -53,16 +57,15 @@ public class SavedStreamLoader: StreamLoader {
             }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
                 currentSignal.concat(nextSignal)
             }).on(next: {}, failed: {error in}, completed: {}).start()
-            self.entries = entries
+            self.items = entries
             UIScheduler().schedule {
                 self.state = .Complete
                 self.observer.sendNext(.CompleteLoadingLatest)
             }
         }
     }
-
-    public override func fetchLatestEntries() {
-        fetchEntries()
+    public override func fetchLatestItems() {
+        fetchItems()
     }
 
 }

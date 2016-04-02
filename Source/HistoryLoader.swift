@@ -14,24 +14,27 @@ public class HistoryLoader: StreamLoader {
     var offset: UInt = 0
     public var histories: [History] = []
     public var playlistsOfHistory: [History: Playlist] = [:]
+    public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
+        super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+    }
     public convenience init() {
-        self.init(stream: SavedStream(id: "history", title: "History"))
+        self.init(stream: SavedStream(id: "history", title: "History"), unreadOnly: false, perPage: CloudAPIClient.perPage)
         reset()
     }
 
     public convenience init(id: String, title: String) {
-        self.init(stream: SavedStream(id: id, title: title))
+        self.init(stream: SavedStream(id: id, title: title), unreadOnly: false, perPage: CloudAPIClient.perPage)
         reset()
     }
 
     private func reset() {
-        self.offset           = 0
-        self.entries          = []
-        self.histories        = []
-        self.state            = .Normal
+        self.offset     = 0
+        self.items      = []
+        self.histories  = []
+        self.state      = .Normal
     }
 
-    public override func fetchEntries() {
+    public override func fetchItems() {
         if state != .Normal {
             return
         }
@@ -93,12 +96,12 @@ public class HistoryLoader: StreamLoader {
         return SignalProducer<Void, NSError>.empty
     }
 
-    public override func fetchLatestEntries() {
+    public override func fetchLatestItems() {
         if state != .Normal {
             return
         }
         reset()
         observer.sendNext(.CompleteLoadingLatest)
-        fetchEntries()
+        fetchItems()
     }
 }

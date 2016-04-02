@@ -10,170 +10,83 @@ import FeedlyKit
 import ReactiveCocoa
 import Result
 
-public class StreamLoader {
+extension PaginatedEntryCollection: PaginatedCollection {}
+
+public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, Entry> {
+    public typealias State = PaginatedCollectionLoaderState
+    public typealias Event = PaginatedCollectionLoaderEvent
     public enum RemoveMark {
         case Read
         case Unread
         case Unsave
     }
 
-    public enum State {
-        case Normal
-        case Fetching
-        case Complete
-        case Error
+    public private(set) var feedlyClient        = CloudAPIClient.sharedInstance
+    public private(set) var musicfavClient      = MusicFavAPIClient.sharedInstance
+
+
+    public override func fetchCollection(streamId streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+        return feedlyClient.fetchEntries(streamId: streamId,
+                                     continuation: paginatedParams.continuation,
+                                       unreadOnly: paginatedParams.unreadOnly ?? false,
+                                          perPage: paginatedParams.count ?? CloudAPIClient.perPage)
     }
 
-    public enum Event {
-        case StartLoadingLatest
-        case CompleteLoadingLatest
-        case StartLoadingNext
-        case CompleteLoadingNext
-        case FailToLoadNext
-        case CompleteLoadingPlaylist(Playlist, Entry)
-        case RemoveAt(Int)
-    }
-
-    public let feedlyClient = CloudAPIClient.sharedInstance
-    let musicfavClient      = MusicFavAPIClient.sharedInstance
-
-    public let stream:             Stream
-    public var lastUpdated:        Int64
-    public var state:              State
-    public var entries:            [Entry]
-    public var playlistsOfEntry:   [Entry:Playlist]
-    public var loaderOfPlaylist:   [Playlist: PlaylistLoader]
-    public var playlistifier:      Disposable?
-    public var streamContinuation: String?
-    public var signal:             Signal<Event, NSError>
-    public var observer:           Signal<Event, NSError>.Observer
-    private var _unreadOnly:       Bool
-    private var _perPage:          Int
-    private var _needsPlaylist:    Bool
-
-    public init(stream: Stream) {
-        self.stream      = stream
-        state            = .Normal
-        lastUpdated      = 0
-        entries          = []
-        playlistsOfEntry = [:]
-        loaderOfPlaylist = [:]
-        let pipe         = Signal<Event, NSError>.pipe()
-        signal           = pipe.0
-        observer         = pipe.1
-        _unreadOnly      = false
-        _perPage         = CloudAPIClient.perPage
-        _needsPlaylist   = true
-    }
-
-    public convenience init(stream: Stream, unreadOnly: Bool) {
-        self.init(stream: stream)
-        _unreadOnly = unreadOnly
-    }
-
-    public convenience init(stream: Stream, perPage: Int, needsPlaylist: Bool) {
-        self.init(stream: stream)
-        _perPage       = perPage
-        _needsPlaylist = needsPlaylist
-    }
-
-    public convenience init(stream: Stream, unreadOnly: Bool, perPage: Int, needsPlaylist: Bool) {
-        self.init(stream: stream)
-        _unreadOnly    = unreadOnly
-        _perPage       = perPage
-        _needsPlaylist = needsPlaylist
-    }
-
-    deinit {
-        dispose()
-    }
-
-    public func dispose() {
+    public override func dispose() {
+        super.dispose()
         for loader in loaderOfPlaylist {
             loader.1.dispose()
         }
         playlistifier?.dispose()
     }
 
-    public func updateLastUpdated(updated: Int64?) {
-        if let timestamp = updated {
-            self.lastUpdated = timestamp + 1
-        } else {
-            self.lastUpdated = Int64(NSDate().timeIntervalSince1970 * 1000)
-        }
+    deinit {
+        dispose()
+    }
+
+    public private(set) var needsPlaylist:      Bool
+    public private(set) var playlistsOfEntry:   [Entry:Playlist]
+    public var loaderOfPlaylist:   [Playlist: PlaylistLoader]
+    public var playlistifier:      Disposable?
+
+    public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
+        needsPlaylist    = true
+        playlistsOfEntry = [:]
+        loaderOfPlaylist = [:]
+        super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+    }
+
+    public convenience init(stream: Stream) {
+        self.init(stream: stream, unreadOnly: false, perPage: CloudAPIClient.perPage)
+    }
+
+    public convenience init(stream: Stream, unreadOnly: Bool) {
+        self.init(stream: stream, unreadOnly: unreadOnly, perPage: CloudAPIClient.perPage)
+    }
+
+    public convenience init(stream: Stream, perPage: Int, needsPlaylist: Bool) {
+        self.init(stream: stream, unreadOnly: false, perPage: perPage)
+        self.needsPlaylist = needsPlaylist
+    }
+
+    public convenience init(stream: Stream, unreadOnly: Bool, perPage: Int, needsPlaylist: Bool) {
+        self.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+        self.needsPlaylist = needsPlaylist
     }
 
     public var playlists: [Playlist] {
-        return entries.map { self.playlistsOfEntry[$0] }
+        return items.map { self.playlistsOfEntry[$0] }
                       .filter { $0 != nil && $0!.validTracksCount > 0 }
                       .map { $0! }
     }
 
-    public func fetchLatestEntries() {
-        if entries.count == 0 {
-            return
-        }
+    public func fetchEntries()       { fetchItems() }
+    public func fetchLatestEntries() { fetchLatestItems() }
 
-        var producer: SignalProducer<PaginatedEntryCollection, NSError>
-        producer = feedlyClient.fetchEntries(streamId: stream.streamId,
-                                            newerThan: lastUpdated,
-                                           unreadOnly: unreadOnly,
-                                              perPage: _perPage)
-        observer.sendNext(.StartLoadingLatest)
-        producer
-            .startOn(UIScheduler())
-            .on(
-                next: { paginatedCollection in
-                    var latestEntries = paginatedCollection.items
-                    latestEntries.appendContentsOf(self.entries)
-                    self.entries = latestEntries
-                    self.updateLastUpdated(paginatedCollection.updated)
-                    if self._needsPlaylist {
-                        self.fetchAllPlaylists()
-                    }
-                },
-                failed: { error in CloudAPIClient.handleError(error: error) },
-                completed: {
-                    self.observer.sendNext(.CompleteLoadingLatest)
-            }).start()
-    }
+    public var entries: [Entry]             { return self.items }
 
-    public func fetchEntries() {
-        if state != .Normal && state != .Error {
-            return
-        }
-        state = .Fetching
-        observer.sendNext(.StartLoadingNext)
-        var producer: SignalProducer<PaginatedEntryCollection, NSError>
-        producer = feedlyClient.fetchEntries(streamId:stream.streamId,
-                                         continuation: streamContinuation,
-                                           unreadOnly: unreadOnly,
-                                              perPage: _perPage)
-        producer
-            .startOn(UIScheduler())
-            .on(next: { paginatedCollection in
-                let entries = paginatedCollection.items
-                self.entries.appendContentsOf(entries)
-                self.streamContinuation = paginatedCollection.continuation
-                self.updateLastUpdated(paginatedCollection.updated)
-                if self._needsPlaylist {
-                    self.fetchAllPlaylists()
-                }
-                self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
-                if paginatedCollection.continuation == nil {    // then wait for next load
-                    self.state = .Complete
-                } else {
-                    self.state = .Normal
-                }
-                },
-                failed: {error in
-                    CloudAPIClient.handleError(error: error)
-                    self.observer.sendNext(.FailToLoadNext)
-                    self.state = State.Error
-                },
-                completed: {
-            })
-            .start()
+    public override func itemsUpdated() {
+        fetchAllPlaylists()
     }
 
     // This method needs to be fixed, but currently ReactiveCocoa has problem about cancelling inner signal
@@ -216,12 +129,12 @@ public class StreamLoader {
 
     public func fetchAllPlaylists() {
         cancelFetchingPlaylists()
-        fetchPlaylistsOfEntries(entries)
+        fetchPlaylistsOfEntries(items)
     }
 
-    public func fetchPlaylistsOfEntries(_entries: [Entry]) {
+    public func fetchPlaylistsOfEntries(entries: [Entry]) {
         self.playlistifier?.dispose()
-        self.playlistifier = _entries.map({
+        self.playlistifier = entries.map({
             self.loadPlaylistOfEntry($0)
         }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
             currentSignal.concat(nextSignal)
@@ -236,14 +149,6 @@ public class StreamLoader {
         }
     }
 
-    public var unreadOnly: Bool {
-        if let userId = CloudAPIClient._profile?.id {
-            if stream == Tag.Saved(userId) { return false }
-            if stream == Tag.Read(userId) {  return false }
-        }
-        return _unreadOnly
-    }
-
     public var removeMark: RemoveMark {
         if let userId = CloudAPIClient._profile?.id {
             if stream == Tag.Saved(userId) { return .Unsave }
@@ -253,31 +158,31 @@ public class StreamLoader {
     }
 
     public func markAsRead(index: Int) {
-        let entry = entries[index]
+        let entry = items[index]
         if CloudAPIClient.isLoggedIn {
             feedlyClient.markEntriesAsRead([entry.id]) { response in
                 if response.result.isFailure { print("Failed to mark as read") }
                 else                { print("Succeeded in marking as read") }
             }
         }
-        entries.removeAtIndex(index)
+        items.removeAtIndex(index)
         observer.sendNext(.RemoveAt(index))
     }
 
     public func markAsUnread(index: Int) {
-        let entry = entries[index]
+        let entry = items[index]
         if CloudAPIClient.isLoggedIn {
             feedlyClient.keepEntriesAsUnread([entry.id], completionHandler: { response in
                 if response.result.isFailure { print("Failed to mark as unread") }
                 else                { print("Succeeded in marking as unread") }
             })
         }
-        entries.removeAtIndex(index)
+        items.removeAtIndex(index)
         observer.sendNext(.RemoveAt(index))
     }
 
     public func markAsUnsaved(index: Int) {
-        let entry = entries[index]
+        let entry = items[index]
         if CloudAPIClient.isLoggedIn {
             feedlyClient.markEntriesAsUnsaved([entry.id]) { response in
                 if response.result.isFailure { print("Failed to mark as unsaved") }
@@ -291,7 +196,7 @@ public class StreamLoader {
         } else {
             EntryStore.remove(entry.toStoreObject())
         }
-        entries.removeAtIndex(index)
+        items.removeAtIndex(index)
         observer.sendNext(.RemoveAt(index))
     }
 }
