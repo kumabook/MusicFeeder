@@ -1,5 +1,5 @@
 github "ReactiveCocoa/ReactiveCocoa"
-github "kumabook/FeedlyKit"
+github "kumabook/FeedlyKit" == 0.5.3
 github "kumabook/XCDYouTubeKit" == 2.5.1
 github "kumabook/PlayerKit"
 github "SwiftyJSON/SwiftyJSON"
