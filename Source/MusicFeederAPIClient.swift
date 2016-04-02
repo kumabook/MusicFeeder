@@ -12,6 +12,10 @@ import ReactiveCocoa
 import Alamofire
 import SwiftyJSON
 
+func urlEncode(string: String) -> String {
+    return string.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
+}
+
 public struct AccessToken: ResponseObjectSerializable {
     public var accessToken: String
     public var tokenType:   String
@@ -115,6 +119,65 @@ struct TrackMarkerAPI: API {
     }
 }
 
+public protocol ParameterEncodable {
+    func toParameters() -> [String: AnyObject]
+}
+
+public extension Alamofire.ParameterEncoding {
+    func encode(URLRequest: URLRequestConvertible, parameters: ParameterEncodable?) -> (NSMutableURLRequest, NSError?) {
+        return encode(URLRequest, parameters: parameters?.toParameters())
+    }
+}
+
+public class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
+    public var olderThan:    Int64?
+    public override init() {}
+    public override func toParameters() -> [String : AnyObject] {
+        var params: [String:AnyObject] = [:]
+        if let _count        = count        { params["count"]        = _count }
+        if let _ranked       = ranked       { params["ranked"]       = _ranked }
+        if let _unreadOnly   = unreadOnly   { params["unreadOnly"]   = _unreadOnly ? "true" : "false" }
+        if let _newerThan    = newerThan    { params["newerThan"]    = NSNumber(longLong: _newerThan) }
+        if let _olderThan    = newerThan    { params["olderThan"]    = NSNumber(longLong: _olderThan) }
+        if let _continuation = continuation { params["continuation"] = _continuation }
+        return params
+    }
+}
+
+struct FetchTracksOfStreamAPI: API {
+    var streamId:  String
+    var params:    MusicFeeder.PaginationParams
+    var url:       String { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/streams/\(urlEncode(streamId))/tracks/contents" }
+    var method:     Alamofire.Method { return .GET }
+    var URLRequest: NSMutableURLRequest {
+        let U = Alamofire.ParameterEncoding.URL
+        let URL = NSURL(string: url)!
+        let req = NSMutableURLRequest(URL: URL)
+        req.HTTPMethod = method.rawValue
+        return U.encode(req, parameters: params.toParameters()).0
+    }
+}
+
+public class PaginatedTrackCollection: ResponseObjectSerializable, PaginatedCollection {
+    public let id:           String
+    public let updated:      Int64?
+    public let continuation: String?
+    public let title:        String?
+    public let direction:    String?
+    public let alternate:    Link?
+    public let items:        [Track]
+    required public init?(response: NSHTTPURLResponse, representation: AnyObject) {
+        let json     = JSON(representation)
+        id           = json["id"].stringValue
+        updated      = json["updated"].int64
+        continuation = json["continuation"].string
+        title        = json["title"].string
+        direction    = json["direction"].string
+        alternate    = json["alternate"].isEmpty ? nil : Link(json: json["alternate"])
+        items        = json["items"].arrayValue.map( {Track(json: $0)} )
+    }
+}
+
 extension CloudAPIClient {
     public func createProfile(email: String, password: String) -> SignalProducer<Profile, NSError> {
         let route = Router.Api(CreateProfileAPI(email: email, password: password))
@@ -165,6 +228,21 @@ extension CloudAPIClient {
         let route = Router.Api(FetchTracksAPI(trackIds: trackIds))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().responseCollection() { (r: Response<[Track], NSError>) -> Void in
+                if let e = r.result.error {
+                    observer.sendFailed(self.buildError(e, response: r.response))
+                } else if let tracks = r.result.value {
+                    observer.sendNext(tracks)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
+    public func fetchTracksOf(streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
+        let route = Router.Api(FetchTracksOfStreamAPI(streamId: streamId, params: paginationParams))
+        return SignalProducer { (observer, disposable) in
+            let req = self.manager.request(route).validate().responseObject() { (r: Response<PaginatedTrackCollection, NSError>) -> Void in
                 if let e = r.result.error {
                     observer.sendFailed(self.buildError(e, response: r.response))
                 } else if let tracks = r.result.value {

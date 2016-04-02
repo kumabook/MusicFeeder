@@ -24,6 +24,7 @@ public enum PaginatedCollectionLoaderEvent {
     case CompleteLoadingNext
     case FailToLoadNext
     case CompleteLoadingPlaylist(Playlist, Entry)
+    case CompleteLoadingTrackDetail(Track)
     case RemoveAt(Int)
 }
 
