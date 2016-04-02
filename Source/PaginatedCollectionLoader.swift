@@ -49,7 +49,23 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
     public internal(set) var unreadOnly:   Bool
     public internal(set) var perPage:      Int
     public internal(set) var disposable:   Disposable?
-    
+
+    public var paginationParams: MusicFeeder.PaginationParams {
+        let params          = MusicFeeder.PaginationParams()
+        params.continuation = continuation
+        params.unreadOnly   = unreadOnly
+        params.count        = perPage
+        return params
+    }
+
+    public var paginationParamsForLatest: MusicFeeder.PaginationParams {
+        let params        = MusicFeeder.PaginationParams()
+        params.newerThan  = lastUpdated
+        params.unreadOnly = unreadOnly
+        params.count      = perPage
+        return params
+    }
+
     public init(stream: Stream, unreadOnly: Bool, perPage: Int) {
         self.stream      = stream
         self.unreadOnly  = unreadOnly
@@ -89,12 +105,8 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
         if items.count == 0 {
             return
         }
-        let params          = MusicFeeder.PaginationParams()
-        params.newerThan    = lastUpdated
-        params.unreadOnly   = unreadOnly
-        params.count        = perPage
         let producer = fetchCollection(streamId: stream.streamId,
-                               paginationParams: params)
+                               paginationParams: paginationParamsForLatest)
         observer.sendNext(.StartLoadingLatest)
         disposable = producer
             .startOn(UIScheduler())
@@ -115,11 +127,7 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
         }
         state = .Fetching
         observer.sendNext(.StartLoadingNext)
-        let params = MusicFeeder.PaginationParams()
-        params.continuation = continuation
-        params.unreadOnly   = unreadOnly
-        params.count        = perPage
-        let producer = fetchCollection(streamId: stream.streamId, paginationParams: params)
+        let producer = fetchCollection(streamId: stream.streamId, paginationParams: paginationParams)
         disposable = producer
             .startOn(UIScheduler())
             .on(next: { paginatedCollection in
