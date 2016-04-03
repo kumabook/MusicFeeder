@@ -29,7 +29,7 @@ public enum PaginatedCollectionLoaderEvent {
 }
 
 public protocol PaginatedCollection {
-    typealias ItemType
+    associatedtype ItemType
     var id:           String     { get }
     var updated:      Int64?     { get }
     var continuation: String?    { get }

@@ -40,7 +40,7 @@ public class HistoryLoader: StreamLoader {
         }
         state = .Fetching
         UIScheduler().schedule {
-            let range = Range<UInt>(start: self.offset, end: self.offset + HistoryStore.limit)
+            let range = self.offset..<self.offset + HistoryStore.limit
             let histories: [History] = HistoryStore.find(range).map { History(store: $0) }
 
             self.offset += HistoryStore.limit

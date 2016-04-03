@@ -135,7 +135,7 @@ public class HistoryStore: RLMObject {
 
         var r: Range<UInt>
         if range.endIndex > results.count {
-            r = Range<UInt>(start: range.startIndex, end: results.count)
+            r = range.startIndex..<results.count
         } else {
             r = range
         }
