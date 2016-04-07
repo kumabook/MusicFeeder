@@ -48,6 +48,16 @@ public class TrackStore: RLMObject {
         }
     }
 
+    internal class func findBy(id id: String) -> TrackStore? {
+        let results = TrackStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+        if results.count == 0 {
+            return nil
+        } else {
+            return results[0] as? TrackStore
+        }
+    }
+
+
     internal class func findAll() -> [TrackStore] {
         let results = TrackStore.allObjectsInRealm(realm)
         var trackStores: [TrackStore] = []

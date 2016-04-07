@@ -305,6 +305,13 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         return nil
     }
 
+    public class func findBy(id id: String) -> Track? {
+        if let store = TrackStore.findBy(id: id) {
+            return Track(store: store)
+        }
+        return nil
+    }
+
     public class func findAll() -> [Track] {
         return TrackStore.findAll().map({ Track(store: $0) })
     }
