@@ -92,8 +92,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
 
     public var likable: Bool { return !id.isEmpty }
 
-    public var status:   Status { return _status }
-    private var _status: Status
+    public private(set) var status: Status
 
     private var _streamUrl:  NSURL?
     public private(set) var youtubeVideo:    XCDYouTubeVideo?
@@ -129,7 +128,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         self.identifier = identifier
         self.title      = title
         self.duration   = 0 as NSTimeInterval
-        self._status    = .Init
+        self.status    = .Init
     }
 
     public init(json: JSON) {
@@ -140,7 +139,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         identifier  = json["identifier"].stringValue
         likesCount  = json["likesCount"].int64Value
         duration    = 0 as NSTimeInterval
-        _status     = .Init
+        status     = .Init
         likers      = json["likers"].array?.map  { Profile(json: $0) }
         entries     = json["entries"].array?.map { Entry(json: $0) }
     }
@@ -152,11 +151,11 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         url         = store.url
         identifier  = store.identifier
         duration    = NSTimeInterval(store.duration)
-        _status     = .Init
+        status     = .Init
         if let url = NSURL(string: store.streamUrl) {
             _streamUrl = url
             if provider != .YouTube {
-                _status = .Available
+                status = .Available
             }
         }
         if let url = NSURL(string: store.thumbnailUrl) {
@@ -177,14 +176,14 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         identifier  = dic["identifier"] ?? ""
         duration    = dic["duration"].flatMap { Int64($0) }.flatMap { NSTimeInterval( $0 / 1000) } ?? 0
         likesCount  = dic["likesCount"].flatMap { Int64($0) }
-        _status    = .Init
+        status    = .Init
     }
 
     public func reloadExpiredDetail() -> SignalProducer<Track, NSError> {
         var signal = SignalProducer<Track, NSError>.empty
         if let expirationDate = youtubeVideo?.expirationDate {
             if expirationDate.timestamp < NSDate().timestamp {
-                _status = .Init
+                status = .Init
                 _streamUrl = nil
                 youtubeVideo = nil
                 signal = signal.concat(fetchTrackDetail(false))
@@ -206,7 +205,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         title           = track.title
         duration        = NSTimeInterval(track.duration / 1000)
         _streamUrl      = NSURL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
-        _status         = .Available
+        status         = .Available
         if let url = track.thumbnailURL {
             thumbnailUrl = url
         }
@@ -217,7 +216,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         title          = video.title
         duration       = video.duration
         thumbnailUrl   = video.mediumThumbnailURL
-        _status        = .Available
+        status        = .Available
     }
 
     internal func toStoreObject() -> TrackStore {
@@ -236,52 +235,47 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         return store
     }
 
-    public func fetchDetail() -> SignalProducer<Void, NSError> {
+    public func fetchDetail() -> SignalProducer<Track, NSError> {
         if CloudAPIClient.includesTrack {
             return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchTrackDetail(false)).map {
                 self.likesCount = $0.0.likesCount
-                return
+                return self
             }
         } else {
-            return fetchTrackDetail(false).map { _ in () }
+            return fetchTrackDetail(false)
         }
     }
 
     public func fetchTrackDetail(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
-        if _status == .Available || _status == .Loading {
-            return SignalProducer<Track, NSError>(value: self)
-        }
-        _status = .Loading
-        switch provider {
-        case .YouTube:
-            return SignalProducer<Track, NSError> { (observer, disposable) in
-                var completed = false
+        return SignalProducer<Track, NSError> { (observer, disposable) in
+            if self.status == .Available || self.status == .Loading {
+                observer.sendNext(self)
+                observer.sendCompleted()
+                return
+            }
+            self.status = .Loading
+            switch self.provider {
+            case .YouTube:
                 let disp = XCDYouTubeClient.defaultClient().fetchVideo(self.identifier).on(
                     next: { video in
                         self.updatePropertiesWithYouTubeVideo(video)
-                        completed = true
+                        self.status = .Available
                         observer.sendNext(self)
                         observer.sendCompleted()
                     }, failed: { error in
-                        self._status = .Unavailable
+                        if self.status != .Available { self.status = .Unavailable }
                         observer.sendNext(self)
                         observer.sendCompleted()
-                    }, completed: {
-                        self._status = .Available
                     }, interrupted: {
-                        self._status = .Unavailable
+                        if self.status != .Available { self.status = .Unavailable }
                         observer.sendNext(self)
                         observer.sendCompleted()
                     }).start()
                 disposable.addDisposable {
-                    if !completed {
-                        disp.dispose()
-                    }
+                    disp.dispose()
                 }
                 return
-            }
-        case .SoundCloud:
-            return SignalProducer<Track, NSError> { (observer, disposable) in
+            case .SoundCloud:
                 typealias R = SoundCloudKit.APIClient.Router
                 SoundCloudKit.APIClient.sharedInstance.fetchItem(R.Track(self.identifier)) { (req: NSURLRequest?, res: NSHTTPURLResponse?, result: Alamofire.Result<SoundCloudKit.Track, NSError>) -> Void in
                     if let track = result.value {
@@ -289,17 +283,18 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
                         observer.sendNext(self)
                         observer.sendCompleted()
                     } else {
-                        self._status = .Unavailable
+                        self.status = .Unavailable
                         observer.sendNext(self)
                         observer.sendCompleted()
                     }
                 }
                 return
+            case .Raw:
+                self._streamUrl = self.identifier.toURL()
+                self.status    = .Available
+                observer.sendNext(self)
+                observer.sendCompleted()
             }
-        case .Raw:
-            _streamUrl = self.identifier.toURL()
-            _status    = .Available
-            return SignalProducer<Track, NSError>.empty
         }
     }
 

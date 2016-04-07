@@ -40,7 +40,7 @@ public class TrackStreamLoader: PaginatedCollectionLoader<PaginatedTrackCollecti
                 self.observer.sendNext(.CompleteLoadingTrackDetail(track))
                 return $0
             }
-        }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
+        }).reduce(SignalProducer<Track, NSError>.empty, combine: { (currentSignal, nextSignal) in
             currentSignal.concat(nextSignal)
         }).on().start()
     }

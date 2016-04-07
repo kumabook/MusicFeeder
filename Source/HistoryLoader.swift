@@ -72,7 +72,7 @@ public class HistoryLoader: StreamLoader {
                 UIScheduler().schedule {
                     self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
                 }
-                self.fetchTracks(entry.playlist, entry: entry)
+                self.fetchTracks(entry.playlist)
                 return SignalProducer<Void, NSError>.empty
             } else {
                 return musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
@@ -83,7 +83,7 @@ public class HistoryLoader: StreamLoader {
                     UIScheduler().schedule {
                         self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
                     }
-                    self.fetchTracks(playlist, entry: entry)
+                    self.fetchTracks(playlist)
                     return ()
                 })
             }

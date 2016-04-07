@@ -34,9 +34,6 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
 
     public override func dispose() {
         super.dispose()
-        for loader in loaderOfPlaylist {
-            loader.1.dispose()
-        }
         playlistifier?.dispose()
     }
 
@@ -46,13 +43,11 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
 
     public private(set) var needsPlaylist:      Bool
     public private(set) var playlistsOfEntry:   [Entry:Playlist]
-    public var loaderOfPlaylist:   [Playlist: PlaylistLoader]
     public var playlistifier:      Disposable?
 
     public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
         needsPlaylist    = true
         playlistsOfEntry = [:]
-        loaderOfPlaylist = [:]
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
     }
 
@@ -76,8 +71,8 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
 
     public var playlists: [Playlist] {
         return items.map { self.playlistsOfEntry[$0] }
-                      .filter { $0 != nil && $0!.validTracksCount > 0 }
-                      .map { $0! }
+                    .filter { $0 != nil && $0!.validTracksCount > 0 }
+                    .map { $0! }
     }
 
     public func fetchEntries()       { fetchItems() }
@@ -89,42 +84,33 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
         fetchAllPlaylists()
     }
 
-    // This method needs to be fixed, but currently ReactiveCocoa has problem about cancelling inner signal
-    // So, we check if playlistifier is disposed before proceed the next signal
-    public func loadPlaylistOfEntry(entry: Entry) -> SignalProducer<Void, NSError> {
-        if let url = entry.url {
-            if let playlist = self.playlistsOfEntry[entry] {
-                fetchTracks(playlist, entry: entry)
-                return SignalProducer<Void, NSError>(value: ())
-            } else if CloudAPIClient.includesTrack {
-                self.playlistsOfEntry[entry] = entry.playlist
-                return SignalProducer<Void, NSError>(value: ())
-            } else {
-                let signal: SignalProducer<SignalProducer<Void, NSError>, NSError> = musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
-                    var tracks = entry.audioTracks
-                    tracks.appendContentsOf(pl.getTracks())
-                    let playlist = Playlist(id: pl.id, title: entry.title!, tracks: tracks)
-                    self.playlistsOfEntry[entry] = playlist
-                    UIScheduler().schedule {
-                        self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
-                    }
-                    // Check if it is disposed
-                    if let disposed = self.playlistifier?.disposed where !disposed {
-                        self.fetchTracks(playlist, entry: entry)
-                    }
-                    return SignalProducer<Void, NSError>.empty
-                })
-                return signal.flatten(.Merge)
-            }
+    public func loadPlaylistOfEntry(entry: Entry) -> SignalProducer<Playlist, NSError> {
+        guard let url = entry.url else { return SignalProducer<Playlist, NSError>.empty }
+
+        if let playlist = self.playlistsOfEntry[entry] {
+            return SignalProducer<Playlist, NSError>(value: playlist).concat(fetchTracks(playlist)
+                                                                     .map { _,_ in playlist })
         }
-        return SignalProducer<Void, NSError>.empty
+        if CloudAPIClient.includesTrack {
+            self.playlistsOfEntry[entry] = entry.playlist
+            return SignalProducer<Playlist, NSError>(value: entry.playlist).concat(fetchTracks(entry.playlist)
+                                                                           .map { _,_ in entry.playlist })
+        }
+        typealias S = SignalProducer<SignalProducer<Playlist, NSError>, NSError>
+        let signal: S = musicfavClient.playlistify(url, errorOnFailure: false).map { pl in
+            var tracks = entry.audioTracks
+            tracks.appendContentsOf(pl.getTracks())
+            let playlist = Playlist(id: pl.id, title: entry.title!, tracks: tracks)
+            self.playlistsOfEntry[entry] = playlist
+            UIScheduler().schedule { self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry)) }
+            return SignalProducer<Playlist, NSError>(value: playlist).concat(self.fetchTracks(playlist)
+                                                                     .map { _,_ in playlist })
+        }
+        return signal.flatten(.Merge)
     }
 
-    internal func fetchTracks(playlist: Playlist, entry: Entry) {
-        let loader = PlaylistLoader(playlist: playlist)
-        loaderOfPlaylist[playlist]?.dispose()
-        loaderOfPlaylist[playlist] = loader
-        loader.fetchTracks()
+    internal func fetchTracks(playlist: Playlist) -> SignalProducer<(Int, Track), NSError> {
+        return PlaylistLoader(playlist: playlist).fetchTracks()
     }
 
     public func fetchAllPlaylists() {
@@ -134,19 +120,13 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
 
     public func fetchPlaylistsOfEntries(entries: [Entry]) {
         self.playlistifier?.dispose()
-        self.playlistifier = entries.map({
-            self.loadPlaylistOfEntry($0)
-        }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
-            currentSignal.concat(nextSignal)
-        }).on().start()
+        self.playlistifier = entries.map({ self.loadPlaylistOfEntry($0) })
+                                    .reduce(SignalProducer<Playlist, NSError>.empty, combine: { $0.concat($1) })
+                                    .on().start()
     }
 
     public func cancelFetchingPlaylists() {
         playlistifier?.dispose()
-        loaderOfPlaylist.forEach {
-            $1.dispose()
-            self.loaderOfPlaylist[$0] = nil
-        }
     }
 
     public var removeMark: RemoveMark {
