@@ -186,7 +186,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
                 status = .Init
                 _streamUrl = nil
                 youtubeVideo = nil
-                signal = signal.concat(fetchTrackDetail(false))
+                signal = signal.concat(fetchPropertiesFromProvider(false))
             }
         }
         return signal
@@ -237,16 +237,16 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
 
     public func fetchDetail() -> SignalProducer<Track, NSError> {
         if CloudAPIClient.includesTrack {
-            return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchTrackDetail(false)).map {
+            return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchPropertiesFromProvider(false)).map {
                 self.likesCount = $0.0.likesCount
                 return self
             }
         } else {
-            return fetchTrackDetail(false)
+            return fetchPropertiesFromProvider(false)
         }
     }
 
-    public func fetchTrackDetail(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
+    public func fetchPropertiesFromProvider(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
         return SignalProducer<Track, NSError> { (observer, disposable) in
             if self.status == .Available || self.status == .Loading {
                 observer.sendNext(self)
