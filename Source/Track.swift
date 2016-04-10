@@ -78,15 +78,18 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
     public let id:           String
     public let provider:     Provider
-    public let url:          String
     public let identifier:   String
-    public var likesCount:   Int64?
-    public var likers:       [Profile]?
-    public var entries:      [Entry]?
-    @objc public var title:  String?
-    @objc public var thumbnailUrl: NSURL?
-    public var duration:     NSTimeInterval
-    @objc public var isVideo:      Bool {
+
+    public private(set) var url:          String
+    public private(set) var entries:      [Entry]?
+    public private(set) var title:        String?
+    public private(set) var thumbnailUrl: NSURL?
+    public private(set) var duration:     NSTimeInterval
+    public private(set) var likesCount:   Int64?
+    public private(set) var likers:       [Profile]?
+
+
+    public var isVideo: Bool {
         return provider == Provider.YouTube && Track.youTubeVideoQuality != YouTubeVideoQuality.AudioOnly
     }
 
@@ -98,7 +101,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public private(set) var youtubeVideo:    XCDYouTubeVideo?
     public private(set) var soundcloudTrack: SoundCloudKit.Track?
 
-    @objc public var streamUrl: NSURL? {
+    public var streamUrl: NSURL? {
         if let video = youtubeVideo {
             return video.streamURLs[Track.youTubeVideoQuality.rawValue]
         } else if let url = _streamUrl {
@@ -116,7 +119,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         return json.arrayValue.map({ Track(json: $0) })
     }
     
-    @objc required public convenience init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    required public convenience init?(response: NSHTTPURLResponse, representation: AnyObject) {
         let json = JSON(representation)
         self.init(json: json)
     }
