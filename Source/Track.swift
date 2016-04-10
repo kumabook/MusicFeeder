@@ -128,7 +128,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         self.identifier = identifier
         self.title      = title
         self.duration   = 0 as NSTimeInterval
-        self.status    = .Init
+        self.status     = .Init
     }
 
     public init(json: JSON) {
@@ -139,7 +139,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         identifier  = json["identifier"].stringValue
         likesCount  = json["likesCount"].int64Value
         duration    = 0 as NSTimeInterval
-        status     = .Init
+        status      = .Init
         likers      = json["likers"].array?.map  { Profile(json: $0) }
         entries     = json["entries"].array?.map { Entry(json: $0) }
     }
@@ -151,7 +151,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         url         = store.url
         identifier  = store.identifier
         duration    = NSTimeInterval(store.duration)
-        status     = .Init
+        status      = .Init
         if let url = NSURL(string: store.streamUrl) {
             _streamUrl = url
             if provider != .YouTube {
@@ -176,7 +176,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         identifier  = dic["identifier"] ?? ""
         duration    = dic["duration"].flatMap { Int64($0) }.flatMap { NSTimeInterval( $0 / 1000) } ?? 0
         likesCount  = dic["likesCount"].flatMap { Int64($0) }
-        status    = .Init
+        status      = .Init
     }
 
     public func reloadExpiredDetail() -> SignalProducer<Track, NSError> {
@@ -205,18 +205,19 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         title           = track.title
         duration        = NSTimeInterval(track.duration / 1000)
         _streamUrl      = NSURL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
-        status         = .Available
+        status          = .Available
+
         if let url = track.thumbnailURL {
             thumbnailUrl = url
         }
     }
     
     public func updatePropertiesWithYouTubeVideo(video: XCDYouTubeVideo) {
-        youtubeVideo   = video
-        title          = video.title
-        duration       = video.duration
-        thumbnailUrl   = video.mediumThumbnailURL
-        status        = .Available
+        youtubeVideo = video
+        title        = video.title
+        duration     = video.duration
+        thumbnailUrl = video.mediumThumbnailURL
+        status       = .Available
     }
 
     internal func toStoreObject() -> TrackStore {
