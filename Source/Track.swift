@@ -239,6 +239,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         if CloudAPIClient.includesTrack {
             return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchPropertiesFromProvider(false)).map {
                 self.likesCount = $0.0.likesCount
+                self.entries    = $0.0.entries
                 return self
             }
         } else {
