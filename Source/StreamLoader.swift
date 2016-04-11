@@ -22,7 +22,7 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
     }
 
     public private(set) var feedlyClient        = CloudAPIClient.sharedInstance
-    public private(set) var musicfavClient      = MusicFavAPIClient.sharedInstance
+    public private(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
 
 
     public override func fetchCollection(streamId streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
@@ -97,7 +97,7 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
                                                                            .map { _,_ in entry.playlist })
         }
         typealias S = SignalProducer<SignalProducer<Playlist, NSError>, NSError>
-        let signal: S = musicfavClient.playlistify(url, errorOnFailure: false).map { pl in
+        let signal: S = pinkspiderClient.playlistify(url, errorOnFailure: false).map { pl in
             var tracks = entry.audioTracks
             tracks.appendContentsOf(pl.getTracks())
             let playlist = Playlist(id: pl.id, title: entry.title!, tracks: tracks)

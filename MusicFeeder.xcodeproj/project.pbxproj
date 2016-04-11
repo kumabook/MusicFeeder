@@ -31,7 +31,7 @@
 		67916DBB1BAEB768004419B0 /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6713B0681B7379CB003A1450 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67916DBC1BAEB768004419B0 /* XCDYouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67916DBD1BAEB768004419B0 /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6713B0601B73798E003A1450 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		679C52D51B70F3DD00BE6614 /* MusicFavAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059D1B6E1398006EAA84 /* MusicFavAPIClient.swift */; };
+		679C52D51B70F3DD00BE6614 /* PinkSpiderAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */; };
 		679C52D61B70F3DD00BE6614 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059F1B6E1398006EAA84 /* Playlist.swift */; };
 		679C52D71B70F3DD00BE6614 /* PlaylistLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A01B6E1398006EAA84 /* PlaylistLoader.swift */; };
 		679C52D81B70F3DD00BE6614 /* PlaylistStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A11B6E1398006EAA84 /* PlaylistStore.swift */; };
@@ -120,7 +120,7 @@
 /* Begin PBXFileReference section */
 		670110CB1C95592A00ECC79F /* FeedlyAPISpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedlyAPISpec.swift; path = Spec/FeedlyAPISpec.swift; sourceTree = SOURCE_ROOT; };
 		670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicFeederAPIClient.swift; path = Source/MusicFeederAPIClient.swift; sourceTree = SOURCE_ROOT; };
-		6705059D1B6E1398006EAA84 /* MusicFavAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicFavAPIClient.swift; path = Source/MusicFavAPIClient.swift; sourceTree = SOURCE_ROOT; };
+		6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinkSpiderAPIClient.swift; path = Source/PinkSpiderAPIClient.swift; sourceTree = SOURCE_ROOT; };
 		6705059F1B6E1398006EAA84 /* Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Playlist.swift; path = Source/Playlist.swift; sourceTree = SOURCE_ROOT; };
 		670505A01B6E1398006EAA84 /* PlaylistLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistLoader.swift; path = Source/PlaylistLoader.swift; sourceTree = SOURCE_ROOT; };
 		670505A11B6E1398006EAA84 /* PlaylistStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistStore.swift; path = Source/PlaylistStore.swift; sourceTree = SOURCE_ROOT; };
@@ -314,7 +314,7 @@
 				67D7F3471CAD33E600C173B4 /* Loader */,
 				67120B401C1884C600240F8B /* Store */,
 				679C53511B72385900BE6614 /* Player.swift */,
-				6705059D1B6E1398006EAA84 /* MusicFavAPIClient.swift */,
+				6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */,
 				67FBBE351B6CE76300B567CB /* FeedlyAPIClient.swift */,
 				670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */,
 				67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */,
@@ -448,7 +448,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				679C52D51B70F3DD00BE6614 /* MusicFavAPIClient.swift in Sources */,
+				679C52D51B70F3DD00BE6614 /* PinkSpiderAPIClient.swift in Sources */,
 				679C52D61B70F3DD00BE6614 /* Playlist.swift in Sources */,
 				670110D01C955FED00ECC79F /* MusicFeederAPIClient.swift in Sources */,
 				679C52D71B70F3DD00BE6614 /* PlaylistLoader.swift in Sources */,

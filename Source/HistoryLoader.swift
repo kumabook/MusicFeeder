@@ -75,7 +75,7 @@ public class HistoryLoader: StreamLoader {
                 self.fetchTracks(entry.playlist)
                 return SignalProducer<Void, NSError>.empty
             } else {
-                return musicfavClient.playlistify(url, errorOnFailure: false).map({ pl in
+                return pinkspiderClient.playlistify(url, errorOnFailure: false).map({ pl in
                     var tracks = entry.audioTracks
                     tracks.appendContentsOf(pl.getTracks())
                     let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)

@@ -15,7 +15,7 @@ public class TrackStreamLoader: PaginatedCollectionLoader<PaginatedTrackCollecti
     public typealias Event = PaginatedCollectionLoaderEvent
     
     public private(set) var feedlyClient        = CloudAPIClient.sharedInstance
-    public private(set) var musicfavClient      = MusicFavAPIClient.sharedInstance
+    public private(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
 
     public override func fetchCollection(streamId streamId: String, paginationParams: MusicFeeder.PaginationParams)-> SignalProducer<PaginatedTrackCollection, NSError> {
         return feedlyClient.fetchTracksOf(streamId, paginationParams: paginationParams)

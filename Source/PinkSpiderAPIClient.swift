@@ -13,15 +13,15 @@ import Result
 import Alamofire
 import FeedlyKit
 
-public class MusicFavAPIClient {
+public class PinkSpiderAPIClient {
     static let baseUrl   = "http://musicfav-cloud.herokuapp.com"
-    public static var sharedInstance = MusicFavAPIClient()
+    public static var sharedInstance = PinkSpiderAPIClient()
     static var sharedManager: Alamofire.Manager! = Alamofire.Manager()
 
     public func playlistify(targetUrl: NSURL, errorOnFailure: Bool) -> SignalProducer<Playlist, NSError> {
         return SignalProducer { (observer, disposable) in
-            let url = String(format: "%@/playlistify", MusicFavAPIClient.baseUrl)
-            let request = MusicFavAPIClient.sharedManager.request(.GET, url, parameters: ["url": targetUrl], encoding: ParameterEncoding.URL)
+            let url = String(format: "%@/playlistify", PinkSpiderAPIClient.baseUrl)
+            let request = PinkSpiderAPIClient.sharedManager.request(.GET, url, parameters: ["url": targetUrl], encoding: ParameterEncoding.URL)
             .responseJSON(options: NSJSONReadingOptions()) { response in
                 if let e = response.result.error {
                     if errorOnFailure { observer.sendFailed(e as NSError) }
