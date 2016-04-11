@@ -40,7 +40,7 @@
 		679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A51B6E1398006EAA84 /* TrackStore.swift */; };
 		679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE321B6CE76300B567CB /* Category.swift */; };
 		679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
-		679C52E11B70F3DD00BE6614 /* FeedlyAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* FeedlyAPIClient.swift */; };
+		679C52E11B70F3DD00BE6614 /* CloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */; };
 		679C52E31B70F3DD00BE6614 /* StreamListLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* StreamListLoader.swift */; };
 		679C52E51B70F3DD00BE6614 /* XCDYouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */; };
 		679C52F41B70F3FC00BE6614 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DD1B70E4B600BE6614 /* playlist.json */; };
@@ -164,7 +164,7 @@
 		67FBBE2D1B6CE61C00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = SOURCE_ROOT; };
 		67FBBE321B6CE76300B567CB /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Category.swift; path = Source/Category.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE341B6CE76300B567CB /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entry.swift; path = Source/Entry.swift; sourceTree = SOURCE_ROOT; };
-		67FBBE351B6CE76300B567CB /* FeedlyAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedlyAPIClient.swift; path = Source/FeedlyAPIClient.swift; sourceTree = SOURCE_ROOT; };
+		67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudAPIClientExtension.swift; path = Source/CloudAPIClientExtension.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE3B1B6CE76300B567CB /* StreamListLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamListLoader.swift; path = Source/StreamListLoader.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCDYouTubeClient.swift; path = Source/XCDYouTubeClient.swift; sourceTree = SOURCE_ROOT; };
 		67FCFAA01B946CED008359BB /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/iOS/SoundCloudKit.framework; sourceTree = "<group>"; };
@@ -315,7 +315,7 @@
 				67120B401C1884C600240F8B /* Store */,
 				679C53511B72385900BE6614 /* Player.swift */,
 				6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */,
-				67FBBE351B6CE76300B567CB /* FeedlyAPIClient.swift */,
+				67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */,
 				670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */,
 				67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */,
 				67FBBE2D1B6CE61C00B567CB /* Info.plist */,
@@ -469,7 +469,7 @@
 				6705761A1BDE60400087063A /* HistoryStore.swift in Sources */,
 				670576221BE4E9C60087063A /* History.swift in Sources */,
 				679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */,
-				679C52E11B70F3DD00BE6614 /* FeedlyAPIClient.swift in Sources */,
+				679C52E11B70F3DD00BE6614 /* CloudAPIClientExtension.swift in Sources */,
 				679C52E31B70F3DD00BE6614 /* StreamListLoader.swift in Sources */,
 				679C53521B72385900BE6614 /* Player.swift in Sources */,
 				67120B3F1C18821C00240F8B /* RealmMigration.swift in Sources */,

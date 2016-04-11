@@ -1,9 +1,9 @@
 //
-//  FeedlyAPIClient.swift
+//  CloudAPIClientExtension.swift
 //  MusicFav
 //
 //  Created by Hiroki Kumamoto on 12/21/14.
-//  Copyright (c) 2014 Hiroki Kumamoto. All rights reserved.
+//  Copyright (c) 2016 Hiroki Kumamoto. All rights reserved.
 //
 
 import UIKit
