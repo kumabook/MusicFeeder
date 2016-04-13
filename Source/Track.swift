@@ -157,9 +157,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         status      = .Init
         if let url = NSURL(string: store.streamUrl) {
             _streamUrl = url
-            if provider != .YouTube {
-                status = .Available
-            }
         }
         if let url = NSURL(string: store.thumbnailUrl) {
             thumbnailUrl = url
