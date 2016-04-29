@@ -69,6 +69,41 @@ struct FetchAccessTokenAPI: API {
     }
 }
 
+struct FetchTopicsAPI: API {
+    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/topics" }
+    var method:     Alamofire.Method { return .GET }
+    var URLRequest: NSMutableURLRequest {
+        let URL = NSURL(string: url)!
+        let req = NSMutableURLRequest(URL: URL)
+        req.HTTPMethod = method.rawValue
+        return req
+    }
+}
+
+struct UpdateTopicAPI: API {
+    var topicId:    String
+    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/topics/\(urlEncode(topicId))" }
+    var method:     Alamofire.Method { return .PUT }
+    var URLRequest: NSMutableURLRequest {
+        let URL = NSURL(string: url)!
+        let req = NSMutableURLRequest(URL: URL)
+        req.HTTPMethod = method.rawValue
+        return req
+    }
+}
+
+struct DeleteTopicAPI: API {
+    var topicId:    String
+    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/topics/\(urlEncode(topicId))" }
+    var method:     Alamofire.Method { return .DELETE }
+    var URLRequest: NSMutableURLRequest {
+        let URL = NSURL(string: url)!
+        let req = NSMutableURLRequest(URL: URL)
+        req.HTTPMethod = method.rawValue
+        return req
+    }
+}
+
 struct FetchTrackAPI: API {
     var trackId: String
 
@@ -202,6 +237,51 @@ extension CloudAPIClient {
                     observer.sendFailed(self.buildError(e, response: r.response))
                 } else if let accessToken = r.result.value {
                     observer.sendNext(accessToken)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
+    public func fetchTopics() -> SignalProducer<[Topic], NSError> {
+        let route = Router.Api(FetchTopicsAPI())
+        return SignalProducer { (observer, disposable) in
+            let req = self.manager.request(route).validate().responseCollection() { (r: Response<[Topic], NSError>) -> Void in
+                if let e = r.result.error {
+                    observer.sendFailed(self.buildError(e, response: r.response))
+                } else if let topics = r.result.value {
+                    observer.sendNext(topics)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
+    public func updateTopic(topic: Topic) -> SignalProducer<Void, NSError> {
+        let route = Router.Api(UpdateTopicAPI(topicId: topic.id))
+        return SignalProducer { (observer, disposable) in
+            let req = self.manager.request(route).validate().response() { (r: Response<Void, NSError>) -> Void in
+                if let e = r.result.error {
+                    observer.sendFailed(self.buildError(e, response: r.response))
+                } else if let _ = r.result.value {
+                    observer.sendNext()
+                    observer.sendCompleted()
+                }
+            }
+            disposable.addDisposable({ req.cancel() })
+        }
+    }
+
+    public func deleteTopic(topic: Topic) -> SignalProducer<Void, NSError> {
+        let route = Router.Api(DeleteTopicAPI(topicId: topic.id))
+        return SignalProducer { (observer, disposable) in
+            let req = self.manager.request(route).validate().response() { (r: Response<Void, NSError>) -> Void in
+                if let e = r.result.error {
+                    observer.sendFailed(self.buildError(e, response: r.response))
+                } else if let _ = r.result.value {
+                    observer.sendNext()
                     observer.sendCompleted()
                 }
             }
