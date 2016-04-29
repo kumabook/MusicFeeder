@@ -15,6 +15,7 @@
 		671132821BC1212E00A036B0 /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132801BC1212E00A036B0 /* EntryStore.swift */; };
 		671132831BC1212E00A036B0 /* SavedStreamLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamLoader.swift */; };
 		67120B3F1C18821C00240F8B /* RealmMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67120B3E1C18821C00240F8B /* RealmMigration.swift */; };
+		671841DE1CD2D40B005904EF /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841DD1CD2D40B005904EF /* Topic.swift */; };
 		678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
 		678305851B9897A000A83F52 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
 		67916DB01BAEB767004419B0 /* Breit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67D2657E1BACE16B000240FB /* Breit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -143,6 +144,7 @@
 		6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
 		6713B07B1B7379DD003A1450 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		6713B07C1B7379DD003A1450 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		671841DD1CD2D40B005904EF /* Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Topic.swift; path = Source/Topic.swift; sourceTree = SOURCE_ROOT; };
 		678305821B987B9600A83F52 /* SubscriptionStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionStore.swift; path = Source/SubscriptionStore.swift; sourceTree = SOURCE_ROOT; };
 		678305841B9897A000A83F52 /* CategoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryStore.swift; path = Source/CategoryStore.swift; sourceTree = SOURCE_ROOT; };
 		679C51D61B70E44000BE6614 /* PlaylistSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistSpec.swift; path = Spec/PlaylistSpec.swift; sourceTree = SOURCE_ROOT; };
@@ -283,6 +285,7 @@
 				67FBBE341B6CE76300B567CB /* Entry.swift */,
 				67FBBE321B6CE76300B567CB /* Category.swift */,
 				67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */,
+				671841DD1CD2D40B005904EF /* Topic.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				671132831BC1212E00A036B0 /* SavedStreamLoader.swift in Sources */,
 				671132821BC1212E00A036B0 /* EntryStore.swift in Sources */,
 				6705761A1BDE60400087063A /* HistoryStore.swift in Sources */,
+				671841DE1CD2D40B005904EF /* Topic.swift in Sources */,
 				670576221BE4E9C60087063A /* History.swift in Sources */,
 				679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */,
 				679C52E11B70F3DD00BE6614 /* CloudAPIClientExtension.swift in Sources */,
