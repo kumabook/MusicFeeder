@@ -14,7 +14,7 @@ import Alamofire
 import FeedlyKit
 
 public class PinkSpiderAPIClient {
-    static let baseUrl   = "http://musicfav-cloud.herokuapp.com"
+    static let baseUrl   = "http://pink-spider.herokuapp.com"
     public static var sharedInstance = PinkSpiderAPIClient()
     static var sharedManager: Alamofire.Manager! = Alamofire.Manager()
 
