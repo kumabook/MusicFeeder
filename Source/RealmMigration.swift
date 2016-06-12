@@ -76,7 +76,7 @@ public class RealmMigration {
             let path: NSString = directory.path!
             return path.stringByAppendingPathComponent("db.realm")
         } else {
-            return RLMRealmConfiguration.defaultConfiguration().path!
+            return RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
         }
     }
 
@@ -91,7 +91,7 @@ public class RealmMigration {
                 addIdToTrack(migration)
             }
         }
-        config.path = listenItLaterPath
+        config.fileURL = NSURL(string: "file://\(listenItLaterPath)")
         return config
     }
 
@@ -100,7 +100,7 @@ public class RealmMigration {
     }
 
     public class var historyPath: String {
-        var path: NSString = RLMRealmConfiguration.defaultConfiguration().path!
+        var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
         path = path.stringByDeletingLastPathComponent
         path = path.stringByAppendingPathComponent("history")
         path = path.stringByAppendingPathExtension("realm")!
@@ -120,7 +120,7 @@ public class RealmMigration {
                 addIdToTrack(migration)
             }
         }
-        config.path = historyPath
+        config.fileURL = NSURL(string: "file://\(historyPath)")
         return config
     }
 
