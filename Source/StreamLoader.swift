@@ -26,10 +26,7 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
 
 
     public override func fetchCollection(streamId streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
-        return feedlyClient.fetchEntries(streamId: streamId,
-                                     continuation: paginatedParams.continuation,
-                                       unreadOnly: paginatedParams.unreadOnly ?? false,
-                                          perPage: paginatedParams.count ?? CloudAPIClient.perPage)
+        return feedlyClient.fetchEntries(streamId: streamId, paginationParams: paginatedParams)
     }
 
     public override func dispose() {

@@ -44,7 +44,7 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
     public internal(set) var state:        PaginatedCollectionLoaderState
     public internal(set) var items:        [I] { didSet(newItems) { itemsUpdated() }}
     public internal(set) var continuation: String?
-    public internal(set) var lastUpdated:  Int64
+    public internal(set) var lastUpdated:  Int64?
     public internal(set) var signal:       Signal<PaginatedCollectionLoaderEvent, NSError>
     public internal(set) var observer:     Signal<PaginatedCollectionLoaderEvent, NSError>.Observer
     public internal(set) var unreadOnly:   Bool
@@ -72,7 +72,7 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
         self.unreadOnly  = unreadOnly
         self.perPage     = perPage
         state            = .Normal
-        lastUpdated      = 0
+        lastUpdated      = nil
         items            = []
         let pipe         = Signal<PaginatedCollectionLoaderEvent, NSError>.pipe()
         signal           = pipe.0
@@ -94,12 +94,8 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
         return SignalProducer<C, NSError>.empty
     }
 
-    func updateLastUpdated(updated: Int64?) {
-        if let timestamp = updated {
-            lastUpdated = timestamp + 1
-        } else {
-            lastUpdated = Int64(NSDate().timeIntervalSince1970 * 1000)
-        }
+    func updateLastUpdated() {
+        lastUpdated = Int64(NSDate().timeIntervalSince1970 * 1000)
     }
     
     public func fetchLatestItems() {
@@ -116,7 +112,7 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
                     var latestItems = paginatedCollection.items
                     latestItems.appendContentsOf(self.items)
                     self.items = latestItems
-                    self.updateLastUpdated(paginatedCollection.updated)
+                    self.updateLastUpdated()
                 },
                 failed: { error in CloudAPIClient.handleError(error: error) },
                 completed: { self.observer.sendNext(.CompleteLoadingLatest)
@@ -135,7 +131,9 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
                 let items = paginatedCollection.items
                 self.items.appendContentsOf(items)
                 self.continuation = paginatedCollection.continuation
-                self.updateLastUpdated(paginatedCollection.updated)
+                if self.lastUpdated == nil {
+                    self.updateLastUpdated()
+                }
                 self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
                 if paginatedCollection.continuation == nil { // then wait for next load
                     self.state = .Complete
