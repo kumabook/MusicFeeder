@@ -110,6 +110,17 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         return nil
     }
 
+    public var subtitle: String? {
+        switch provider {
+        case .YouTube:
+            return nil
+        case .SoundCloud:
+            return soundcloudTrack?.user.username
+        default:
+            return nil
+        }
+    }
+
     public var hashValue: Int {
         return "\(provider):\(identifier)".hashValue
     }
