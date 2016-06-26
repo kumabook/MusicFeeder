@@ -40,11 +40,13 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
 
     public private(set) var needsPlaylist:      Bool
     public private(set) var playlistsOfEntry:   [Entry:Playlist]
+    public private(set) var playlistQueue:      PlaylistQueue
     public var playlistifier:      Disposable?
 
     public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
         needsPlaylist    = true
         playlistsOfEntry = [:]
+        playlistQueue    = PlaylistQueue(playlists: [])
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
     }
 
@@ -90,6 +92,7 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
         }
         if CloudAPIClient.includesTrack {
             self.playlistsOfEntry[entry] = entry.playlist
+            self.playlistQueue.enqueue(entry.playlist)
             return SignalProducer<Playlist, NSError>(value: entry.playlist).concat(fetchTracks(entry.playlist)
                                                                            .map { _,_ in entry.playlist })
         }
@@ -99,6 +102,7 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
             tracks.appendContentsOf(pl.getTracks())
             let playlist = Playlist(id: pl.id, title: entry.title!, tracks: tracks)
             self.playlistsOfEntry[entry] = playlist
+            self.playlistQueue.enqueue(playlist)
             UIScheduler().schedule { self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry)) }
             return SignalProducer<Playlist, NSError>(value: playlist).concat(self.fetchTracks(playlist)
                                                                      .map { _,_ in playlist })

@@ -17,6 +17,7 @@
 		67120B3F1C18821C00240F8B /* RealmMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67120B3E1C18821C00240F8B /* RealmMigration.swift */; };
 		671841DE1CD2D40B005904EF /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841DD1CD2D40B005904EF /* Topic.swift */; };
 		671841E71CD2E1E2005904EF /* TopicRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841E61CD2E1E2005904EF /* TopicRepository.swift */; };
+		673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
 		678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
 		678305851B9897A000A83F52 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
 		67916DB01BAEB767004419B0 /* Breit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67D2657E1BACE16B000240FB /* Breit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -147,6 +148,7 @@
 		6713B07C1B7379DD003A1450 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		671841DD1CD2D40B005904EF /* Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Topic.swift; path = Source/Topic.swift; sourceTree = SOURCE_ROOT; };
 		671841E61CD2E1E2005904EF /* TopicRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopicRepository.swift; path = Source/TopicRepository.swift; sourceTree = SOURCE_ROOT; };
+		673672C41D1F918C006259F9 /* PlaylistQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistQueue.swift; path = Source/PlaylistQueue.swift; sourceTree = SOURCE_ROOT; };
 		678305821B987B9600A83F52 /* SubscriptionStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionStore.swift; path = Source/SubscriptionStore.swift; sourceTree = SOURCE_ROOT; };
 		678305841B9897A000A83F52 /* CategoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryStore.swift; path = Source/CategoryStore.swift; sourceTree = SOURCE_ROOT; };
 		679C51D61B70E44000BE6614 /* PlaylistSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistSpec.swift; path = Spec/PlaylistSpec.swift; sourceTree = SOURCE_ROOT; };
@@ -296,6 +298,7 @@
 				67FBBE321B6CE76300B567CB /* Category.swift */,
 				67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */,
 				671841DD1CD2D40B005904EF /* Topic.swift */,
+				673672C41D1F918C006259F9 /* PlaylistQueue.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				671841E71CD2E1E2005904EF /* TopicRepository.swift in Sources */,
 				679C52E31B70F3DD00BE6614 /* StreamListLoader.swift in Sources */,
 				679C53521B72385900BE6614 /* Player.swift in Sources */,
+				673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */,
 				67120B3F1C18821C00240F8B /* RealmMigration.swift in Sources */,
 				679C52E51B70F3DD00BE6614 /* XCDYouTubeClient.swift in Sources */,
 			);
