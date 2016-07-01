@@ -45,12 +45,6 @@ public class HistoryLoader: StreamLoader {
 
             self.offset += HistoryStore.limit
 
-            self.playlistifier = histories.map({
-                self.loadPlaylistOfHistory($0)
-            }).reduce(SignalProducer<Void, NSError>.empty, combine: { (currentSignal, nextSignal) in
-                currentSignal.concat(nextSignal)
-            }).start()
-
             self.histories.appendContentsOf(histories)
             let count = HistoryStore.count()
             dispatch_async(dispatch_get_main_queue()) {
@@ -64,36 +58,53 @@ public class HistoryLoader: StreamLoader {
         }
     }
 
-    public func loadPlaylistOfHistory(history: History) -> SignalProducer<Void, NSError> {
+    public override func fetchPlaylistsOfEntries(entries: [Entry]) {
+        self.playlistifier = histories.map {
+            self.loadPlaylistOfHistory($0)
+        }.reduce(SignalProducer<Playlist, NSError>.empty, combine: { (currentSignal, nextSignal) in
+            currentSignal.concat(nextSignal)
+        }).start()
+    }
+
+    public override func cancelFetchingPlaylists() {
+        playlistifier?.dispose()
+    }
+
+    public func loadPlaylistOfHistory(history: History) -> SignalProducer<Playlist, NSError> {
+        if let playlist = self.playlistsOfHistory[history] {
+            return SignalProducer<Playlist, NSError>(value: playlist).concat(fetchTracks(playlist)
+                .map { _,_ in playlist })
+        }
         if let entry = history.entry, url = entry.url {
             if CloudAPIClient.includesTrack {
                 let playlist = entry.playlist
                 self.playlistsOfHistory[history] = playlist
+                self.playlistQueue.enqueue(playlist)
+                return SignalProducer<Playlist, NSError>(value: entry.playlist).concat(fetchTracks(entry.playlist)
+                        .map { _,_ in entry.playlist })
+            }
+            typealias S = SignalProducer<SignalProducer<Playlist, NSError>, NSError>
+            let signal: S = pinkspiderClient.playlistify(url, errorOnFailure: false).map { pl in
+                var tracks = entry.audioTracks
+                tracks.appendContentsOf(pl.getTracks())
+                let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
+                self.playlistsOfHistory[history] = playlist
+                self.playlistQueue.enqueue(playlist)
                 UIScheduler().schedule {
                     self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
                 }
-                self.fetchTracks(entry.playlist)
-                return SignalProducer<Void, NSError>.empty
-            } else {
-                return pinkspiderClient.playlistify(url, errorOnFailure: false).map({ pl in
-                    var tracks = entry.audioTracks
-                    tracks.appendContentsOf(pl.getTracks())
-                    let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
-                    self.playlistsOfHistory[history] = playlist
-                    UIScheduler().schedule {
-                        self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry))
-                    }
-                    self.fetchTracks(playlist)
-                    return ()
-                })
+                return SignalProducer<Playlist, NSError>(value: playlist).concat(self.fetchTracks(playlist)
+                                                                         .map { _,_ in playlist })
             }
+            return signal.flatten(.Merge)
+
         } else if let track = history.track {
             self.playlistsOfHistory[history] = Playlist(id: "track_history_\(history.timestamp)",
                                                      title: track.title ?? "",
                                                     tracks: [track])
             track.fetchDetail().start()
         }
-        return SignalProducer<Void, NSError>.empty
+        return SignalProducer<Playlist, NSError>.empty
     }
 
     public override func fetchLatestItems() {
