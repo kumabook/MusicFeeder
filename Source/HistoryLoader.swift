@@ -42,7 +42,6 @@ public class HistoryLoader: StreamLoader {
             let histories: [History] = HistoryStore.find(range).map { History(store: $0) }
 
             self.histories.appendContentsOf(histories)
-            let count = HistoryStore.count()
             dispatch_async(dispatch_get_main_queue()) {
                 self.state = .Complete
                 self.observer.sendNext(.CompleteLoadingNext)
