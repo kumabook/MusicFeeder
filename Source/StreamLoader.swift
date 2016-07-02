@@ -91,10 +91,11 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
                                                                     .map { _, t in (t, playlist) })
         }
         if CloudAPIClient.includesTrack {
-            self.playlistsOfEntry[entry] = entry.playlist
-            self.playlistQueue.enqueue(entry.playlist)
-            return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(entry.playlist)
-                                                                           .map { _, t in (t, entry.playlist) })
+            let playlist = entry.toPlaylist()
+            self.playlistsOfEntry[entry] = playlist
+            self.playlistQueue.enqueue(playlist)
+            return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(playlist)
+                                                                           .map { _, t in (t, playlist) })
         }
         typealias S = SignalProducer<SignalProducer<(Track, Playlist), NSError>, NSError>
         let signal: S = pinkspiderClient.playlistify(url, errorOnFailure: false).map { pl in

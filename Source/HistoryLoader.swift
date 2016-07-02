@@ -68,11 +68,11 @@ public class HistoryLoader: StreamLoader {
         }
         if let entry = history.entry, url = entry.url {
             if CloudAPIClient.includesTrack {
-                let playlist = entry.playlist
+                let playlist = entry.toPlaylist()
                 self.playlistsOfHistory[history] = playlist
                 self.playlistQueue.enqueue(playlist)
-                return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(entry.playlist)
-                        .map { _,t in (t, entry.playlist) })
+                return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(playlist)
+                        .map { _,t in (t, playlist) })
             }
             typealias S = SignalProducer<SignalProducer<(Track, Playlist), NSError>, NSError>
             let signal: S = pinkspiderClient.playlistify(url, errorOnFailure: false).map { pl in

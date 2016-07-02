@@ -38,7 +38,7 @@ extension Entry {
         return published.date.passedTime
     }
 
-    public var playlist: Playlist {
+    public func toPlaylist() -> Playlist {
         if let t = title {
             return Playlist(id: "playlist_\(id)", title: t, tracks: tracks)
         } else {
