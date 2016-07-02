@@ -17,6 +17,8 @@ public class TrackStreamLoader: PaginatedCollectionLoader<PaginatedTrackCollecti
     public private(set) var feedlyClient        = CloudAPIClient.sharedInstance
     public private(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
 
+    public private(set) var playlistQueue: PlaylistQueue = PlaylistQueue(playlists: [])
+
     public override func fetchCollection(streamId streamId: String, paginationParams: MusicFeeder.PaginationParams)-> SignalProducer<PaginatedTrackCollection, NSError> {
         return feedlyClient.fetchTracksOf(streamId, paginationParams: paginationParams)
     }
@@ -29,7 +31,6 @@ public class TrackStreamLoader: PaginatedCollectionLoader<PaginatedTrackCollecti
     public func fetchLatestTracks() { fetchLatestItems() }
     
     public var tracks:   [Track]    { return self.items }
-    public var playlist: Playlist   { return Playlist(id: stream.streamId, title: stream.streamTitle, tracks: tracks) }
     public var detailLoader:        Disposable?
 
     
@@ -37,6 +38,7 @@ public class TrackStreamLoader: PaginatedCollectionLoader<PaginatedTrackCollecti
         detailLoader?.dispose()
         detailLoader = tracks.map({ track in
             track.fetchDetail().map {
+                self.playlistQueue.enqueue(Playlist(id: track.id, title: track.title ?? "No title", tracks: [track]))
                 self.observer.sendNext(.CompleteLoadingTrackDetail(track))
                 return $0
             }
