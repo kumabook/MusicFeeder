@@ -13,7 +13,7 @@ import Breit
 
 public class HistoryStore: RLMObject {
     static let maxLength:  UInt = 10
-    static let limit:      UInt = 5
+    static let limit:      UInt = 10
 
     class var realm: RLMRealm {
         return try! RLMRealm(configuration: RealmMigration.historyConfiguration())

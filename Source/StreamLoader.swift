@@ -83,20 +83,20 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
         fetchAllPlaylists()
     }
 
-    public func loadPlaylistOfEntry(entry: Entry) -> SignalProducer<Playlist, NSError> {
-        guard let url = entry.url else { return SignalProducer<Playlist, NSError>.empty }
+    public func loadPlaylistOfEntry(entry: Entry) -> SignalProducer<(Track, Playlist), NSError> {
+        guard let url = entry.url else { return SignalProducer<(Track, Playlist), NSError>.empty }
 
         if let playlist = self.playlistsOfEntry[entry] {
-            return SignalProducer<Playlist, NSError>(value: playlist).concat(fetchTracks(playlist)
-                                                                     .map { _,_ in playlist })
+            return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(playlist)
+                                                                    .map { _, t in (t, playlist) })
         }
         if CloudAPIClient.includesTrack {
             self.playlistsOfEntry[entry] = entry.playlist
             self.playlistQueue.enqueue(entry.playlist)
-            return SignalProducer<Playlist, NSError>(value: entry.playlist).concat(fetchTracks(entry.playlist)
-                                                                           .map { _,_ in entry.playlist })
+            return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(entry.playlist)
+                                                                           .map { _, t in (t, entry.playlist) })
         }
-        typealias S = SignalProducer<SignalProducer<Playlist, NSError>, NSError>
+        typealias S = SignalProducer<SignalProducer<(Track, Playlist), NSError>, NSError>
         let signal: S = pinkspiderClient.playlistify(url, errorOnFailure: false).map { pl in
             var tracks = entry.audioTracks
             tracks.appendContentsOf(pl.getTracks())
@@ -104,8 +104,8 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
             self.playlistsOfEntry[entry] = playlist
             self.playlistQueue.enqueue(playlist)
             UIScheduler().schedule { self.observer.sendNext(.CompleteLoadingPlaylist(playlist, entry)) }
-            return SignalProducer<Playlist, NSError>(value: playlist).concat(self.fetchTracks(playlist)
-                                                                     .map { _,_ in playlist })
+            return SignalProducer<(Track, Playlist), NSError>.empty.concat(self.fetchTracks(playlist)
+                                                                     .map { _, t in (t, playlist) })
         }
         return signal.flatten(.Merge)
     }
@@ -122,8 +122,10 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
     public func fetchPlaylistsOfEntries(entries: [Entry]) {
         self.playlistifier?.dispose()
         self.playlistifier = entries.map({ self.loadPlaylistOfEntry($0) })
-                                    .reduce(SignalProducer<Playlist, NSError>.empty, combine: { $0.concat($1) })
-                                    .on().start()
+                                    .reduce(SignalProducer<(Track, Playlist), NSError>.empty, combine: { $0.concat($1) })
+                                    .on(next: { track, playlist in
+                                        self.playlistQueue.trackUpdated(track)
+                                    }).start()
     }
 
     public func cancelFetchingPlaylists() {

@@ -53,7 +53,7 @@ public class SavedStreamLoader: StreamLoader {
         QueueScheduler().schedule {
             let entries: [Entry] = EntryStore.findAll().map { Entry(store: $0) }.reverse()
             self.playlistifier = entries.map { self.loadPlaylistOfEntry($0) }
-                                        .reduce(SignalProducer<Playlist, NSError>.empty, combine: { $0.concat($1) })
+                                        .reduce(SignalProducer<(Track, Playlist), NSError>.empty, combine: { $0.concat($1) })
                                         .start()
             self.items = entries
             UIScheduler().schedule {
