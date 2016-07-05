@@ -87,6 +87,18 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public private(set) var duration:     NSTimeInterval
     public private(set) var likesCount:   Int64?
     public private(set) var likers:       [Profile]?
+    public var artworkUrl: NSURL? {
+        switch self.provider {
+        case .YouTube:
+            return youtubeVideo?.largeThumbnailURL
+        case .SoundCloud:
+            guard let sc = soundcloudTrack else { return nil }
+            return sc.artworkURL
+        default:
+            break
+        }
+        return nil
+    }
 
 
     public var isVideo: Bool {
