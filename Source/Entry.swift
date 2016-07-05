@@ -13,7 +13,7 @@ extension Entry {
     public var url: NSURL? {
         if let alternate = self.alternate {
             if alternate.count > 0 {
-                return NSURL(string: alternate[0].href)!
+                return NSURL(string: alternate[0].href)
             }
         }
         return nil
