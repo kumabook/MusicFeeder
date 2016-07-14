@@ -35,8 +35,9 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public static var playlistNumberLimit: Int = 5
     public static var trackNumberLimit:    Int = 5
 
+    public static var sharedOrderBy = PlaylistStore.OrderBy.CreatedAt(OrderType.Desc)
     public static var sharedPipe: (Signal<Event, NSError>, Signal<Event, NSError>.Observer)! = Signal<Event, NSError>.pipe()
-    public static var sharedList: [Playlist] = Playlist.findAll()
+    public static var sharedList: [Playlist] = Playlist.findAll(sharedOrderBy)
     
     public enum Event {
         case Created(Playlist)
@@ -55,8 +56,8 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
 
     public class func notifyChange(event: Event) {
         switch event {
-        case .Created(let playlist):
-            Playlist.sharedList.append(playlist)
+        case .Created:
+            Playlist.sharedList = Playlist.findAll(sharedOrderBy)
         case .Removed(let playlist):
             if let index = Playlist.sharedList.indexOf(playlist) {
                 Playlist.sharedList.removeAtIndex(index)
@@ -169,8 +170,8 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         return result
     }
 
-    public class func findAll() -> [Playlist] {
-        return PlaylistStore.findAll()
+    public class func findAll(orderBy: PlaylistStore.OrderBy = .CreatedAt(.Desc)) -> [Playlist] {
+        return PlaylistStore.findAll(orderBy)
     }
 
     public class func findBy(id id: String) -> Playlist? {
