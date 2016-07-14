@@ -28,10 +28,42 @@ public enum PersistentResult {
     case Failure
 }
 
+public enum OrderType {
+    case Desc
+    case Asc
+}
+
 public class PlaylistStore: RLMObject {
-    dynamic var id:     String = ""
-    dynamic var title:  String = ""
+    dynamic var id:        String = ""
+    dynamic var title:     String = ""
+    dynamic var createdAt: Int64  = 0
+    dynamic var updatedAt: Int64  = 0
+    dynamic var number:    Float  = 0
     dynamic var tracks = RLMArray(objectClassName: TrackStore.className())
+
+    public enum OrderBy {
+        case CreatedAt(OrderType)
+        case UpdatedAt(OrderType)
+        case Title(OrderType)
+        case Number(OrderType)
+        var name: String {
+            switch self {
+            case CreatedAt: return "createdAt"
+            case UpdatedAt: return "updatedAt"
+            case Title:     return "title"
+            case Number:    return "number"
+            }
+        }
+        var ascending: Bool {
+            switch self {
+            case CreatedAt(let orderType): return orderType == .Asc
+            case UpdatedAt(let orderType): return orderType == .Asc
+            case Title(let orderType):     return orderType == .Asc
+            case Number(let orderType):    return orderType == .Asc
+            }
+        }
+    }
+
     public override class func primaryKey() -> String {
         return "id"
     }
@@ -78,6 +110,7 @@ public class PlaylistStore: RLMObject {
         }
         if let _ = findBy(id: playlist.id) { return .Failure }
         let store = playlist.toStoreObject()
+        store.createdAt = NSDate().timestamp
         do {
             try realm.transactionWithBlock() {
                 self.realm.addObject(store)
@@ -92,6 +125,7 @@ public class PlaylistStore: RLMObject {
         if let store = findBy(id: playlist.id) {
             try! realm.transactionWithBlock() {
                 store.title = playlist.title
+                store.updatedAt = NSDate().timestamp
             }
             return true
         } else {
@@ -99,9 +133,9 @@ public class PlaylistStore: RLMObject {
         }
     }
 
-    internal class func findAll() -> [Playlist] {
+    internal class func findAll(orderBy: OrderBy = OrderBy.CreatedAt(.Desc)) -> [Playlist] {
         var playlists: [Playlist] = []
-        for store in PlaylistStore.allObjectsInRealm(realm) {
+        for store in PlaylistStore.allObjectsInRealm(realm).sortedResultsUsingProperty(orderBy.name, ascending: orderBy.ascending) {
             playlists.append(Playlist(store: store as! PlaylistStore))
         }
         return playlists
