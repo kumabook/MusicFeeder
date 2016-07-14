@@ -82,6 +82,20 @@ public class PlaylistStore: RLMObject {
         }
     }
 
+    internal func insertTrack(trackStore: TrackStore, atIndex: UInt) -> PersistentResult {
+        if Int(tracks.count) + 1 > Playlist.trackNumberLimit {
+            return .ExceedLimit
+        }
+        do {
+            try realm!.transactionWithBlock() {
+                tracks.insertObject(trackStore, atIndex: atIndex)
+            }
+            return .Success
+        } catch {
+            return .Failure
+        }
+    }
+
     internal class func appendTracks(tracks: [Track], playlist: Playlist) -> PersistentResult {
         let trackStores: [TrackStore] = tracks.map({ track in
             if let trackStore = TrackStore.findBy(url: track.url) { return trackStore }

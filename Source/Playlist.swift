@@ -161,6 +161,13 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         Playlist.notifyChange(.TrackRemoved(self, track, Int(index)))
     }
 
+    public func insertTrack(track: Track, atIndex: UInt) {
+        guard let trackStore = TrackStore.findBy(url: track.url) else { return }
+        guard let store = PlaylistStore.findBy(id: id) else { return }
+        store.insertTrack(trackStore, atIndex: atIndex)
+        Playlist.notifyChange(.TracksAdded(self, [track]))
+    }
+
     public func appendTracks(tracks: [Track]) -> PersistentResult {
         let result = PlaylistStore.appendTracks(tracks, playlist: self)
         if result == .Success {
