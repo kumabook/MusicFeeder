@@ -177,6 +177,19 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         return result
     }
 
+    public func moveTrackAtIndex(sourceIndex: Int, toIndex: Int) -> PersistentResult {
+        guard let store = PlaylistStore.findBy(id: id) else { return .Failure }
+        let result = store.moveTrackAtIndex(UInt(sourceIndex), toIndex: UInt(toIndex))
+        switch result {
+        case .Success:
+            let t = _tracks[sourceIndex]
+            _tracks[sourceIndex] = _tracks[toIndex]
+            _tracks[toIndex]     = t
+        default: break
+        }
+        return result
+    }
+
     public class func findAll(orderBy: PlaylistStore.OrderBy = .CreatedAt(.Desc)) -> [Playlist] {
         return PlaylistStore.findAll(orderBy)
     }

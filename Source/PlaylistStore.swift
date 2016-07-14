@@ -118,6 +118,17 @@ public class PlaylistStore: RLMObject {
         return .Failure
     }
 
+    internal func moveTrackAtIndex(sourceIndex: UInt, toIndex: UInt) -> PersistentResult {
+        do {
+            try realm!.transactionWithBlock() {
+                tracks.moveObjectAtIndex(sourceIndex, toIndex: toIndex)
+            }
+            return .Success
+        } catch {
+            return .Failure
+        }
+    }
+
     internal class func create(playlist: Playlist) -> PersistentResult {
         if PlaylistStore.findAll().count+1 > Playlist.playlistNumberLimit {
             return .ExceedLimit
