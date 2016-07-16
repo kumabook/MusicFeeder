@@ -20,6 +20,9 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public let _id:          String
     public var title:        String
     private var _tracks:     [Track]
+    public var createdAt:    Int64
+    public var updatedAt:    Int64
+    public var number:       Float
     public var thumbnailUrl: NSURL? { return _tracks.first?.thumbnailUrl }
     public var signal:       Signal<PlaylistEvent, NSError>
     public var observer:     Signal<PlaylistEvent, NSError>.Observer
@@ -83,12 +86,15 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     }
 
     public init(title: String) {
-        self._id      = "\(title)-created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
-        self.title    = title
-        self._tracks  = []
-        let pipe      = Signal<PlaylistEvent, NSError>.pipe()
-        self.signal   = pipe.0
-        self.observer = pipe.1
+        self._id       = "\(title)-created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
+        self.title     = title
+        self._tracks   = []
+        let pipe       = Signal<PlaylistEvent, NSError>.pipe()
+        self.signal    = pipe.0
+        self.observer  = pipe.1
+        self.createdAt = NSDate().timestamp
+        self.updatedAt = NSDate().timestamp
+        self.number    = 0
     }
 
     public init(id: String, title: String, tracks: [Track]) {
@@ -98,21 +104,30 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         let pipe      = Signal<PlaylistEvent, NSError>.pipe()
         self.signal   = pipe.0
         self.observer = pipe.1
+        self.createdAt = NSDate().timestamp
+        self.updatedAt = NSDate().timestamp
+        self.number    = Float(PlaylistStore.findAll().count)
     }
 
     public init(json: JSON) {
         _id           = json["url"].stringValue
         title         = json["title"].stringValue
         _tracks       = json["tracks"].arrayValue.map({ Track(json: $0) })
+        createdAt     = NSDate().timestamp
+        updatedAt     = NSDate().timestamp
+        number        = json["number"].floatValue
         let pipe      = Signal<PlaylistEvent, NSError>.pipe()
         self.signal   = pipe.0
         self.observer = pipe.1
     }
 
     public init(store: PlaylistStore) {
-        _id     = store.id
-        title   = store.title
-        _tracks = [] as [Track]
+        _id       = store.id
+        title     = store.title
+        _tracks   = [] as [Track]
+        createdAt = store.createdAt
+        updatedAt = store.updatedAt
+        number    = store.number
         for trackStore in store.tracks {
             _tracks.append(Track(store:trackStore as! TrackStore))
         }
@@ -126,9 +141,12 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     }
 
     internal func toStoreObject() -> PlaylistStore {
-        let store    = PlaylistStore()
-        store.id     = id
-        store.title  = title
+        let store       = PlaylistStore()
+        store.id        = id
+        store.title     = title
+        store.createdAt = createdAt
+        store.updatedAt = updatedAt
+        store.number    = number
         store.tracks.addObjects(_tracks.map({ $0.toStoreObject() }))
         return store
     }
