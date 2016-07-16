@@ -130,12 +130,13 @@ public class PlaylistStore: RLMObject {
     }
 
     internal class func create(playlist: Playlist) -> PersistentResult {
-        if PlaylistStore.findAll().count+1 > Playlist.playlistNumberLimit {
+        if Int(PlaylistStore.findAll().count+1) > Playlist.playlistNumberLimit {
             return .ExceedLimit
         }
         if let _ = findBy(id: playlist.id) { return .Failure }
         let store = playlist.toStoreObject()
         store.createdAt = NSDate().timestamp
+        store.number    = Float(PlaylistStore.findAll().count)
         do {
             try realm.transactionWithBlock() {
                 self.realm.addObject(store)
@@ -150,6 +151,7 @@ public class PlaylistStore: RLMObject {
         if let store = findBy(id: playlist.id) {
             try! realm.transactionWithBlock() {
                 store.title = playlist.title
+                store.number = playlist.number
                 store.updatedAt = NSDate().timestamp
             }
             return true
@@ -158,12 +160,8 @@ public class PlaylistStore: RLMObject {
         }
     }
 
-    internal class func findAll(orderBy: OrderBy = OrderBy.CreatedAt(.Desc)) -> [Playlist] {
-        var playlists: [Playlist] = []
-        for store in PlaylistStore.allObjectsInRealm(realm).sortedResultsUsingProperty(orderBy.name, ascending: orderBy.ascending) {
-            playlists.append(Playlist(store: store as! PlaylistStore))
-        }
-        return playlists
+    internal class func findAll(orderBy: OrderBy = OrderBy.Number(.Desc)) -> RLMResults {
+        return PlaylistStore.allObjectsInRealm(realm).sortedResultsUsingProperty(orderBy.name, ascending: orderBy.ascending)
     }
 
     internal class func findBy(id id: String) -> PlaylistStore? {
