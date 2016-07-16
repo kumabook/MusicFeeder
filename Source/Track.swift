@@ -90,7 +90,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public var artworkUrl: NSURL? {
         switch self.provider {
         case .YouTube:
-            return youtubeVideo?.largeThumbnailURL
+            return youtubeVideo?.largeThumbnailURL ?? youtubeVideo?.mediumThumbnailURL ?? youtubeVideo?.smallThumbnailURL
         case .SoundCloud:
             guard let sc = soundcloudTrack else { return nil }
             return sc.artworkURL
