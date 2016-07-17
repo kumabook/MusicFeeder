@@ -41,11 +41,12 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public static var sharedOrderBy = PlaylistStore.OrderBy.Number(OrderType.Desc)
     public static var sharedPipe: (Signal<Event, NSError>, Signal<Event, NSError>.Observer)! = Signal<Event, NSError>.pipe()
     public static var sharedList: [Playlist] = Playlist.findAll(sharedOrderBy)
-    public static func updatePlaylistInSharedList(playlists: [Playlist]) {
+    public static func updatePlaylistInSharedList(playlists: [Playlist]) -> PersistentResult {
         for playlist in  playlists {
             playlist.save(true)
         }
         notifyChange(.SharedListUpdated)
+        return .Success
     }
     
     public enum Event {
@@ -166,6 +167,26 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
             Playlist.notifyChange(.Created(self))
         }
         return result
+    }
+
+    public class func movePlaylistInSharedList(sourceIndex: Int, toIndex: Int) -> PersistentResult {
+        let source     = sharedList[sourceIndex]
+        let destNumber = sharedList[toIndex].number
+        var nextIndex  = toIndex
+        var direction  = 0 as Float
+        if toIndex > sourceIndex {
+            nextIndex = toIndex + 1
+            direction = sharedOrderBy.ascending ? 1 : -1
+        } else if toIndex < sourceIndex {
+            nextIndex = toIndex - 1
+            direction = sharedOrderBy.ascending ? -1 : 1
+        }
+        if let next = sharedList.get(nextIndex) {
+            source.number = (destNumber + next.number) / 2
+        } else {
+            source.number = destNumber + direction
+        }
+        return Playlist.updatePlaylistInSharedList([source])
     }
 
     public func save(slient: Bool = false) -> Bool {
