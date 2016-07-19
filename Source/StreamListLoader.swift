@@ -222,4 +222,10 @@ public class StreamListLoader {
             })
         }
     }
+
+    public func moveSubscriptionTo(sourceIndex: Int, toIndex:Int) -> PersistentResult {
+        let result = SubscriptionStore.moveSubscriptionInSharedList(sourceIndex, toIndex: toIndex)
+        fetchLocalSubscriptions()
+        return result
+    }
 }
