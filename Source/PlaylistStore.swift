@@ -33,6 +33,29 @@ public enum OrderType {
     case Asc
 }
 
+public enum OrderBy {
+    case CreatedAt(OrderType)
+    case UpdatedAt(OrderType)
+    case Title(OrderType)
+    case Number(OrderType)
+    var name: String {
+        switch self {
+        case CreatedAt: return "createdAt"
+        case UpdatedAt: return "updatedAt"
+        case Title:     return "title"
+        case Number:    return "number"
+        }
+    }
+    var ascending: Bool {
+        switch self {
+        case CreatedAt(let orderType): return orderType == .Asc
+        case UpdatedAt(let orderType): return orderType == .Asc
+        case Title(let orderType):     return orderType == .Asc
+        case Number(let orderType):    return orderType == .Asc
+        }
+    }
+}
+
 public class PlaylistStore: RLMObject {
     dynamic var id:        String = ""
     dynamic var title:     String = ""
@@ -40,29 +63,6 @@ public class PlaylistStore: RLMObject {
     dynamic var updatedAt: Int64  = 0
     dynamic var number:    Float  = 0
     dynamic var tracks = RLMArray(objectClassName: TrackStore.className())
-
-    public enum OrderBy {
-        case CreatedAt(OrderType)
-        case UpdatedAt(OrderType)
-        case Title(OrderType)
-        case Number(OrderType)
-        var name: String {
-            switch self {
-            case CreatedAt: return "createdAt"
-            case UpdatedAt: return "updatedAt"
-            case Title:     return "title"
-            case Number:    return "number"
-            }
-        }
-        var ascending: Bool {
-            switch self {
-            case CreatedAt(let orderType): return orderType == .Asc
-            case UpdatedAt(let orderType): return orderType == .Asc
-            case Title(let orderType):     return orderType == .Asc
-            case Number(let orderType):    return orderType == .Asc
-            }
-        }
-    }
 
     public override class func primaryKey() -> String {
         return "id"

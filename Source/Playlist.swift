@@ -38,7 +38,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public static var playlistNumberLimit: Int = 5
     public static var trackNumberLimit:    Int = 5
 
-    public static var sharedOrderBy = PlaylistStore.OrderBy.Number(OrderType.Desc)
+    public static var sharedOrderBy = OrderBy.Number(OrderType.Desc)
     public static var sharedPipe: (Signal<Event, NSError>, Signal<Event, NSError>.Observer)! = Signal<Event, NSError>.pipe()
     public static var sharedList: [Playlist] = Playlist.findAll(sharedOrderBy)
     public static func updatePlaylistInSharedList(playlists: [Playlist]) -> PersistentResult {
@@ -240,7 +240,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         return result
     }
 
-    public class func findAll(orderBy: PlaylistStore.OrderBy = .Number(.Desc)) -> [Playlist] {
+    public class func findAll(orderBy: OrderBy = .Number(.Desc)) -> [Playlist] {
         var playlists: [Playlist] = []
         for store in PlaylistStore.findAll(orderBy) {
             playlists.append(Playlist(store: store as! PlaylistStore))
