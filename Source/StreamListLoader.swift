@@ -37,6 +37,7 @@ public class StreamListLoader {
     private var observer:            Signal<Event, NSError>.Observer
     public var streamListOfCategory: [FeedlyKit.Category: [Stream]]
     public var uncategorized:        FeedlyKit.Category
+    public var useCache: Bool
     public var categories: [FeedlyKit.Category] {
         return streamListOfCategory.keys.sort({ (first, second) -> Bool in
             return first == self.uncategorized || first.label > second.label
@@ -46,7 +47,7 @@ public class StreamListLoader {
         return streamListOfCategory[uncategorized]!
     }
 
-    public init() {
+    public init(useCache: Bool = true) {
         state                = .Normal
         streamListOfCategory = [:]
         let pipe = Signal<Event, NSError>.pipe()
@@ -57,6 +58,7 @@ public class StreamListLoader {
             uncategorized = FeedlyKit.Category.Uncategorized(userId)
         }
         streamListOfCategory[uncategorized] = []
+        self.useCache = useCache
     }
 
     deinit {
@@ -90,8 +92,8 @@ public class StreamListLoader {
 
     public func refresh() -> SignalProducer<Void, NSError> {
         var signal: SignalProducer<[FeedlyKit.Category: [Stream]], NSError>
-        if !CloudAPIClient.isLoggedIn {
-            signal = self.fetchLocalSubscrptions()
+        if !CloudAPIClient.isLoggedIn || useCache {
+            signal = self.fetchLocalSubscriptions()
         } else {
             signal = self.fetchSubscriptions()
         }
@@ -111,12 +113,14 @@ public class StreamListLoader {
         }
     }
 
-    public func fetchLocalSubscrptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
+    public func fetchLocalSubscriptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
+        streamListOfCategory = [:]
+        streamListOfCategory[uncategorized] = []
         return SignalProducer { (_observer, disposable) in
-            for category in CategoryStore.findAll() {
+            for category in Category.findAll() {
                 self.streamListOfCategory[category] = [] as [Stream]
             }
-            for subscription in SubscriptionStore.findAll() {
+            for subscription in Subscription.findAll() {
                 self.addSubscription(subscription)
             }
             for key in self.streamListOfCategory.keys {
@@ -168,6 +172,8 @@ public class StreamListLoader {
 
     public func subscribeTo(subscription: Subscription) -> SignalProducer<Subscription, NSError> {
         return SignalProducer<Subscription, NSError> { (_observer, disposable) in
+            self.state = .Updating
+            self.observer.sendNext(.StartUpdating)
             if !CloudAPIClient.isLoggedIn {
                 SubscriptionStore.create(subscription)
                 self.addSubscription(subscription)
@@ -176,13 +182,16 @@ public class StreamListLoader {
                 _observer.sendNext(subscription)
                 _observer.sendCompleted()
             } else {
-                CloudAPIClient.sharedInstance.subscribeTo(subscription) { response in
+                self.apiClient.subscribeTo(subscription) { response in
                     if let e = response.result.error {
                         CloudAPIClient.handleError(error: e)
                         self.state = .Error
                         self.observer.sendNext(.FailToUpdate(e))
                         _observer.sendFailed(CloudAPIClient.sharedInstance.buildError(e, response: response.response))
                     } else {
+                        if self.useCache {
+                            SubscriptionStore.create(subscription)
+                        }
                         self.addSubscription(subscription)
                         self.state = .Normal
                         self.observer.sendNext(.Create(subscription))
