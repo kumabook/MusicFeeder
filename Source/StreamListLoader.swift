@@ -26,7 +26,8 @@ public class StreamListLoader {
         case FailToLoad(ErrorType)
         case StartUpdating
         case FailToUpdate(ErrorType)
-        case RemoveAt(Int, Subscription, FeedlyKit.Category)
+        case Create(Subscription)
+        case Remove(Subscription)
     }
 
     var apiClient: CloudAPIClient { return CloudAPIClient.sharedInstance }
@@ -171,6 +172,7 @@ public class StreamListLoader {
                 SubscriptionStore.create(subscription)
                 self.addSubscription(subscription)
                 self.state = .Normal
+                self.observer.sendNext(.Create(subscription))
                 _observer.sendNext(subscription)
                 _observer.sendCompleted()
             } else {
@@ -183,6 +185,7 @@ public class StreamListLoader {
                     } else {
                         self.addSubscription(subscription)
                         self.state = .Normal
+                        self.observer.sendNext(.Create(subscription))
                         _observer.sendNext(subscription)
                         _observer.sendCompleted()
                     }
@@ -191,25 +194,32 @@ public class StreamListLoader {
         }
     }
 
-    public func unsubscribeTo(subscription: Subscription, index: Int, category: FeedlyKit.Category) {
-        state = .Updating
-        observer.sendNext(.StartUpdating)
-        if !CloudAPIClient.isLoggedIn {
-            SubscriptionStore.remove(subscription)
-            self.removeSubscription(subscription)
-            self.state = .Normal
-            self.observer.sendNext(.RemoveAt(index, subscription, category))
-            return
-        }
-        apiClient.unsubscribeTo(subscription.id, completionHandler: { response in
-            if let e = response.result.error {
-                self.state = .Error
-                self.observer.sendNext(.FailToUpdate(e))
-            } else {
+    public func unsubscribeTo(subscription: Subscription) -> SignalProducer<Subscription, NSError> {
+        return SignalProducer<Subscription, NSError> { (_observer, disposable) in
+            self.state = .Updating
+            self.observer.sendNext(.StartUpdating)
+            if !CloudAPIClient.isLoggedIn {
+                SubscriptionStore.remove(subscription)
                 self.removeSubscription(subscription)
                 self.state = .Normal
-                self.observer.sendNext(.RemoveAt(index, subscription, category))
+                self.observer.sendNext(.Remove(subscription))
+                return
             }
-        })
+            self.apiClient.unsubscribeTo(subscription.id, completionHandler: { response in
+                if let e = response.result.error {
+                    self.state = .Error
+                    self.observer.sendNext(.FailToUpdate(e))
+                } else {
+                    if self.useCache {
+                        SubscriptionStore.remove(subscription)
+                    }
+                    self.removeSubscription(subscription)
+                    self.state = .Normal
+                    self.observer.sendNext(.Remove(subscription))
+                    _observer.sendNext(subscription)
+                    _observer.sendCompleted()
+                }
+            })
+        }
     }
 }
