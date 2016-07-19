@@ -19,6 +19,23 @@ extension Subscription {
         store.categories.addObjects(categories.map { $0.toStoreObject() })
         return store
     }
+    public class func findAll(orderBy: OrderBy = OrderBy.Number(.Desc)) -> [Subscription] {
+        var subscriptions: [Subscription] = []
+        var categories: [FeedlyKit.Category] = []
+        for store in SubscriptionStore.findAll(orderBy) {
+            for c in store.categories {
+                if let categoryStore: CategoryStore = c as? CategoryStore {
+                    categories.append(FeedlyKit.Category(id: categoryStore.id, label: categoryStore.label))
+                }
+            }
+            let subscription: Subscription = Subscription(id: store.id,
+                                                       title: store.title,
+                                                   visualUrl: store.visualUrl,
+                                                  categories: categories)
+            subscriptions.append(subscription)
+        }
+        return subscriptions
+    }
 }
 
 public class SubscriptionStore: RLMObject {
