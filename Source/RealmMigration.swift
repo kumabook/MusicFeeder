@@ -19,7 +19,7 @@ public class RealmMigration {
 
     public class func mainConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration.defaultConfiguration()
-        config.schemaVersion = 9
+        config.schemaVersion = 10
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
@@ -64,6 +64,9 @@ public class RealmMigration {
             if (oldVersion < 9) {
                 addTimestampsTo(PlaylistStore.className(), migration: migration)
             }
+            if (oldVersion < 10) {
+                addTimestampsTo(SubscriptionStore.className(), migration: migration)
+            }
         }
         return config
     }
@@ -85,7 +88,7 @@ public class RealmMigration {
 
     public class func listenItLaterConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
-        config.schemaVersion = 3
+        config.schemaVersion = 4
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(ListenItLaterEntryStore.className()) { oldObject, newObject in }
@@ -95,6 +98,9 @@ public class RealmMigration {
             }
             if (oldVersion < 3) {
                 addTimestampsTo(PlaylistStore.className(), migration: migration)
+            }
+            if (oldVersion < 4) {
+                addTimestampsTo(SubscriptionStore.className(), migration: migration)
             }
         }
         config.fileURL = NSURL(string: "file://\(listenItLaterPath)")
@@ -115,7 +121,7 @@ public class RealmMigration {
 
     public class func historyConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
-        config.schemaVersion = 3
+        config.schemaVersion = 4
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(EntryStore.className())   { oldObject, newObject in }
@@ -127,6 +133,9 @@ public class RealmMigration {
             }
             if (oldVersion < 3) {
                 addTimestampsTo(PlaylistStore.className(), migration: migration)
+            }
+            if (oldVersion < 4) {
+                addTimestampsTo(SubscriptionStore.className(), migration: migration)
             }
         }
         config.fileURL = NSURL(string: "file://\(historyPath)")
