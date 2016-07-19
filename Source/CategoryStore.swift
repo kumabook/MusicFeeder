@@ -23,6 +23,14 @@ extension FeedlyKit.Category {
         store.label = label
         return store
     }
+    public class func findAll() -> [FeedlyKit.Category] {
+        var categories: [FeedlyKit.Category] = []
+        for store in CategoryStore.findAll() {
+            let category: FeedlyKit.Category = FeedlyKit.Category(id: store.id, label: store.label)
+            categories.append(category)
+        }
+        return categories
+    }
 }
 
 public class CategoryStore: RLMObject {
@@ -54,13 +62,8 @@ public class CategoryStore: RLMObject {
         }
     }
 
-    public class func findAll() -> [FeedlyKit.Category] {
-        var categories: [FeedlyKit.Category] = []
-        for store in CategoryStore.allObjectsInRealm(realm) {
-            let category: FeedlyKit.Category = FeedlyKit.Category(id: store.id, label: store.label)
-            categories.append(category)
-        }
-        return categories
+    public class func findAll() -> RLMResults {
+        return CategoryStore.allObjectsInRealm(realm)
     }
 
     public class func findBy(id id: String) -> CategoryStore? {
