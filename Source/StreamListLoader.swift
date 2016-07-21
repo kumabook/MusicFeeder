@@ -183,7 +183,7 @@ public class StreamListLoader {
                 _observer.sendCompleted()
             } else {
                 self.apiClient.subscribeTo(subscription) { response in
-                    if let e = response.result.error {
+                    if let e = response.result.error where response.response?.statusCode ?? 0 != 409 {
                         CloudAPIClient.handleError(error: e)
                         self.state = .Error
                         self.observer.sendNext(.FailToUpdate(e))
@@ -215,7 +215,7 @@ public class StreamListLoader {
                 return
             }
             self.apiClient.unsubscribeTo(subscription.id, completionHandler: { response in
-                if let e = response.result.error {
+                if let e = response.result.error where response.response?.statusCode ?? 0 != 404 {
                     self.state = .Error
                     self.observer.sendNext(.FailToUpdate(e))
                     _observer.sendFailed(CloudAPIClient.sharedInstance.buildError(e, response: response.response))
