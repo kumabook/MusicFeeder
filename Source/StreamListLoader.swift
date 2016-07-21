@@ -218,6 +218,8 @@ public class StreamListLoader {
                 if let e = response.result.error {
                     self.state = .Error
                     self.observer.sendNext(.FailToUpdate(e))
+                    _observer.sendFailed(CloudAPIClient.sharedInstance.buildError(e, response: response.response))
+                    _observer.sendCompleted()
                 } else {
                     if self.useCache {
                         SubscriptionStore.remove(subscription)
