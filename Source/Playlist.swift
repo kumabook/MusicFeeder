@@ -211,11 +211,14 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         Playlist.notifyChange(.TrackRemoved(self, track, Int(index)))
     }
 
-    public func insertTrack(track: Track, atIndex: UInt) {
-        guard let trackStore = TrackStore.findBy(url: track.url) else { return }
-        guard let store = PlaylistStore.findBy(id: id) else { return }
-        store.insertTrack(trackStore, atIndex: atIndex)
-        Playlist.notifyChange(.TracksAdded(self, [track]))
+    public func insertTrack(track: Track, atIndex: UInt) -> PersistentResult {
+        let trackStore = TrackStore.findBy(url: track.url) ?? track.toStoreObject()
+        guard let store = PlaylistStore.findBy(id: id) else { return .Failure }
+        let result = store.insertTrack(trackStore, atIndex: atIndex)
+        if result == .Success {
+            Playlist.notifyChange(.TracksAdded(self, [track]))
+        }
+        return result
     }
 
     public func appendTracks(tracks: [Track]) -> PersistentResult {
