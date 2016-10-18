@@ -31,8 +31,7 @@ class FeedlyAPISpec: QuickSpec {
 
     override func spec() {
         beforeSuite {
-            let c = CloudAPIClient(target: CloudAPIClient.Target.Custom("http://localhost:3000"))
-            CloudAPIClient.sharedInstance = c
+            SpecHelper.setupAPI()
         }
         beforeEach {
             CloudAPIClient.sharedInstance.setAccessToken(self.accessToken?.accessToken)
