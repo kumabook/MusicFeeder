@@ -1,5 +1,5 @@
 //
-//  PaginatedCollectionLoader.swift
+//  PaginatedCollectionRepository.swift
 //  MusicFav
 //
 //  Created by Hiroki Kumamoto on 4/4/15.
@@ -10,14 +10,14 @@ import FeedlyKit
 import ReactiveCocoa
 import Result
 
-public enum PaginatedCollectionLoaderState {
+public enum PaginatedCollectionRepositoryState {
     case Normal
     case Fetching
     case Complete
     case Error
 }
 
-public enum PaginatedCollectionLoaderEvent {
+public enum PaginatedCollectionRepositoryEvent {
     case StartLoadingLatest
     case CompleteLoadingLatest
     case StartLoadingNext
@@ -39,14 +39,14 @@ public protocol PaginatedCollection {
     var items:        [ItemType] { get }
 }
 
-public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemType == I> {
+public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.ItemType == I> {
     public internal(set) var stream:       Stream
-    public internal(set) var state:        PaginatedCollectionLoaderState
+    public internal(set) var state:        PaginatedCollectionRepositoryState
     public internal(set) var items:        [I] { didSet(newItems) { itemsUpdated() }}
     public internal(set) var continuation: String?
     public internal(set) var lastUpdated:  Int64?
-    public internal(set) var signal:       Signal<PaginatedCollectionLoaderEvent, NSError>
-    public internal(set) var observer:     Signal<PaginatedCollectionLoaderEvent, NSError>.Observer
+    public internal(set) var signal:       Signal<PaginatedCollectionRepositoryEvent, NSError>
+    public internal(set) var observer:     Signal<PaginatedCollectionRepositoryEvent, NSError>.Observer
     public internal(set) var unreadOnly:   Bool
     public internal(set) var perPage:      Int
     public internal(set) var disposable:   Disposable?
@@ -74,13 +74,14 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
         state            = .Normal
         lastUpdated      = nil
         items            = []
-        let pipe         = Signal<PaginatedCollectionLoaderEvent, NSError>.pipe()
+        let pipe         = Signal<PaginatedCollectionRepositoryEvent, NSError>.pipe()
         signal           = pipe.0
         observer         = pipe.1
         if let userId = CloudAPIClient._profile?.id {
             if stream == Tag.Saved(userId) { self.unreadOnly = false }
             if stream == Tag.Read(userId)  { self.unreadOnly = false }
         }
+        loadCacheItems()
     }
 
     public func dispose() {
@@ -113,6 +114,8 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
                     latestItems.appendContentsOf(self.items)
                     self.items = latestItems
                     self.updateLastUpdated()
+                    self.clearCacheItems()
+                    self.cacheItems(latestItems)
                 },
                 failed: { error in CloudAPIClient.handleError(error: error) },
                 completed: { self.observer.sendNext(.CompleteLoadingLatest)
@@ -134,6 +137,7 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
                 if self.lastUpdated == nil {
                     self.updateLastUpdated()
                 }
+                self.cacheItems(items)
                 self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
                 if paginatedCollection.continuation == nil { // then wait for next load
                     self.state = .Complete
@@ -149,4 +153,7 @@ public class PaginatedCollectionLoader<C: PaginatedCollection, I where C.ItemTyp
                 completed: {
             }).start()
     }
+    public func cacheItems(items: [C.ItemType]) {}
+    public func loadCacheItems() {}
+    public func clearCacheItems() {}
 }
