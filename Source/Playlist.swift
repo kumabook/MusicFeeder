@@ -17,7 +17,7 @@ public enum PlaylistEvent {
 }
 
 public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
-    public let _id:          String
+    public private(set) var id: String
     public var title:        String
     private var _tracks:     [Track]
     public var createdAt:    Int64
@@ -27,7 +27,6 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public var signal:       Signal<PlaylistEvent, NSError>
     public var observer:     Signal<PlaylistEvent, NSError>.Observer
 
-    public var id:     String { return _id }
     public var tracks: [PlayerKit.Track] { return _tracks.map { $0 as PlayerKit.Track }}
     public var validTracksCount: Int {
         return tracks.filter({ $0.streamUrl != nil}).count
@@ -96,7 +95,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     }
 
     public init(title: String) {
-        self._id       = "\(title)-created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
+        self.id       = "\(title)-created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
         self.title     = title
         self._tracks   = []
         let pipe       = Signal<PlaylistEvent, NSError>.pipe()
@@ -108,7 +107,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     }
 
     public init(id: String, title: String, tracks: [Track]) {
-        self._id      = id
+        self.id      = id
         self.title    = title
         self._tracks  = tracks
         let pipe      = Signal<PlaylistEvent, NSError>.pipe()
@@ -120,7 +119,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     }
 
     public init(json: JSON) {
-        _id           = json["url"].stringValue
+        id           = json["url"].stringValue
         title         = json["title"].stringValue
         _tracks       = json["tracks"].arrayValue.map({ Track(json: $0) })
         createdAt     = NSDate().timestamp
@@ -132,7 +131,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     }
 
     public init(store: PlaylistStore) {
-        _id       = store.id
+        id       = store.id
         title     = store.title
         _tracks   = [] as [Track]
         createdAt = store.createdAt
