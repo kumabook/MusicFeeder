@@ -100,9 +100,10 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
     }
     
     public func fetchLatestItems() {
-        if items.count == 0 {
+        if state != .Normal && state != .Error {
             return
         }
+        state = .Fetching
         let producer = fetchCollection(streamId: stream.streamId,
                                paginationParams: paginationParamsForLatest)
         observer.sendNext(.StartLoadingLatest)
@@ -110,16 +111,22 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
             .startOn(UIScheduler())
             .on(
                 next: { paginatedCollection in
-                    var latestItems = paginatedCollection.items
-                    latestItems.appendContentsOf(self.items)
+                    let latestItems = paginatedCollection.items
                     self.items = latestItems
                     self.updateLastUpdated()
                     self.clearCacheItems()
                     self.cacheItems(latestItems)
+                    self.observer.sendNext(.CompleteLoadingLatest) // First reload tableView,
+                    if paginatedCollection.continuation == nil {   // then wait for next load
+                        self.state = .Complete
+                    } else {
+                        self.state = .Normal
+                    }
                 },
                 failed: { error in CloudAPIClient.handleError(error: error) },
-                completed: { self.observer.sendNext(.CompleteLoadingLatest)
-            }).start()
+                completed: {
+                }
+            ).start()
     }
     public func fetchItems() {
         if state != .Normal && state != .Error {
@@ -130,20 +137,21 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         let producer = fetchCollection(streamId: stream.streamId, paginationParams: paginationParams)
         disposable = producer
             .startOn(UIScheduler())
-            .on(next: { paginatedCollection in
-                let items = paginatedCollection.items
-                self.items.appendContentsOf(items)
-                self.continuation = paginatedCollection.continuation
-                if self.lastUpdated == nil {
-                    self.updateLastUpdated()
-                }
-                self.cacheItems(items)
-                self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
-                if paginatedCollection.continuation == nil { // then wait for next load
-                    self.state = .Complete
-                } else {
-                    self.state = .Normal
-                }
+            .on(
+                next: { paginatedCollection in
+                    let items = paginatedCollection.items
+                    self.items.appendContentsOf(items)
+                    self.continuation = paginatedCollection.continuation
+                    if self.lastUpdated == nil {
+                        self.updateLastUpdated()
+                    }
+                    self.cacheItems(items)
+                    self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
+                    if paginatedCollection.continuation == nil { // then wait for next load
+                        self.state = .Complete
+                    } else {
+                        self.state = .Normal
+                    }
                 },
                 failed: {error in
                     CloudAPIClient.handleError(error: error)
