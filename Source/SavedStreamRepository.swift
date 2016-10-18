@@ -1,5 +1,5 @@
 //
-//  SavedStreamLoader.swift
+//  SavedStreamRepository.swift
 //  MusicFeeder
 //
 //  Created by KumamotoHiroki on 10/4/15.
@@ -32,7 +32,7 @@ public class SavedStream: Stream {
     }
 }
 
-public class SavedStreamLoader: StreamLoader {
+public class SavedStreamRepository: EntryRepository {
     public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
     }
@@ -45,25 +45,19 @@ public class SavedStreamLoader: StreamLoader {
         self.init(stream: SavedStream(id: id, title: title), unreadOnly: false, perPage: CloudAPIClient.perPage)
     }
 
-    public override func fetchItems() {
-        if state != .Normal {
-            return
-        }
-        state = .Fetching
-        QueueScheduler().schedule {
-            let entries: [Entry] = EntryStore.findAll().map { Entry(store: $0) }.reverse()
-            self.playlistifier = entries.map { self.loadPlaylistOfEntry($0) }
-                                        .reduce(SignalProducer<(Track, Playlist), NSError>.empty, combine: { $0.concat($1) })
-                                        .start()
-            self.items = entries
-            UIScheduler().schedule {
-                self.state = .Complete
-                self.observer.sendNext(.CompleteLoadingLatest)
+    public override func fetchCollection(streamId streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+        return SignalProducer { (observer, disposable) in
+            QueueScheduler().schedule {
+                // TODO: support pagination
+                let entries: [Entry] = EntryStore.findAll().map { Entry(store: $0) }.reverse()
+                self.playlistifier = entries.map { self.loadPlaylistOfEntry($0) }
+                                            .reduce(SignalProducer<(Track, Playlist), NSError>.empty, combine: { $0.concat($1) })
+                                            .start()
+                self.items = entries
+                UIScheduler().schedule {
+                    self.observer.sendNext(.CompleteLoadingLatest)
+                }
             }
         }
     }
-    public override func fetchLatestItems() {
-        fetchItems()
-    }
-
 }
