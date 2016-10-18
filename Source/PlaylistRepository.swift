@@ -1,5 +1,5 @@
 //
-//  PlaylistLoader.swift
+//  PlaylistRepository.swift
 //  MusicFav
 //
 //  Created by Hiroki Kumamoto on 4/5/15.
@@ -10,14 +10,13 @@ import Foundation
 import ReactiveCocoa
 import Result
 
-public class PlaylistLoader {
-    public let playlist:    Playlist
+public class PlaylistRepository {
+    public let playlist: Playlist
     public init(playlist: Playlist) {
         self.playlist = playlist
     }
 
-    deinit {
-    }
+    deinit {}
 
     public func fetchTracks() -> SignalProducer<(Int, Track), NSError> {
         return playlist.getTracks().enumerate().map {
@@ -25,7 +24,7 @@ public class PlaylistLoader {
         }.reduce(SignalProducer<(Int, Track), NSError>.empty, combine: { (c, n) in c.concat(n) })
     }
 
-    public func fetchTrack(index: Int, track: Track) -> SignalProducer<(Int, Track), NSError> {
+    private func fetchTrack(index: Int, track: Track) -> SignalProducer<(Int, Track), NSError> {
         return track.fetchDetail().map { _track -> (Int, Track) in
             Playlist.notifyChange(.TrackUpdated(self.playlist, track))
             self.playlist.observer.sendNext(PlaylistEvent.Load(index: index))
