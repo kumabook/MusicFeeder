@@ -16,6 +16,7 @@ class PlaylistSpec: QuickSpec {
         var playlist: Playlist!
         beforeSuite {
             RealmMigration.migrateAll()
+            TrackCacheMap.deleteAllItems()
         }
         beforeEach {
             let json = JSON(SpecHelper.fixtureJSONObject(fixtureNamed: "playlist")!)
@@ -31,7 +32,7 @@ class PlaylistSpec: QuickSpec {
                 expect(playlist).notTo(beNil())
                 expect(playlist.id).to(equal("http://dummy.com/playlist.html"))
                 expect(playlist.title).to(equal("playlist_title"))
-//                expect(playlist.tracks.count).to(equal(2))
+                expect(playlist.tracks.count).to(equal(2))
             }
             it("should create if not exist") {
                 var playlists = Playlist.findAll()
