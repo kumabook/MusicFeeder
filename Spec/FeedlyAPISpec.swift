@@ -44,7 +44,7 @@ class FeedlyAPISpec: QuickSpec {
                     }).start()
             }
             it("should create a user") {
-                expect(self.profile).toEventuallyNot(beNil())
+                expect(self.profile).toFinallyNot(beNil())
                 expect(self.profile!.email!).to(equal(self.email))
                 expect(self.profile!.id).notTo(beNil())
             }
@@ -60,7 +60,7 @@ class FeedlyAPISpec: QuickSpec {
                     }).start()
             }
             it("should fetch accessToken") {
-                expect(self.accessToken).toEventuallyNot(beNil())
+                expect(self.accessToken).toFinallyNot(beNil())
             }
         }
 
@@ -73,7 +73,7 @@ class FeedlyAPISpec: QuickSpec {
                     }).start()
             }
             it("should fetch a user") {
-                expect(_profile).toEventuallyNot(beNil())
+                expect(_profile).toFinallyNot(beNil())
                 expect(_profile!.id).to(equal(self.profile!.id))
                 expect(_profile!.email!).to(equal(self.profile!.email))
             }
@@ -87,7 +87,7 @@ class FeedlyAPISpec: QuickSpec {
                     }).start()
             }
             it("should fetch a user") {
-                expect(self.feeds).toEventuallyNot(beNil())
+                expect(self.feeds).toFinallyNot(beNil())
                 expect(self.feeds!.count).to(beGreaterThan(0))
             }
         }
@@ -99,8 +99,8 @@ class FeedlyAPISpec: QuickSpec {
                         self.entries = $0.items
                     }).start()
             }
-            it("should fetch a user") {
-                expect(self.entries).toEventuallyNot(beNil())
+            it("should fetch entries") {
+                expect(self.entries).toFinallyNot(beNil())
                 expect(self.entries!.count).to(beGreaterThan(0))
                 expect(self.entries![0].engagement).notTo(beNil())
                 expect(self.entries![0].enclosure).notTo(beNil())
@@ -142,8 +142,8 @@ class FeedlyAPISpec: QuickSpec {
                 }).start()
             }
             it("should fetch a user") {
-                expect(isFinish).toEventually(equal(true), timeout: 30)
-                expect(self.tracks).toEventuallyNot(beNil())
+                expect(isFinish).toFinally(equal(true))
+                expect(self.tracks).toFinallyNot(beNil())
                 expect(newLikesCount).to(equal(oldLikesCount + 1))
             }
         }
@@ -157,7 +157,7 @@ class FeedlyAPISpec: QuickSpec {
                     }).start()
             }
             it("should fetch a track") {
-                expect(track).toEventuallyNot(beNil())
+                expect(track).toFinallyNot(beNil())
                 expect(track!.likesCount).notTo(beNil())
                 expect(track!.likers).notTo(beNil())
             }
@@ -172,7 +172,7 @@ class FeedlyAPISpec: QuickSpec {
                     }).start()
             }
             it("should fetch a track") {
-                expect(tracks).toEventuallyNot(beNil())
+                expect(tracks).toFinallyNot(beNil())
                 expect(tracks!.count).to(equal(self.tracks!.count))
                 for track in tracks! {
                     expect(track.likesCount).notTo(beNil())

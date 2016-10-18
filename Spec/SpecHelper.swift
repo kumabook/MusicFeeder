@@ -62,3 +62,12 @@ public class SpecHelper {
     }
 }
 
+extension Expectation {
+    public func toFinally<U where U : Matcher, U.ValueType == T>(matcher: U) {
+        self.toEventually(matcher, timeout: 10)
+    }
+    
+    public func toFinallyNot<U where U : Matcher, U.ValueType == T>(matcher: U) {
+        self.toEventuallyNot(matcher, timeout: 10)
+    }
+}
