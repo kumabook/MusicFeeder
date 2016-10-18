@@ -45,6 +45,20 @@ public final class Topic: Stream, ResponseObjectSerializable, ResponseCollection
         self.description = description
     }
 
+    public init(store: TopicStore) {
+        id          = store.id
+        label       = store.label
+        description = store.desc
+    }
+
+    public func toStoreObject() -> TopicStore {
+        let store    = TopicStore()
+        store.id     = id
+        store.label  = label
+        store.desc   = description ?? ""
+        return store
+    }
+
     public func toParameters() -> [String : AnyObject] {
         if let d = description {
             return ["id": id, "label": label, "description": d]
