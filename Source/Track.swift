@@ -183,7 +183,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         if let url = NSURL(string: store.streamUrl) {
             _streamUrl = url
         }
-        if let url = NSURL(string: store.thumbnailUrl) {
+        if let url = NSURL(string: store.thumbnailUrl) where !store.thumbnailUrl.isEmpty {
             thumbnailUrl = url
         }
         likesCount = store.likesCount
@@ -200,7 +200,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         }
         id          = dic["id"].flatMap { $0 } ?? ""
         provider    = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.YouTube
-        title       = dic["title"] ?? ""
+        title       = dic["title"]
         url         = urlString
         identifier  = dic["identifier"] ?? ""
         duration    = dic["duration"].flatMap { Int64($0) }.flatMap { NSTimeInterval( $0 / 1000) } ?? 0
