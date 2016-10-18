@@ -1,5 +1,5 @@
 //
-//  StreamLoader.swift
+//  EntryRepository.swift
 //  MusicFav
 //
 //  Created by Hiroki Kumamoto on 4/4/15.
@@ -9,12 +9,13 @@
 import FeedlyKit
 import ReactiveCocoa
 import Result
+import Realm
 
 extension PaginatedEntryCollection: PaginatedCollection {}
 
-public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, Entry> {
-    public typealias State = PaginatedCollectionLoaderState
-    public typealias Event = PaginatedCollectionLoaderEvent
+public class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollection, Entry> {
+    public typealias State = PaginatedCollectionRepositoryState
+    public typealias Event = PaginatedCollectionRepositoryEvent
     public enum RemoveMark {
         case Read
         case Unread
@@ -23,7 +24,6 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
 
     public private(set) var feedlyClient        = CloudAPIClient.sharedInstance
     public private(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
-
 
     public override func fetchCollection(streamId streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
         return feedlyClient.fetchEntries(streamId: streamId, paginationParams: paginatedParams)
@@ -74,14 +74,22 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
                     .map { $0! }
     }
 
-    public func fetchEntries()       { fetchItems() }
-    public func fetchLatestEntries() { fetchLatestItems() }
+    // MARK: - PaginatedCollectionRepository protocol
 
-    public var entries: [Entry]             { return self.items }
-
+    public override func cacheItems(items: [Entry]) {
+        EntryCacheList.findOrCreate(stream.streamId).add(items)
+    }
+    public override func loadCacheItems() {
+        items = EntryCacheList.findOrCreate(stream.streamId).items.map { Entry(store: $0 as! EntryStore) }
+    }
+    public override func clearCacheItems() {
+        EntryCacheList.findOrCreate(stream.streamId).clear()
+    }
     public override func itemsUpdated() {
         fetchAllPlaylists()
     }
+
+    // MARK: - EntryRepository
 
     public func loadPlaylistOfEntry(entry: Entry) -> SignalProducer<(Track, Playlist), NSError> {
         guard let url = entry.url else { return SignalProducer<(Track, Playlist), NSError>.empty }
@@ -112,7 +120,7 @@ public class StreamLoader: PaginatedCollectionLoader<PaginatedEntryCollection, E
     }
 
     internal func fetchTracks(playlist: Playlist) -> SignalProducer<(Int, Track), NSError> {
-        return PlaylistLoader(playlist: playlist).fetchTracks()
+        return PlaylistRepository(playlist: playlist).fetchTracks()
     }
 
     public func fetchAllPlaylists() {
