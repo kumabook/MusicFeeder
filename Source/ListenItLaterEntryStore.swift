@@ -12,7 +12,7 @@ import FeedlyKit
 
 public class ListenItLaterEntryStore: EntryStore {
     override class var realm: RLMRealm {
-        return try! RLMRealm(configuration: RealmMigration.listenItLaterConfiguration())
+        return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.listenItLaterPath))
     }
 
     public class func moveToSaved() {

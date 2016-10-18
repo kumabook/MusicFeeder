@@ -16,7 +16,7 @@ public class HistoryStore: RLMObject {
     static let limit:      UInt = 10
 
     class var realm: RLMRealm {
-        return try! RLMRealm(configuration: RealmMigration.historyConfiguration())
+        return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.historyPath))
     }
 
     override public class func primaryKey() -> String {

@@ -15,6 +15,7 @@ public class RealmMigration {
         migrateMain()
         migrateListenItLater()
         migrateHistory()
+        migrateCache()
     }
 
     public class func mainConfiguration() -> RLMRealmConfiguration {
@@ -84,7 +85,6 @@ public class RealmMigration {
         RLMRealmConfiguration.setDefaultConfiguration(mainConfiguration())
         RLMRealm.defaultRealm()
     }
-
     public static var listenItLaterPath: String {
         let fileManager = NSFileManager.defaultManager()
         if let directory = fileManager.containerURLForSecurityApplicationGroupIdentifier(groupIdentifier) {
@@ -94,8 +94,17 @@ public class RealmMigration {
             return RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
         }
     }
-
-    public class func listenItLaterConfiguration() -> RLMRealmConfiguration {
+    public class func migrateListenItLater() {
+        ListenItLaterEntryStore.realm
+    }
+    public static func realmPath(name: String) -> String {
+        var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
+        path = path.stringByDeletingLastPathComponent
+        path = path.stringByAppendingPathComponent(name)
+        path = path.stringByAppendingPathExtension("realm")!
+        return path as String
+    }
+    public class func configurationOf(path: String) -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
         config.schemaVersion = 5
         config.migrationBlock = { migration, oldVersion in
@@ -121,14 +130,9 @@ public class RealmMigration {
                 }
             }
         }
-        config.fileURL = NSURL(string: "file://\(listenItLaterPath)")
+        config.fileURL = NSURL(string: "file://\(path)")
         return config
     }
-
-    public class func migrateListenItLater() {
-        ListenItLaterEntryStore.realm
-    }
-
     public class var historyPath: String {
         var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
         path = path.stringByDeletingLastPathComponent
@@ -137,32 +141,31 @@ public class RealmMigration {
         return path as String
     }
 
-    public class func historyConfiguration() -> RLMRealmConfiguration {
-        let config = RLMRealmConfiguration()
-        config.schemaVersion = 4
-        config.migrationBlock = { migration, oldVersion in
-            if (oldVersion < 1) {
-                migration.enumerateObjects(EntryStore.className())   { oldObject, newObject in }
-                migration.enumerateObjects(TrackStore.className())   { oldObject, newObject in }
-                migration.enumerateObjects(HistoryStore.className()) { oldObject, newObject in }
-            }
-            if (oldVersion < 2) {
-                addIdToTrack(migration)
-            }
-            if (oldVersion < 3) {
-                addTimestampsTo(PlaylistStore.className(), migration: migration)
-            }
-            if (oldVersion < 4) {
-                addTimestampsTo(SubscriptionStore.className(), migration: migration)
-            }
-        }
-        config.fileURL = NSURL(string: "file://\(historyPath)")
-        return config
-    }
-
     public class func migrateHistory() {
         HistoryStore.realm
     }
+    
+    public class var cacheListPath: String {
+        var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
+        path = path.stringByDeletingLastPathComponent
+        path = path.stringByAppendingPathComponent("cache_list")
+        path = path.stringByAppendingPathExtension("realm")!
+        return path as String
+    }
+
+    public class var cacheMapPath: String {
+        var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
+        path = path.stringByDeletingLastPathComponent
+        path = path.stringByAppendingPathComponent("cache_map")
+        path = path.stringByAppendingPathExtension("realm")!
+        return path as String
+    }
+
+    public class func migrateCache() {
+        EntryCacheList.realm
+        TrackCacheMap.realm
+    }
+
 
     private class func addIdToTrack(migration: RLMMigration) {
         migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
