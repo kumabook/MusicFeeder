@@ -34,7 +34,7 @@ public final class TopicCacheList: RLMObject, CacheList {
 }
 
 extension Topic: Cacheable {
-    public func toCacheStoreObject() -> TopicStore {
+    public func toCacheStoreObject(realm: RLMRealm) -> TopicStore {
         return toStoreObject()
     }
 }

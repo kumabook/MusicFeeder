@@ -40,14 +40,18 @@ public final class TrackCacheMap: RLMObject, CacheMap {
 }
 
 extension Track: Cacheable {
-    public func toCacheStoreObject() -> TrackStore {
+    public func toCacheStoreObject(realm: RLMRealm) -> TrackStore {
         let store = toStoreObject()
         entries?.forEach {e in
-            store.entries.addObject(e.toStoreObject())
+            let entryStore = e.toStoreObject()
+            realm.addOrUpdateObject(entryStore)
+            store.entries.addObject(entryStore)
         }
         likers?.forEach {p in
-            store.likers.addObject(p.toStoreObject())
+            let profileStore = p.toStoreObject()
+            realm.addOrUpdateObject(profileStore)
+            store.likers.addObject(profileStore)
         }
-        return toStoreObject()
+        return store
     }
 }

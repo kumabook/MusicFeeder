@@ -15,7 +15,7 @@ import Result
 public protocol Cacheable {
     associatedtype Object
     var id: String { get }
-    func toCacheStoreObject() -> Object
+    func toCacheStoreObject(realm: RLMRealm) -> Object
 }
 
 public protocol CacheList: class {
@@ -64,12 +64,9 @@ extension CacheList where Self: RLMObject, Item: Cacheable, Object: RLMObject, I
         return materialize(try Self.realm.transactionWithBlock()
             {
                 items.forEach {item in
-                    let results = Object.objectsInRealm(Self.realm, withPredicate: NSPredicate(format: "id= %@", item.id))
-                    if results.count == 0 {
-                        self.items.addObject(item.toCacheStoreObject())
-                    } else {
-                        self.items.addObject(results[0] as! Object)
-                    }
+                    let itemCache = item.toCacheStoreObject(Self.realm)
+                    Self.realm.addOrUpdateObject(itemCache)
+                    self.items.addObject(itemCache)
                 }
                 timestamp = NSDate().timestamp
                 Self.realm.addOrUpdateObject(self)
@@ -120,13 +117,10 @@ extension CacheMap where Item: Cacheable, Object: RLMObject, Entity: RLMObject, 
         switch materialize(try realm.transactionWithBlock()
             {
                 let entity       = Entity(value: ["id": id])
+                let itemCache    = item.toCacheStoreObject(Self.realm)
+                Self.realm.addOrUpdateObject(itemCache)
                 entity.timestamp = NSDate().timestamp
-                let results = Object.objectsInRealm(Self.realm, withPredicate: NSPredicate(format: "id= %@", item.id))
-                if results.count == 0 {
-                    entity.item = item.toCacheStoreObject()
-                } else {
-                    entity.item = results[0] as? Object
-                }
+                entity.item = itemCache
                 Self.realm.addOrUpdateObject(entity)
             })
         {

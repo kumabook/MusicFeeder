@@ -59,6 +59,7 @@ class TrackRespoistorySpec: QuickSpec {
                     expect(track.status).toFinally(equal(Track.Status.Available))
                     expect(track.title!.characters.count).to(beGreaterThan(0))
                     expect(track.thumbnailUrl).notTo(beNil())
+                    expect(track.entries!.count).to(beGreaterThan(0))
                 }
             }
             context("when it has cache") {
@@ -70,9 +71,14 @@ class TrackRespoistorySpec: QuickSpec {
                     let entry = self.entryRepository.items[0]
                     expect(entry.tracks.count).to(beGreaterThan(0))
                     let track = entry.tracks[0]
+                    expect(track.entries!.count).to(beGreaterThan(0))
                     expect(track.status).to(equal(Track.Status.Loading))
                     expect(track.title!.characters.count).to(beGreaterThan(0))
                     expect(track.thumbnailUrl).notTo(beNil())
+                    
+                    expect(track.status).toFinally(equal(Track.Status.Available))
+                    expect(track.entries!.count).to(beGreaterThan(0))
+
                 }
             }
         }

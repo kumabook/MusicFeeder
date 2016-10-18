@@ -34,7 +34,7 @@ public final class EntryCacheList: RLMObject, CacheList {
 }
 
 extension Entry: Cacheable {
-    public func toCacheStoreObject() -> EntryStore {
+    public func toCacheStoreObject(realm: RLMRealm) -> EntryStore {
         return toStoreObject()
     }
 }
