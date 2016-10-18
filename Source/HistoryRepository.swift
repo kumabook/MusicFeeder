@@ -1,5 +1,5 @@
 //
-//  HistoryLoader.swift
+//  HistoryRepository.swift
 //  MusicFeeder
 //
 //  Created by KumamotoHiroki on 10/26/15.
@@ -10,7 +10,7 @@ import Foundation
 import ReactiveCocoa
 import FeedlyKit
 
-public class HistoryLoader: StreamLoader {
+public class HistoryRepository: EntryRepository {
     public var histories: [History] = []
     public var playlistsOfHistory: [History: Playlist] = [:]
     public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
