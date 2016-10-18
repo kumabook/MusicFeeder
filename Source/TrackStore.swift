@@ -19,6 +19,10 @@ public class TrackStore: RLMObject {
     dynamic var streamUrl:    String = ""
     dynamic var thumbnailUrl: String = ""
     dynamic var duration:     Int    = 0
+    dynamic var likesCount:   Int64  = 0
+
+    dynamic var entries              = RLMArray(objectClassName: EntryStore.className())
+    dynamic var likers               = RLMArray(objectClassName: ProfileStore.className())
 
     class var realm: RLMRealm {
         return RLMRealm.defaultRealm()

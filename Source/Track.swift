@@ -184,6 +184,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         if let url = NSURL(string: store.thumbnailUrl) {
             thumbnailUrl = url
         }
+        likesCount = store.likesCount
+        likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
+        entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
     }
 
     public init(urlString: String) {
@@ -255,7 +258,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
             if let _streamUrl = streamUrl?.absoluteString   { store.streamUrl    = _streamUrl }
         }
         store.duration       = Int(duration)
-
+        store.likesCount     = likesCount ?? 0
+        // entries and likers are not neccesary, depends on the store
         return store
     }
 
