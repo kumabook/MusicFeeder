@@ -9,6 +9,8 @@
 import Foundation
 import FeedlyKit
 
+var StoredPropertyKeyForTracks: UInt8 = 0
+
 extension Entry {
     public var url: NSURL? {
         if let alternate = self.alternate {
@@ -20,12 +22,29 @@ extension Entry {
     }
 
     public var tracks: [Track] {
-        return enclosure.map {
+        if let storedTracks = self.storedTracks {
+            return storedTracks
+        }
+        self.storedTracks = enclosure.map {
             $0.filter { $0.type.contains("application/json") }.map {
                 Track(urlString: $0.href)
             }
         } ?? []
+        return self.storedTracks!
     }
+    
+    private var storedTracks: [Track]? {
+        get {
+            guard let tracks = objc_getAssociatedObject(self, &StoredPropertyKeyForTracks) as? [Track] else {
+                return nil
+            }
+            return tracks
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForTracks, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+
 
     public var audioTracks: [Track] {
         return enclosure.map {
