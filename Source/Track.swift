@@ -155,6 +155,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         self.title      = title
         self.duration   = 0 as NSTimeInterval
         self.status     = .Init
+        loadPropertiesFromCache()
     }
 
     public init(json: JSON) {
@@ -168,6 +169,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         status      = .Init
         likers      = json["likers"].array?.map  { Profile(json: $0) }
         entries     = json["entries"].array?.map { Entry(json: $0) }
+        loadPropertiesFromCache()
     }
 
     public init(store: TrackStore) {
@@ -187,6 +189,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         likesCount = store.likesCount
         likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
         entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
+        loadPropertiesFromCache()
     }
 
     public init(urlString: String) {
@@ -203,6 +206,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         duration    = dic["duration"].flatMap { Int64($0) }.flatMap { NSTimeInterval( $0 / 1000) } ?? 0
         likesCount  = dic["likesCount"].flatMap { Int64($0) }
         status      = .Init
+        loadPropertiesFromCache()
     }
 
     public func reloadExpiredDetail() -> SignalProducer<Track, NSError> {
@@ -226,6 +230,16 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         return TrackStore.save(self)
     }
 
+    private func cacheProperties() {
+        TrackRepository.sharedInstance.cacheTrack(self)
+    }
+
+    private func loadPropertiesFromCache() {
+        if let store = TrackRepository.sharedInstance.getCacheTrackStore(id) {
+            self.updateProperties(store)
+        }
+    }
+
     public func updateProperties(track: SoundCloudKit.Track) {
         soundcloudTrack = track
         title           = track.title
@@ -238,12 +252,27 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         }
     }
     
-    public func updatePropertiesWithYouTubeVideo(video: XCDYouTubeVideo) {
+    public func updateProperties(video: XCDYouTubeVideo) {
         youtubeVideo = video
         title        = video.title
         duration     = video.duration
         thumbnailUrl = video.mediumThumbnailURL
         status       = .Available
+    }
+
+    public func updateProperties(store: TrackStore) {
+        title       = store.title
+        url         = store.url
+        duration    = NSTimeInterval(store.duration)
+        if let url = NSURL(string: store.streamUrl) {
+            _streamUrl = url
+        }
+        if let url = NSURL(string: store.thumbnailUrl) where !store.thumbnailUrl.isEmpty {
+            thumbnailUrl = url
+        }
+        likesCount = store.likesCount
+        likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
+        entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
     }
 
     internal func toStoreObject() -> TrackStore {
@@ -268,6 +297,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
             return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchPropertiesFromProvider(false)).map {
                 self.likesCount = $0.0.likesCount
                 self.entries    = $0.0.entries
+                self.cacheProperties()
                 return self
             }
         } else {
@@ -286,8 +316,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
             case .YouTube:
                 let disp = XCDYouTubeClient.defaultClient().fetchVideo(self.identifier).on(
                     next: { video in
-                        self.updatePropertiesWithYouTubeVideo(video)
-                        self.status = .Available
+                        self.updateProperties(video)
                         observer.sendNext(self)
                         observer.sendCompleted()
                     }, failed: { error in
