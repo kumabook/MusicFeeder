@@ -169,7 +169,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         status      = .Init
         likers      = json["likers"].array?.map  { Profile(json: $0) }
         entries     = json["entries"].array?.map { Entry(json: $0) }
-        loadPropertiesFromCache()
     }
 
     public init(store: TrackStore) {
