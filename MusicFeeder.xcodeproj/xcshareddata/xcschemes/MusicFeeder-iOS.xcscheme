@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "679C52851B70F24A00BE6614"
+               BuildableName = "MusicFeeder-iOSTests.xctest"
+               BlueprintName = "MusicFeeder-iOSTests"
+               ReferencedContainer = "container:MusicFeeder.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "679C527B1B70F24A00BE6614"
+            BuildableName = "MusicFeeder.framework"
+            BlueprintName = "MusicFeeder-iOS"
+            ReferencedContainer = "container:MusicFeeder.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
