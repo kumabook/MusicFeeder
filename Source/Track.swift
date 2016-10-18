@@ -76,9 +76,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         case Available
         case Unavailable
     }
-    public let id:           String
-    public let provider:     Provider
-    public let identifier:   String
+    public private(set) var id:           String
+    public private(set) var provider:     Provider
+    public private(set) var identifier:   String
 
     public private(set) var url:          String
     public private(set) var entries:      [Entry]?
