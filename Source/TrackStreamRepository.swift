@@ -1,5 +1,5 @@
 //
-//  TrackStreamLoader.swift
+//  TrackStreamRepository.swift
 //  MusicFeeder
 //
 //  Created by Hiroki Kumamoto on 3/31/16.
@@ -10,9 +10,9 @@ import FeedlyKit
 import ReactiveCocoa
 import Result
 
-public class TrackStreamLoader: PaginatedCollectionLoader<PaginatedTrackCollection, Track> {
-    public typealias State = PaginatedCollectionLoaderState
-    public typealias Event = PaginatedCollectionLoaderEvent
+public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrackCollection, Track> {
+    public typealias State = PaginatedCollectionRepositoryState
+    public typealias Event = PaginatedCollectionRepositoryEvent
     
     public private(set) var feedlyClient        = CloudAPIClient.sharedInstance
     public private(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
@@ -27,16 +27,25 @@ public class TrackStreamLoader: PaginatedCollectionLoader<PaginatedTrackCollecti
         dispose()
     }
     
-    public func fetchTracks()       { fetchItems() }
-    public func fetchLatestTracks() { fetchLatestItems() }
+    public var detailLoader: Disposable?
     
-    public var tracks:   [Track]    { return self.items }
-    public var detailLoader:        Disposable?
-
+    public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
+        super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+    }
+    // MARK: - PaginatedCollectionRepository protocol
     
+    public override func cacheItems(items: [Track]) {
+        TrackCacheList.findOrCreate(stream.streamId).add(items)
+    }
+    public override func loadCacheItems() {
+        items = TrackCacheList.findOrCreate(stream.streamId).items.map { Track(store: $0 as! TrackStore) }
+    }
+    public override func clearCacheItems() {
+        TrackCacheList.findOrCreate(stream.streamId).clear()
+    }
     public override func itemsUpdated() {
         detailLoader?.dispose()
-        detailLoader = tracks.map({ track in
+        detailLoader = items.map({ track in
             track.fetchDetail().map {
                 self.playlistQueue.enqueue(Playlist(id: track.id, title: track.title ?? "No title", tracks: [track]))
                 self.observer.sendNext(.CompleteLoadingTrackDetail(track))
@@ -45,9 +54,5 @@ public class TrackStreamLoader: PaginatedCollectionLoader<PaginatedTrackCollecti
         }).reduce(SignalProducer<Track, NSError>.empty, combine: { (currentSignal, nextSignal) in
             currentSignal.concat(nextSignal)
         }).on().start()
-    }
-
-    public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
-        super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
     }
 }
