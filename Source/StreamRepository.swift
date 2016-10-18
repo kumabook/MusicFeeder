@@ -1,7 +1,7 @@
 
 //
-//  StreamListLoader.swift
-//  MusicFav
+//  StreamRepository.swift
+//  MusicFeeder
 //
 //  Created by Hiroki Kumamoto on 4/15/15.
 //  Copyright (c) 2015 Hiroki Kumamoto. All rights reserved.
@@ -12,7 +12,7 @@ import FeedlyKit
 import ReactiveCocoa
 import Result
 
-public class StreamListLoader {
+public class StreamRepository {
     public enum State {
         case Normal
         case Fetching
@@ -37,7 +37,9 @@ public class StreamListLoader {
     private var observer:            Signal<Event, NSError>.Observer
     public var streamListOfCategory: [FeedlyKit.Category: [Stream]]
     public var uncategorized:        FeedlyKit.Category
-    public var useCache: Bool
+    public var isLoggedIn: Bool {
+        return CloudAPIClient.isLoggedIn
+    }
     public var categories: [FeedlyKit.Category] {
         return streamListOfCategory.keys.sort({ (first, second) -> Bool in
             return first == self.uncategorized || first.label > second.label
@@ -47,7 +49,7 @@ public class StreamListLoader {
         return streamListOfCategory[uncategorized]!
     }
 
-    public init(useCache: Bool = true) {
+    public init() {
         state                = .Normal
         streamListOfCategory = [:]
         let pipe = Signal<Event, NSError>.pipe()
@@ -58,7 +60,7 @@ public class StreamListLoader {
             uncategorized = FeedlyKit.Category.Uncategorized(userId)
         }
         streamListOfCategory[uncategorized] = []
-        self.useCache = useCache
+        loadLocalSubscriptions()
     }
 
     deinit {
@@ -72,6 +74,7 @@ public class StreamListLoader {
     }
 
     private func addSubscription(subscription: Subscription) {
+        SubscriptionStore.create(subscription)
         let categories = subscription.categories.count > 0 ? subscription.categories : [uncategorized]
         for category in categories {
             if (streamListOfCategory[category]!).indexOf(subscription) == nil {
@@ -81,6 +84,7 @@ public class StreamListLoader {
     }
 
     private func removeSubscription(subscription: Subscription) {
+        SubscriptionStore.remove(subscription)
         let  categories = subscription.categories.count > 0 ? subscription.categories : [uncategorized]
         for category in categories {
             let index = (self.streamListOfCategory[category]!).indexOf(subscription)
@@ -90,38 +94,41 @@ public class StreamListLoader {
         }
     }
 
-    public func refresh() -> SignalProducer<Void, NSError> {
-        var signal: SignalProducer<[FeedlyKit.Category: [Stream]], NSError>
-        if !CloudAPIClient.isLoggedIn || useCache {
-            signal = self.fetchLocalSubscriptions()
-        } else {
-            signal = self.fetchSubscriptions()
-        }
-        streamListOfCategory                = [:]
-        streamListOfCategory[uncategorized] = []
+    public func refresh() {
         state = .Fetching
         observer.sendNext(.StartLoading)
-        return signal.map { (table: [FeedlyKit.Category: [Stream]]) -> Void in
+        apiClient.fetchSubscriptions().on(
+            next: { subscriptions in
+                self.updateSubscriptions(subscriptions)
+            }, completed: {
                 self.state = .Normal
                 self.observer.sendNext(.CompleteLoading)
-                return
-            }.mapError { (error: NSError) in
+            }, failed: { error in
                 CloudAPIClient.handleError(error: error)
                 self.state = .Error
                 self.observer.sendNext(.FailToLoad(error))
-                return error
+            }
+        ).start()
+    }
+    
+    public func updateSubscriptions(subscriptions: [Subscription]) {
+        for subscription in subscriptions {
+            SubscriptionStore.create(subscription)
         }
     }
 
-    public func fetchLocalSubscriptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
-        streamListOfCategory = [:]
-        streamListOfCategory[uncategorized] = []
+    public func loadLocalSubscriptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
         return SignalProducer { (_observer, disposable) in
             for category in Category.findAll() {
                 self.streamListOfCategory[category] = [] as [Stream]
             }
             for subscription in Subscription.findAll() {
-                self.addSubscription(subscription)
+                let categories = subscription.categories.count > 0 ? subscription.categories : [self.uncategorized]
+                for category in categories {
+                    if (self.streamListOfCategory[category]!).indexOf(subscription) == nil {
+                        self.streamListOfCategory[category]!.append(subscription)
+                    }
+                }
             }
             for key in self.streamListOfCategory.keys {
                 if self.streamListOfCategory[key]!.isEmpty {
@@ -134,21 +141,6 @@ public class StreamListLoader {
             _observer.sendCompleted()
             return
         }
-    }
-
-    public func fetchSubscriptions() -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> {
-        let signal: SignalProducer<[FeedlyKit.Category], NSError> = apiClient.fetchCategories()
-        return signal.map { (categories: [FeedlyKit.Category]) -> SignalProducer<[FeedlyKit.Category: [Stream]], NSError> in
-            for category in categories {
-                self.streamListOfCategory[category] = [] as [Stream]
-            }
-            return self.apiClient.fetchSubscriptions().map { subscriptions in
-                for subscription in subscriptions {
-                    self.addSubscription(subscription)
-                }
-                return self.streamListOfCategory
-            }
-        }.flatten(.Merge)
     }
 
     public func createCategory(label: String) -> FeedlyKit.Category? {
@@ -174,8 +166,7 @@ public class StreamListLoader {
         return SignalProducer<Subscription, NSError> { (_observer, disposable) in
             self.state = .Updating
             self.observer.sendNext(.StartUpdating)
-            if !CloudAPIClient.isLoggedIn {
-                SubscriptionStore.create(subscription)
+            if !self.isLoggedIn {
                 self.addSubscription(subscription)
                 self.state = .Normal
                 self.observer.sendNext(.Create(subscription))
@@ -189,10 +180,6 @@ public class StreamListLoader {
                         self.observer.sendNext(.FailToUpdate(e))
                         _observer.sendFailed(CloudAPIClient.sharedInstance.buildError(e, response: response.response))
                     } else {
-                        if self.useCache {
-                            SubscriptionStore.create(subscription)
-                        }
-                        self.addSubscription(subscription)
                         self.state = .Normal
                         self.observer.sendNext(.Create(subscription))
                         _observer.sendNext(subscription)
@@ -207,8 +194,7 @@ public class StreamListLoader {
         return SignalProducer<Subscription, NSError> { (_observer, disposable) in
             self.state = .Updating
             self.observer.sendNext(.StartUpdating)
-            if !CloudAPIClient.isLoggedIn {
-                SubscriptionStore.remove(subscription)
+            if !self.isLoggedIn {
                 self.removeSubscription(subscription)
                 self.state = .Normal
                 self.observer.sendNext(.Remove(subscription))
@@ -221,9 +207,7 @@ public class StreamListLoader {
                     _observer.sendFailed(CloudAPIClient.sharedInstance.buildError(e, response: response.response))
                     _observer.sendCompleted()
                 } else {
-                    if self.useCache {
-                        SubscriptionStore.remove(subscription)
-                    }
+                    SubscriptionStore.remove(subscription)
                     self.removeSubscription(subscription)
                     self.state = .Normal
                     self.observer.sendNext(.Remove(subscription))
@@ -236,7 +220,7 @@ public class StreamListLoader {
 
     public func moveSubscriptionTo(sourceIndex: Int, toIndex:Int) -> PersistentResult {
         let result = SubscriptionStore.moveSubscriptionInSharedList(sourceIndex, toIndex: toIndex)
-        fetchLocalSubscriptions()
+        loadLocalSubscriptions()
         return result
     }
 }
