@@ -19,7 +19,7 @@ public class RealmMigration {
 
     public class func mainConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration.defaultConfiguration()
-        config.schemaVersion = 10
+        config.schemaVersion = 11
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
@@ -67,6 +67,15 @@ public class RealmMigration {
             if (oldVersion < 10) {
                 addTimestampsTo(SubscriptionStore.className(), migration: migration)
             }
+            if (oldVersion < 11) {
+                migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
+                    if let _ = oldObject, new = newObject {
+                        new["likesCount"] = 0
+                        new["entries"] = RLMArray(objectClassName: EntryStore.className())
+                        new["likers"] = RLMArray(objectClassName: ProfileStore.className())
+                    }
+                }
+            }
         }
         return config
     }
@@ -88,7 +97,7 @@ public class RealmMigration {
 
     public class func listenItLaterConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
-        config.schemaVersion = 4
+        config.schemaVersion = 5
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(ListenItLaterEntryStore.className()) { oldObject, newObject in }
@@ -101,6 +110,15 @@ public class RealmMigration {
             }
             if (oldVersion < 4) {
                 addTimestampsTo(SubscriptionStore.className(), migration: migration)
+            }
+            if (oldVersion < 5) {
+                migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
+                    if let _ = oldObject, new = newObject {
+                        new["likesCount"] = 0
+                        new["entries"] = RLMArray(objectClassName: EntryStore.className())
+                        new["likers"] = RLMArray(objectClassName: ProfileStore.className())
+                    }
+                }
             }
         }
         config.fileURL = NSURL(string: "file://\(listenItLaterPath)")
