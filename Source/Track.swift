@@ -179,9 +179,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         identifier  = store.identifier
         duration    = NSTimeInterval(store.duration)
         status      = .Init
-        if let url = NSURL(string: store.streamUrl) {
-            _streamUrl = url
-        }
         if let url = NSURL(string: store.thumbnailUrl) where !store.thumbnailUrl.isEmpty {
             thumbnailUrl = url
         }
@@ -263,9 +260,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         title       = store.title
         url         = store.url
         duration    = NSTimeInterval(store.duration)
-        if let url = NSURL(string: store.streamUrl) {
-            _streamUrl = url
-        }
         if let url = NSURL(string: store.thumbnailUrl) where !store.thumbnailUrl.isEmpty {
             thumbnailUrl = url
         }
