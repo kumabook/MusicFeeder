@@ -43,6 +43,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
     public internal(set) var stream:       Stream
     public internal(set) var state:        PaginatedCollectionRepositoryState
     public internal(set) var items:        [I] { didSet(newItems) { itemsUpdated() }}
+    public internal(set) var cacheItems:   [I] { didSet(newItems) { itemsUpdated() }}
     public internal(set) var continuation: String?
     public internal(set) var lastUpdated:  Int64?
     public internal(set) var signal:       Signal<PaginatedCollectionRepositoryEvent, NSError>
@@ -74,6 +75,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         state            = .Normal
         lastUpdated      = nil
         items            = []
+        cacheItems       = []
         let pipe         = Signal<PaginatedCollectionRepositoryEvent, NSError>.pipe()
         signal           = pipe.0
         observer         = pipe.1
@@ -114,8 +116,10 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     let latestItems = paginatedCollection.items
                     self.items = latestItems
                     self.updateLastUpdated()
-                    self.clearCacheItems()
-                    self.cacheItems(latestItems)
+                    QueueScheduler().schedule {
+                        self.clearCacheItems()
+                        self.cacheItems(latestItems)
+                    }
                     self.observer.sendNext(.CompleteLoadingLatest) // First reload tableView,
                     if paginatedCollection.continuation == nil {   // then wait for next load
                         self.state = .Complete
@@ -145,7 +149,9 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     if self.lastUpdated == nil {
                         self.updateLastUpdated()
                     }
-                    self.cacheItems(items)
+                    QueueScheduler().schedule {
+                        self.cacheItems(items)
+                    }
                     self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
                     if paginatedCollection.continuation == nil { // then wait for next load
                         self.state = .Complete

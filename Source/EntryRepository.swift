@@ -80,7 +80,7 @@ public class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollec
         EntryCacheList.findOrCreate(stream.streamId).add(items)
     }
     public override func loadCacheItems() {
-        items = EntryCacheList.findOrCreate(stream.streamId).items.map { Entry(store: $0 as! EntryStore) }
+        cacheItems = EntryCacheList.findOrCreate(stream.streamId).items.map { Entry(store: $0 as! EntryStore) }
     }
     public override func clearCacheItems() {
         EntryCacheList.findOrCreate(stream.streamId).clear()

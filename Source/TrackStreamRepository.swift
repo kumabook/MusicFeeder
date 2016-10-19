@@ -38,7 +38,7 @@ public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrack
         TrackCacheList.findOrCreate(stream.streamId).add(items)
     }
     public override func loadCacheItems() {
-        items = TrackCacheList.findOrCreate(stream.streamId).items.map { Track(store: $0 as! TrackStore) }
+        cacheItems = TrackCacheList.findOrCreate(stream.streamId).items.map { Track(store: $0 as! TrackStore) }
     }
     public override func clearCacheItems() {
         TrackCacheList.findOrCreate(stream.streamId).clear()
