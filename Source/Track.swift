@@ -301,6 +301,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public func fetchPropertiesFromProvider(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
         return SignalProducer<Track, NSError> { (observer, disposable) in
             if self.status == .Available || self.status == .Loading {
+                observer.sendNext(self)
                 observer.sendCompleted()
                 return
             }
