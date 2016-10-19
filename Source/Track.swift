@@ -155,7 +155,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         self.title      = title
         self.duration   = 0 as NSTimeInterval
         self.status     = .Init
-        loadPropertiesFromCache()
+        QueueScheduler().schedule {
+            self.loadPropertiesFromCache()
+        }
     }
 
     public init(json: JSON) {
@@ -185,7 +187,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         likesCount = store.likesCount
         likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
         entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
-        loadPropertiesFromCache()
+        QueueScheduler().schedule {
+            self.loadPropertiesFromCache()
+        }
     }
 
     public init(urlString: String) {
@@ -202,7 +206,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         duration    = dic["duration"].flatMap { Int64($0) }.flatMap { NSTimeInterval( $0 / 1000) } ?? 0
         likesCount  = dic["likesCount"].flatMap { Int64($0) }
         status      = .Init
-        loadPropertiesFromCache()
+        QueueScheduler().schedule {
+            self.loadPropertiesFromCache()
+        }
     }
 
     public func reloadExpiredDetail() -> SignalProducer<Track, NSError> {
@@ -227,7 +233,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
 
     private func cacheProperties() {
-        TrackRepository.sharedInstance.cacheTrack(self)
+        QueueScheduler().schedule {
+            TrackRepository.sharedInstance.cacheTrack(self)
+        }
     }
 
     private func loadPropertiesFromCache() {

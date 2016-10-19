@@ -83,7 +83,9 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
             if stream == Tag.Saved(userId) { self.unreadOnly = false }
             if stream == Tag.Read(userId)  { self.unreadOnly = false }
         }
-        loadCacheItems()
+        QueueScheduler().schedule {
+            self.loadCacheItems()
+        }
     }
 
     public func dispose() {
