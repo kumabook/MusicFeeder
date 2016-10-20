@@ -76,7 +76,7 @@ public class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollec
 
     // MARK: - PaginatedCollectionRepository protocol
 
-    public override func cacheItems(items: [Entry]) {
+    public override func addCacheItems(items: [Entry]) {
         EntryCacheList.findOrCreate(stream.streamId).add(items)
     }
     public override func loadCacheItems() {

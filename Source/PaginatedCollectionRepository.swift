@@ -169,7 +169,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                 completed: {
             }).start()
     }
-    public func cacheItems(items: [C.ItemType]) {}
+    public func addCacheItems(items: [C.ItemType]) {}
     public func loadCacheItems() {}
     public func clearCacheItems() {}
 }

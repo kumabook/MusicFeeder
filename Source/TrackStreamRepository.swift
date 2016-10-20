@@ -34,7 +34,7 @@ public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrack
     }
     // MARK: - PaginatedCollectionRepository protocol
     
-    public override func cacheItems(items: [Track]) {
+    public override func addCacheItems(items: [Track]) {
         TrackCacheList.findOrCreate(stream.streamId).add(items)
     }
     public override func loadCacheItems() {
