@@ -11,6 +11,8 @@ import ReactiveCocoa
 import Result
 
 public enum PaginatedCollectionRepositoryState {
+    case CacheOnly
+    case CacheOnlyFetching
     case Normal
     case Fetching
     case Complete
@@ -85,6 +87,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         }
         QueueScheduler().schedule {
             self.loadCacheItems()
+            self.state = .CacheOnly
         }
     }
 
@@ -94,6 +97,17 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
     }
 
     public func itemsUpdated() {}
+    
+    public func getItems() -> [I] {
+        switch state {
+        case .CacheOnly:
+            return cacheItems
+        case .CacheOnlyFetching:
+            return cacheItems
+        default:
+            return items
+        }
+    }
 
     public func fetchCollection(streamId streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<C, NSError> {
         return SignalProducer<C, NSError>.empty
@@ -104,29 +118,34 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
     }
     
     public func fetchLatestItems() {
-        if state != .Normal && state != .Error {
+        if state != .CacheOnly && state != .Normal && state != .Error {
             return
         }
-        state = .Fetching
+        if state == .CacheOnly {
+            state = .CacheOnlyFetching
+        } else {
+            state = .Fetching
+        }
         let producer = fetchCollection(streamId: stream.streamId,
                                paginationParams: paginationParamsForLatest)
         observer.sendNext(.StartLoadingLatest)
         disposable = producer
-            .startOn(UIScheduler())
+            .startOn(QueueScheduler())
             .on(
                 next: { paginatedCollection in
                     let latestItems = paginatedCollection.items
                     self.items = latestItems
                     self.updateLastUpdated()
-                    QueueScheduler().schedule {
-                        self.clearCacheItems()
-                        self.cacheItems(latestItems)
-                    }
-                    self.observer.sendNext(.CompleteLoadingLatest) // First reload tableView,
-                    if paginatedCollection.continuation == nil {   // then wait for next load
-                        self.state = .Complete
-                    } else {
-                        self.state = .Normal
+                    self.clearCacheItems()
+                    self.addCacheItems(self.items)
+                    self.loadCacheItems()
+                    UIScheduler().schedule {
+                        self.observer.sendNext(.CompleteLoadingLatest) // First reload tableView,
+                        if paginatedCollection.continuation == nil {   // then wait for next load
+                            self.state = .Complete
+                        } else {
+                            self.state = .Normal
+                        }
                     }
                 },
                 failed: { error in CloudAPIClient.handleError(error: error) },
@@ -135,14 +154,18 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
             ).start()
     }
     public func fetchItems() {
-        if state != .Normal && state != .Error {
+        if state != .CacheOnly && state != .Normal && state != .Error {
             return
         }
-        state = .Fetching
+        if state == .CacheOnly {
+            state = .CacheOnlyFetching
+        } else {
+            state = .Fetching
+        }
         observer.sendNext(.StartLoadingNext)
         let producer = fetchCollection(streamId: stream.streamId, paginationParams: paginationParams)
         disposable = producer
-            .startOn(UIScheduler())
+            .startOn(QueueScheduler())
             .on(
                 next: { paginatedCollection in
                     let items = paginatedCollection.items
@@ -151,14 +174,16 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     if self.lastUpdated == nil {
                         self.updateLastUpdated()
                     }
-                    QueueScheduler().schedule {
-                        self.cacheItems(items)
-                    }
-                    self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
-                    if paginatedCollection.continuation == nil { // then wait for next load
-                        self.state = .Complete
-                    } else {
-                        self.state = .Normal
+                    self.clearCacheItems() // need to be optimized: append new items only
+                    self.addCacheItems(self.items)
+                    self.loadCacheItems()
+                    UIScheduler().schedule {
+                        self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
+                        if paginatedCollection.continuation == nil { // then wait for next load
+                            self.state = .Complete
+                        } else {
+                            self.state = .Normal
+                        }
                     }
                 },
                 failed: {error in

@@ -12,6 +12,8 @@ import FeedlyKit
 
 public class TopicRepository {
     public enum State {
+        case CacheOnly
+        case CacheOnlyFetching
         case Normal
         case Fetching
         case Updating
@@ -26,7 +28,8 @@ public class TopicRepository {
     }
     private let KEY: String = "topics"
     public static var sharedInstance: TopicRepository = TopicRepository(cloudApiClient: CloudAPIClient.sharedInstance)
-    public private(set) var items: [Topic] = []
+    public private(set) var items:      [Topic] = []
+    public private(set) var cacheItems: [Topic] = []
     private var cacheList: TopicCacheList
     public var cloudApiClient: CloudAPIClient
     
@@ -37,17 +40,31 @@ public class TopicRepository {
     public init(cloudApiClient: CloudAPIClient) {
         let pipe = Signal<Event, NSError>.pipe()
         self.cloudApiClient = cloudApiClient
-        state               = .Normal
         signal              = pipe.0
         observer            = pipe.1
         cacheList           = TopicCacheList.findOrCreate(KEY)
+        state               = .CacheOnly
         loadCacheItems()
     }
+    public func getItems() -> [Topic] {
+        switch state {
+        case .CacheOnly:
+            return cacheItems
+        case .CacheOnlyFetching:
+            return cacheItems
+        default:
+            return items
+        }
+    }
     public func fetch() {
-        if state != .Normal && state != .Error {
+        if state != .CacheOnly && state != .Normal && state != .Error {
             return
         }
-        state = .Fetching
+        if state == .CacheOnly {
+            state = .CacheOnlyFetching
+        } else {
+            state = .Fetching
+        }
         observer.sendNext(.StartLoading)
         cloudApiClient.fetchTopics().on(
             next: { topics in
@@ -64,6 +81,6 @@ public class TopicRepository {
         ).start()
     }
     public func loadCacheItems() {
-        items = cacheList.items.map { Topic(store: $0 as! TopicStore) }
+        cacheItems = cacheList.items.map { Topic(store: $0 as! TopicStore) }
     }
 }
