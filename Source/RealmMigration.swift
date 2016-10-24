@@ -72,8 +72,9 @@ public class RealmMigration {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
                     if let _ = oldObject, new = newObject {
                         new["likesCount"] = 0
-                        new["entries"] = RLMArray(objectClassName: EntryStore.className())
-                        new["likers"] = RLMArray(objectClassName: ProfileStore.className())
+                        new["entries"]    = RLMArray(objectClassName: EntryStore.className())
+                        new["likers"]     = RLMArray(objectClassName: ProfileStore.className())
+                        new["expiresAt"]  = 0
                     }
                 }
             }
@@ -124,8 +125,9 @@ public class RealmMigration {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
                     if let _ = oldObject, new = newObject {
                         new["likesCount"] = 0
-                        new["entries"] = RLMArray(objectClassName: EntryStore.className())
-                        new["likers"] = RLMArray(objectClassName: ProfileStore.className())
+                        new["entries"]    = RLMArray(objectClassName: EntryStore.className())
+                        new["likers"]     = RLMArray(objectClassName: ProfileStore.className())
+                        new["expiresAt"]  = 0
                     }
                 }
             }

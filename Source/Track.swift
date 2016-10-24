@@ -72,6 +72,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
 
     public enum Status {
         case Init
+        case Cache
         case Loading
         case Available
         case Unavailable
@@ -87,6 +88,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public private(set) var duration:     NSTimeInterval
     public private(set) var likesCount:   Int64?
     public private(set) var likers:       [Profile]?
+    public private(set) var expiresAt:    Int64
     public var artworkUrl: NSURL? {
         switch self.provider {
         case .YouTube:
@@ -155,6 +157,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         self.title      = title
         self.duration   = 0 as NSTimeInterval
         self.status     = .Init
+        self.expiresAt  = 0
         QueueScheduler().schedule {
             self.loadPropertiesFromCache()
         }
@@ -171,6 +174,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         status      = .Init
         likers      = json["likers"].array?.map  { Profile(json: $0) }
         entries     = json["entries"].array?.map { Entry(json: $0) }
+        expiresAt   = 0
     }
 
     public init(store: TrackStore) {
@@ -187,6 +191,14 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         likesCount = store.likesCount
         likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
         entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
+        switch provider {
+        case .YouTube:
+            expiresAt = youtubeVideo?.expirationDate?.timestamp ?? 0
+        case .SoundCloud:
+            expiresAt = Int64.max
+        default:
+            expiresAt = Int64.max
+        }
         QueueScheduler().schedule {
             self.loadPropertiesFromCache()
         }
@@ -206,20 +218,20 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         duration    = dic["duration"].flatMap { Int64($0) }.flatMap { NSTimeInterval( $0 / 1000) } ?? 0
         likesCount  = dic["likesCount"].flatMap { Int64($0) }
         status      = .Init
+        expiresAt   = 0
         QueueScheduler().schedule {
             self.loadPropertiesFromCache()
         }
     }
 
-    public func reloadExpiredDetail() -> SignalProducer<Track, NSError> {
+    public func fetchProperiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
         var signal = SignalProducer<Track, NSError>.empty
-        if let expirationDate = youtubeVideo?.expirationDate {
-            if expirationDate.timestamp < NSDate().timestamp {
-                status = .Init
-                _streamUrl = nil
-                youtubeVideo = nil
-                signal = signal.concat(fetchPropertiesFromProvider(false))
-            }
+        if _streamUrl == nil || expiresAt < NSDate().timestamp {
+            status       = .Init
+            _streamUrl   = nil
+            youtubeVideo = nil
+            expiresAt    = 0
+            signal = signal.concat(fetchPropertiesFromProvider(false))
         }
         return signal
     }
@@ -241,6 +253,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     private func loadPropertiesFromCache() {
         if let store = TrackRepository.sharedInstance.getCacheTrackStore(id) {
             self.updateProperties(store)
+            self.status = .Cache
         }
     }
 
@@ -271,6 +284,17 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         if let url = NSURL(string: store.thumbnailUrl) where !store.thumbnailUrl.isEmpty {
             thumbnailUrl = url
         }
+        if let url = NSURL(string: store.streamUrl) where !store.streamUrl.isEmpty {
+            _streamUrl = url
+        }
+        switch provider {
+        case .YouTube:
+            expiresAt = youtubeVideo?.expirationDate?.timestamp ?? 0
+        case .SoundCloud:
+            expiresAt = Int64.max
+        default:
+            expiresAt = Int64.max
+        }
         likesCount = store.likesCount
         likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
         entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
@@ -290,12 +314,13 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         store.duration       = Int(duration)
         store.likesCount     = likesCount ?? 0
         // entries and likers are not neccesary, depends on the store
+        store.expiresAt      = expiresAt
         return store
     }
 
     public func fetchDetail() -> SignalProducer<Track, NSError> {
         if CloudAPIClient.includesTrack {
-            return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchPropertiesFromProvider(false)).map {
+            return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchProperiesFromProviderIfNeed()).map {
                 self.likesCount = $0.0.likesCount
                 self.entries    = $0.0.entries
                 self.cacheProperties()
