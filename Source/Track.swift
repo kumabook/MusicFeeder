@@ -175,6 +175,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         likers      = json["likers"].array?.map  { Profile(json: $0) }
         entries     = json["entries"].array?.map { Entry(json: $0) }
         expiresAt   = 0
+        QueueScheduler().schedule {
+            self.loadPropertiesFromCache()
+        }
     }
 
     public init(store: TrackStore) {
