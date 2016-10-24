@@ -136,7 +136,9 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     let latestItems = paginatedCollection.items
                     self.items = latestItems
                     self.updateLastUpdated()
-                    self.clearCacheItems()
+                    if latestItems.count > 0 {
+                        self.clearCacheItems()
+                    }
                     self.addCacheItems(self.items)
                     self.loadCacheItems()
                     UIScheduler().schedule {
@@ -174,8 +176,10 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     if self.lastUpdated == nil {
                         self.updateLastUpdated()
                     }
-                    self.clearCacheItems() // need to be optimized: append new items only
-                    self.addCacheItems(self.items)
+                    if self.items.count > 0 {
+                        self.clearCacheItems() // need to be optimized: append new items only
+                        self.addCacheItems(self.items)
+                    }
                     self.loadCacheItems()
                     UIScheduler().schedule {
                         self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
