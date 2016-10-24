@@ -51,7 +51,7 @@ class TopicRepositorySpec: QuickSpec {
                     self.topicRepository = TopicRepository(cloudApiClient: CloudAPIClient.sharedInstance)
                 }
                 it("fetches topics from cache") {
-                    expect(self.topicRepository.items.count).to(beGreaterThan(0))
+                    expect(self.topicRepository.getItems().count).to(beGreaterThan(0))
                 }
             }
         }
