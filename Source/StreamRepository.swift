@@ -180,6 +180,7 @@ public class StreamRepository {
                         self.observer.sendNext(.FailToUpdate(e))
                         _observer.sendFailed(CloudAPIClient.sharedInstance.buildError(e, response: response.response))
                     } else {
+                        self.addSubscription(subscription)
                         self.state = .Normal
                         self.observer.sendNext(.Create(subscription))
                         _observer.sendNext(subscription)
