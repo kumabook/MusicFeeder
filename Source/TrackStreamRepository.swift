@@ -55,14 +55,26 @@ public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrack
     }
     public override func itemsUpdated() {
         detailLoader?.dispose()
-        detailLoader = items.map({ track in
-            track.fetchDetail().map {
-                self.playlistQueue.enqueue(Playlist(id: track.id, title: track.title ?? "No title", tracks: [track]))
-                self.observer.sendNext(.CompleteLoadingTrackDetail(track))
-                return $0
+        self.playlistQueue = PlaylistQueue(playlists: [])
+        QueueScheduler().schedule() {
+            self.items.forEach {
+                $0.loadPropertiesFromCache(true)
             }
-        }).reduce(SignalProducer<Track, NSError>.empty, combine: { (currentSignal, nextSignal) in
-            currentSignal.concat(nextSignal)
-        }).on().start()
+            UIScheduler().schedule() {
+                self.observer.sendNext(.CompleteLoadingNext)
+            }
+            self.detailLoader = self.items.map({ track in
+                track.fetchDetail().map {
+                    self.playlistQueue.enqueue(Playlist(id: track.id, title: track.title ?? "No title", tracks: [track]))
+                    UIScheduler().schedule() {
+                        self.observer.sendNext(.CompleteLoadingTrackDetail(track))
+                    }
+                    return $0
+                }
+            }).reduce(SignalProducer<Track, NSError>.empty, combine: { (currentSignal, nextSignal) in
+                currentSignal.concat(nextSignal)
+            }).on(completed: {
+            }).start()
+        }
     }
 }
