@@ -74,6 +74,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         case Init
         case Cache
         case Loading
+        case Dirty
         case Available
         case Unavailable
     }
@@ -315,11 +316,21 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         return store
     }
 
+    public func markAsLiked() -> ReactiveCocoa.SignalProducer<Track, NSError> {
+        return CloudAPIClient.sharedInstance.markTracksAsLiked([self]).flatMap(.Concat) {
+            self.invalidate().fetchDetail()
+        }
+    }
+    
+    public func markAsUnliked() -> ReactiveCocoa.SignalProducer<Track, NSError> {
+        return CloudAPIClient.sharedInstance.markTracksAsUnliked([self]).flatMap(.Concat) {
+            self.invalidate().fetchDetail()
+        }
+    }
+
     public func fetchDetail() -> SignalProducer<Track, NSError> {
         if CloudAPIClient.includesTrack {
-            return CloudAPIClient.sharedInstance.fetchTrack(id).combineLatestWith(fetchProperiesFromProviderIfNeed()).map {
-                self.likesCount = $0.0.likesCount
-                self.entries    = $0.0.entries
+            return fetchTrack().combineLatestWith(fetchPropertiesFromProviderIfNeed()).map {_,_ in
                 self.cacheProperties()
                 return self
             }
@@ -328,7 +339,24 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         }
     }
 
-    public func fetchPropertiesFromProvider(errorOnFailure: Bool) -> SignalProducer<Track, NSError>{
+    public func invalidate() -> Track {
+        status = .Dirty
+        return self
+    }
+    
+    private func fetchTrack() -> SignalProducer<Track, NSError> {
+        if status == .Init || status == .Cache || status == .Dirty {
+            return CloudAPIClient.sharedInstance.fetchTrack(id).map {
+                self.likesCount = $0.likesCount
+                self.entries    = $0.entries
+                return self
+            }
+        } else {
+            return SignalProducer<Track, NSError>(value: self)
+        }
+    }
+
+    private func fetchPropertiesFromProvider(errorOnFailure: Bool) -> SignalProducer<Track, NSError> {
         return SignalProducer<Track, NSError> { (observer, disposable) in
             if self.status == .Available || self.status == .Loading {
                 observer.sendNext(self)
