@@ -376,7 +376,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
                         observer.sendNext(self)
                         observer.sendCompleted()
                     }, interrupted: {
-                        if self.status != .Available { self.status = .Unavailable }
+                        if self.status != .Available { self.status = .Init }
                         observer.sendNext(self)
                         observer.sendCompleted()
                     }).start()
