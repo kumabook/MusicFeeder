@@ -89,19 +89,20 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public private(set) var likesCount:   Int64?
     public private(set) var likers:       [Profile]?
     public private(set) var expiresAt:    Int64
+    public private(set) var artist:       String?
     public var artworkUrl: NSURL? {
         switch self.provider {
         case .YouTube:
-            return youtubeVideo?.largeThumbnailURL ?? youtubeVideo?.mediumThumbnailURL ?? youtubeVideo?.smallThumbnailURL
+            let url = youtubeVideo?.largeThumbnailURL ?? youtubeVideo?.mediumThumbnailURL ?? youtubeVideo?.smallThumbnailURL
+            return url ?? thumbnailUrl
         case .SoundCloud:
             guard let sc = soundcloudTrack else { return nil }
-            return sc.artworkURL
+            return sc.artworkURL ?? thumbnailUrl
         default:
             break
         }
         return nil
     }
-
 
     public var isVideo: Bool {
         return provider == Provider.YouTube && Track.youTubeVideoQuality != YouTubeVideoQuality.AudioOnly
@@ -111,17 +112,15 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
 
     public private(set) var status: Status
 
-    private var _streamUrl:  NSURL?
+    public private(set) var streamUrl:  NSURL?
     public private(set) var youtubeVideo:    XCDYouTubeVideo?
     public private(set) var soundcloudTrack: SoundCloudKit.Track?
 
-    public var streamUrl: NSURL? {
+    public var streamURL: NSURL? {
         if let video = youtubeVideo {
-            return video.streamURLs[Track.youTubeVideoQuality.rawValue]
-        } else if let url = _streamUrl {
-            return  url
+            streamUrl = video.streamURLs[Track.youTubeVideoQuality.rawValue]
         }
-        return nil
+        return streamUrl
     }
 
     public var subtitle: String? {
@@ -158,9 +157,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         self.duration   = 0 as NSTimeInterval
         self.status     = .Init
         self.expiresAt  = 0
-        QueueScheduler().schedule {
-            self.loadPropertiesFromCache()
-        }
     }
 
     public init(json: JSON) {
@@ -169,15 +165,16 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         title       = nil
         url         = json["url"].stringValue
         identifier  = json["identifier"].stringValue
-        likesCount  = json["likesCount"].int64Value
+        likesCount  = 0
         duration    = 0 as NSTimeInterval
         status      = .Init
+        likers      = []
+        entries     = []
+        expiresAt   = 0
+        // prefer to cache
+        likesCount  = json["likesCount"].int64Value
         likers      = json["likers"].array?.map  { Profile(json: $0) }
         entries     = json["entries"].array?.map { Entry(json: $0) }
-        expiresAt   = 0
-        QueueScheduler().schedule {
-            self.loadPropertiesFromCache()
-        }
     }
 
     public init(store: TrackStore) {
@@ -188,22 +185,12 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         identifier  = store.identifier
         duration    = NSTimeInterval(store.duration)
         status      = .Init
-        if let url = NSURL(string: store.thumbnailUrl) where !store.thumbnailUrl.isEmpty {
-            thumbnailUrl = url
-        }
         likesCount = store.likesCount
         likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
         entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
-        switch provider {
-        case .YouTube:
-            expiresAt = youtubeVideo?.expirationDate?.timestamp ?? 0
-        case .SoundCloud:
-            expiresAt = Int64.max
-        default:
-            expiresAt = Int64.max
-        }
-        QueueScheduler().schedule {
-            self.loadPropertiesFromCache()
+        expiresAt  = store.expiresAt
+        if let url = NSURL(string: store.thumbnailUrl) where !store.thumbnailUrl.isEmpty {
+            thumbnailUrl = url
         }
     }
 
@@ -222,21 +209,19 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         likesCount  = dic["likesCount"].flatMap { Int64($0) }
         status      = .Init
         expiresAt   = 0
-        QueueScheduler().schedule {
-            self.loadPropertiesFromCache()
-        }
     }
 
-    public func fetchProperiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
-        var signal = SignalProducer<Track, NSError>.empty
-        if _streamUrl == nil || expiresAt < NSDate().timestamp {
+    public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
+        if streamUrl == nil || expiresAt < NSDate().timestamp {
             status       = .Init
-            _streamUrl   = nil
+            streamUrl    = nil
             youtubeVideo = nil
             expiresAt    = 0
-            signal = signal.concat(fetchPropertiesFromProvider(false))
+            return fetchPropertiesFromProvider(false)
+        } else {
+            status = .Available
+            return SignalProducer<Track, NSError>(value: self)
         }
-        return signal
     }
 
     public func create() -> Bool {
@@ -253,10 +238,13 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         }
     }
 
-    private func loadPropertiesFromCache() {
+    public func loadPropertiesFromCache(providerOnly: Bool = false) {
         if let store = TrackRepository.sharedInstance.getCacheTrackStore(id) {
-            self.updateProperties(store)
-            self.status = .Cache
+            if !providerOnly {
+                self.updateProperties(store)
+            }
+            self.updateProviderProperties(store)
+            status = .Cache
         }
     }
 
@@ -264,7 +252,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         soundcloudTrack = track
         title           = track.title
         duration        = NSTimeInterval(track.duration / 1000)
-        _streamUrl      = NSURL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
+        streamUrl       = NSURL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
+        artist          = soundcloudTrack?.user.username
         status          = .Available
 
         if let url = track.thumbnailURL {
@@ -277,27 +266,33 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         title        = video.title
         duration     = video.duration
         thumbnailUrl = video.mediumThumbnailURL
+        streamUrl    = youtubeVideo?.streamURLs[Track.youTubeVideoQuality.rawValue] // for cache
+        expiresAt    = youtubeVideo?.expirationDate?.timestamp ?? Int64.max
         status       = .Available
     }
 
-    public func updateProperties(store: TrackStore) {
+    public func updateProviderProperties(store: TrackStore) {
         title       = store.title
-        url         = store.url
         duration    = NSTimeInterval(store.duration)
         if let url = NSURL(string: store.thumbnailUrl) where !store.thumbnailUrl.isEmpty {
             thumbnailUrl = url
         }
         if let url = NSURL(string: store.streamUrl) where !store.streamUrl.isEmpty {
-            _streamUrl = url
+            streamUrl = url
         }
         switch provider {
         case .YouTube:
-            expiresAt = youtubeVideo?.expirationDate?.timestamp ?? 0
+            expiresAt = store.expiresAt
         case .SoundCloud:
             expiresAt = Int64.max
         default:
             expiresAt = Int64.max
         }
+    }
+
+    public func updateProperties(store: TrackStore) {
+        url        = store.url
+        artist     = store.artist
         likesCount = store.likesCount
         likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
         entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
@@ -309,15 +304,14 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         store.url            = url
         store.providerRaw    = provider.rawValue
         store.identifier     = identifier
-        if let _title        = title                        { store.title        = _title }
-        if let _thumbnailUrl = thumbnailUrl?.absoluteString { store.thumbnailUrl = _thumbnailUrl }
-        if provider != .YouTube {
-            if let _streamUrl = streamUrl?.absoluteString   { store.streamUrl    = _streamUrl }
-        }
+        store.title          = title ?? ""
+        store.thumbnailUrl   = thumbnailUrl?.absoluteString ?? ""
+        store.streamUrl      = streamUrl?.absoluteString ?? ""
         store.duration       = Int(duration)
         store.likesCount     = likesCount ?? 0
         // entries and likers are not neccesary, depends on the store
         store.expiresAt      = expiresAt
+        store.artist         = artist ?? ""
         return store
     }
 
@@ -377,7 +371,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
                 }
                 return
             case .Raw:
-                self._streamUrl = self.identifier.toURL()
+                self.streamUrl = self.identifier.toURL()
                 self.status    = .Available
                 observer.sendNext(self)
                 observer.sendCompleted()

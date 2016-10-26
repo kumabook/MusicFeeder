@@ -271,7 +271,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     public func reloadExpiredTracks() -> SignalProducer<Playlist, NSError> {
         var signal = SignalProducer<Track, NSError>.empty
         for track in getTracks() {
-            signal = signal.concat(track.fetchProperiesFromProviderIfNeed())
+            signal = signal.concat(track.fetchPropertiesFromProviderIfNeed())
         }
         return signal.map { _ in self }
     }

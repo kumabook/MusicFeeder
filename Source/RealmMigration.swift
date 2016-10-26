@@ -128,6 +128,7 @@ public class RealmMigration {
                         new["entries"]    = RLMArray(objectClassName: EntryStore.className())
                         new["likers"]     = RLMArray(objectClassName: ProfileStore.className())
                         new["expiresAt"]  = 0
+                        new["artist"]     = ""
                     }
                 }
             }

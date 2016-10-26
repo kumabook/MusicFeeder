@@ -21,6 +21,7 @@ public class TrackStore: RLMObject {
     dynamic var duration:     Int    = 0
     dynamic var likesCount:   Int64  = 0
     dynamic var expiresAt:    Int64  = 0
+    dynamic var artist:       String = ""
 
 
     dynamic var entries              = RLMArray(objectClassName: EntryStore.className())
