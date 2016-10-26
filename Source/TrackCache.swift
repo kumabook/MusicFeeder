@@ -32,7 +32,7 @@ public final class TrackCacheEntity: RLMObject, CacheEntity {
     }
 }
 
-public final class TrackCacheMap: RLMObject, CacheMap {
+public final class TrackCacheSet: RLMObject, CacheSet {
     public typealias Item = Track
     public typealias Object = TrackStore
     public typealias Entity = TrackCacheEntity

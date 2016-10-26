@@ -35,7 +35,7 @@ public protocol CacheList: class {
     static func deleteOldItems()
 }
 
-public protocol CacheMap: class {
+public protocol CacheSet: class {
     associatedtype Item
     associatedtype Object
     associatedtype Entity: CacheEntity
@@ -110,8 +110,8 @@ extension CacheList where Self: RLMObject, Item: Cacheable, Object: RLMObject, I
     }
 }
 
-extension CacheMap where Item: Cacheable, Object: RLMObject, Entity: RLMObject, Entity.Object == Object, Item.Object == Object {
-    public static var realm: RLMRealm { return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.cacheMapPath)) }
+extension CacheSet where Item: Cacheable, Object: RLMObject, Entity: RLMObject, Entity.Object == Object, Item.Object == Object {
+    public static var realm: RLMRealm { return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.cacheSetPath)) }
 
     public static func set(id: String, item: Item) -> Bool {
         switch materialize(try realm.transactionWithBlock()

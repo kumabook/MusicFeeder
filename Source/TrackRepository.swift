@@ -14,13 +14,13 @@ public class TrackRepository {
     public static var sharedInstance: TrackRepository = TrackRepository()
 
     public func getCacheTrackStore(id: String) -> TrackStore? {
-        if let entity = TrackCacheMap.get(id), store = entity.item {
+        if let entity = TrackCacheSet.get(id), store = entity.item {
             return store
         }
         return nil
     }
 
     public func cacheTrack(track: Track) {
-        TrackCacheMap.set(track.id, item: track)
+        TrackCacheSet.set(track.id, item: track)
     }
 }

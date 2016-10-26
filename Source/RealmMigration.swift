@@ -155,7 +155,7 @@ public class RealmMigration {
         return path as String
     }
 
-    public class var cacheMapPath: String {
+    public class var cacheSetPath: String {
         var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
         path = path.stringByDeletingLastPathComponent
         path = path.stringByAppendingPathComponent("cache_map")
@@ -165,7 +165,7 @@ public class RealmMigration {
 
     public class func migrateCache() {
         EntryCacheList.realm
-        TrackCacheMap.realm
+        TrackCacheSet.realm
     }
 
 
