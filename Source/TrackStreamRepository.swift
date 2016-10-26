@@ -43,6 +43,16 @@ public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrack
     public override func clearCacheItems() {
         TrackCacheList.findOrCreate(stream.streamId).clear()
     }
+    public override func cacheItemsUpdated() {
+        QueueScheduler().schedule() {
+            self.cacheItems.forEach {
+                $0.loadPropertiesFromCache(false)
+            }
+            UIScheduler().schedule() {
+                self.observer.sendNext(.CompleteLoadingNext)
+            }
+        }
+    }
     public override func itemsUpdated() {
         detailLoader?.dispose()
         detailLoader = items.map({ track in

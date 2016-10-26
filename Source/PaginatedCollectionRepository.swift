@@ -45,7 +45,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
     public internal(set) var stream:       Stream
     public internal(set) var state:        PaginatedCollectionRepositoryState
     public internal(set) var items:        [I] { didSet(newItems) { itemsUpdated() }}
-    public internal(set) var cacheItems:   [I] { didSet(newItems) { itemsUpdated() }}
+    public internal(set) var cacheItems:   [I] { didSet(newItems) { cacheItemsUpdated() }}
     public internal(set) var continuation: String?
     public internal(set) var lastUpdated:  Int64?
     public internal(set) var signal:       Signal<PaginatedCollectionRepositoryEvent, NSError>
@@ -97,6 +97,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
     }
 
     public func itemsUpdated() {}
+    public func cacheItemsUpdated() {}
     
     public func getItems() -> [I] {
         switch state {
