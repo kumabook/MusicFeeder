@@ -97,7 +97,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
             let url = youtubeVideo?.largeThumbnailURL ?? youtubeVideo?.mediumThumbnailURL ?? youtubeVideo?.smallThumbnailURL
             return url ?? thumbnailUrl
         case .SoundCloud:
-            guard let sc = soundcloudTrack else { return nil }
+            guard let sc = soundcloudTrack else { return thumbnailUrl }
             return sc.artworkURL ?? thumbnailUrl
         default:
             break
