@@ -63,9 +63,12 @@ public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrack
             UIScheduler().schedule() {
                 self.observer.sendNext(.CompleteLoadingNext)
             }
+            self.items.forEach {
+                let playlist = Playlist(id: $0.id, title: $0.title ?? "No title", tracks: [$0])
+                self.playlistQueue.enqueue(playlist)
+            }
             self.detailLoader = self.items.map({ track in
-                track.fetchDetail().map {
-                    self.playlistQueue.enqueue(Playlist(id: track.id, title: track.title ?? "No title", tracks: [track]))
+                return track.fetchDetail().map {
                     UIScheduler().schedule() {
                         self.observer.sendNext(.CompleteLoadingTrackDetail(track))
                     }
