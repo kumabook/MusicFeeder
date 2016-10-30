@@ -11,6 +11,8 @@ import ReactiveCocoa
 import Result
 
 public enum PaginatedCollectionRepositoryState {
+    case Init
+    case FetchingCache
     case CacheOnly
     case CacheOnlyFetching
     case Normal
@@ -20,6 +22,8 @@ public enum PaginatedCollectionRepositoryState {
 }
 
 public enum PaginatedCollectionRepositoryEvent {
+    case StartLoadingCache
+    case CompleteLoadingCache
     case StartLoadingLatest
     case CompleteLoadingLatest
     case StartLoadingNext
@@ -74,7 +78,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         self.stream      = stream
         self.unreadOnly  = unreadOnly
         self.perPage     = perPage
-        state            = .Normal
+        state            = .Init
         lastUpdated      = nil
         items            = []
         cacheItems       = []
@@ -84,10 +88,6 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         if let userId = CloudAPIClient._profile?.id {
             if stream == Tag.Saved(userId) { self.unreadOnly = false }
             if stream == Tag.Read(userId)  { self.unreadOnly = false }
-        }
-        QueueScheduler().schedule {
-            self.loadCacheItems()
-            self.state = .CacheOnly
         }
     }
 
@@ -101,6 +101,8 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
     
     public func getItems() -> [I] {
         switch state {
+        case .FetchingCache:
+            return cacheItems
         case .CacheOnly:
             return cacheItems
         case .CacheOnlyFetching:
@@ -117,9 +119,17 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
     func updateLastUpdated() {
         lastUpdated = Int64(NSDate().timeIntervalSince1970 * 1000)
     }
+
+    public func fetchCacheItems() {
+        state = .FetchingCache
+        observer.sendNext(.StartLoadingCache)
+        loadCacheItems()
+        observer.sendNext(.CompleteLoadingCache)
+        state = .CacheOnly
+    }
     
     public func fetchLatestItems() {
-        if state != .CacheOnly && state != .Normal && state != .Error {
+        if state != .Init && state != .CacheOnly && state != .Normal && state != .Error {
             return
         }
         if state == .CacheOnly {
@@ -157,7 +167,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
             ).start()
     }
     public func fetchItems() {
-        if state != .CacheOnly && state != .Normal && state != .Error {
+        if state != .Init && state != .CacheOnly && state != .Normal && state != .Error {
             return
         }
         if state == .CacheOnly {
