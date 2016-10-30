@@ -281,6 +281,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         if let url = NSURL(string: store.streamUrl) where !store.streamUrl.isEmpty {
             streamUrl = url
         }
+        artist = store.artist
         switch provider {
         case .YouTube:
             expiresAt = store.expiresAt
@@ -293,7 +294,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
 
     public func updateProperties(store: TrackStore) {
         url        = store.url
-        artist     = store.artist
         likesCount = store.likesCount
         likers     = store.likers.map  { Profile(store: $0 as! ProfileStore) }
         entries    = store.entries.map { Entry(store: $0 as! EntryStore) }
