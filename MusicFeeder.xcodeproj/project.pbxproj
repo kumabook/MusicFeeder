@@ -94,6 +94,8 @@
 		67D265911BACE17B000240FB /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */; };
 		67D7F3461CAD33DE00C173B4 /* TrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */; };
 		67D7F34A1CAD348200C173B4 /* PaginatedCollectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */; };
+		67E315761DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */; };
+		67E315781DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -190,6 +192,8 @@
 		67D265801BACE16B000240FB /* WebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebImage.framework; path = Carthage/Build/iOS/WebImage.framework; sourceTree = "<group>"; };
 		67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackStreamRepository.swift; path = Source/TrackStreamRepository.swift; sourceTree = SOURCE_ROOT; };
 		67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaginatedCollectionRepository.swift; path = Source/PaginatedCollectionRepository.swift; sourceTree = SOURCE_ROOT; };
+		67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSpecifiedEntryRepository.swift; path = Source/TimeSpecifiedEntryRepository.swift; sourceTree = SOURCE_ROOT; };
+		67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSpecifiedTrackStreamRepository.swift; path = Source/TimeSpecifiedTrackStreamRepository.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE271B6CE4EF00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Spec/Info.plist; sourceTree = SOURCE_ROOT; };
 		67FBBE2D1B6CE61C00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = SOURCE_ROOT; };
 		67FBBE321B6CE76300B567CB /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Category.swift; path = Source/Category.swift; sourceTree = SOURCE_ROOT; };
@@ -273,6 +277,8 @@
 				671132811BC1212E00A036B0 /* SavedStreamRepository.swift */,
 				67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */,
 				6705761B1BDE73A00087063A /* HistoryRepository.swift */,
+				67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */,
+				67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */,
 			);
 			name = Repository;
 			sourceTree = "<group>";
@@ -501,6 +507,7 @@
 				679C52D71B70F3DD00BE6614 /* PlaylistRepository.swift in Sources */,
 				6705761C1BDE73A00087063A /* HistoryRepository.swift in Sources */,
 				67AD468C1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift in Sources */,
+				67E315781DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift in Sources */,
 				679C52D81B70F3DD00BE6614 /* PlaylistStore.swift in Sources */,
 				67BCCEA91CAFBF6E00310AF3 /* TrackStream.swift in Sources */,
 				679C52DA1B70F3DD00BE6614 /* EntryRepository.swift in Sources */,
@@ -531,6 +538,7 @@
 				67120B3F1C18821C00240F8B /* RealmMigration.swift in Sources */,
 				6748048D1DB268C000D6FD33 /* TopicCache.swift in Sources */,
 				679C52E51B70F3DD00BE6614 /* XCDYouTubeClient.swift in Sources */,
+				67E315761DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
