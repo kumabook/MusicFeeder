@@ -55,6 +55,8 @@ class EntryRepositorySpec: QuickSpec {
                     self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20, needsPlaylist: false)
                 }
                 it("fetches entries from cache") {
+                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.Init))
+                    self.entryRepository.fetchCacheItems()
                     expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.CacheOnly))
                     expect(self.entryRepository.cacheItems.count).to(beGreaterThan(0))
                 }

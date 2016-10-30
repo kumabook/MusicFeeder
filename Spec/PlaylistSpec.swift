@@ -16,7 +16,7 @@ class PlaylistSpec: QuickSpec {
         var playlist: Playlist!
         beforeSuite {
             RealmMigration.migrateAll()
-            TrackCacheMap.deleteAllItems()
+            TrackCacheSet.deleteAllItems()
         }
         beforeEach {
             let json = JSON(SpecHelper.fixtureJSONObject(fixtureNamed: "playlist")!)
