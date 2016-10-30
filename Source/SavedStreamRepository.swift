@@ -45,6 +45,10 @@ public class SavedStreamRepository: EntryRepository {
         self.init(stream: SavedStream(id: id, title: title), unreadOnly: false, perPage: CloudAPIClient.perPage)
     }
 
+    public override func fetchCacheItems() {
+        fetchItems()
+    }
+
     public override func fetchCollection(streamId streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
         return SignalProducer { (observer, disposable) in
             QueueScheduler().schedule {
