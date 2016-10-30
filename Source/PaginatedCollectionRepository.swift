@@ -122,10 +122,14 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
 
     public func fetchCacheItems() {
         state = .FetchingCache
-        observer.sendNext(.StartLoadingCache)
-        loadCacheItems()
-        observer.sendNext(.CompleteLoadingCache)
-        state = .CacheOnly
+        dispatch_async(dispatch_get_main_queue()) {
+            self.observer.sendNext(.StartLoadingCache)
+            self.loadCacheItems()
+            self.state = .CacheOnly
+            dispatch_async(dispatch_get_main_queue()) {
+                self.observer.sendNext(.CompleteLoadingCache)
+            }
+        }
     }
     
     public func fetchLatestItems() {
@@ -139,7 +143,9 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         }
         let producer = fetchCollection(streamId: stream.streamId,
                                paginationParams: paginationParamsForLatest)
-        observer.sendNext(.StartLoadingLatest)
+        UIScheduler().schedule {
+            self.observer.sendNext(.StartLoadingLatest)
+        }
         disposable = producer
             .startOn(QueueScheduler())
             .on(
@@ -153,7 +159,9 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     self.addCacheItems(self.items)
                     self.loadCacheItems()
                     UIScheduler().schedule {
-                        self.observer.sendNext(.CompleteLoadingLatest) // First reload tableView,
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.observer.sendNext(.CompleteLoadingLatest) // First reload tableView,
+                        }
                         if paginatedCollection.continuation == nil {   // then wait for next load
                             self.state = .Complete
                         } else {
@@ -175,7 +183,9 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         } else {
             state = .Fetching
         }
-        observer.sendNext(.StartLoadingNext)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.observer.sendNext(.StartLoadingNext)
+        }
         let producer = fetchCollection(streamId: stream.streamId, paginationParams: paginationParams)
         disposable = producer
             .startOn(QueueScheduler())
@@ -193,8 +203,10 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     }
                     self.loadCacheItems()
                     UIScheduler().schedule {
-                        self.observer.sendNext(.CompleteLoadingNext) // First reload tableView,
-                        if paginatedCollection.continuation == nil { // then wait for next load
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.observer.sendNext(.CompleteLoadingNext)
+                        }
+                        if paginatedCollection.continuation == nil {
                             self.state = .Complete
                         } else {
                             self.state = .Normal
@@ -203,7 +215,9 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                 },
                 failed: {error in
                     CloudAPIClient.handleError(error: error)
-                    self.observer.sendNext(.FailToLoadNext)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.observer.sendNext(.FailToLoadNext)
+                    }
                     self.state = .Error
                 },
                 completed: {
