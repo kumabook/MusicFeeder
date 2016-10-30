@@ -173,7 +173,7 @@ public class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
         if let _ranked       = ranked       { params["ranked"]       = _ranked }
         if let _unreadOnly   = unreadOnly   { params["unreadOnly"]   = _unreadOnly ? "true" : "false" }
         if let _newerThan    = newerThan    { params["newerThan"]    = NSNumber(longLong: _newerThan) }
-        if let _olderThan    = newerThan    { params["olderThan"]    = NSNumber(longLong: _olderThan) }
+        if let _olderThan    = olderThan    { params["olderThan"]    = NSNumber(longLong: _olderThan) }
         if let _continuation = continuation { params["continuation"] = _continuation }
         return params
     }
