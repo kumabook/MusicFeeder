@@ -25,7 +25,7 @@ extension FeedlyKit.Category {
     }
     public class func findAll() -> [FeedlyKit.Category] {
         var categories: [FeedlyKit.Category] = []
-        for store in CategoryStore.findAll() {
+        for store in realizeResults(CategoryStore.findAll()) {
             let category: FeedlyKit.Category = FeedlyKit.Category(id: store.id, label: store.label)
             categories.append(category)
         }
@@ -33,27 +33,27 @@ extension FeedlyKit.Category {
     }
 }
 
-public class CategoryStore: RLMObject {
+open class CategoryStore: RLMObject {
     dynamic var id:        String = ""
     dynamic var label:     String = ""
-    public override class func primaryKey() -> String {
+    open override class func primaryKey() -> String {
         return "id"
     }
 
-    class var realm: RLMRealm { return RLMRealm.defaultRealm() }
+    class var realm: RLMRealm { return RLMRealm.default() }
 
-    public class func create(category: FeedlyKit.Category) -> PersistentResult {
-        if let _ = findBy(id: category.id) { return .Failure }
+    open class func create(_ category: FeedlyKit.Category) -> PersistentResult {
+        if let _ = findBy(id: category.id) { return .failure }
         let store = category.toStoreObject()
-        try! realm.transactionWithBlock() {
-            self.realm.addObject(store)
+        try! realm.transaction() {
+            self.realm.add(store)
         }
-        return .Success
+        return .success
     }
 
-    public class func save(category: FeedlyKit.Category) -> Bool {
+    open class func save(_ category: FeedlyKit.Category) -> Bool {
         if let store = findBy(id: category.id) {
-            try! realm.transactionWithBlock() {
+            try! realm.transaction() {
                 store.label = category.label
             }
             return true
@@ -62,12 +62,12 @@ public class CategoryStore: RLMObject {
         }
     }
 
-    public class func findAll() -> RLMResults {
-        return CategoryStore.allObjectsInRealm(realm)
+    open class func findAll() -> RLMResults<CategoryStore> {
+        return CategoryStore.allObjects(in: realm) as! RLMResults<CategoryStore>
     }
 
-    public class func findBy(id id: String) -> CategoryStore? {
-        let results = CategoryStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+    open class func findBy(id: String) -> CategoryStore? {
+        let results = CategoryStore.objects(in: realm, with: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil
         } else {
@@ -75,16 +75,16 @@ public class CategoryStore: RLMObject {
         }
     }
 
-    public class func remove(category: FeedlyKit.Category) {
+    open class func remove(_ category: FeedlyKit.Category) {
         if let store = findBy(id: category.id) {
-            try! realm.transactionWithBlock() {
-                self.realm.deleteObject(store)
+            try! realm.transaction() {
+                self.realm.delete(store)
             }
         }
     }
 
-    public class func removeAll() {
-        try! realm.transactionWithBlock() {
+    open class func removeAll() {
+        try! realm.transaction() {
             self.realm.deleteAllObjects()
         }
     }

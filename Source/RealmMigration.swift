@@ -9,29 +9,29 @@
 import Foundation
 import Realm
 
-public class RealmMigration {
-    public static var groupIdentifier: String = "group.com.your.app"
-    public class func migrateAll() {
+open class RealmMigration {
+    open static var groupIdentifier: String = "group.com.your.app"
+    open class func migrateAll() {
         migrateMain()
         migrateListenItLater()
         migrateHistory()
         migrateCache()
     }
 
-    public class func mainConfiguration() -> RLMRealmConfiguration {
-        let config = RLMRealmConfiguration.defaultConfiguration()
+    open class func mainConfiguration() -> RLMRealmConfiguration {
+        let config = RLMRealmConfiguration.default()
         config.schemaVersion = 11
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
-                    if let old = oldObject, new =  newObject {
+                    if let old = oldObject, let new =  newObject {
                         new["identifier"] = old["serviceId"]
                     }
                 }
             }
             if (oldVersion < 2) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
-                    if let old = oldObject, new =  newObject {
+                    if let old = oldObject, let new =  newObject {
                         let properties = ["title", "streamUrl", "thumbnailUrl"]
                         for prop in properties {
                             new[prop] = old[prop]
@@ -41,7 +41,7 @@ public class RealmMigration {
             }
             if (oldVersion < 7) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
-                    if let old = oldObject, new =  newObject {
+                    if let old = oldObject, let new =  newObject {
                         let properties = ["title", "streamUrl", "thumbnailUrl"]
                         for prop in properties {
                             new[prop] = old[prop]
@@ -70,7 +70,7 @@ public class RealmMigration {
             }
             if (oldVersion < 11) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
-                    if let _ = oldObject, new = newObject {
+                    if let _ = oldObject, let new = newObject {
                         new["likesCount"] = 0
                         new["entries"]    = RLMArray(objectClassName: EntryStore.className())
                         new["likers"]     = RLMArray(objectClassName: ProfileStore.className())
@@ -82,30 +82,30 @@ public class RealmMigration {
         return config
     }
 
-    public class func migrateMain() {
-        RLMRealmConfiguration.setDefaultConfiguration(mainConfiguration())
-        RLMRealm.defaultRealm()
+    open class func migrateMain() {
+        RLMRealmConfiguration.setDefault(mainConfiguration())
+        RLMRealm.default()
     }
-    public static var listenItLaterPath: String {
-        let fileManager = NSFileManager.defaultManager()
-        if let directory = fileManager.containerURLForSecurityApplicationGroupIdentifier(groupIdentifier) {
-            let path: NSString = directory.path!
-            return path.stringByAppendingPathComponent("db.realm")
+    open static var listenItLaterPath: String {
+        let fileManager = FileManager.default
+        if let directory = fileManager.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier) {
+            let path: NSString = directory.path as NSString
+            return path.appendingPathComponent("db.realm")
         } else {
-            return RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
+            return RLMRealmConfiguration.default().fileURL!.path
         }
     }
-    public class func migrateListenItLater() {
-        ListenItLaterEntryStore.realm
+    open class func migrateListenItLater() {
+        let _ = ListenItLaterEntryStore.realm
     }
-    public static func realmPath(name: String) -> String {
-        var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
-        path = path.stringByDeletingLastPathComponent
-        path = path.stringByAppendingPathComponent(name)
-        path = path.stringByAppendingPathExtension("realm")!
+    open static func realmPath(_ name: String) -> String {
+        var path: NSString = RLMRealmConfiguration.default().fileURL!.path as NSString
+        path = path.deletingLastPathComponent as NSString
+        path = path.appendingPathComponent(name) as NSString
+        path = path.appendingPathExtension("realm")! as NSString
         return path as String
     }
-    public class func configurationOf(path: String) -> RLMRealmConfiguration {
+    open class func configurationOf(_ path: String) -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
         config.schemaVersion = 5
         config.migrationBlock = { migration, oldVersion in
@@ -123,7 +123,7 @@ public class RealmMigration {
             }
             if (oldVersion < 5) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
-                    if let _ = oldObject, new = newObject {
+                    if let _ = oldObject, let new = newObject {
                         new["likesCount"] = 0
                         new["entries"]    = RLMArray(objectClassName: EntryStore.className())
                         new["likers"]     = RLMArray(objectClassName: ProfileStore.className())
@@ -133,46 +133,46 @@ public class RealmMigration {
                 }
             }
         }
-        config.fileURL = NSURL(string: "file://\(path)")
+        config.fileURL = URL(string: "file://\(path)")
         return config
     }
-    public class var historyPath: String {
-        var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
-        path = path.stringByDeletingLastPathComponent
-        path = path.stringByAppendingPathComponent("history")
-        path = path.stringByAppendingPathExtension("realm")!
+    open class var historyPath: String {
+        var path: NSString = RLMRealmConfiguration.default().fileURL!.path as NSString
+        path = path.deletingLastPathComponent as NSString
+        path = path.appendingPathComponent("history") as NSString
+        path = path.appendingPathExtension("realm")! as NSString
         return path as String
     }
 
-    public class func migrateHistory() {
-        HistoryStore.realm
+    open class func migrateHistory() {
+        let _ = HistoryStore.realm
     }
     
-    public class var cacheListPath: String {
-        var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
-        path = path.stringByDeletingLastPathComponent
-        path = path.stringByAppendingPathComponent("cache_list")
-        path = path.stringByAppendingPathExtension("realm")!
+    open class var cacheListPath: String {
+        var path: NSString = RLMRealmConfiguration.default().fileURL!.path as NSString
+        path = path.deletingLastPathComponent as NSString
+        path = path.appendingPathComponent("cache_list") as NSString
+        path = path.appendingPathExtension("realm")! as NSString
         return path as String
     }
 
-    public class var cacheSetPath: String {
-        var path: NSString = RLMRealmConfiguration.defaultConfiguration().fileURL!.path!
-        path = path.stringByDeletingLastPathComponent
-        path = path.stringByAppendingPathComponent("cache_map")
-        path = path.stringByAppendingPathExtension("realm")!
+    open class var cacheSetPath: String {
+        var path: NSString = RLMRealmConfiguration.default().fileURL!.path as NSString
+        path = path.deletingLastPathComponent as NSString
+        path = path.appendingPathComponent("cache_map") as NSString
+        path = path.appendingPathExtension("realm")! as NSString
         return path as String
     }
 
-    public class func migrateCache() {
-        EntryCacheList.realm
-        TrackCacheSet.realm
+    open class func migrateCache() {
+        let _ = EntryCacheList.realm
+        let _ = TrackCacheSet.realm
     }
 
 
-    private class func addIdToTrack(migration: RLMMigration) {
+    fileprivate class func addIdToTrack(_ migration: RLMMigration) {
         migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
-            if let old = oldObject, new =  newObject {
+            if let old = oldObject, let new =  newObject {
                 let properties = ["title", "streamUrl", "thumbnailUrl"]
                 for prop in properties {
                     new[prop] = old[prop]
@@ -182,13 +182,13 @@ public class RealmMigration {
         }
     }
 
-    private class func addTimestampsTo(className: String, migration: RLMMigration) {
+    fileprivate class func addTimestampsTo(_ className: String, migration: RLMMigration) {
         var number: Float = 0
         migration.enumerateObjects(className) { oldObject, newObject in
-            if let _ = oldObject, new = newObject {
-                new["createdAt"] = NSNumber(longLong: NSDate().timestamp)
-                new["updatedAt"] = NSNumber(longLong: NSDate().timestamp)
-                new["number"]    = NSNumber(float: number)
+            if let _ = oldObject, let new = newObject {
+                new["createdAt"] = NSNumber(value: Date().timestamp)
+                new["updatedAt"] = NSNumber(value: Date().timestamp)
+                new["number"]    = NSNumber(value: number as Float)
                 number -= 1
             }
         }

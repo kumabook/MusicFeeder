@@ -7,27 +7,27 @@
 //
 
 import Foundation
-import ReactiveCocoa
+import ReactiveSwift
 import Result
 
-public class PlaylistRepository {
-    public let playlist: Playlist
+open class PlaylistRepository {
+    open let playlist: Playlist
     public init(playlist: Playlist) {
         self.playlist = playlist
     }
 
     deinit {}
 
-    public func fetchTracks() -> SignalProducer<(Int, Track), NSError> {
-        return playlist.getTracks().enumerate().map {
+    open func fetchTracks() -> SignalProducer<(Int, Track), NSError> {
+        return playlist.getTracks().enumerated().map {
             fetchTrack($0, track: $1)
-        }.reduce(SignalProducer<(Int, Track), NSError>.empty, combine: { (c, n) in c.concat(n) })
+        }.reduce(SignalProducer<(Int, Track), NSError>.empty, { (c, n) in c.concat(n) })
     }
 
-    private func fetchTrack(index: Int, track: Track) -> SignalProducer<(Int, Track), NSError> {
+    fileprivate func fetchTrack(_ index: Int, track: Track) -> SignalProducer<(Int, Track), NSError> {
         return track.fetchDetail().map { _track -> (Int, Track) in
-            Playlist.notifyChange(.TrackUpdated(self.playlist, track))
-            self.playlist.observer.sendNext(PlaylistEvent.Load(index: index))
+            Playlist.notifyChange(.trackUpdated(self.playlist, track))
+            self.playlist.observer.send(value: PlaylistEvent.load(index: index))
             return (index, track)
         }
     }

@@ -23,15 +23,15 @@ public enum HistoryType: String {
     }
 }
 
-public class History: Equatable, Hashable {
-    public var id:         String
-    public var type:       HistoryType
-    public var timestamp:  Int64
+open class History: Equatable, Hashable {
+    open var id:         String
+    open var type:       HistoryType
+    open var timestamp:  Int64
     
-    public var entry: Entry?
-    public var track: Track?
+    open var entry: Entry?
+    open var track: Track?
     
-    public var hashValue: Int {
+    open var hashValue: Int {
         return id.hashValue
     }
     
@@ -47,7 +47,7 @@ public class History: Equatable, Hashable {
         }
     }
     
-    public func toStoreObject() -> HistoryStore {
+    open func toStoreObject() -> HistoryStore {
         return HistoryStore(id: id, timestamp: timestamp, type: type.rawValue)
     }
 }

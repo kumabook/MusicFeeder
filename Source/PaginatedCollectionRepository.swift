@@ -7,31 +7,31 @@
 //
 
 import FeedlyKit
-import ReactiveCocoa
+import ReactiveSwift
 import Result
 
 public enum PaginatedCollectionRepositoryState {
-    case Init
-    case FetchingCache
-    case CacheOnly
-    case CacheOnlyFetching
-    case Normal
-    case Fetching
-    case Complete
-    case Error
+    case `init`
+    case fetchingCache
+    case cacheOnly
+    case cacheOnlyFetching
+    case normal
+    case fetching
+    case complete
+    case error
 }
 
 public enum PaginatedCollectionRepositoryEvent {
-    case StartLoadingCache
-    case CompleteLoadingCache
-    case StartLoadingLatest
-    case CompleteLoadingLatest
-    case StartLoadingNext
-    case CompleteLoadingNext
-    case FailToLoadNext
-    case CompleteLoadingPlaylist(Playlist, Entry)
-    case CompleteLoadingTrackDetail(Track)
-    case RemoveAt(Int)
+    case startLoadingCache
+    case completeLoadingCache
+    case startLoadingLatest
+    case completeLoadingLatest
+    case startLoadingNext
+    case completeLoadingNext
+    case failToLoadNext
+    case completeLoadingPlaylist(Playlist, Entry)
+    case completeLoadingTrackDetail(Track)
+    case removeAt(Int)
 }
 
 public protocol PaginatedCollection {
@@ -45,20 +45,20 @@ public protocol PaginatedCollection {
     var items:        [ItemType] { get }
 }
 
-public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.ItemType == I> {
-    public internal(set) var stream:       Stream
-    public internal(set) var state:        PaginatedCollectionRepositoryState
-    public internal(set) var items:        [I] { didSet(newItems) { itemsUpdated() }}
-    public internal(set) var cacheItems:   [I] { didSet(newItems) { cacheItemsUpdated() }}
-    public internal(set) var continuation: String?
-    public internal(set) var lastUpdated:  Int64?
-    public internal(set) var signal:       Signal<PaginatedCollectionRepositoryEvent, NSError>
-    public internal(set) var observer:     Signal<PaginatedCollectionRepositoryEvent, NSError>.Observer
-    public internal(set) var unreadOnly:   Bool
-    public internal(set) var perPage:      Int
-    public internal(set) var disposable:   Disposable?
+open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.ItemType == I {
+    open internal(set) var stream:       FeedlyKit.Stream
+    open internal(set) var state:        PaginatedCollectionRepositoryState
+    open internal(set) var items:        [I] { didSet(newItems) { itemsUpdated() }}
+    open internal(set) var cacheItems:   [I] { didSet(newItems) { cacheItemsUpdated() }}
+    open internal(set) var continuation: String?
+    open internal(set) var lastUpdated:  Int64?
+    open internal(set) var signal:       Signal<PaginatedCollectionRepositoryEvent, NSError>
+    open internal(set) var observer:     Signal<PaginatedCollectionRepositoryEvent, NSError>.Observer
+    open internal(set) var unreadOnly:   Bool
+    open internal(set) var perPage:      Int
+    open internal(set) var disposable:   Disposable?
 
-    public var paginationParams: MusicFeeder.PaginationParams {
+    open var paginationParams: MusicFeeder.PaginationParams {
         let params          = MusicFeeder.PaginationParams()
         params.continuation = continuation
         params.unreadOnly   = unreadOnly
@@ -66,7 +66,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         return params
     }
 
-    public var paginationParamsForLatest: MusicFeeder.PaginationParams {
+    open var paginationParamsForLatest: MusicFeeder.PaginationParams {
         let params        = MusicFeeder.PaginationParams()
         params.newerThan  = lastUpdated
         params.unreadOnly = unreadOnly
@@ -74,11 +74,11 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         return params
     }
 
-    public init(stream: Stream, unreadOnly: Bool, perPage: Int) {
+    public init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
         self.stream      = stream
         self.unreadOnly  = unreadOnly
         self.perPage     = perPage
-        state            = .Init
+        state            = .init
         lastUpdated      = nil
         items            = []
         cacheItems       = []
@@ -91,28 +91,28 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         }
     }
 
-    public func dispose() {
+    open func dispose() {
         disposable?.dispose()
         disposable = nil
     }
 
-    public func itemsUpdated() {}
-    public func cacheItemsUpdated() {}
+    open func itemsUpdated() {}
+    open func cacheItemsUpdated() {}
     
-    public func getItems() -> [I] {
+    open func getItems() -> [I] {
         switch state {
-        case .FetchingCache:
+        case .fetchingCache:
             return cacheItems
-        case .CacheOnly:
+        case .cacheOnly:
             return cacheItems
-        case .CacheOnlyFetching:
+        case .cacheOnlyFetching:
             return cacheItems
         default:
             return items
         }
     }
 
-    public func fetchCollection(streamId streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<C, NSError> {
+    open func fetchCollection(streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<C, NSError> {
         return SignalProducer<C, NSError>.empty
     }
 
@@ -120,36 +120,36 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
         lastUpdated = Int64(NSDate().timeIntervalSince1970 * 1000)
     }
 
-    public func fetchCacheItems() {
-        state = .FetchingCache
-        dispatch_async(dispatch_get_main_queue()) {
-            self.observer.sendNext(.StartLoadingCache)
+    open func fetchCacheItems() {
+        state = .fetchingCache
+        DispatchQueue.main.async() {
+            self.observer.send(value: .startLoadingCache)
             self.loadCacheItems()
-            self.state = .CacheOnly
-            dispatch_async(dispatch_get_main_queue()) {
-                self.observer.sendNext(.CompleteLoadingCache)
+            self.state = .cacheOnly
+            DispatchQueue.main.async() {
+                self.observer.send(value: .completeLoadingCache)
             }
         }
     }
     
-    public func fetchLatestItems() {
-        if state != .Init && state != .CacheOnly && state != .Normal && state != .Error {
+    open func fetchLatestItems() {
+        if state != .init && state != .cacheOnly && state != .normal && state != .error {
             return
         }
-        if state == .CacheOnly {
-            state = .CacheOnlyFetching
+        if state == .cacheOnly {
+            state = .cacheOnlyFetching
         } else {
-            state = .Fetching
+            state = .fetching
         }
         let producer = fetchCollection(streamId: stream.streamId,
                                paginationParams: paginationParamsForLatest)
         UIScheduler().schedule {
-            self.observer.sendNext(.StartLoadingLatest)
+            self.observer.send(value: .startLoadingLatest)
         }
         disposable = producer
-            .startOn(QueueScheduler())
+            .start(on: QueueScheduler())
             .on(
-                next: { paginatedCollection in
+                value: { paginatedCollection in
                     let latestItems = paginatedCollection.items
                     self.items = latestItems
                     self.updateLastUpdated()
@@ -159,13 +159,13 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     self.addCacheItems(self.items)
                     self.loadCacheItems()
                     UIScheduler().schedule {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.observer.sendNext(.CompleteLoadingLatest) // First reload tableView,
+                        DispatchQueue.main.async() {
+                            self.observer.send(value: .completeLoadingLatest) // First reload tableView,
                         }
                         if paginatedCollection.continuation == nil {   // then wait for next load
-                            self.state = .Complete
+                            self.state = .complete
                         } else {
-                            self.state = .Normal
+                            self.state = .normal
                         }
                     }
                 },
@@ -174,25 +174,25 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                 }
             ).start()
     }
-    public func fetchItems() {
-        if state != .Init && state != .CacheOnly && state != .Normal && state != .Error {
+    open func fetchItems() {
+        if state != .init && state != .cacheOnly && state != .normal && state != .error {
             return
         }
-        if state == .CacheOnly {
-            state = .CacheOnlyFetching
+        if state == .cacheOnly {
+            state = .cacheOnlyFetching
         } else {
-            state = .Fetching
+            state = .fetching
         }
-        dispatch_async(dispatch_get_main_queue()) {
-            self.observer.sendNext(.StartLoadingNext)
+        DispatchQueue.main.async() {
+            self.observer.send(value: .startLoadingNext)
         }
         let producer = fetchCollection(streamId: stream.streamId, paginationParams: paginationParams)
         disposable = producer
-            .startOn(QueueScheduler())
+            .start(on: QueueScheduler())
             .on(
-                next: { paginatedCollection in
+                value: { paginatedCollection in
                     let items = paginatedCollection.items
-                    self.items.appendContentsOf(items)
+                    self.items.append(contentsOf: items)
                     self.continuation = paginatedCollection.continuation
                     if self.lastUpdated == nil {
                         self.updateLastUpdated()
@@ -203,27 +203,27 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                     }
                     self.loadCacheItems()
                     UIScheduler().schedule {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.observer.sendNext(.CompleteLoadingNext)
+                        DispatchQueue.main.async() {
+                            self.observer.send(value: .completeLoadingNext)
                         }
                         if paginatedCollection.continuation == nil {
-                            self.state = .Complete
+                            self.state = .complete
                         } else {
-                            self.state = .Normal
+                            self.state = .normal
                         }
                     }
                 },
                 failed: {error in
                     CloudAPIClient.handleError(error: error)
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.observer.sendNext(.FailToLoadNext)
+                    DispatchQueue.main.async() {
+                        self.observer.send(value: .failToLoadNext)
                     }
-                    self.state = .Error
+                    self.state = .error
                 },
                 completed: {
             }).start()
     }
-    public func addCacheItems(items: [C.ItemType]) {}
-    public func loadCacheItems() {}
-    public func clearCacheItems() {}
+    open func addCacheItems(_ items: [C.ItemType]) {}
+    open func loadCacheItems() {}
+    open func clearCacheItems() {}
 }

@@ -32,18 +32,18 @@ extension Entry {
         visual          = store.visual.map  { Visual(store: $0) }
         summary         = store.summary.map { Content(store: $0) }
 
-        alternate  = store.alternate.map  { return Link(store: $0 as! LinkStore) }
-        keywords   = store.keywords.map   { return ($0 as! KeywordStore).name }
-        tags       = store.tags.map       { return Tag(store: $0 as! TagStore) }
-        categories = store.categories.map { return Category(store: $0 as! CategoryStore) }
-        enclosure  = store.enclusure.map  { return Link(store: $0 as! LinkStore) }
+        alternate  = realize(store.alternate).map  { return Link(store: $0 as! LinkStore) }
+        keywords   = realize(store.keywords).map   { return ($0 as! KeywordStore).name }
+        tags       = realize(store.tags).map       { return Tag(store: $0 as! TagStore) }
+        categories = realize(store.categories).map { return Category(store: $0 as! CategoryStore) }
+        enclosure  = realize(store.enclusure).map  { return Link(store: $0 as! LinkStore) }
     }
     func toStoreObject() -> EntryStore {
         let store = EntryStore()
         updateProperties(store)
         return store
     }
-    func updateProperties(store: EntryStore) {
+    func updateProperties(_ store: EntryStore) {
         store.id              = id
         store.title           = title
         store.author          = author
@@ -64,15 +64,15 @@ extension Entry {
         store.summary       = summary?.toStoreObject()
 
         store.alternate  = RLMArray(objectClassName: LinkStore.className())
-        for item in alternate ?? [] { store.alternate.addObject(item.toStoreObject()) }
+        for item in alternate ?? [] { store.alternate.add(item.toStoreObject()) }
         store.keywords   = RLMArray(objectClassName: KeywordStore.className())
-        for item in keywords  ?? [] { store.keywords.addObject(KeywordStore(name: item)) }
+        for item in keywords  ?? [] { store.keywords.add(KeywordStore(name: item)) }
         store.tags       = RLMArray(objectClassName: TagStore.className())
-        for item in tags      ?? [] { store.tags.addObject(item.toStoreObject()) }
+        for item in tags      ?? [] { store.tags.add(item.toStoreObject()) }
         store.categories = RLMArray(objectClassName: CategoryStore.className())
-        for item in categories      { store.categories.addObject(item.toStoreObject()) }
+        for item in categories      { store.categories.add(item.toStoreObject()) }
         store.enclusure  = RLMArray(objectClassName: LinkStore.className())
-        for item in enclosure ?? [] { store.enclusure.addObject(item.toStoreObject()) }
+        for item in enclosure ?? [] { store.enclusure.add(item.toStoreObject()) }
     }
 }
 
@@ -195,7 +195,7 @@ public class VisualStore: RLMObject {
     }
 }
 
-public class EntryStore: RLMObject {
+open class EntryStore: RLMObject {
     dynamic var id:              String = ""
     dynamic var title:           String?
     dynamic var author:          String?
@@ -221,27 +221,27 @@ public class EntryStore: RLMObject {
 
     class var realm: RLMRealm {
         get {
-            return RLMRealm.defaultRealm()
+            return RLMRealm.default()
         }
     }
 
-    override public class func primaryKey() -> String {
+    override open class func primaryKey() -> String {
         return "id"
     }
 
-    public override class func requiredProperties() -> [String] {
+    override open class func requiredProperties() -> [String] {
         return ["id"]
     }
 
-    public class func findOrCreate(entry: Entry) -> EntryStore {
+    public class func findOrCreate(_ entry: Entry) -> EntryStore {
         if let store = findBy(id: entry.id) {
             return store
         }
         return entry.toStoreObject()
     }
 
-    public class func findBy(id id: String) -> EntryStore? {
-        let results = EntryStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+    public class func findBy(id: String) -> EntryStore? {
+        let results = EntryStore.objects(in: realm, with: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil
         } else {
@@ -250,26 +250,26 @@ public class EntryStore: RLMObject {
     }
 
     public class func findAll() -> [EntryStore] {
-        let results = EntryStore.allObjectsInRealm(realm)
+        let results = EntryStore.allObjects(in: realm)
         var entryStores: [EntryStore] = []
-        for result in results {
+        for result in realizeResults(results) {
             entryStores.append(result as! EntryStore)
         }
         return entryStores
     }
 
-    public class func create(entry: Entry) -> Bool {
+    public class func create(_ entry: Entry) -> Bool {
         if let _ = findBy(id: entry.id) { return false }
         let store = entry.toStoreObject()
-        try! realm.transactionWithBlock() {
-            self.realm.addObject(store)
+        try! realm.transaction() {
+            self.realm.add(store)
         }
         return true
     }
 
-    public class func save(entry: Entry) -> Bool {
+    public class func save(_ entry: Entry) -> Bool {
         if let store = findBy(id: entry.id) {
-            try! realm.transactionWithBlock() {
+            try! realm.transaction() {
                 entry.updateProperties(store)
             }
             return true
@@ -278,16 +278,16 @@ public class EntryStore: RLMObject {
         }
     }
 
-    public class func remove(entry: EntryStore) {
+    public class func remove(_ entry: EntryStore) {
         if let store = findBy(id: entry.id) {
-            try! realm.transactionWithBlock() {
-                self.realm.deleteObject(store)
+            try! realm.transaction() {
+                self.realm.delete(store)
             }
         }
     }
 
     public class func removeAll() {
-        try! realm.transactionWithBlock() {
+        try! realm.transaction() {
             self.realm.deleteAllObjects()
         }
     }

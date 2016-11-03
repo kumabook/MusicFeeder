@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import ReactiveCocoa
+import ReactiveSwift
 import FeedlyKit
 
-public class SavedStream: Stream {
+open class SavedStream: FeedlyKit.Stream {
     let id:    String
     let title: String
 
@@ -18,22 +18,22 @@ public class SavedStream: Stream {
         self.id    = id
         self.title = title
     }
-    override public var streamId: String {
+    override open var streamId: String {
         return id
     }
-    override public var streamTitle: String {
+    override open var streamTitle: String {
         return title
     }
-    override public var thumbnailURL: NSURL? {
+    override open var thumbnailURL: URL? {
         return nil
     }
-    override public var hashValue: Int {
+    override open var hashValue: Int {
         return streamId.hashValue
     }
 }
 
-public class SavedStreamRepository: EntryRepository {
-    public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
+open class SavedStreamRepository: EntryRepository {
+    public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
     }
 
@@ -45,21 +45,21 @@ public class SavedStreamRepository: EntryRepository {
         self.init(stream: SavedStream(id: id, title: title), unreadOnly: false, perPage: CloudAPIClient.perPage)
     }
 
-    public override func fetchCacheItems() {
+    open override func fetchCacheItems() {
         fetchItems()
     }
 
-    public override func fetchCollection(streamId streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    open override func fetchCollection(streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
         return SignalProducer { (observer, disposable) in
             QueueScheduler().schedule {
                 // TODO: support pagination
-                let entries: [Entry] = EntryStore.findAll().map { Entry(store: $0) }.reverse()
+                let entries: [Entry] = EntryStore.findAll().map { Entry(store: $0) }.reversed()
                 self.playlistifier = entries.map { self.loadPlaylistOfEntry($0) }
-                                            .reduce(SignalProducer<(Track, Playlist), NSError>.empty, combine: { $0.concat($1) })
+                                            .reduce(SignalProducer<(Track, Playlist), NSError>.empty, { $0.concat($1) })
                                             .start()
                 self.items = entries
                 UIScheduler().schedule {
-                    self.observer.sendNext(.CompleteLoadingLatest)
+                    self.observer.send(value: .completeLoadingLatest)
                 }
             }
         }

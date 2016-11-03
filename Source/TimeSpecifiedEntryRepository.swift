@@ -9,17 +9,17 @@
 import Foundation
 import FeedlyKit
 
-public class TimeSpecifiedEntryRepository: EntryRepository {
+open class TimeSpecifiedEntryRepository: EntryRepository {
     var newerThan: Int64
     var olderThan: Int64
     
-    public init(stream: Stream, unreadOnly: Bool, perPage: Int, newerThan: Int64, olderThan: Int64) {
+    public init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int, newerThan: Int64, olderThan: Int64) {
         self.newerThan = newerThan
         self.olderThan = olderThan
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
     }
     
-    public override var paginationParams: MusicFeeder.PaginationParams {
+    open override var paginationParams: MusicFeeder.PaginationParams {
         let params          = MusicFeeder.PaginationParams()
         params.continuation = continuation
         params.unreadOnly   = unreadOnly
@@ -29,7 +29,7 @@ public class TimeSpecifiedEntryRepository: EntryRepository {
         return params
     }
     
-    public override var paginationParamsForLatest: MusicFeeder.PaginationParams {
+    open override var paginationParamsForLatest: MusicFeeder.PaginationParams {
         let params        = MusicFeeder.PaginationParams()
         params.unreadOnly = unreadOnly
         params.count      = perPage

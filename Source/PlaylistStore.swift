@@ -8,55 +8,72 @@
 
 import Foundation
 import Realm
-
 import FeedlyKit
 
-extension RLMArray: SequenceType {
-    public func generate() -> NSFastGenerator {
-        return NSFastGenerator(self)
+/*
+extension RLMArray: Sequence {
+    public func makeIterator() -> NSFastEnumerationIterator {
+        return NSFastEnumerationIterator(self)
     }
 }
-extension RLMResults: SequenceType {
-    public func generate() -> NSFastGenerator {
-        return NSFastGenerator(self)
+extension RLMResults: Sequence {
+    public func makeIterator() -> NSFastEnumerationIterator {
+        return NSFastEnumerationIterator(self)
     }
+}
+*/
+
+func realize<O: RLMObject>(_ array: RLMArray<O>) -> [O] {
+    var items: [O] = []
+    for i in 0..<array.count {
+        items.append(array.object(at: i))
+    }
+    return items
+}
+
+func realizeResults<O: RLMObject>(_ results: RLMResults<O>) -> [O] {
+    var items: [O] = []
+    for i in 0..<results.count {
+        items.append(results.object(at: i))
+    }
+    return items    
 }
 
 public enum PersistentResult {
-    case Success
-    case ExceedLimit
-    case Failure
+    case success
+    case exceedLimit
+    case failure
 }
 
 public enum OrderType {
-    case Desc
-    case Asc
+    case desc
+    case asc
 }
 
 public enum OrderBy {
-    case CreatedAt(OrderType)
-    case UpdatedAt(OrderType)
-    case Title(OrderType)
-    case Number(OrderType)
+    case createdAt(OrderType)
+    case updatedAt(OrderType)
+    case title(OrderType)
+    case number(OrderType)
     var name: String {
         switch self {
-        case CreatedAt: return "createdAt"
-        case UpdatedAt: return "updatedAt"
-        case Title:     return "title"
-        case Number:    return "number"
+        case .createdAt: return "createdAt"
+        case .updatedAt: return "updatedAt"
+        case .title:     return "title"
+        case .number:    return "number"
         }
     }
     var ascending: Bool {
         switch self {
-        case CreatedAt(let orderType): return orderType == .Asc
-        case UpdatedAt(let orderType): return orderType == .Asc
-        case Title(let orderType):     return orderType == .Asc
-        case Number(let orderType):    return orderType == .Asc
+        case .createdAt(let orderType): return orderType == .asc
+        case .updatedAt(let orderType): return orderType == .asc
+        case .title(let orderType):     return orderType == .asc
+        case .number(let orderType):    return orderType == .asc
         }
     }
 }
 
-public class PlaylistStore: RLMObject {
+open class PlaylistStore: RLMObject {
     dynamic var id:        String = ""
     dynamic var title:     String = ""
     dynamic var createdAt: Int64  = 0
@@ -64,39 +81,39 @@ public class PlaylistStore: RLMObject {
     dynamic var number:    Float  = 0
     dynamic var tracks = RLMArray(objectClassName: TrackStore.className())
 
-    public override class func primaryKey() -> String {
+    open override class func primaryKey() -> String {
         return "id"
     }
 
     class var realm: RLMRealm {
         get {
-            return RLMRealm.defaultRealm()
+            return RLMRealm.default()
         }
     }
 
-    internal class func removeTrackAtIndex(index: UInt, playlist: Playlist) {
+    internal class func removeTrackAtIndex(_ index: UInt, playlist: Playlist) {
         if let store = findBy(id: playlist.id) {
-            try! realm.transactionWithBlock() {
-                store.tracks.removeObjectAtIndex(index)
+            try! realm.transaction() {
+                store.tracks.removeObject(at: index)
             }
         }
     }
 
-    internal func insertTrack(trackStore: TrackStore, atIndex: UInt) -> PersistentResult {
+    internal func insertTrack(_ trackStore: TrackStore, atIndex: UInt) -> PersistentResult {
         if Int(tracks.count) + 1 > Playlist.trackNumberLimit {
-            return .ExceedLimit
+            return .exceedLimit
         }
         do {
-            try realm!.transactionWithBlock() {
-                tracks.insertObject(trackStore, atIndex: atIndex)
+            try PlaylistStore.realm.transaction() {
+                tracks.insert(trackStore, at: atIndex)
             }
-            return .Success
+            return .success
         } catch {
-            return .Failure
+            return .failure
         }
     }
 
-    internal class func appendTracks(tracks: [Track], playlist: Playlist) -> PersistentResult {
+    internal class func appendTracks(_ tracks: [Track], playlist: Playlist) -> PersistentResult {
         let trackStores: [TrackStore] = tracks.map({ track in
             if let trackStore = TrackStore.findBy(url: track.url) { return trackStore }
             else                                                  { return track.toStoreObject() }
@@ -104,55 +121,55 @@ public class PlaylistStore: RLMObject {
 
         if let store = findBy(id: playlist.id) {
             if Int(store.tracks.count) + trackStores.count > Playlist.trackNumberLimit {
-                return .ExceedLimit
+                return .exceedLimit
             }
             do {
-                try realm.transactionWithBlock() {
-                    store.tracks.addObjects(trackStores)
+                try realm.transaction() {
+                    store.tracks.addObjects(trackStores as NSFastEnumeration)
                 }
-                return .Success
+                return .success
             } catch {
-                return .Failure
+                return .failure
             }
         }
-        return .Failure
+        return .failure
     }
 
-    internal func moveTrackAtIndex(sourceIndex: UInt, toIndex: UInt) -> PersistentResult {
+    internal func moveTrackAtIndex(_ sourceIndex: UInt, toIndex: UInt) -> PersistentResult {
         do {
-            try realm!.transactionWithBlock() {
-                tracks.moveObjectAtIndex(sourceIndex, toIndex: toIndex)
+            try PlaylistStore.realm.transaction() {
+                tracks.moveObject(at: sourceIndex, to: toIndex)
             }
-            return .Success
+            return .success
         } catch {
-            return .Failure
+            return .failure
         }
     }
 
-    internal class func create(playlist: Playlist) -> PersistentResult {
+    internal class func create(_ playlist: Playlist) -> PersistentResult {
         if Int(PlaylistStore.findAll().count+1) > Playlist.playlistNumberLimit {
-            return .ExceedLimit
+            return .exceedLimit
         }
-        if let _ = findBy(id: playlist.id) { return .Failure }
+        if let _ = findBy(id: playlist.id) { return .failure }
         let store = playlist.toStoreObject()
-        store.createdAt = NSDate().timestamp
+        store.createdAt = Date().timestamp
         store.number    = Float(PlaylistStore.findAll().count)
         do {
-            try realm.transactionWithBlock() {
-                self.realm.addObject(store)
+            try realm.transaction() {
+                self.realm.add(store)
             }
-            return .Success
+            return .success
         } catch {
-            return .Failure
+            return .failure
         }
     }
 
-    internal class func save(playlist: Playlist) -> Bool {
+    internal class func save(_ playlist: Playlist) -> Bool {
         if let store = findBy(id: playlist.id) {
-            try! realm.transactionWithBlock() {
+            try! realm.transaction() {
                 store.title = playlist.title
                 store.number = playlist.number
-                store.updatedAt = NSDate().timestamp
+                store.updatedAt = Date().timestamp
             }
             return true
         } else {
@@ -160,12 +177,12 @@ public class PlaylistStore: RLMObject {
         }
     }
 
-    internal class func findAll(orderBy: OrderBy = OrderBy.Number(.Desc)) -> RLMResults {
-        return PlaylistStore.allObjectsInRealm(realm).sortedResultsUsingProperty(orderBy.name, ascending: orderBy.ascending)
+    internal class func findAll(_ orderBy: OrderBy = OrderBy.number(.desc)) -> RLMResults<RLMObject> {
+        return PlaylistStore.allObjects(in: realm).sortedResults(usingProperty: orderBy.name, ascending: orderBy.ascending)
     }
 
-    internal class func findBy(id id: String) -> PlaylistStore? {
-        let results = PlaylistStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+    internal class func findBy(id: String) -> PlaylistStore? {
+        let results = PlaylistStore.objects(in: realm, with: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil
         } else {
@@ -173,16 +190,16 @@ public class PlaylistStore: RLMObject {
         }
     }
 
-    internal class func remove(playlist: Playlist) {
+    internal class func remove(_ playlist: Playlist) {
         if let store = findBy(id: playlist.id) {
-            try! realm.transactionWithBlock() {
-                self.realm.deleteObject(store)
+            try! realm.transaction() {
+                self.realm.delete(store)
             }
         }
     }
 
     internal class func removeAll() {
-        try! realm.transactionWithBlock() {
+        try! realm.transaction() {
             self.realm.deleteAllObjects()
         }
     }

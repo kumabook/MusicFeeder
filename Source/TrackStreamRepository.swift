@@ -7,19 +7,19 @@
 //
 
 import FeedlyKit
-import ReactiveCocoa
+import ReactiveSwift
 import Result
 
-public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrackCollection, Track> {
+open class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrackCollection, Track> {
     public typealias State = PaginatedCollectionRepositoryState
     public typealias Event = PaginatedCollectionRepositoryEvent
     
-    public private(set) var feedlyClient        = CloudAPIClient.sharedInstance
-    public private(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
+    open fileprivate(set) var feedlyClient        = CloudAPIClient.sharedInstance
+    open fileprivate(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
 
-    public private(set) var playlistQueue: PlaylistQueue = PlaylistQueue(playlists: [])
+    open fileprivate(set) var playlistQueue: PlaylistQueue = PlaylistQueue(playlists: [])
 
-    public override func fetchCollection(streamId streamId: String, paginationParams: MusicFeeder.PaginationParams)-> SignalProducer<PaginatedTrackCollection, NSError> {
+    open override func fetchCollection(streamId: String, paginationParams: MusicFeeder.PaginationParams)-> SignalProducer<PaginatedTrackCollection, NSError> {
         return feedlyClient.fetchTracksOf(streamId, paginationParams: paginationParams)
     }
 
@@ -27,33 +27,33 @@ public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrack
         dispose()
     }
     
-    public var detailLoader: Disposable?
+    open var detailLoader: Disposable?
     
-    public override init(stream: Stream, unreadOnly: Bool, perPage: Int) {
+    public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
     }
     // MARK: - PaginatedCollectionRepository protocol
     
-    public override func addCacheItems(items: [Track]) {
-        TrackCacheList.findOrCreate(stream.streamId).add(items)
+    open override func addCacheItems(_ items: [Track]) {
+        let _ = TrackCacheList.findOrCreate(stream.streamId).add(items)
     }
-    public override func loadCacheItems() {
-        cacheItems = TrackCacheList.findOrCreate(stream.streamId).items.map { Track(store: $0 as! TrackStore) }
+    open override func loadCacheItems() {
+        cacheItems = realize(TrackCacheList.findOrCreate(stream.streamId).items).map { Track(store: $0 as! TrackStore) }
     }
-    public override func clearCacheItems() {
-        TrackCacheList.findOrCreate(stream.streamId).clear()
+    open override func clearCacheItems() {
+        let _ = TrackCacheList.findOrCreate(stream.streamId).clear()
     }
-    public override func cacheItemsUpdated() {
+    open override func cacheItemsUpdated() {
         QueueScheduler().schedule() {
             self.cacheItems.forEach {
                 $0.loadPropertiesFromCache(false)
             }
             UIScheduler().schedule() {
-                self.observer.sendNext(.CompleteLoadingNext)
+                self.observer.send(value: .completeLoadingNext)
             }
         }
     }
-    public override func itemsUpdated() {
+    open override func itemsUpdated() {
         detailLoader?.dispose()
         self.playlistQueue = PlaylistQueue(playlists: [])
         QueueScheduler().schedule() {
@@ -61,7 +61,7 @@ public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrack
                 $0.loadPropertiesFromCache(true)
             }
             UIScheduler().schedule() {
-                self.observer.sendNext(.CompleteLoadingNext)
+                self.observer.send(value: .completeLoadingNext)
             }
             self.items.forEach {
                 let playlist = Playlist(id: $0.id, title: $0.title ?? "No title", tracks: [$0])
@@ -70,11 +70,11 @@ public class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrack
             self.detailLoader = self.items.map({ track in
                 return track.fetchDetail().map {
                     UIScheduler().schedule() {
-                        self.observer.sendNext(.CompleteLoadingTrackDetail(track))
+                        self.observer.send(value: .completeLoadingTrackDetail(track))
                     }
                     return $0
                 }
-            }).reduce(SignalProducer<Track, NSError>.empty, combine: { (currentSignal, nextSignal) in
+            }).reduce(SignalProducer<Track, NSError>.empty, { (currentSignal, nextSignal) in
                 currentSignal.concat(nextSignal)
             }).on(completed: {
             }).start()

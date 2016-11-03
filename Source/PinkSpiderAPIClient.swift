@@ -8,30 +8,30 @@
 
 import Foundation
 import SwiftyJSON
-import ReactiveCocoa
+import ReactiveSwift
 import Result
 import Alamofire
 import FeedlyKit
 
-public class PinkSpiderAPIClient {
+open class PinkSpiderAPIClient {
     static let baseUrl   = "http://pink-spider.herokuapp.com"
-    public static var sharedInstance = PinkSpiderAPIClient()
-    static var sharedManager: Alamofire.Manager! = Alamofire.Manager()
+    open static var sharedInstance = PinkSpiderAPIClient()
+    static var sharedManager: Alamofire.SessionManager! = Alamofire.SessionManager()
 
-    public func playlistify(targetUrl: NSURL, errorOnFailure: Bool) -> SignalProducer<Playlist, NSError> {
+    open func playlistify(_ targetUrl: NSURL, errorOnFailure: Bool) -> SignalProducer<Playlist, NSError> {
         return SignalProducer { (observer, disposable) in
             let url = String(format: "%@/playlistify", PinkSpiderAPIClient.baseUrl)
-            let request = PinkSpiderAPIClient.sharedManager.request(.GET, url, parameters: ["url": targetUrl], encoding: ParameterEncoding.URL)
-            .responseJSON(options: NSJSONReadingOptions()) { response in
+            let request = PinkSpiderAPIClient.sharedManager.request(url, parameters: ["url": targetUrl], encoding: URLEncoding.default)
+            .responseJSON(options: JSONSerialization.ReadingOptions()) { response in
                 if let e = response.result.error {
-                    if errorOnFailure { observer.sendFailed(e as NSError) }
+                    if errorOnFailure { observer.send(error: e as NSError) }
                     else              { observer.sendCompleted() }
                 } else {
-                    observer.sendNext(Playlist(json: JSON(response.result.value!)))
+                    observer.send(value: Playlist(json: JSON(response.result.value!)))
                     observer.sendCompleted()
                 }
             }
-            disposable.addDisposable {
+            disposable.add() {
                 request.cancel()
             }
         }

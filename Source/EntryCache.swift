@@ -24,17 +24,17 @@ public final class EntryCacheList: RLMObject, CacheList {
     dynamic public var items:     RLMArray = RLMArray(objectClassName: EntryStore.className())
 
     public static func deleteAllItems() {
-        materialize(try realm.transactionWithBlock()
+        let _ = materialize(try realm.transaction()
             {
-                realm.deleteObjects(EntryStore.allObjectsInRealm(realm))
-                realm.deleteObjects(allObjectsInRealm(realm))
+                realm.deleteObjects(EntryStore.allObjects(in: realm))
+                realm.deleteObjects(allObjects(in: realm))
             }
         )
     }
 }
 
 extension Entry: Cacheable {
-    public func toCacheStoreObject(realm: RLMRealm) -> EntryStore {
+    public func toCacheStoreObject(_ realm: RLMRealm) -> EntryStore {
         return toStoreObject()
     }
 }

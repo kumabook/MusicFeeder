@@ -10,17 +10,17 @@ import Foundation
 import ReactiveCocoa
 import Result
 
-public class TrackRepository {
-    public static var sharedInstance: TrackRepository = TrackRepository()
+open class TrackRepository {
+    open static var sharedInstance: TrackRepository = TrackRepository()
 
-    public func getCacheTrackStore(id: String) -> TrackStore? {
-        if let entity = TrackCacheSet.get(id), store = entity.item {
+    open func getCacheTrackStore(_ id: String) -> TrackStore? {
+        if let entity = TrackCacheSet.get(id), let store = entity.item {
             return store
         }
         return nil
     }
 
-    public func cacheTrack(track: Track) {
-        TrackCacheSet.set(track.id, item: track)
+    open func cacheTrack(_ track: Track) {
+        let _ = TrackCacheSet.set(track.id, item: track)
     }
 }

@@ -33,7 +33,7 @@ extension Entry {
         return self.storedTracks!
     }
     
-    private var storedTracks: [Track]? {
+    fileprivate var storedTracks: [Track]? {
         get {
             guard let tracks = objc_getAssociatedObject(self, &StoredPropertyKeyForTracks) as? [Track] else {
                 return nil

@@ -24,17 +24,17 @@ public final class TopicCacheList: RLMObject, CacheList {
     dynamic public var items:     RLMArray = RLMArray(objectClassName: TopicCacheList.objectClassName)
     
     public static func deleteAllItems() {
-        materialize(try realm.transactionWithBlock()
+        let _ = materialize(try realm.transaction()
             {
-                realm.deleteObjects(TopicStore.allObjectsInRealm(realm))
-                realm.deleteObjects(allObjectsInRealm(realm))
+                realm.deleteObjects(TopicStore.allObjects(in: realm))
+                realm.deleteObjects(allObjects(in: realm))
             }
         )
     }
 }
 
 extension Topic: Cacheable {
-    public func toCacheStoreObject(realm: RLMRealm) -> TopicStore {
+    public func toCacheStoreObject(_ realm: RLMRealm) -> TopicStore {
         return toStoreObject()
     }
 }

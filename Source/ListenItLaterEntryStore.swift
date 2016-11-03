@@ -10,15 +10,15 @@ import Foundation
 import Realm
 import FeedlyKit
 
-public class ListenItLaterEntryStore: EntryStore {
+open class ListenItLaterEntryStore: EntryStore {
     override class var realm: RLMRealm {
         return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.listenItLaterPath))
     }
 
-    public class func moveToSaved() {
+    open class func moveToSaved() {
         let entryStores = findAll()
         entryStores.forEach {
-            EntryStore.create(Entry(store: $0))
+            let _ = EntryStore.create(Entry(store: $0))
         }
         removeAll()
     }

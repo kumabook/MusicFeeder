@@ -9,13 +9,13 @@
 import Foundation
 import FeedlyKit
 
-public class TrackStream: Stream {
-    public private(set) var id:    String
-    public private(set) var title: String
-    public override var streamId: String {
+open class TrackStream: FeedlyKit.Stream {
+    open fileprivate(set) var id:    String
+    open fileprivate(set) var title: String
+    open override var streamId: String {
         return id
     }
-    public override var streamTitle: String {
+    open override var streamTitle: String {
         return title
     }
 

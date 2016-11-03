@@ -10,9 +10,9 @@ import Foundation
 import FeedlyKit
 
 public final class Journal: FeedlyKit.Stream {
-    public private(set) var id:          String
-    public private(set) var label:       String
-    public private(set) var description: String?
+    public fileprivate(set) var id:          String
+    public fileprivate(set) var label:       String
+    public fileprivate(set) var description: String?
 
     public override var streamId: String {
         return id

@@ -31,12 +31,13 @@ class TrackRespoistorySpec: QuickSpec {
                     started = false
                     completed = false
                     self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20, needsPlaylist: false)
-                    self.entryRepository.signal.observeNext({ event in
+                    self.entryRepository.signal.observeResult({ result in
+                        guard let event = result.value else { return }
                         switch event {
-                        case .StartLoadingNext:
+                        case .startLoadingNext:
                             started = true
                             break
-                        case .CompleteLoadingNext:
+                        case .completeLoadingNext:
                             completed = true
                             break
                         default:
@@ -52,7 +53,7 @@ class TrackRespoistorySpec: QuickSpec {
                     let entry = self.entryRepository.getItems()[0]
                     expect(entry.tracks.count).to(beGreaterThan(0))
                     let track = entry.tracks[0]
-                    expect(track.status).to(equal(Track.Status.Loading))
+                    expect(track.status).to(equal(Track.Status.loading))
                     expect(track.title!.characters.count).to(equal(0))
                     expect(track.thumbnailUrl).to(beNil())
 
@@ -67,9 +68,9 @@ class TrackRespoistorySpec: QuickSpec {
                     self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20, needsPlaylist: false)
                 }
                 it("fetches entries from cache") {
-                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.Init))
+                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.init))
                     self.entryRepository.fetchCacheItems()
-                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.CacheOnly))
+                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.cacheOnly))
                     expect(self.entryRepository.getItems().count).to(beGreaterThan(0))
                     if self.entryRepository.getItems().count > 0 {
                         let entry = self.entryRepository.getItems()[0]

@@ -10,10 +10,10 @@ import Foundation
 import FeedlyKit
 import SwiftyJSON
 
-public final class Topic: Stream, ResponseObjectSerializable, ResponseCollectionSerializable, ParameterEncodable {
-    public private(set) var id:          String
-    public private(set) var label:       String
-    public private(set) var description: String?
+public final class Topic: FeedlyKit.Stream, ResponseObjectSerializable, ResponseCollectionSerializable, ParameterEncodable {
+    public fileprivate(set) var id:          String
+    public fileprivate(set) var label:       String
+    public fileprivate(set) var description: String?
 
     public override var streamId: String {
         return id
@@ -23,12 +23,12 @@ public final class Topic: Stream, ResponseObjectSerializable, ResponseCollection
         return label
     }
 
-    public class func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Topic]? {
+    public class func collection(_ response: HTTPURLResponse, representation: Any) -> [Topic]? {
         let json = JSON(representation)
         return json.arrayValue.map({ Topic(json: $0) })
     }
 
-    @objc required public convenience init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required public convenience init?(response: HTTPURLResponse, representation: Any) {
         let json = JSON(representation)
         self.init(json: json)
     }
@@ -59,11 +59,11 @@ public final class Topic: Stream, ResponseObjectSerializable, ResponseCollection
         return store
     }
 
-    public func toParameters() -> [String : AnyObject] {
+    public func toParameters() -> [String : Any] {
         if let d = description {
-            return ["id": id, "label": label, "description": d]
+            return ["id": id as AnyObject, "label": label, "description": d]
         } else {
-            return ["id": id, "label": label]
+            return ["id": id as AnyObject, "label": label]
         }
     }
 }

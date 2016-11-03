@@ -16,14 +16,14 @@ extension Subscription {
         store.id        = streamId
         store.title     = streamTitle
         store.visualUrl = visualUrl ?? ""
-        store.categories.addObjects(categories.map { $0.toStoreObject() })
+        store.categories.addObjects(categories.map { $0.toStoreObject() } as NSArray)
         return store
     }
-    public class func findAll(orderBy: OrderBy = OrderBy.Number(.Desc)) -> [Subscription] {
+    public class func findAll(_ orderBy: OrderBy = OrderBy.number(.desc)) -> [Subscription] {
         var subscriptions: [Subscription] = []
         var categories: [FeedlyKit.Category] = []
-        for store in SubscriptionStore.findAll(orderBy) {
-            for c in store.categories {
+        for store in realizeResults(SubscriptionStore.findAll(orderBy)) {
+            for c in realize(store.categories) {
                 if let categoryStore: CategoryStore = c as? CategoryStore {
                     categories.append(FeedlyKit.Category(id: categoryStore.id, label: categoryStore.label))
                 }
@@ -38,48 +38,48 @@ extension Subscription {
     }
 }
 
-public class SubscriptionStore: RLMObject {
-    static var sharedOrderBy: OrderBy = OrderBy.Number(.Desc)
-    public dynamic var id:         String = ""
-    public dynamic var title:      String = ""
-    public dynamic var visualUrl:  String?
-    public dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
-    public dynamic var createdAt:  Int64  = 0
-    public dynamic var updatedAt:  Int64  = 0
-    public dynamic var lastReadAt: Int64  = 0
-    public dynamic var number:     Float  = 0
-    public override class func primaryKey() -> String {
+open class SubscriptionStore: RLMObject {
+    static var sharedOrderBy: OrderBy = OrderBy.number(.desc)
+    open dynamic var id:         String = ""
+    open dynamic var title:      String = ""
+    open dynamic var visualUrl:  String?
+    open dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
+    open dynamic var createdAt:  Int64  = 0
+    open dynamic var updatedAt:  Int64  = 0
+    open dynamic var lastReadAt: Int64  = 0
+    open dynamic var number:     Float  = 0
+    open override class func primaryKey() -> String {
         return "id"
     }
 
-    public override class func requiredProperties() -> [String] {
+    open override class func requiredProperties() -> [String] {
         return ["id", "title"]
     }
 
-    class var realm: RLMRealm { return RLMRealm.defaultRealm() }
+    class var realm: RLMRealm { return RLMRealm.default() }
 
-    public func updateLastReadAt() -> PersistentResult {
-        try! SubscriptionStore.realm.transactionWithBlock() {
-            lastReadAt = NSDate().timestamp
+    open func updateLastReadAt() -> PersistentResult {
+        try! SubscriptionStore.realm.transaction() {
+            lastReadAt = Date().timestamp
         }
-        return .Success
+        return .success
     }
 
-    public class func create(subscription: Subscription) -> PersistentResult {
-        if let _ = findBy(id: subscription.streamId) { return .Failure }
+    open class func create(_ subscription: Subscription) -> PersistentResult {
+        if let _ = findBy(id: subscription.streamId) { return .failure }
         let store = subscription.toStoreObject()
-        store.createdAt = NSDate().timestamp
-        store.updatedAt = NSDate().timestamp
+        store.createdAt = Date().timestamp
+        store.updatedAt = Date().timestamp
         store.number    = Float(findAll().count)
-        try! realm.transactionWithBlock() {
-            self.realm.addObject(store)
+        try! realm.transaction() {
+            self.realm.add(store)
         }
-        return .Success
+        return .success
     }
 
-    public class func save(subscription: Subscription) -> Bool {
+    open class func save(_ subscription: Subscription) -> Bool {
         if let store = findBy(id: subscription.streamId) {
-            try! realm.transactionWithBlock() {
+            try! realm.transaction() {
                 store.title = subscription.streamTitle
             }
             return true
@@ -88,12 +88,12 @@ public class SubscriptionStore: RLMObject {
         }
     }
 
-    public class func findAll(orderBy: OrderBy = OrderBy.Number(.Desc)) -> RLMResults {
-        return SubscriptionStore.allObjectsInRealm(realm).sortedResultsUsingProperty(orderBy.name, ascending: orderBy.ascending)
+    open class func findAll(_ orderBy: OrderBy = OrderBy.number(.desc)) -> RLMResults<SubscriptionStore> {
+        return SubscriptionStore.allObjects(in: realm).sortedResults(usingProperty: orderBy.name, ascending: orderBy.ascending) as! RLMResults<SubscriptionStore>
     }
 
-    public class func findBy(id id: String) -> SubscriptionStore? {
-        let results = SubscriptionStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+    open class func findBy(id: String) -> SubscriptionStore? {
+        let results = SubscriptionStore.objects(in: realm, with: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil
         } else {
@@ -101,23 +101,23 @@ public class SubscriptionStore: RLMObject {
         }
     }
 
-    public class func remove(stream: Subscription) {
+    open class func remove(_ stream: Subscription) {
         if let store = findBy(id: stream.streamId) {
-            try! realm.transactionWithBlock() {
-                self.realm.deleteObject(store)
+            try! realm.transaction() {
+                self.realm.delete(store)
             }
         }
     }
 
-    public class func removeAll() {
-        try! realm.transactionWithBlock() {
+    open class func removeAll() {
+        try! realm.transaction() {
             self.realm.deleteAllObjects()
         }
     }
 
-    public class func moveSubscriptionInSharedList(sourceIndex: Int, toIndex: Int) -> PersistentResult {
+    open class func moveSubscriptionInSharedList(_ sourceIndex: Int, toIndex: Int) -> PersistentResult {
         let storeList  = findAll()
-        guard let source = findBy(id: storeList[UInt(sourceIndex)].id) else { return .Failure }
+        guard let source = findBy(id: storeList[UInt(sourceIndex)].id) else { return .failure }
         let destNumber = storeList[UInt(toIndex)].number
         var nextIndex  = toIndex
         var direction  = 0 as Float
@@ -128,7 +128,7 @@ public class SubscriptionStore: RLMObject {
             nextIndex -= 1
             direction = sharedOrderBy.ascending ? -1 : 1
         }
-        try! realm.transactionWithBlock() {
+        try! realm.transaction() {
             if 0 <= nextIndex && nextIndex < Int(storeList.count) {
                 let next = storeList[UInt(nextIndex)]
                 source.number = (destNumber + next.number) / 2
@@ -136,6 +136,6 @@ public class SubscriptionStore: RLMObject {
                 source.number = destNumber + direction
             }
         }
-        return .Success
+        return .success
     }
 }

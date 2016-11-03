@@ -8,6 +8,7 @@
 
 import MusicFeeder
 import FeedlyKit
+import ReactiveSwift
 import Quick
 import Nimble
 
@@ -28,11 +29,12 @@ class TopicRepositorySpec: QuickSpec {
                     started = false
                     completed = false
                     self.topicRepository = TopicRepository(cloudApiClient: CloudAPIClient.sharedInstance)
-                    self.topicRepository.signal.observeNext({ event in
+                    self.topicRepository.signal.observeResult({ result in
+                        guard let event = result.value else { return }
                         switch event {
-                        case .StartLoading:
+                        case .startLoading:
                             started = true
-                        case .CompleteLoading:
+                        case .completeLoading:
                             completed = true
                         default:
                             break

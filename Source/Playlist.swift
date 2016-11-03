@@ -7,102 +7,103 @@
 //
 
 import SwiftyJSON
-import ReactiveCocoa
+import ReactiveSwift
 import Result
 import PlayerKit
+import Breit
 
 public enum PlaylistEvent {
-    case Load(index: Int)
-    case ChangePlayState(index: Int, playerState: PlayerState)
+    case load(index: Int)
+    case changePlayState(index: Int, playerState: PlayerState)
 }
 
-public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
-    public private(set) var id: String
-    public var title:        String
-    private var _tracks:     [Track]
-    public var createdAt:    Int64
-    public var updatedAt:    Int64
-    public var number:       Float
-    public var thumbnailUrl: NSURL? { return _tracks.first?.thumbnailUrl }
-    public var signal:       Signal<PlaylistEvent, NSError>
-    public var observer:     Signal<PlaylistEvent, NSError>.Observer
+open class Playlist: PlayerKit.Playlist, Equatable, Hashable {
+    open fileprivate(set) var id: String
+    open var title:        String
+    fileprivate var _tracks:     [Track]
+    open var createdAt:    Int64
+    open var updatedAt:    Int64
+    open var number:       Float
+    open var thumbnailUrl: URL? { return _tracks.first?.thumbnailUrl }
+    open var signal:       Signal<PlaylistEvent, NSError>
+    open var observer:     Signal<PlaylistEvent, NSError>.Observer
 
-    public var tracks: [PlayerKit.Track] { return _tracks.map { $0 as PlayerKit.Track }}
-    public var validTracksCount: Int {
+    open var tracks: [PlayerKit.Track] { return _tracks.map { $0 as PlayerKit.Track }}
+    open var validTracksCount: Int {
         return tracks.filter({ $0.streamUrl != nil}).count
     }
 
-    public func getTracks() -> [Track] { return _tracks }
+    open func getTracks() -> [Track] { return _tracks }
     
-    public static var playlistNumberLimit: Int = 5
-    public static var trackNumberLimit:    Int = 5
+    open static var playlistNumberLimit: Int = 5
+    open static var trackNumberLimit:    Int = 5
 
-    public static var sharedOrderBy = OrderBy.Number(OrderType.Desc)
-    public static var sharedPipe: (Signal<Event, NSError>, Signal<Event, NSError>.Observer)! = Signal<Event, NSError>.pipe()
-    public static var sharedList: [Playlist] = Playlist.findAll(sharedOrderBy)
-    public static func updatePlaylistInSharedList(playlists: [Playlist]) -> PersistentResult {
+    open static var sharedOrderBy = OrderBy.number(OrderType.desc)
+    open static var sharedPipe: (Signal<Event, NSError>, Signal<Event, NSError>.Observer)! = Signal<Event, NSError>.pipe()
+    open static var sharedList: [Playlist] = Playlist.findAll(sharedOrderBy)
+    open static func updatePlaylistInSharedList(_ playlists: [Playlist]) -> PersistentResult {
         for playlist in  playlists {
-            playlist.save(true)
+            let _ = playlist.save(true)
         }
-        notifyChange(.SharedListUpdated)
-        return .Success
+        notifyChange(.sharedListUpdated)
+        return .success
     }
     
     public enum Event {
-        case Created(Playlist)
-        case Removed(Playlist)
-        case Updated(Playlist)
-        case TracksAdded( Playlist, [Track])
-        case TrackRemoved(Playlist, Track, Int)
-        case TrackUpdated(Playlist, Track)
-        case SharedListUpdated
+        case created(Playlist)
+        case removed(Playlist)
+        case updated(Playlist)
+        case tracksAdded( Playlist, [Track])
+        case trackRemoved(Playlist, Track, Int)
+        case trackUpdated(Playlist, Track)
+        case sharedListUpdated
     }
 
-    public class var shared: (signal: Signal<Event, NSError>, observer: Signal<Event, NSError>.Observer, current: [Playlist]) {
+    open class var shared: (signal: Signal<Event, NSError>, observer: Signal<Event, NSError>.Observer, current: [Playlist]) {
         get { return (signal: Playlist.sharedPipe.0,
                     observer: Playlist.sharedPipe.1,
                      current: Playlist.sharedList) }
     }
 
-    public class func notifyChange(event: Event) {
+    open class func notifyChange(_ event: Event) {
         switch event {
-        case .Created:
+        case .created:
             Playlist.sharedList = Playlist.findAll(sharedOrderBy)
-        case .Removed(let playlist):
-            if let index = Playlist.sharedList.indexOf(playlist) {
-                Playlist.sharedList.removeAtIndex(index)
+        case .removed(let playlist):
+            if let index = Playlist.sharedList.index(of: playlist) {
+                Playlist.sharedList.remove(at: index)
             }
-        case .Updated(let playlist):
-            if let index = Playlist.sharedList.indexOf(playlist) {
+        case .updated(let playlist):
+            if let index = Playlist.sharedList.index(of: playlist) {
                 Playlist.sharedList[index] = playlist
             }
-        case .TracksAdded(_, _):
+        case .tracksAdded(_, _):
             break
-        case .TrackRemoved(_, _, _):
+        case .trackRemoved(_, _, _):
             break
-        case .TrackUpdated(_, _):
+        case .trackUpdated(_, _):
             break
-        case .SharedListUpdated:
+        case .sharedListUpdated:
             Playlist.sharedList = Playlist.findAll(sharedOrderBy)
         }
-        shared.observer.sendNext(event)
+        shared.observer.send(value: event)
     }
 
-    private class func dateFormatter() -> NSDateFormatter {
-        let dateFormatter = NSDateFormatter()
+    fileprivate class func dateFormatter() -> DateFormatter {
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
         return dateFormatter
     }
 
     public init(title: String) {
-        self.id       = "\(title)-created-\(Playlist.dateFormatter().stringFromDate(NSDate()))"
+        self.id       = "\(title)-created-\(Playlist.dateFormatter().string(from: NSDate() as Date))"
         self.title     = title
         self._tracks   = []
         let pipe       = Signal<PlaylistEvent, NSError>.pipe()
         self.signal    = pipe.0
         self.observer  = pipe.1
-        self.createdAt = NSDate().timestamp
-        self.updatedAt = NSDate().timestamp
+        self.createdAt = Date().timestamp
+        self.updatedAt = Date().timestamp
         self.number    = 0
     }
 
@@ -113,8 +114,8 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         let pipe      = Signal<PlaylistEvent, NSError>.pipe()
         self.signal   = pipe.0
         self.observer = pipe.1
-        self.createdAt = NSDate().timestamp
-        self.updatedAt = NSDate().timestamp
+        self.createdAt = Date().timestamp
+        self.updatedAt = Date().timestamp
         self.number    = Float(PlaylistStore.findAll().count)
     }
 
@@ -122,8 +123,8 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         id           = json["url"].stringValue
         title         = json["title"].stringValue
         _tracks       = json["tracks"].arrayValue.map({ Track(json: $0) })
-        createdAt     = NSDate().timestamp
-        updatedAt     = NSDate().timestamp
+        createdAt     = Date().timestamp
+        updatedAt     = Date().timestamp
         number        = json["number"].floatValue
         let pipe      = Signal<PlaylistEvent, NSError>.pipe()
         self.signal   = pipe.0
@@ -137,7 +138,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         createdAt = store.createdAt
         updatedAt = store.updatedAt
         number    = store.number
-        for trackStore in store.tracks {
+        for trackStore in realize(store.tracks) {
             _tracks.append(Track(store:trackStore as! TrackStore))
         }
         let pipe      = Signal<PlaylistEvent, NSError>.pipe()
@@ -145,7 +146,7 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         self.observer = pipe.1
     }
 
-    public var hashValue: Int {
+    open var hashValue: Int {
         return id.hashValue
     }
 
@@ -156,19 +157,19 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         store.createdAt = createdAt
         store.updatedAt = updatedAt
         store.number    = number
-        store.tracks.addObjects(_tracks.map({ $0.toStoreObject() }))
+        store.tracks.addObjects(_tracks.map({ $0.toStoreObject() }) as NSArray)
         return store
     }
 
-    public func create() -> PersistentResult {
+    open func create() -> PersistentResult {
         let result = PlaylistStore.create(self)
-        if result == .Success {
-            Playlist.notifyChange(.Created(self))
+        if result == .success {
+            Playlist.notifyChange(.created(self))
         }
         return result
     }
 
-    public class func movePlaylistInSharedList(sourceIndex: Int, toIndex: Int) -> PersistentResult {
+    open class func movePlaylistInSharedList(_ sourceIndex: Int, toIndex: Int) -> PersistentResult {
         let source     = sharedList[sourceIndex]
         let destNumber = sharedList[toIndex].number
         var nextIndex  = toIndex
@@ -188,10 +189,10 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         return Playlist.updatePlaylistInSharedList([source])
     }
 
-    public func save(slient: Bool = false) -> Bool {
+    open func save(_ slient: Bool = false) -> Bool {
         if PlaylistStore.save(self) {
             if !slient {
-                Playlist.notifyChange(.Updated(self))
+                Playlist.notifyChange(.updated(self))
             }
             return true
         } else {
@@ -199,41 +200,41 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         }
     }
 
-    public func remove() {
+    open func remove() {
         PlaylistStore.remove(self)
-        Playlist.notifyChange(.Removed(self))
+        Playlist.notifyChange(.removed(self))
     }
 
-    public func removeTrackAtIndex(index: UInt) {
+    open func removeTrackAtIndex(_ index: UInt) {
         PlaylistStore.removeTrackAtIndex(index, playlist: self)
-        let track = _tracks.removeAtIndex(Int(index))
-        Playlist.notifyChange(.TrackRemoved(self, track, Int(index)))
+        let track = _tracks.remove(at: Int(index))
+        Playlist.notifyChange(.trackRemoved(self, track, Int(index)))
     }
 
-    public func insertTrack(track: Track, atIndex: UInt) -> PersistentResult {
+    open func insertTrack(_ track: Track, atIndex: UInt) -> PersistentResult {
         let trackStore = TrackStore.findBy(url: track.url) ?? track.toStoreObject()
-        guard let store = PlaylistStore.findBy(id: id) else { return .Failure }
+        guard let store = PlaylistStore.findBy(id: id) else { return .failure }
         let result = store.insertTrack(trackStore, atIndex: atIndex)
-        if result == .Success {
-            Playlist.notifyChange(.TracksAdded(self, [track]))
+        if result == .success {
+            Playlist.notifyChange(.tracksAdded(self, [track]))
         }
         return result
     }
 
-    public func appendTracks(tracks: [Track]) -> PersistentResult {
+    open func appendTracks(_ tracks: [Track]) -> PersistentResult {
         let result = PlaylistStore.appendTracks(tracks, playlist: self)
-        if result == .Success {
-            self._tracks.appendContentsOf(tracks)
-            Playlist.notifyChange(.TracksAdded(self, tracks))
+        if result == .success {
+            self._tracks.append(contentsOf: tracks)
+            Playlist.notifyChange(.tracksAdded(self, tracks))
         }
         return result
     }
 
-    public func moveTrackAtIndex(sourceIndex: Int, toIndex: Int) -> PersistentResult {
-        guard let store = PlaylistStore.findBy(id: id) else { return .Failure }
+    open func moveTrackAtIndex(_ sourceIndex: Int, toIndex: Int) -> PersistentResult {
+        guard let store = PlaylistStore.findBy(id: id) else { return .failure }
         let result = store.moveTrackAtIndex(UInt(sourceIndex), toIndex: UInt(toIndex))
         switch result {
-        case .Success:
+        case .success:
             let t = _tracks[sourceIndex]
             _tracks[sourceIndex] = _tracks[toIndex]
             _tracks[toIndex]     = t
@@ -242,15 +243,15 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         return result
     }
 
-    public class func findAll(orderBy: OrderBy = .Number(.Desc)) -> [Playlist] {
+    open class func findAll(_ orderBy: OrderBy = .number(.desc)) -> [Playlist] {
         var playlists: [Playlist] = []
-        for store in PlaylistStore.findAll(orderBy) {
+        for store in realizeResults(PlaylistStore.findAll(orderBy)) {
             playlists.append(Playlist(store: store as! PlaylistStore))
         }
         return playlists
     }
 
-    public class func findBy(id id: String) -> Playlist? {
+    open class func findBy(id: String) -> Playlist? {
         if let store = PlaylistStore.findBy(id: id) {
             return Playlist(store: store)
         } else {
@@ -258,17 +259,17 @@ public class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         }
     }
 
-    public class func removeAll() {
+    open class func removeAll() {
         PlaylistStore.removeAll()
     }
 
-    public class func createDefaultPlaylist() {
+    open class func createDefaultPlaylist() {
         if Playlist.sharedList.count == 0 {
-            Playlist(title: "Favorite").create()
+            let _ = Playlist(title: "Favorite").create()
         }
     }
 
-    public func reloadExpiredTracks() -> SignalProducer<Playlist, NSError> {
+    open func reloadExpiredTracks() -> SignalProducer<Playlist, NSError> {
         var signal = SignalProducer<Track, NSError>.empty
         for track in getTracks() {
             signal = signal.concat(track.fetchPropertiesFromProviderIfNeed())

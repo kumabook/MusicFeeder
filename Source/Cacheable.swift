@@ -15,7 +15,7 @@ import Result
 public protocol Cacheable {
     associatedtype Object
     var id: String { get }
-    func toCacheStoreObject(realm: RLMRealm) -> Object
+    func toCacheStoreObject(_ realm: RLMRealm) -> Object
 }
 
 public protocol CacheList: class {
@@ -26,11 +26,11 @@ public protocol CacheList: class {
 
     var id:        String   { get }
     var timestamp: Int64    { get set }
-    var items:     RLMArray { get set }
-    func add(items: [Item]) -> Result<(), NSError>
+    var items:     RLMArray<RLMObject> { get set }
+    func add(_ items: [Item]) -> Result<(), NSError>
     func clear() -> Result<(), NSError>
-    static func findOrCreate(id: String) -> Self
-    static func create(id: String) -> Self
+    static func findOrCreate(_ id: String) -> Self
+    static func create(_ id: String) -> Self
     static func deleteAllItems()
     static func deleteOldItems()
 }
@@ -42,10 +42,10 @@ public protocol CacheSet: class {
     static var realm: RLMRealm { get }
     static var objectClassName: String { get }
 
-    static func set(id: String, item: Item) -> Bool
-    static func get(id: String) -> Entity?
+    static func set(_ id: String, item: Item) -> Bool
+    static func get(_ id: String) -> Entity?
     static func getAllItems() -> [Entity]
-    static func delete(id: String) -> Bool
+    static func delete(_ id: String) -> Bool
     static func deleteAllItems()
     static func deleteOldItems()
 }
@@ -60,49 +60,49 @@ public protocol CacheEntity: class {
 extension CacheList where Self: RLMObject, Item: Cacheable, Object: RLMObject, Item.Object == Object {
     public static var realm: RLMRealm { return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.cacheListPath)) }
 
-    public func add(items: [Item]) -> Result<(), NSError> {
-        return materialize(try Self.realm.transactionWithBlock()
+    public func add(_ items: [Item]) -> Result<(), NSError> {
+        return materialize(try Self.realm.transaction()
             {
                 items.forEach {item in
                     let itemCache = item.toCacheStoreObject(Self.realm)
-                    Self.realm.addOrUpdateObject(itemCache)
-                    self.items.addObject(itemCache)
+                    Self.realm.addOrUpdate(itemCache)
+                    self.items.add(itemCache)
                 }
-                timestamp = NSDate().timestamp
-                Self.realm.addOrUpdateObject(self)
+                timestamp = Date().timestamp
+                Self.realm.addOrUpdate(self)
             }
         )
     }
     
     public func clear() -> Result<(), NSError> {
-        return materialize(try Self.realm.transactionWithBlock()
+        return materialize(try Self.realm.transaction()
             {
                 Self.realm.deleteObjects(items)
-                Self.realm.deleteObject(self)
+                Self.realm.delete(self)
             }
         )
     }
     
-    public static func findOrCreate(id: String) -> Self {
-        let results = Self.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+    public static func findOrCreate(_ id: String) -> Self {
+        let results = Self.objects(in: realm, with: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return create(id)
         } else {
             return results[0] as! Self
         }
     }
-    public static func create(id: String) -> Self {
+    public static func create(_ id: String) -> Self {
         let list = Self(value: ["id":id])
-        materialize(try realm.transactionWithBlock()
+        let _ = materialize(try realm.transaction()
             {
-                Self.realm.addOrUpdateObject(list)
+                Self.realm.addOrUpdate(list)
             })
         return list
     }
     public static func deleteAllItems() {
-        materialize(try realm.transactionWithBlock()
+        let _ = materialize(try realm.transaction()
             {
-                realm.deleteObjects(allObjectsInRealm(realm))
+                realm.deleteObjects(allObjects(in: realm))
             }
         )
     }
@@ -113,23 +113,23 @@ extension CacheList where Self: RLMObject, Item: Cacheable, Object: RLMObject, I
 extension CacheSet where Item: Cacheable, Object: RLMObject, Entity: RLMObject, Entity.Object == Object, Item.Object == Object {
     public static var realm: RLMRealm { return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.cacheSetPath)) }
 
-    public static func set(id: String, item: Item) -> Bool {
-        switch materialize(try realm.transactionWithBlock()
+    public static func set(_ id: String, item: Item) -> Bool {
+        switch materialize(try realm.transaction()
             {
                 let entity       = Entity(value: ["id": id])
                 let itemCache    = item.toCacheStoreObject(Self.realm)
-                Self.realm.addOrUpdateObject(itemCache)
-                entity.timestamp = NSDate().timestamp
+                Self.realm.addOrUpdate(itemCache)
+                entity.timestamp = Date().timestamp
                 entity.item = itemCache
-                Self.realm.addOrUpdateObject(entity)
+                Self.realm.addOrUpdate(entity)
             })
         {
-        case .Success: return true
-        case .Failure: return false
+        case .success: return true
+        case .failure: return false
         }
     }
-    public static func get(id: String) -> Entity? {
-        let results = Entity.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+    public static func get(_ id: String) -> Entity? {
+        let results = Entity.objects(in: realm, with: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil
         } else {
@@ -137,21 +137,21 @@ extension CacheSet where Item: Cacheable, Object: RLMObject, Entity: RLMObject, 
         }
     }
     public static func getAllItems() -> [Entity] {
-        return Entity.allObjectsInRealm(realm).map { $0 as! Entity }
+        return realizeResults(Entity.allObjects(in: realm)).map { $0 as! Entity }
     }
-    public static func delete(id: String) -> Bool {
+    public static func delete(_ id: String) -> Bool {
         guard let obj = get(id) else { return false }
-        switch materialize(try realm.transactionWithBlock()
+        switch materialize(try realm.transaction()
             {
-                Self.realm.deleteObject(obj)
+                Self.realm.delete(obj)
             }
         ) {
-        case .Success: return true
-        case .Failure: return false
+        case .success: return true
+        case .failure: return false
         }
     }
     public static func deleteAllItems() {
-        materialize(try realm.transactionWithBlock()
+       let _ =  materialize(try realm.transaction()
             {
                 Self.realm.deleteAllObjects()
             })

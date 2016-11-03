@@ -1,7 +1,0 @@
-{
-    "baseUrl":      "https://spread-beaver.herokuapp.com",
-    "clientId":     "xxxx",
-    "clientSecret": "xxxx",
-    "email":        "xxxx",
-    "password":     "xxxx"
-}

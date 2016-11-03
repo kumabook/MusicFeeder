@@ -11,7 +11,7 @@ import Realm
 import FeedlyKit
 import Breit
 
-public class HistoryStore: RLMObject {
+open class HistoryStore: RLMObject {
     static let maxLength:  UInt = 10
     static let limit:      UInt = 10
 
@@ -19,21 +19,21 @@ public class HistoryStore: RLMObject {
         return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.historyPath))
     }
 
-    override public class func primaryKey() -> String {
+    override open class func primaryKey() -> String {
         return "id"
     }
 
-    public override class func requiredProperties() -> [String] {
+    open override class func requiredProperties() -> [String] {
         return ["id", "type"]
     }
 
-    public dynamic var id:        String = ""
-    public dynamic var type:      String = ""
-    public dynamic var timestamp: Int64  = 0
+    open dynamic var id:        String = ""
+    open dynamic var type:      String = ""
+    open dynamic var timestamp: Int64  = 0
 
-    public var entry: EntryStore? {
+    open var entry: EntryStore? {
         if type == HistoryType.Entry.rawValue {
-            let results = EntryStore.objectsInRealm(HistoryStore.realm, withPredicate: NSPredicate(format: "id = %@", id))
+            let results = EntryStore.objects(in: HistoryStore.realm, with: NSPredicate(format: "id = %@", id))
             if results.count > 0 {
                 return results[0] as? EntryStore
             }
@@ -41,9 +41,9 @@ public class HistoryStore: RLMObject {
         return nil
     }
 
-    public var track: TrackStore? {
+    open var track: TrackStore? {
         if type == HistoryType.Track.rawValue {
-            let results = TrackStore.objectsInRealm(HistoryStore.realm, withPredicate: NSPredicate(format: "url = %@", id))
+            let results = TrackStore.objects(in: HistoryStore.realm, with: NSPredicate(format: "url = %@", id))
             if results.count > 0 {
                 return results[0] as? TrackStore
             }
@@ -62,47 +62,47 @@ public class HistoryStore: RLMObject {
         self.type      = type
     }
 
-    public class func add(entry: Entry) -> HistoryStore {
+    open class func add(_ entry: Entry) -> HistoryStore {
         removeOldestIfExceed()
         if let history = HistoryStore.findBy(id: entry.id) {
-            try! realm.transactionWithBlock() {
-                history.timestamp = NSDate().timestamp
-                self.realm.addOrUpdateObject(history)
+            try! realm.transaction() {
+                history.timestamp = Date().timestamp
+                self.realm.addOrUpdate(history)
             }
             return history
         }
         let history = HistoryStore(id: entry.id,
-                            timestamp: NSDate().timestamp,
+                            timestamp: Date().timestamp,
                                  type: HistoryType.Entry.rawValue)
-        try! realm.transactionWithBlock() {
-            self.realm.addOrUpdateObject(findOrCreateEntryStore(entry))
-            self.realm.addOrUpdateObject(history)
+        try! realm.transaction() {
+            self.realm.addOrUpdate(findOrCreateEntryStore(entry))
+            self.realm.addOrUpdate(history)
         }
         return history
     }
 
-    public class func add(track: Track) -> HistoryStore {
+    open class func add(_ track: Track) -> HistoryStore {
         removeOldestIfExceed()
         if let history = HistoryStore.findBy(id: track.url) {
-            try! realm.transactionWithBlock() {
-                history.timestamp = NSDate().timestamp
-                self.realm.addOrUpdateObject(history)
+            try! realm.transaction() {
+                history.timestamp = Date().timestamp
+                self.realm.addOrUpdate(history)
             }
             return history
         }
         let history = HistoryStore(id: track.url,
-                            timestamp: NSDate().timestamp,
+                            timestamp: Date().timestamp,
                                  type: HistoryType.Track.rawValue)
-        try! realm.transactionWithBlock() {
-            self.realm.addOrUpdateObject(findOrCreateTrackStore(track))
-            self.realm.addOrUpdateObject(history)
+        try! realm.transaction() {
+            self.realm.addOrUpdate(findOrCreateTrackStore(track))
+            self.realm.addOrUpdate(history)
         }
         return history
     }
 
-    private class func removeOldestIfExceed() {
-        var results = HistoryStore.allObjectsInRealm(realm)
-        results = results.sortedResultsUsingProperty("timestamp", ascending: true)
+    fileprivate class func removeOldestIfExceed() {
+        var results = HistoryStore.allObjects(in: realm)
+        results = results.sortedResults(usingProperty: "timestamp", ascending: true)
         if results.count >= maxLength {
             if let h = results[0] as? HistoryStore {
                 switch HistoryType(rawValue: h.type)! {
@@ -116,8 +116,8 @@ public class HistoryStore: RLMObject {
         }
     }
 
-    public class func findBy(id id: String) -> HistoryStore? {
-        let results = HistoryStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+    open class func findBy(id: String) -> HistoryStore? {
+        let results = HistoryStore.objects(in: realm, with: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil
         } else {
@@ -125,17 +125,17 @@ public class HistoryStore: RLMObject {
         }
     }
 
-    public class func count() -> UInt {
-        return HistoryStore.allObjectsInRealm(realm).count
+    open class func count() -> UInt {
+        return HistoryStore.allObjects(in: realm).count
     }
 
-    public class func find(range: Range<UInt>) -> [HistoryStore] {
-        var results = HistoryStore.allObjectsInRealm(realm)
-        results = results.sortedResultsUsingProperty("timestamp", ascending: false)
+    open class func find(_ range: CountableRange<UInt>) -> [HistoryStore] {
+        var results = HistoryStore.allObjects(in: realm)
+        results = results.sortedResults(usingProperty: "timestamp", ascending: false)
 
-        var r: Range<UInt>
-        if range.endIndex > results.count {
-            r = range.startIndex..<results.count
+        var r: CountableRange<UInt>
+        if range.upperBound > results.count {
+            r = range.lowerBound..<results.count
         } else {
             r = range
         }
@@ -147,30 +147,30 @@ public class HistoryStore: RLMObject {
         return historyStores
     }
 
-    public class func remove(history: HistoryStore) {
+    open class func remove(_ history: HistoryStore) {
         if let store = findBy(id: history.id) {
-            try! realm.transactionWithBlock() {
-                self.realm.deleteObject(store)
+            try! realm.transaction() {
+                self.realm.delete(store)
             }
         }
     }
 
-    public class func removeAll() {
-        try! realm.transactionWithBlock() {
+    open class func removeAll() {
+        try! realm.transaction() {
             self.realm.deleteAllObjects()
         }
     }
 
-    private class func findOrCreateEntryStore(entry: Entry) -> EntryStore {
-        let results = EntryStore.objectsInRealm(HistoryStore.realm, withPredicate: NSPredicate(format: "id = %@", entry.id))
+    fileprivate class func findOrCreateEntryStore(_ entry: Entry) -> EntryStore {
+        let results = EntryStore.objects(in: HistoryStore.realm, with: NSPredicate(format: "id = %@", entry.id))
         if results.count > 0 {
             return results[0] as! EntryStore
         }
         return entry.toStoreObject()
     }
 
-    private class func findOrCreateTrackStore(track: Track) -> TrackStore {
-        let results = TrackStore.objectsInRealm(HistoryStore.realm, withPredicate: NSPredicate(format: "url = %@", track.url))
+    fileprivate class func findOrCreateTrackStore(_ track: Track) -> TrackStore {
+        let results = TrackStore.objects(in: HistoryStore.realm, with: NSPredicate(format: "url = %@", track.url))
         if results.count > 0 {
             return results[0] as! TrackStore
         }

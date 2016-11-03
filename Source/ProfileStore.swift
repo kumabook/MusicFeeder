@@ -40,12 +40,12 @@ extension Profile {
         store.locale     = locale     ?? ""
         return store
     }
-    class private func getString(str: String) -> String? {
+    class fileprivate func getString(_ str: String) -> String? {
         return str == "" ? nil : str
     }
 }
 
-public class ProfileStore: RLMObject {
+open class ProfileStore: RLMObject {
     dynamic var id:         String = ""
     dynamic var email:      String = ""
     dynamic var reader:     String = ""
@@ -61,14 +61,14 @@ public class ProfileStore: RLMObject {
     
 
     class var realm: RLMRealm {
-        return RLMRealm.defaultRealm()
+        return RLMRealm.default()
     }
 
-    public override class func requiredProperties() -> [String] {
+    open override class func requiredProperties() -> [String] {
         return ["id"]
     }
 
-    override public class func primaryKey() -> String {
+    override open class func primaryKey() -> String {
         return "id"
     }
 }

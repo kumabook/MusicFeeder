@@ -11,10 +11,10 @@ import FeedlyKit
 import SwiftyJSON
 import Quick
 import Nimble
-import ReactiveCocoa
+import ReactiveSwift
 
 class FeedlyAPISpec: QuickSpec {
-    let uuid:     String = NSUUID().UUIDString
+    let uuid:     String = NSUUID().uuidString
     var email:    String { return "test-\(uuid)" }
     var password: String { return "password-\(uuid)" }
 
@@ -39,7 +39,7 @@ class FeedlyAPISpec: QuickSpec {
         describe("PUT /v3/profile") {
             beforeEach {
                 self.client.createProfile(self.email, password: self.password)
-                    .on(next: {
+                    .on(value: {
                        self.profile = $0
                     }).start()
             }
@@ -53,10 +53,10 @@ class FeedlyAPISpec: QuickSpec {
         describe("POST /v3/oauth/token") {
             beforeEach {
                 self.client.fetchAccessToken(self.email, password: self.password, clientId: CloudAPIClient.clientId, clientSecret: CloudAPIClient.clientSecret)
-                    .on(failed: {
-                            print("error \($0.code)")
-                        }, next: {
-                            self.accessToken = $0
+                    .on(value: {
+                        self.accessToken = $0
+                    }, failed: {
+                        print("error \($0.code)")
                     }).start()
             }
             it("should fetch accessToken") {
@@ -68,7 +68,7 @@ class FeedlyAPISpec: QuickSpec {
             var _profile: Profile?
             beforeEach {
                 self.client.fetchProfile()
-                    .on(next: {
+                    .on(value: {
                         _profile = $0
                     }).start()
             }
@@ -81,8 +81,8 @@ class FeedlyAPISpec: QuickSpec {
 
         describe("GET /v3/search/feeds") {
             beforeEach {
-                self.client.searchFeeds(SearchQueryOfFeed(query: ""))
-                    .on(next: {
+                self.client.searchFeeds(query: SearchQueryOfFeed(query: ""))
+                    .on(value: {
                         self.feeds = $0
                     }).start()
             }
@@ -95,7 +95,7 @@ class FeedlyAPISpec: QuickSpec {
         describe("GET /v3/streams/:streamId/contents") {
             beforeEach {
                 self.client.fetchEntries(streamId: self.feeds![0].id, paginationParams: PaginationParams())
-                    .on(next: {
+                    .on(value: {
                         self.entries = $0.items
                     }).start()
             }
@@ -128,14 +128,14 @@ class FeedlyAPISpec: QuickSpec {
             beforeEach {
                 guard let ts = self.tracks else { return }
                 let track = ts[0]
-                self.client.markTracksAsUnliked(ts).flatMap(.Concat) {
+                self.client.markTracksAsUnliked(ts).flatMap(.concat) {
                     self.client.fetchTracks([track.id])
-                }.flatMap(.Concat) { (tracks: [Track]) -> SignalProducer<Void, NSError> in
+                }.flatMap(.concat) { (tracks: [Track]) -> SignalProducer<Void, NSError> in
                     oldLikesCount = tracks[0].likesCount!
                     return self.client.markTracksAsLiked(ts)
-                }.flatMap(.Concat) {(_: ()) -> SignalProducer<[Track], NSError> in
+                }.flatMap(.concat) {(_: ()) -> SignalProducer<[Track], NSError> in
                     self.client.fetchTracks([track.id])
-                }.on(next: { tracks in
+                }.on(value: { tracks in
                     newLikesCount = tracks[0].likesCount!
                 }, disposed: {
                     isFinish = true
@@ -152,7 +152,7 @@ class FeedlyAPISpec: QuickSpec {
             var track: Track?
             beforeEach {
                 self.client.fetchTrack(self.tracks![0].id)
-                    .on(next: {
+                    .on(value: {
                         track = $0
                     }).start()
             }
@@ -167,7 +167,7 @@ class FeedlyAPISpec: QuickSpec {
             var tracks: [Track]?
             beforeEach {
                 self.client.fetchTracks(self.tracks!.map { $0.id })
-                    .on(next: {
+                    .on(value: {
                         tracks = $0
                     }).start()
             }

@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-import ReactiveCocoa
+import ReactiveSwift
 import Result
 import FeedlyKit
 import Alamofire
@@ -25,7 +25,7 @@ extension CloudAPIClient {
     public static let keyChainGroup = "Feedly"
     public static var includesTrack = false
 
-    public static var sharedInstance: CloudAPIClient = CloudAPIClient(target: Target.Sandbox)
+    public static var sharedInstance: CloudAPIClient = CloudAPIClient(target: Target.sandbox)
     static let errorResponseKey = "com.alamofire.serialization.response.error.response"
 
     public static var _profile: Profile?
@@ -38,10 +38,10 @@ extension CloudAPIClient {
         case Logout
     }
 
-    public class func handleError(error error:ErrorType) {
+    public class func handleError(error:Error) {
         let e = error as NSError
         if let dic = e.userInfo as NSDictionary? {
-            if let response:NSHTTPURLResponse = dic[errorResponseKey] as? NSHTTPURLResponse {
+            if let response:HTTPURLResponse = dic[errorResponseKey] as? HTTPURLResponse {
                 if response.statusCode == 401 {
                     if isLoggedIn { logout() }
                 }
@@ -49,16 +49,16 @@ extension CloudAPIClient {
         }
     }
 
-    public class func alertController(error error:ErrorType, handler: (UIAlertAction!) -> Void) -> UIAlertController {
+    public class func alertController(error:Error, handler: @escaping (UIAlertAction!) -> Void) -> UIAlertController {
         let ac = UIAlertController(title: "Network error".localize(),
             message: "Sorry, network error occured.".localize(),
-            preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "OK".localize(), style: UIAlertActionStyle.Default, handler: handler)
+            preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK".localize(), style: UIAlertActionStyle.default, handler: handler)
         ac.addAction(okAction)
         return ac
     }
 
-   public class func setAccessToken(token: String) {
+   public class func setAccessToken(_ token: String) {
         CloudAPIClient.sharedInstance.setAccessToken(token)
     }
 
@@ -69,44 +69,41 @@ extension CloudAPIClient {
     public class func login(profile: Profile, token: String) {
         _profile = profile
         setAccessToken(token)
-        sharedPipe.1.sendNext(AccountEvent.Login(profile))
+        sharedPipe.1.send(value: AccountEvent.Login(profile))
     }
 
     public class func logout() {
         _profile = nil
         setAccessToken("")
-        sharedPipe.1.sendNext(AccountEvent.Logout)
+        sharedPipe.1.send(value: AccountEvent.Logout)
     }
 
     public var authUrl:  String {
         let url = String(format: "%@%@", target.baseUrl, CloudAPIClient.authPath)
-        return url.stringByReplacingOccurrencesOfString("http",
-                                           withString: "https",
-                                              options: [],
-                                                range: nil)
+        return url.replace("http", withString: "https")
     }
     public var tokenUrl: String { return String(format: "%@%@", target.baseUrl, CloudAPIClient.tokenPath) }
 
-    public func buildError(error: ErrorType, response: NSHTTPURLResponse?) -> NSError {
+    public func buildError(error: NSError, response: HTTPURLResponse?) -> NSError {
         if let r = response {
             return NSError(domain: error._domain,
                             code: error._code,
                         userInfo: [CloudAPIClient.errorResponseKey: r])
         }
-        return error as NSError
+        return error
     }
 
     public func fetchProfile() -> SignalProducer<Profile, NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchProfile({ response -> Void in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let profile = response.result.value {
-                    observer.sendNext(profile)
+                    observer.send(value: profile)
                     observer.sendCompleted()
                 }
             })
-            disposable.addDisposable({ req.cancel() })
+            disposable.add({ req.cancel() })
         }
     }
 
@@ -114,13 +111,13 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             let req = self.updateProfile(params) { response -> Void in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let profile = response.result.value {
-                    observer.sendNext(profile)
+                    observer.send(value: profile)
                     observer.sendCompleted()
                 }
             }
-            disposable.addDisposable({ req.cancel() })
+            disposable.add({ req.cancel() })
         }
     }
 
@@ -128,17 +125,17 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchSubscriptions({ response in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let subscriptions = response.result.value {
-                    observer.sendNext(subscriptions)
+                    observer.send(value: subscriptions)
                     observer.sendCompleted()
                 }
             })
-            disposable.addDisposable({ req.cancel() })
+            disposable.add({ req.cancel() })
         }
     }
 
-    public func fetchEntries(streamId streamId: String, newerThan: Int64, unreadOnly: Bool, perPage: Int) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchEntries(streamId: String, newerThan: Int64, unreadOnly: Bool, perPage: Int) -> SignalProducer<PaginatedEntryCollection, NSError> {
         let paginationParams        = PaginationParams()
         paginationParams.unreadOnly = unreadOnly
         paginationParams.count      = perPage
@@ -146,7 +143,7 @@ extension CloudAPIClient {
         return fetchEntries(streamId: streamId, paginationParams: paginationParams)
     }
 
-    public func fetchEntries(streamId streamId: String, continuation: String?, unreadOnly: Bool, perPage: Int) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchEntries(streamId: String, continuation: String?, unreadOnly: Bool, perPage: Int) -> SignalProducer<PaginatedEntryCollection, NSError> {
         let paginationParams          = PaginationParams()
         paginationParams.unreadOnly   = unreadOnly
         paginationParams.count        = perPage
@@ -154,19 +151,19 @@ extension CloudAPIClient {
         return fetchEntries(streamId: streamId, paginationParams: paginationParams)
     }
 
-    public func fetchEntries(streamId streamId: String, paginationParams: PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchEntries(streamId: String, paginationParams: PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchContents(streamId, paginationParams: paginationParams, completionHandler: { response in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let entries = response.result.value {
-                    observer.sendNext(entries)
+                    observer.send(value: entries)
                     observer.sendCompleted()
                 } else {
-                    observer.sendFailed(self.buildError(NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
+                    observer.send(error: self.buildError(error: NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
                 }
             })
-            disposable.addDisposable({ req.cancel() })
+            disposable.add({ req.cancel() })
         }
     }
 
@@ -174,13 +171,13 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchFeeds(feedIds, completionHandler: { response in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let feeds = response.result.value {
-                    observer.sendNext(feeds)
+                    observer.send(value: feeds)
                     observer.sendCompleted()
                 }
             })
-            disposable.addDisposable({ req.cancel() })
+            disposable.add({ req.cancel() })
         }
     }
 
@@ -188,13 +185,13 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchCategories({ response in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let categories = response.result.value {
-                    observer.sendNext(categories)
+                    observer.send(value: categories)
                     observer.sendCompleted()
                 }
             })
-            disposable.addDisposable({ req.cancel() })
+            disposable.add({ req.cancel() })
         }
     }
 
@@ -202,15 +199,15 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             let req = self.searchFeeds(query, completionHandler: { response in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else {
                     if let feedResults = response.result.value {
-                        observer.sendNext(feedResults.results)
+                        observer.send(value: feedResults.results)
                         observer.sendCompleted()
                     }
                 }
             })
-            disposable.addDisposable({ req.cancel() })
+            disposable.add({ req.cancel() })
         }
     }
 
@@ -218,15 +215,15 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchEntry(entryId) { response in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else {
                     if let entry = response.result.value {
-                        observer.sendNext(entry)
+                        observer.send(value: entry)
                         observer.sendCompleted()
                     }
                 }
             }
-            disposable.addDisposable({ req.cancel() })
+            disposable.add() { req.cancel() }
         }
     }
 
@@ -234,43 +231,43 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchEntries(entryIds) { response in
                 if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else {
                     if let entries = response.result.value {
-                        observer.sendNext(entries)
+                        observer.send(value: entries)
                         observer.sendCompleted()
                     }
                 }
             }
-            disposable.addDisposable({ req.cancel() })
+            disposable.add() { req.cancel() }
         }
     }
 
     public func markEntriesAsSaved(itemIds: [String]) -> SignalProducer<Void, NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.markEntriesAsSaved(itemIds) { response in
-                if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
-                } else if let categories = response.result.value {
-                    observer.sendNext(categories)
+                if let e = response.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
+                } else {
+                    observer.send(value: ())
                     observer.sendCompleted()
                 }
             }
-            disposable.addDisposable({ req.cancel() })
+            disposable.add({ req.cancel() })
         }
     }
 
     public func markEntriesAsUnsaved(itemIds: [String]) -> SignalProducer<Void, NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.markEntriesAsUnsaved(itemIds) { response in
-                if let e = response.result.error {
-                    observer.sendFailed(self.buildError(e, response: response.response))
-                } else if let categories = response.result.value {
-                    observer.sendNext(categories)
+                if let e = response.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
+                } else {
+                    observer.send(value: ())
                     observer.sendCompleted()
                 }
             }
-            disposable.addDisposable({ req.cancel() })
+            disposable.add() { req.cancel() }
         }
     }
 

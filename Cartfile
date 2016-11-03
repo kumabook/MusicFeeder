@@ -1,8 +1,8 @@
-github "ReactiveCocoa/ReactiveCocoa"
+github "ReactiveCocoa/ReactiveCocoa" "master"
 github "kumabook/FeedlyKit"
-github "kumabook/XCDYouTubeKit" == 2.5.3
+github "0xced/XCDYouTubeKit"
 github "kumabook/PlayerKit"
-github "SwiftyJSON/SwiftyJSON"
+github "SwiftyJSON/SwiftyJSON" "3.0.0"
 github "Alamofire/Alamofire"
 github "realm/realm-cocoa"
 github "kumabook/Breit"

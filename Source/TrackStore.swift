@@ -10,7 +10,7 @@ import Foundation
 import Realm
 import FeedlyKit
 
-public class TrackStore: RLMObject {
+open class TrackStore: RLMObject {
     dynamic var id:           String = ""
     dynamic var url:          String = ""
     dynamic var providerRaw:  String = ""
@@ -28,26 +28,26 @@ public class TrackStore: RLMObject {
     dynamic var likers               = RLMArray(objectClassName: ProfileStore.className())
 
     class var realm: RLMRealm {
-        return RLMRealm.defaultRealm()
+        return RLMRealm.default()
     }
 
-    public override class func requiredProperties() -> [String] {
+    open override class func requiredProperties() -> [String] {
         return ["id", "url", "providerRaw", "identifier", "title", "streamUrl", "thumbnailUrl"]
     }
 
-    override public class func primaryKey() -> String {
+    override open class func primaryKey() -> String {
         return "url"
     }
 
-    internal class func findOrCreate(track: Track) -> TrackStore? {
+    internal class func findOrCreate(_ track: Track) -> TrackStore? {
         if let store = findBy(url: track.url) {
             return store
         }
         return track.toStoreObject()
     }
 
-    internal class func findBy(url url: String) -> TrackStore? {
-        let results = TrackStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "url = %@", url))
+    internal class func findBy(url: String) -> TrackStore? {
+        let results = TrackStore.objects(in: realm, with: NSPredicate(format: "url = %@", url))
         if results.count == 0 {
             return nil
         } else {
@@ -55,8 +55,8 @@ public class TrackStore: RLMObject {
         }
     }
 
-    internal class func findBy(id id: String) -> TrackStore? {
-        let results = TrackStore.objectsInRealm(realm, withPredicate: NSPredicate(format: "id = %@", id))
+    internal class func findBy(id: String) -> TrackStore? {
+        let results = TrackStore.objects(in: realm, with: NSPredicate(format: "id = %@", id))
         if results.count == 0 {
             return nil
         } else {
@@ -66,20 +66,20 @@ public class TrackStore: RLMObject {
 
 
     internal class func findAll() -> [TrackStore] {
-        let results = TrackStore.allObjectsInRealm(realm)
+        let results = TrackStore.allObjects(in: realm)
         var trackStores: [TrackStore] = []
-        for result in results {
+        for result in realizeResults(results) {
             trackStores.append(result as! TrackStore)
         }
         return trackStores
     }
 
-    internal class func create(track: Track) -> Bool {
+    internal class func create(_ track: Track) -> Bool {
         if let _ = findBy(url: track.url) { return false }
         let store = track.toStoreObject()
         do {
-            try realm.transactionWithBlock() {
-                self.realm.addObject(store)
+            try realm.transaction() {
+                self.realm.add(store)
             }
         } catch {
             return false
@@ -87,9 +87,9 @@ public class TrackStore: RLMObject {
         return true
     }
 
-    internal class func save(track: Track) -> Bool {
+    internal class func save(_ track: Track) -> Bool {
         if let store = findBy(url: track.url) {
-            try! realm.transactionWithBlock() {
+            try! realm.transaction() {
                 if let title        = track.title                        { store.title        = title }
                 if let streamUrl    = track.streamUrl?.absoluteString    { store.streamUrl    = streamUrl }
                 if let thumbnailUrl = track.thumbnailUrl?.absoluteString { store.thumbnailUrl = thumbnailUrl }
@@ -100,16 +100,16 @@ public class TrackStore: RLMObject {
         }
     }
 
-    internal class func remove(track: TrackStore) {
+    internal class func remove(_ track: TrackStore) {
         if let store = findBy(url: track.url) {
-            try! realm.transactionWithBlock() {
-                self.realm.deleteObject(store)
+            try! realm.transaction() {
+                self.realm.delete(store)
             }
         }
     }
 
     internal class func removeAll() {
-        try! realm.transactionWithBlock() {
+        try! realm.transaction() {
             self.realm.deleteAllObjects()
         }
     }

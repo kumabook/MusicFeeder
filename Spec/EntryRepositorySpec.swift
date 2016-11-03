@@ -29,12 +29,13 @@ class EntryRepositorySpec: QuickSpec {
                     started = false
                     completed = false
                     self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20, needsPlaylist: false)
-                    self.entryRepository.signal.observeNext({ event in
+                    self.entryRepository.signal.observeResult({ result in
+                        guard let event = result.value else { return }
                         switch event {
-                        case .StartLoadingNext:
+                        case .startLoadingNext:
                             started = true
                             break
-                        case .CompleteLoadingNext:
+                        case .completeLoadingNext:
                             completed = true
                             break
                         default:
@@ -55,9 +56,9 @@ class EntryRepositorySpec: QuickSpec {
                     self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20, needsPlaylist: false)
                 }
                 it("fetches entries from cache") {
-                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.Init))
+                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.init))
                     self.entryRepository.fetchCacheItems()
-                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.CacheOnly))
+                    expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.cacheOnly))
                     expect(self.entryRepository.cacheItems.count).to(beGreaterThan(0))
                 }
             }

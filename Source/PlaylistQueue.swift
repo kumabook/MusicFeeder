@@ -9,7 +9,7 @@
 import Foundation
 import PlayerKit
 
-public class PlaylistQueue: PlayerKit.PlaylistQueue {
+open class PlaylistQueue: PlayerKit.PlaylistQueue {
     public init(playlists: [Playlist]) {
         super.init(playlists: playlists)
     }

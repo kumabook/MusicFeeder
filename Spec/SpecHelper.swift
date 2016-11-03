@@ -12,7 +12,7 @@ import FeedlyKit
 import MusicFeeder
 import SwiftyJSON
 
-public class Account {
+open class Account {
     var baseUrl:      String
     var clientId:     String
     var clientSecret: String
@@ -27,47 +27,47 @@ public class Account {
     }
 }
 
-public class SpecHelper {
+open class SpecHelper {
     class var email:    String { return getAccount().email }
     class var password: String { return getAccount().password }
     
-    public class func fixtureJSONObject(fixtureNamed fixtureNamed: String) -> AnyObject? {
-        let bundle   = NSBundle(forClass: SpecHelper.self)
-        let filePath = bundle.pathForResource(fixtureNamed, ofType: "json")
-        let data     = NSData(contentsOfFile: filePath!)
-        let jsonObject : AnyObject? = try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
+    open class func fixtureJSONObject(fixtureNamed: String) -> AnyObject? {
+        let bundle   = Bundle(for: SpecHelper.self)
+        let filePath = bundle.path(forResource: fixtureNamed, ofType: "json")
+        let data     = try? Data(contentsOf: URL(fileURLWithPath: filePath!))
+        let jsonObject : AnyObject? = try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject?
         return jsonObject
     }
-    public class func getAccount() -> Account {
+    open class func getAccount() -> Account {
         let json = JSON(SpecHelper.fixtureJSONObject(fixtureNamed: "account")!)
         return Account(json: json)
     }
 
-    public class func setupAPI() {
+    open class func setupAPI() {
         CloudAPIClient.includesTrack = true
         let account = getAccount()
-        let c = CloudAPIClient(target: CloudAPIClient.Target.Custom(account.baseUrl))
+        let c = CloudAPIClient(target: CloudAPIClient.Target.custom(account.baseUrl))
         CloudAPIClient.clientId       = account.clientId
         CloudAPIClient.clientSecret   = account.clientSecret
         CloudAPIClient.sharedInstance = c
     }
-    public class var api: CloudAPIClient { return CloudAPIClient.sharedInstance }
-    public class func login() {
+    open class var api: CloudAPIClient { return CloudAPIClient.sharedInstance }
+    open class func login() {
         setupAPI()
         api.fetchAccessToken(self.email, password: self.password, clientId: CloudAPIClient.clientId, clientSecret: CloudAPIClient.clientSecret)
-            .on(next: {
+            .on(value: {
                 CloudAPIClient.setAccessToken($0.accessToken)
-                api.fetchProfile().on(next: { CloudAPIClient._profile = $0 }).start()
+                api.fetchProfile().on(value: { CloudAPIClient._profile = $0 }).start()
             }).start()
     }
 }
 
 extension Expectation {
-    public func toFinally<U where U : Matcher, U.ValueType == T>(matcher: U) {
+    public func toFinally<U>(_ matcher: U) where U : Matcher, U.ValueType == T {
         self.toEventually(matcher, timeout: 10)
     }
     
-    public func toFinallyNot<U where U : Matcher, U.ValueType == T>(matcher: U) {
+    public func toFinallyNot<U>(_ matcher: U) where U : Matcher, U.ValueType == T {
         self.toEventuallyNot(matcher, timeout: 10)
     }
 }
