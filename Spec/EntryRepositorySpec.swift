@@ -15,6 +15,7 @@ class EntryRepositorySpec: QuickSpec {
     var entryRepository: EntryRepository!
     var stream: Feed = Feed(id: "feed/http://spincoaster.com/feed", title: "Spincoaster", description: "", subscribers: 0)
     override func spec() {
+        SpecHelper.ping() // wake up test server
         describe("A EntryRepository") {
             var started = false
             var completed = false

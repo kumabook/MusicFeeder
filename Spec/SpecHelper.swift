@@ -60,6 +60,23 @@ open class SpecHelper {
                 api.fetchProfile().on(value: { CloudAPIClient._profile = $0 }).start()
             }).start()
     }
+    open class func ping() {
+        let account = getAccount()
+        guard let url = URL(string: account.baseUrl) else {
+            print("Error! Invalid URL!")
+            return
+        }
+        
+        let request = URLRequest(url: url)
+        let semaphore = DispatchSemaphore(value: 0)
+        var data: Data? = nil
+        URLSession.shared.dataTask(with: request) { (responseData, _, _) -> Void in
+            data = responseData
+            semaphore.signal()
+        }.resume()
+        let _ = semaphore.wait(timeout: .distantFuture)
+        print("ping complete: \(data)")
+    }
 }
 
 extension Expectation {
