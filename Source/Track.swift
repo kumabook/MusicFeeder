@@ -10,7 +10,6 @@ import SwiftyJSON
 import ReactiveSwift
 import Result
 import XCDYouTubeKit
-import UIKit
 import PlayerKit
 import Breit
 import SoundCloudKit
@@ -36,6 +35,7 @@ public enum YouTubeVideoQuality: UInt {
         case .hd720:     return  "HD 720".localize()
         }
     }
+    #if os(iOS)
     public static func buildAlertActions(_ handler: @escaping () -> ()) -> [UIAlertAction] {
         var actions: [UIAlertAction] = []
         actions.append(UIAlertAction(title: YouTubeVideoQuality.audioOnly.label,
@@ -53,6 +53,7 @@ public enum YouTubeVideoQuality: UInt {
                                    handler: { action in  Track.youTubeVideoQuality = .hd720; handler() }))
         return actions
     }
+    #endif
 }
 
 final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {

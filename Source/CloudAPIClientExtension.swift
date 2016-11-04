@@ -6,12 +6,14 @@
 //  Copyright (c) 2016 Hiroki Kumamoto. All rights reserved.
 //
 
-import UIKit
 import SwiftyJSON
 import ReactiveSwift
 import Result
 import FeedlyKit
 import Alamofire
+#if os(iOS)
+    import UIKit
+#endif
 
 extension CloudAPIClient {
     public static var perPage       = 15
@@ -49,6 +51,7 @@ extension CloudAPIClient {
         }
     }
 
+    #if os(iOS)
     public class func alertController(error:Error, handler: @escaping (UIAlertAction!) -> Void) -> UIAlertController {
         let ac = UIAlertController(title: "Network error".localize(),
             message: "Sorry, network error occured.".localize(),
@@ -57,8 +60,9 @@ extension CloudAPIClient {
         ac.addAction(okAction)
         return ac
     }
+    #endif
 
-   public class func setAccessToken(_ token: String) {
+    public class func setAccessToken(_ token: String) {
         CloudAPIClient.sharedInstance.setAccessToken(token)
     }
 

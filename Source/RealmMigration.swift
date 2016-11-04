@@ -13,7 +13,7 @@ open class RealmMigration {
     open static var groupIdentifier: String = "group.com.your.app"
     open class func migrateAll() {
         migrateMain()
-        migrateListenItLater()
+//        migrateListenItLater()
         migrateHistory()
         migrateCache()
     }
@@ -87,13 +87,14 @@ open class RealmMigration {
         RLMRealm.default()
     }
     open static var listenItLaterPath: String {
-        let fileManager = FileManager.default
-        if let directory = fileManager.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier) {
-            let path: NSString = directory.path as NSString
-            return path.appendingPathComponent("db.realm")
-        } else {
-            return RLMRealmConfiguration.default().fileURL!.path
-        }
+        #if os(iOS)
+            if let directory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier) {
+                let path: NSString = directory.path as NSString
+                return path.appendingPathComponent("db.realm")
+            }
+        #endif
+        print("path : \(RLMRealmConfiguration.default().fileURL!.path)")
+        return RLMRealmConfiguration.default().fileURL!.path
     }
     open class func migrateListenItLater() {
         let _ = ListenItLaterEntryStore.realm
@@ -107,6 +108,7 @@ open class RealmMigration {
     }
     open class func configurationOf(_ path: String) -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
+        config.fileURL = URL(fileURLWithPath: path)
         config.schemaVersion = 5
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
@@ -133,7 +135,6 @@ open class RealmMigration {
                 }
             }
         }
-        config.fileURL = URL(string: "file://\(path)")
         return config
     }
     open class var historyPath: String {

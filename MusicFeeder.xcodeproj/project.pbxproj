@@ -20,6 +20,191 @@
 		67156DDE1DCB6EB9007DC6F1 /* ReactiveSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67B7A8501DCB346100EB2604 /* ReactiveSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156DDF1DCB6F06007DC6F1 /* SDWebImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67B7A84E1DCB344B00EB2604 /* SDWebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156DE01DCB6F0D007DC6F1 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B7A84E1DCB344B00EB2604 /* SDWebImage.framework */; };
+		67156DEF1DCB744F007DC6F1 /* MusicFeeder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156DE61DCB744F007DC6F1 /* MusicFeeder.framework */; };
+		67156DF61DCB744F007DC6F1 /* MusicFeeder-macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 67156DE81DCB744F007DC6F1 /* MusicFeeder-macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		67156E0B1DCB748A007DC6F1 /* MusicFeeder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E021DCB748A007DC6F1 /* MusicFeeder.framework */; };
+		67156E121DCB748A007DC6F1 /* MusicFeeder-tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 67156E041DCB748A007DC6F1 /* MusicFeeder-tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		67156E281DCB756C007DC6F1 /* MusicFeeder-iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 67156E271DCB756C007DC6F1 /* MusicFeeder-iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		67156E301DCB762D007DC6F1 /* TopicRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841E61CD2E1E2005904EF /* TopicRepository.swift */; };
+		67156E311DCB762D007DC6F1 /* TrackRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FF1DAB648500FDF28F /* TrackRepository.swift */; };
+		67156E321DCB762D007DC6F1 /* PlaylistRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A01B6E1398006EAA84 /* PlaylistRepository.swift */; };
+		67156E331DCB762D007DC6F1 /* StreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* StreamRepository.swift */; };
+		67156E341DCB762D007DC6F1 /* PaginatedCollectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */; };
+		67156E351DCB762D007DC6F1 /* EntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A31B6E1398006EAA84 /* EntryRepository.swift */; };
+		67156E361DCB762D007DC6F1 /* SavedStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamRepository.swift */; };
+		67156E371DCB762D007DC6F1 /* TrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */; };
+		67156E381DCB762D007DC6F1 /* HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705761B1BDE73A00087063A /* HistoryRepository.swift */; };
+		67156E391DCB762D007DC6F1 /* TimeSpecifiedEntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */; };
+		67156E3A1DCB762D007DC6F1 /* TimeSpecifiedTrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */; };
+		67156E3B1DCB762D007DC6F1 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A41B6E1398006EAA84 /* Track.swift */; };
+		67156E3C1DCB762D007DC6F1 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059F1B6E1398006EAA84 /* Playlist.swift */; };
+		67156E3D1DCB762D007DC6F1 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576211BE4E9C60087063A /* History.swift */; };
+		67156E3E1DCB762D007DC6F1 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
+		67156E3F1DCB762D007DC6F1 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE321B6CE76300B567CB /* Category.swift */; };
+		67156E401DCB762D007DC6F1 /* TrackStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */; };
+		67156E411DCB762D007DC6F1 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841DD1CD2D40B005904EF /* Topic.swift */; };
+		67156E421DCB762D007DC6F1 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FD1DA13F6400FDF28F /* Journal.swift */; };
+		67156E431DCB762D007DC6F1 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
+		67156E441DCB762D007DC6F1 /* PlaylistStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A11B6E1398006EAA84 /* PlaylistStore.swift */; };
+		67156E451DCB762D007DC6F1 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
+		67156E461DCB762D007DC6F1 /* RealmMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67120B3E1C18821C00240F8B /* RealmMigration.swift */; };
+		67156E471DCB762D007DC6F1 /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132801BC1212E00A036B0 /* EntryStore.swift */; };
+		67156E481DCB762D007DC6F1 /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576191BDE60400087063A /* HistoryStore.swift */; };
+		67156E491DCB762D007DC6F1 /* TrackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A51B6E1398006EAA84 /* TrackStore.swift */; };
+		67156E4A1DCB762D007DC6F1 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
+		67156E4B1DCB762D007DC6F1 /* ListenItLaterEntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */; };
+		67156E4C1DCB762D007DC6F1 /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6719A19D1DABDF6700280349 /* ProfileStore.swift */; };
+		67156E4D1DCB762D007DC6F1 /* TopicStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4061DAD4C20004DE304 /* TopicStore.swift */; };
+		67156E4E1DCB762D007DC6F1 /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4081DAD4D77004DE304 /* Cacheable.swift */; };
+		67156E4F1DCB762D007DC6F1 /* TopicCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6748048C1DB268C000D6FD33 /* TopicCache.swift */; };
+		67156E501DCB762D007DC6F1 /* EntryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6719A1971DABB70200280349 /* EntryCache.swift */; };
+		67156E511DCB762D007DC6F1 /* TrackCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6719A1991DABCECC00280349 /* TrackCache.swift */; };
+		67156E521DCB762D007DC6F1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C53511B72385900BE6614 /* Player.swift */; };
+		67156E531DCB762D007DC6F1 /* PinkSpiderAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */; };
+		67156E541DCB762D007DC6F1 /* CloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */; };
+		67156E551DCB762D007DC6F1 /* MusicFeederAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */; };
+		67156E561DCB762D007DC6F1 /* XCDYouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */; };
+		67156E671DCB7672007DC6F1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E591DCB7672007DC6F1 /* Alamofire.framework */; };
+		67156E681DCB7672007DC6F1 /* Breit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5A1DCB7672007DC6F1 /* Breit.framework */; };
+		67156E691DCB7672007DC6F1 /* FeedlyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5B1DCB7672007DC6F1 /* FeedlyKit.framework */; };
+		67156E6B1DCB7672007DC6F1 /* PlayerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5D1DCB7672007DC6F1 /* PlayerKit.framework */; };
+		67156E6D1DCB7672007DC6F1 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5F1DCB7672007DC6F1 /* ReactiveSwift.framework */; };
+		67156E6E1DCB7672007DC6F1 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E601DCB7672007DC6F1 /* Realm.framework */; };
+		67156E6F1DCB7672007DC6F1 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E611DCB7672007DC6F1 /* Result.framework */; };
+		67156E701DCB7672007DC6F1 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E621DCB7672007DC6F1 /* SDWebImage.framework */; };
+		67156E711DCB7672007DC6F1 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E631DCB7672007DC6F1 /* SnapKit.framework */; };
+		67156E721DCB7672007DC6F1 /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */; };
+		67156E731DCB7672007DC6F1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */; };
+		67156E741DCB7672007DC6F1 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */; };
+		67156E751DCB768E007DC6F1 /* TopicRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841E61CD2E1E2005904EF /* TopicRepository.swift */; };
+		67156E761DCB768E007DC6F1 /* TrackRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FF1DAB648500FDF28F /* TrackRepository.swift */; };
+		67156E771DCB768E007DC6F1 /* PlaylistRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A01B6E1398006EAA84 /* PlaylistRepository.swift */; };
+		67156E781DCB768E007DC6F1 /* StreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* StreamRepository.swift */; };
+		67156E791DCB768E007DC6F1 /* PaginatedCollectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */; };
+		67156E7A1DCB768E007DC6F1 /* EntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A31B6E1398006EAA84 /* EntryRepository.swift */; };
+		67156E7B1DCB768E007DC6F1 /* SavedStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamRepository.swift */; };
+		67156E7C1DCB768E007DC6F1 /* TrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */; };
+		67156E7D1DCB768E007DC6F1 /* HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705761B1BDE73A00087063A /* HistoryRepository.swift */; };
+		67156E7E1DCB768E007DC6F1 /* TimeSpecifiedEntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */; };
+		67156E7F1DCB768E007DC6F1 /* TimeSpecifiedTrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */; };
+		67156E801DCB768E007DC6F1 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A41B6E1398006EAA84 /* Track.swift */; };
+		67156E811DCB768E007DC6F1 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059F1B6E1398006EAA84 /* Playlist.swift */; };
+		67156E821DCB768E007DC6F1 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576211BE4E9C60087063A /* History.swift */; };
+		67156E831DCB768E007DC6F1 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
+		67156E841DCB768E007DC6F1 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE321B6CE76300B567CB /* Category.swift */; };
+		67156E851DCB768E007DC6F1 /* TrackStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */; };
+		67156E861DCB768E007DC6F1 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841DD1CD2D40B005904EF /* Topic.swift */; };
+		67156E871DCB768E007DC6F1 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FD1DA13F6400FDF28F /* Journal.swift */; };
+		67156E881DCB768E007DC6F1 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
+		67156E891DCB768E007DC6F1 /* PlaylistStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A11B6E1398006EAA84 /* PlaylistStore.swift */; };
+		67156E8A1DCB768E007DC6F1 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
+		67156E8B1DCB768E007DC6F1 /* RealmMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67120B3E1C18821C00240F8B /* RealmMigration.swift */; };
+		67156E8C1DCB768E007DC6F1 /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132801BC1212E00A036B0 /* EntryStore.swift */; };
+		67156E8D1DCB768E007DC6F1 /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576191BDE60400087063A /* HistoryStore.swift */; };
+		67156E8E1DCB768E007DC6F1 /* TrackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A51B6E1398006EAA84 /* TrackStore.swift */; };
+		67156E8F1DCB768E007DC6F1 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
+		67156E901DCB768E007DC6F1 /* ListenItLaterEntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */; };
+		67156E911DCB768E007DC6F1 /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6719A19D1DABDF6700280349 /* ProfileStore.swift */; };
+		67156E921DCB768E007DC6F1 /* TopicStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4061DAD4C20004DE304 /* TopicStore.swift */; };
+		67156E931DCB768E007DC6F1 /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4081DAD4D77004DE304 /* Cacheable.swift */; };
+		67156E941DCB768E007DC6F1 /* TopicCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6748048C1DB268C000D6FD33 /* TopicCache.swift */; };
+		67156E951DCB768E007DC6F1 /* EntryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6719A1971DABB70200280349 /* EntryCache.swift */; };
+		67156E961DCB768E007DC6F1 /* TrackCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6719A1991DABCECC00280349 /* TrackCache.swift */; };
+		67156E971DCB768E007DC6F1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C53511B72385900BE6614 /* Player.swift */; };
+		67156E981DCB768E007DC6F1 /* PinkSpiderAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */; };
+		67156E991DCB768E007DC6F1 /* CloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */; };
+		67156E9A1DCB768E007DC6F1 /* MusicFeederAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */; };
+		67156E9B1DCB768E007DC6F1 /* XCDYouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */; };
+		67156EAA1DCB76B3007DC6F1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */; };
+		67156EAB1DCB76B3007DC6F1 /* Breit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9D1DCB76B2007DC6F1 /* Breit.framework */; };
+		67156EAC1DCB76B3007DC6F1 /* FeedlyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9E1DCB76B2007DC6F1 /* FeedlyKit.framework */; };
+		67156EAE1DCB76B3007DC6F1 /* PlayerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA01DCB76B2007DC6F1 /* PlayerKit.framework */; };
+		67156EB01DCB76B3007DC6F1 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA21DCB76B2007DC6F1 /* ReactiveSwift.framework */; };
+		67156EB11DCB76B3007DC6F1 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA31DCB76B2007DC6F1 /* Realm.framework */; };
+		67156EB21DCB76B3007DC6F1 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA41DCB76B2007DC6F1 /* Result.framework */; };
+		67156EB31DCB76B3007DC6F1 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA51DCB76B3007DC6F1 /* SDWebImage.framework */; };
+		67156EB41DCB76B3007DC6F1 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA61DCB76B3007DC6F1 /* SnapKit.framework */; };
+		67156EB51DCB76B3007DC6F1 /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */; };
+		67156EB61DCB76B3007DC6F1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */; };
+		67156EB71DCB76B3007DC6F1 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */; };
+		67156EF31DCB7A35007DC6F1 /* PlaylistSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D61B70E44000BE6614 /* PlaylistSpec.swift */; };
+		67156EF41DCB7A35007DC6F1 /* SpecHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D71B70E44000BE6614 /* SpecHelper.swift */; };
+		67156EF51DCB7A35007DC6F1 /* TrackSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D81B70E44000BE6614 /* TrackSpec.swift */; };
+		67156EF61DCB7A3D007DC6F1 /* FeedlyAPISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670110CB1C95592A00ECC79F /* FeedlyAPISpec.swift */; };
+		67156EF71DCB7A3D007DC6F1 /* TopicRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4041DAD4B68004DE304 /* TopicRepositorySpec.swift */; };
+		67156EF81DCB7A3D007DC6F1 /* EntryRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */; };
+		67156EF91DCB7A3D007DC6F1 /* TrackRespoistorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804931DB5896700D6FD33 /* TrackRespoistorySpec.swift */; };
+		67156EFA1DCB7A44007DC6F1 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DD1B70E4B600BE6614 /* playlist.json */; };
+		67156EFB1DCB7A44007DC6F1 /* track.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DE1B70E4B600BE6614 /* track.json */; };
+		67156EFC1DCB7A44007DC6F1 /* account.json in Resources */ = {isa = PBXBuildFile; fileRef = 674804951DB6176E00D6FD33 /* account.json */; };
+		67156EFD1DCB7A4D007DC6F1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E591DCB7672007DC6F1 /* Alamofire.framework */; };
+		67156EFE1DCB7A4D007DC6F1 /* Breit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5A1DCB7672007DC6F1 /* Breit.framework */; };
+		67156EFF1DCB7A4D007DC6F1 /* FeedlyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5B1DCB7672007DC6F1 /* FeedlyKit.framework */; };
+		67156F001DCB7A4D007DC6F1 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5C1DCB7672007DC6F1 /* Nimble.framework */; };
+		67156F011DCB7A4D007DC6F1 /* PlayerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5D1DCB7672007DC6F1 /* PlayerKit.framework */; };
+		67156F021DCB7A4D007DC6F1 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5E1DCB7672007DC6F1 /* Quick.framework */; };
+		67156F031DCB7A4D007DC6F1 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5F1DCB7672007DC6F1 /* ReactiveSwift.framework */; };
+		67156F041DCB7A4D007DC6F1 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E601DCB7672007DC6F1 /* Realm.framework */; };
+		67156F051DCB7A4D007DC6F1 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E611DCB7672007DC6F1 /* Result.framework */; };
+		67156F061DCB7A4D007DC6F1 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E621DCB7672007DC6F1 /* SDWebImage.framework */; };
+		67156F071DCB7A4D007DC6F1 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E631DCB7672007DC6F1 /* SnapKit.framework */; };
+		67156F081DCB7A4D007DC6F1 /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */; };
+		67156F091DCB7A4D007DC6F1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */; };
+		67156F0A1DCB7A4D007DC6F1 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */; };
+		67156F0C1DCB7A6E007DC6F1 /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E591DCB7672007DC6F1 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F0D1DCB7A6E007DC6F1 /* Breit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E5A1DCB7672007DC6F1 /* Breit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F0E1DCB7A6E007DC6F1 /* FeedlyKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E5B1DCB7672007DC6F1 /* FeedlyKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F0F1DCB7A6E007DC6F1 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E5C1DCB7672007DC6F1 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F101DCB7A6E007DC6F1 /* PlayerKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E5D1DCB7672007DC6F1 /* PlayerKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F111DCB7A6E007DC6F1 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E5E1DCB7672007DC6F1 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F121DCB7A6E007DC6F1 /* ReactiveSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E5F1DCB7672007DC6F1 /* ReactiveSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F131DCB7A6E007DC6F1 /* Realm.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E601DCB7672007DC6F1 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F141DCB7A6E007DC6F1 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E611DCB7672007DC6F1 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F151DCB7A6E007DC6F1 /* SDWebImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E621DCB7672007DC6F1 /* SDWebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F161DCB7A6E007DC6F1 /* SnapKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E631DCB7672007DC6F1 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F171DCB7A6E007DC6F1 /* SoundCloudKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F181DCB7A6E007DC6F1 /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F191DCB7A6E007DC6F1 /* XCDYouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F1A1DCB7A83007DC6F1 /* MusicFeeder.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156DE61DCB744F007DC6F1 /* MusicFeeder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F1B1DCB7A96007DC6F1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */; };
+		67156F1C1DCB7A96007DC6F1 /* Breit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9D1DCB76B2007DC6F1 /* Breit.framework */; };
+		67156F1D1DCB7A96007DC6F1 /* FeedlyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9E1DCB76B2007DC6F1 /* FeedlyKit.framework */; };
+		67156F1E1DCB7A96007DC6F1 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9F1DCB76B2007DC6F1 /* Nimble.framework */; };
+		67156F1F1DCB7A96007DC6F1 /* PlayerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA01DCB76B2007DC6F1 /* PlayerKit.framework */; };
+		67156F201DCB7A96007DC6F1 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA11DCB76B2007DC6F1 /* Quick.framework */; };
+		67156F211DCB7A96007DC6F1 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA21DCB76B2007DC6F1 /* ReactiveSwift.framework */; };
+		67156F221DCB7A96007DC6F1 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA31DCB76B2007DC6F1 /* Realm.framework */; };
+		67156F231DCB7A96007DC6F1 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA41DCB76B2007DC6F1 /* Result.framework */; };
+		67156F241DCB7A96007DC6F1 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA51DCB76B3007DC6F1 /* SDWebImage.framework */; };
+		67156F251DCB7A96007DC6F1 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA61DCB76B3007DC6F1 /* SnapKit.framework */; };
+		67156F261DCB7A96007DC6F1 /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */; };
+		67156F271DCB7A96007DC6F1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */; };
+		67156F281DCB7A96007DC6F1 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */; };
+		67156F291DCB7AA8007DC6F1 /* PlaylistSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D61B70E44000BE6614 /* PlaylistSpec.swift */; };
+		67156F2A1DCB7AA8007DC6F1 /* SpecHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D71B70E44000BE6614 /* SpecHelper.swift */; };
+		67156F2B1DCB7AA8007DC6F1 /* TrackSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D81B70E44000BE6614 /* TrackSpec.swift */; };
+		67156F2C1DCB7AAD007DC6F1 /* FeedlyAPISpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670110CB1C95592A00ECC79F /* FeedlyAPISpec.swift */; };
+		67156F2D1DCB7AAD007DC6F1 /* TopicRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4041DAD4B68004DE304 /* TopicRepositorySpec.swift */; };
+		67156F2E1DCB7AAD007DC6F1 /* EntryRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */; };
+		67156F2F1DCB7AAD007DC6F1 /* TrackRespoistorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804931DB5896700D6FD33 /* TrackRespoistorySpec.swift */; };
+		67156F301DCB7AB7007DC6F1 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DD1B70E4B600BE6614 /* playlist.json */; };
+		67156F311DCB7AB7007DC6F1 /* track.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DE1B70E4B600BE6614 /* track.json */; };
+		67156F321DCB7AB7007DC6F1 /* account.json in Resources */ = {isa = PBXBuildFile; fileRef = 674804951DB6176E00D6FD33 /* account.json */; };
+		67156F341DCB7ACD007DC6F1 /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F351DCB7ACD007DC6F1 /* Breit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E9D1DCB76B2007DC6F1 /* Breit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F361DCB7ACD007DC6F1 /* FeedlyKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E9E1DCB76B2007DC6F1 /* FeedlyKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F371DCB7ACD007DC6F1 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E9F1DCB76B2007DC6F1 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F381DCB7ACD007DC6F1 /* PlayerKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA01DCB76B2007DC6F1 /* PlayerKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F391DCB7ACD007DC6F1 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA11DCB76B2007DC6F1 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F3A1DCB7ACD007DC6F1 /* ReactiveSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA21DCB76B2007DC6F1 /* ReactiveSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F3B1DCB7ACD007DC6F1 /* Realm.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA31DCB76B2007DC6F1 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F3C1DCB7ACD007DC6F1 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA41DCB76B2007DC6F1 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F3D1DCB7ACD007DC6F1 /* SDWebImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA51DCB76B3007DC6F1 /* SDWebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F3E1DCB7ACD007DC6F1 /* SnapKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA61DCB76B3007DC6F1 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F3F1DCB7ACD007DC6F1 /* SoundCloudKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F401DCB7ACD007DC6F1 /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F411DCB7ACD007DC6F1 /* XCDYouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67156F421DCB7AE1007DC6F1 /* MusicFeeder.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E021DCB748A007DC6F1 /* MusicFeeder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		671841DE1CD2D40B005904EF /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841DD1CD2D40B005904EF /* Topic.swift */; };
 		671841E71CD2E1E2005904EF /* TopicRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841E61CD2E1E2005904EF /* TopicRepository.swift */; };
 		6719A1981DABB70200280349 /* EntryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6719A1971DABB70200280349 /* EntryCache.swift */; };
@@ -99,6 +284,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		67156DF01DCB744F007DC6F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67FBBDFD1B6CE43100B567CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67156DE51DCB744F007DC6F1;
+			remoteInfo = "MusicFeeder-macOS";
+		};
+		67156E0C1DCB748A007DC6F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67FBBDFD1B6CE43100B567CB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67156E011DCB748A007DC6F1;
+			remoteInfo = "MusicFeeder-tvOS";
+		};
 		679C52881B70F24A00BE6614 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 67FBBDFD1B6CE43100B567CB /* Project object */;
@@ -109,6 +308,54 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		67156F0B1DCB7A55007DC6F1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				67156F1A1DCB7A83007DC6F1 /* MusicFeeder.framework in CopyFiles */,
+				67156F0C1DCB7A6E007DC6F1 /* Alamofire.framework in CopyFiles */,
+				67156F0D1DCB7A6E007DC6F1 /* Breit.framework in CopyFiles */,
+				67156F0E1DCB7A6E007DC6F1 /* FeedlyKit.framework in CopyFiles */,
+				67156F0F1DCB7A6E007DC6F1 /* Nimble.framework in CopyFiles */,
+				67156F101DCB7A6E007DC6F1 /* PlayerKit.framework in CopyFiles */,
+				67156F111DCB7A6E007DC6F1 /* Quick.framework in CopyFiles */,
+				67156F121DCB7A6E007DC6F1 /* ReactiveSwift.framework in CopyFiles */,
+				67156F131DCB7A6E007DC6F1 /* Realm.framework in CopyFiles */,
+				67156F141DCB7A6E007DC6F1 /* Result.framework in CopyFiles */,
+				67156F151DCB7A6E007DC6F1 /* SDWebImage.framework in CopyFiles */,
+				67156F161DCB7A6E007DC6F1 /* SnapKit.framework in CopyFiles */,
+				67156F171DCB7A6E007DC6F1 /* SoundCloudKit.framework in CopyFiles */,
+				67156F181DCB7A6E007DC6F1 /* SwiftyJSON.framework in CopyFiles */,
+				67156F191DCB7A6E007DC6F1 /* XCDYouTubeKit.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156F331DCB7ABA007DC6F1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				67156F421DCB7AE1007DC6F1 /* MusicFeeder.framework in CopyFiles */,
+				67156F341DCB7ACD007DC6F1 /* Alamofire.framework in CopyFiles */,
+				67156F351DCB7ACD007DC6F1 /* Breit.framework in CopyFiles */,
+				67156F361DCB7ACD007DC6F1 /* FeedlyKit.framework in CopyFiles */,
+				67156F371DCB7ACD007DC6F1 /* Nimble.framework in CopyFiles */,
+				67156F381DCB7ACD007DC6F1 /* PlayerKit.framework in CopyFiles */,
+				67156F391DCB7ACD007DC6F1 /* Quick.framework in CopyFiles */,
+				67156F3A1DCB7ACD007DC6F1 /* ReactiveSwift.framework in CopyFiles */,
+				67156F3B1DCB7ACD007DC6F1 /* Realm.framework in CopyFiles */,
+				67156F3C1DCB7ACD007DC6F1 /* Result.framework in CopyFiles */,
+				67156F3D1DCB7ACD007DC6F1 /* SDWebImage.framework in CopyFiles */,
+				67156F3E1DCB7ACD007DC6F1 /* SnapKit.framework in CopyFiles */,
+				67156F3F1DCB7ACD007DC6F1 /* SoundCloudKit.framework in CopyFiles */,
+				67156F401DCB7ACD007DC6F1 /* SwiftyJSON.framework in CopyFiles */,
+				67156F411DCB7ACD007DC6F1 /* XCDYouTubeKit.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		679C53161B70F63A00BE6614 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -162,6 +409,50 @@
 		6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
 		6713B07B1B7379DD003A1450 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		6713B07C1B7379DD003A1450 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		67156DE61DCB744F007DC6F1 /* MusicFeeder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicFeeder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		67156DE81DCB744F007DC6F1 /* MusicFeeder-macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MusicFeeder-macOS.h"; path = "Header/MusicFeeder-macOS.h"; sourceTree = "<group>"; };
+		67156DEE1DCB744F007DC6F1 /* MusicFeeder-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MusicFeeder-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		67156E021DCB748A007DC6F1 /* MusicFeeder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicFeeder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		67156E041DCB748A007DC6F1 /* MusicFeeder-tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MusicFeeder-tvOS.h"; path = "Header/MusicFeeder-tvOS.h"; sourceTree = "<group>"; };
+		67156E0A1DCB748A007DC6F1 /* MusicFeeder-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MusicFeeder-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		67156E271DCB756C007DC6F1 /* MusicFeeder-iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MusicFeeder-iOS.h"; path = "Header/MusicFeeder-iOS.h"; sourceTree = "<group>"; };
+		67156E591DCB7672007DC6F1 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/Mac/Alamofire.framework; sourceTree = "<group>"; };
+		67156E5A1DCB7672007DC6F1 /* Breit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Breit.framework; path = Carthage/Build/Mac/Breit.framework; sourceTree = "<group>"; };
+		67156E5B1DCB7672007DC6F1 /* FeedlyKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedlyKit.framework; path = Carthage/Build/Mac/FeedlyKit.framework; sourceTree = "<group>"; };
+		67156E5C1DCB7672007DC6F1 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
+		67156E5D1DCB7672007DC6F1 /* PlayerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PlayerKit.framework; path = Carthage/Build/Mac/PlayerKit.framework; sourceTree = "<group>"; };
+		67156E5E1DCB7672007DC6F1 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/Mac/Quick.framework; sourceTree = "<group>"; };
+		67156E5F1DCB7672007DC6F1 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/Mac/ReactiveSwift.framework; sourceTree = "<group>"; };
+		67156E601DCB7672007DC6F1 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/Mac/Realm.framework; sourceTree = "<group>"; };
+		67156E611DCB7672007DC6F1 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
+		67156E621DCB7672007DC6F1 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/Mac/SDWebImage.framework; sourceTree = "<group>"; };
+		67156E631DCB7672007DC6F1 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/Mac/SnapKit.framework; sourceTree = "<group>"; };
+		67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/Mac/SoundCloudKit.framework; sourceTree = "<group>"; };
+		67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/Mac/SwiftyJSON.framework; sourceTree = "<group>"; };
+		67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/Mac/XCDYouTubeKit.framework; sourceTree = "<group>"; };
+		67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/tvOS/Alamofire.framework; sourceTree = "<group>"; };
+		67156E9D1DCB76B2007DC6F1 /* Breit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Breit.framework; path = Carthage/Build/tvOS/Breit.framework; sourceTree = "<group>"; };
+		67156E9E1DCB76B2007DC6F1 /* FeedlyKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedlyKit.framework; path = Carthage/Build/tvOS/FeedlyKit.framework; sourceTree = "<group>"; };
+		67156E9F1DCB76B2007DC6F1 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/tvOS/Nimble.framework; sourceTree = "<group>"; };
+		67156EA01DCB76B2007DC6F1 /* PlayerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PlayerKit.framework; path = Carthage/Build/tvOS/PlayerKit.framework; sourceTree = "<group>"; };
+		67156EA11DCB76B2007DC6F1 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/tvOS/Quick.framework; sourceTree = "<group>"; };
+		67156EA21DCB76B2007DC6F1 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/tvOS/ReactiveSwift.framework; sourceTree = "<group>"; };
+		67156EA31DCB76B2007DC6F1 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/tvOS/Realm.framework; sourceTree = "<group>"; };
+		67156EA41DCB76B2007DC6F1 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/tvOS/Result.framework; sourceTree = "<group>"; };
+		67156EA51DCB76B3007DC6F1 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/tvOS/SDWebImage.framework; sourceTree = "<group>"; };
+		67156EA61DCB76B3007DC6F1 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/tvOS/SnapKit.framework; sourceTree = "<group>"; };
+		67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/tvOS/SoundCloudKit.framework; sourceTree = "<group>"; };
+		67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/tvOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/tvOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
+		67156EBA1DCB770A007DC6F1 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/watchOS/Alamofire.framework; sourceTree = "<group>"; };
+		67156EBB1DCB770A007DC6F1 /* Breit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Breit.framework; path = Carthage/Build/watchOS/Breit.framework; sourceTree = "<group>"; };
+		67156EBC1DCB770A007DC6F1 /* FeedlyKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedlyKit.framework; path = Carthage/Build/watchOS/FeedlyKit.framework; sourceTree = "<group>"; };
+		67156EBD1DCB770A007DC6F1 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/watchOS/ReactiveSwift.framework; sourceTree = "<group>"; };
+		67156EBE1DCB770A007DC6F1 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/watchOS/Realm.framework; sourceTree = "<group>"; };
+		67156EBF1DCB770A007DC6F1 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/watchOS/Result.framework; sourceTree = "<group>"; };
+		67156EC01DCB770A007DC6F1 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/watchOS/SDWebImage.framework; sourceTree = "<group>"; };
+		67156EC11DCB770A007DC6F1 /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/watchOS/SoundCloudKit.framework; sourceTree = "<group>"; };
+		67156EC21DCB770A007DC6F1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/watchOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		671841DD1CD2D40B005904EF /* Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Topic.swift; path = Source/Topic.swift; sourceTree = SOURCE_ROOT; };
 		671841E61CD2E1E2005904EF /* TopicRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopicRepository.swift; path = Source/TopicRepository.swift; sourceTree = SOURCE_ROOT; };
 		6719A1971DABB70200280349 /* EntryCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryCache.swift; path = Source/EntryCache.swift; sourceTree = SOURCE_ROOT; };
@@ -205,6 +496,88 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		67156DE21DCB744F007DC6F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156E671DCB7672007DC6F1 /* Alamofire.framework in Frameworks */,
+				67156E681DCB7672007DC6F1 /* Breit.framework in Frameworks */,
+				67156E691DCB7672007DC6F1 /* FeedlyKit.framework in Frameworks */,
+				67156E6B1DCB7672007DC6F1 /* PlayerKit.framework in Frameworks */,
+				67156E6D1DCB7672007DC6F1 /* ReactiveSwift.framework in Frameworks */,
+				67156E6E1DCB7672007DC6F1 /* Realm.framework in Frameworks */,
+				67156E6F1DCB7672007DC6F1 /* Result.framework in Frameworks */,
+				67156E701DCB7672007DC6F1 /* SDWebImage.framework in Frameworks */,
+				67156E711DCB7672007DC6F1 /* SnapKit.framework in Frameworks */,
+				67156E721DCB7672007DC6F1 /* SoundCloudKit.framework in Frameworks */,
+				67156E731DCB7672007DC6F1 /* SwiftyJSON.framework in Frameworks */,
+				67156E741DCB7672007DC6F1 /* XCDYouTubeKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156DEB1DCB744F007DC6F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156DEF1DCB744F007DC6F1 /* MusicFeeder.framework in Frameworks */,
+				67156EFD1DCB7A4D007DC6F1 /* Alamofire.framework in Frameworks */,
+				67156EFE1DCB7A4D007DC6F1 /* Breit.framework in Frameworks */,
+				67156EFF1DCB7A4D007DC6F1 /* FeedlyKit.framework in Frameworks */,
+				67156F001DCB7A4D007DC6F1 /* Nimble.framework in Frameworks */,
+				67156F011DCB7A4D007DC6F1 /* PlayerKit.framework in Frameworks */,
+				67156F021DCB7A4D007DC6F1 /* Quick.framework in Frameworks */,
+				67156F031DCB7A4D007DC6F1 /* ReactiveSwift.framework in Frameworks */,
+				67156F041DCB7A4D007DC6F1 /* Realm.framework in Frameworks */,
+				67156F051DCB7A4D007DC6F1 /* Result.framework in Frameworks */,
+				67156F061DCB7A4D007DC6F1 /* SDWebImage.framework in Frameworks */,
+				67156F071DCB7A4D007DC6F1 /* SnapKit.framework in Frameworks */,
+				67156F081DCB7A4D007DC6F1 /* SoundCloudKit.framework in Frameworks */,
+				67156F091DCB7A4D007DC6F1 /* SwiftyJSON.framework in Frameworks */,
+				67156F0A1DCB7A4D007DC6F1 /* XCDYouTubeKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156DFE1DCB748A007DC6F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156EAA1DCB76B3007DC6F1 /* Alamofire.framework in Frameworks */,
+				67156EAB1DCB76B3007DC6F1 /* Breit.framework in Frameworks */,
+				67156EAC1DCB76B3007DC6F1 /* FeedlyKit.framework in Frameworks */,
+				67156EAE1DCB76B3007DC6F1 /* PlayerKit.framework in Frameworks */,
+				67156EB01DCB76B3007DC6F1 /* ReactiveSwift.framework in Frameworks */,
+				67156EB11DCB76B3007DC6F1 /* Realm.framework in Frameworks */,
+				67156EB21DCB76B3007DC6F1 /* Result.framework in Frameworks */,
+				67156EB31DCB76B3007DC6F1 /* SDWebImage.framework in Frameworks */,
+				67156EB41DCB76B3007DC6F1 /* SnapKit.framework in Frameworks */,
+				67156EB51DCB76B3007DC6F1 /* SoundCloudKit.framework in Frameworks */,
+				67156EB61DCB76B3007DC6F1 /* SwiftyJSON.framework in Frameworks */,
+				67156EB71DCB76B3007DC6F1 /* XCDYouTubeKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156E071DCB748A007DC6F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156F1B1DCB7A96007DC6F1 /* Alamofire.framework in Frameworks */,
+				67156F1C1DCB7A96007DC6F1 /* Breit.framework in Frameworks */,
+				67156F1D1DCB7A96007DC6F1 /* FeedlyKit.framework in Frameworks */,
+				67156F1E1DCB7A96007DC6F1 /* Nimble.framework in Frameworks */,
+				67156F1F1DCB7A96007DC6F1 /* PlayerKit.framework in Frameworks */,
+				67156F201DCB7A96007DC6F1 /* Quick.framework in Frameworks */,
+				67156F211DCB7A96007DC6F1 /* ReactiveSwift.framework in Frameworks */,
+				67156F221DCB7A96007DC6F1 /* Realm.framework in Frameworks */,
+				67156F231DCB7A96007DC6F1 /* Result.framework in Frameworks */,
+				67156F241DCB7A96007DC6F1 /* SDWebImage.framework in Frameworks */,
+				67156F251DCB7A96007DC6F1 /* SnapKit.framework in Frameworks */,
+				67156F261DCB7A96007DC6F1 /* SoundCloudKit.framework in Frameworks */,
+				67156F271DCB7A96007DC6F1 /* SwiftyJSON.framework in Frameworks */,
+				67156F281DCB7A96007DC6F1 /* XCDYouTubeKit.framework in Frameworks */,
+				67156E0B1DCB748A007DC6F1 /* MusicFeeder.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		679C52781B70F24A00BE6614 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -265,6 +638,95 @@
 			name = Store;
 			sourceTree = "<group>";
 		};
+		67156E261DCB74C0007DC6F1 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				67156E271DCB756C007DC6F1 /* MusicFeeder-iOS.h */,
+				67156DE81DCB744F007DC6F1 /* MusicFeeder-macOS.h */,
+				67156E041DCB748A007DC6F1 /* MusicFeeder-tvOS.h */,
+			);
+			name = Header;
+			sourceTree = "<group>";
+		};
+		67156E571DCB763C007DC6F1 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				67B7A8501DCB346100EB2604 /* ReactiveSwift.framework */,
+				67B7A84E1DCB344B00EB2604 /* SDWebImage.framework */,
+				67D2657E1BACE16B000240FB /* Breit.framework */,
+				67D2657F1BACE16B000240FB /* SnapKit.framework */,
+				67FCFAA01B946CED008359BB /* SoundCloudKit.framework */,
+				6713B07B1B7379DD003A1450 /* Nimble.framework */,
+				6713B07C1B7379DD003A1450 /* Quick.framework */,
+				6713B0631B7379CB003A1450 /* FeedlyKit.framework */,
+				6713B0641B7379CB003A1450 /* PlayerKit.framework */,
+				6713B0661B7379CB003A1450 /* Realm.framework */,
+				6713B0671B7379CB003A1450 /* Result.framework */,
+				6713B0681B7379CB003A1450 /* SwiftyJSON.framework */,
+				6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */,
+				6713B0601B73798E003A1450 /* Alamofire.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		67156E581DCB7646007DC6F1 /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				67156E591DCB7672007DC6F1 /* Alamofire.framework */,
+				67156E5A1DCB7672007DC6F1 /* Breit.framework */,
+				67156E5B1DCB7672007DC6F1 /* FeedlyKit.framework */,
+				67156E5C1DCB7672007DC6F1 /* Nimble.framework */,
+				67156E5D1DCB7672007DC6F1 /* PlayerKit.framework */,
+				67156E5E1DCB7672007DC6F1 /* Quick.framework */,
+				67156E5F1DCB7672007DC6F1 /* ReactiveSwift.framework */,
+				67156E601DCB7672007DC6F1 /* Realm.framework */,
+				67156E611DCB7672007DC6F1 /* Result.framework */,
+				67156E621DCB7672007DC6F1 /* SDWebImage.framework */,
+				67156E631DCB7672007DC6F1 /* SnapKit.framework */,
+				67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */,
+				67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */,
+				67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */,
+			);
+			name = macOS;
+			sourceTree = "<group>";
+		};
+		67156EB81DCB76BC007DC6F1 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */,
+				67156E9D1DCB76B2007DC6F1 /* Breit.framework */,
+				67156E9E1DCB76B2007DC6F1 /* FeedlyKit.framework */,
+				67156E9F1DCB76B2007DC6F1 /* Nimble.framework */,
+				67156EA01DCB76B2007DC6F1 /* PlayerKit.framework */,
+				67156EA11DCB76B2007DC6F1 /* Quick.framework */,
+				67156EA21DCB76B2007DC6F1 /* ReactiveSwift.framework */,
+				67156EA31DCB76B2007DC6F1 /* Realm.framework */,
+				67156EA41DCB76B2007DC6F1 /* Result.framework */,
+				67156EA51DCB76B3007DC6F1 /* SDWebImage.framework */,
+				67156EA61DCB76B3007DC6F1 /* SnapKit.framework */,
+				67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */,
+				67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */,
+				67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */,
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
+		67156EB91DCB76E8007DC6F1 /* watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				67156EBA1DCB770A007DC6F1 /* Alamofire.framework */,
+				67156EBB1DCB770A007DC6F1 /* Breit.framework */,
+				67156EBC1DCB770A007DC6F1 /* FeedlyKit.framework */,
+				67156EBD1DCB770A007DC6F1 /* ReactiveSwift.framework */,
+				67156EBE1DCB770A007DC6F1 /* Realm.framework */,
+				67156EBF1DCB770A007DC6F1 /* Result.framework */,
+				67156EC01DCB770A007DC6F1 /* SDWebImage.framework */,
+				67156EC11DCB770A007DC6F1 /* SoundCloudKit.framework */,
+				67156EC21DCB770A007DC6F1 /* SwiftyJSON.framework */,
+			);
+			name = watchOS;
+			sourceTree = "<group>";
+		};
 		671841E51CD2E1CF005904EF /* Repository */ = {
 			isa = PBXGroup;
 			children = (
@@ -308,20 +770,10 @@
 		679C52751B70F16800BE6614 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				67B7A8501DCB346100EB2604 /* ReactiveSwift.framework */,
-				67B7A84E1DCB344B00EB2604 /* SDWebImage.framework */,
-				67D2657E1BACE16B000240FB /* Breit.framework */,
-				67D2657F1BACE16B000240FB /* SnapKit.framework */,
-				67FCFAA01B946CED008359BB /* SoundCloudKit.framework */,
-				6713B07B1B7379DD003A1450 /* Nimble.framework */,
-				6713B07C1B7379DD003A1450 /* Quick.framework */,
-				6713B0631B7379CB003A1450 /* FeedlyKit.framework */,
-				6713B0641B7379CB003A1450 /* PlayerKit.framework */,
-				6713B0661B7379CB003A1450 /* Realm.framework */,
-				6713B0671B7379CB003A1450 /* Result.framework */,
-				6713B0681B7379CB003A1450 /* SwiftyJSON.framework */,
-				6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */,
-				6713B0601B73798E003A1450 /* Alamofire.framework */,
+				67156E571DCB763C007DC6F1 /* iOS */,
+				67156E581DCB7646007DC6F1 /* macOS */,
+				67156EB81DCB76BC007DC6F1 /* tvOS */,
+				67156EB91DCB76E8007DC6F1 /* watchOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -345,6 +797,7 @@
 		67FBBDFC1B6CE43100B567CB = {
 			isa = PBXGroup;
 			children = (
+				67156E261DCB74C0007DC6F1 /* Header */,
 				67FBBE081B6CE43100B567CB /* Source */,
 				67FBBE151B6CE43100B567CB /* Spec */,
 				679C51DC1B70E44800BE6614 /* Fixture */,
@@ -358,6 +811,10 @@
 			children = (
 				679C527C1B70F24A00BE6614 /* MusicFeeder.framework */,
 				679C52861B70F24A00BE6614 /* MusicFeeder-iOSTests.xctest */,
+				67156DE61DCB744F007DC6F1 /* MusicFeeder.framework */,
+				67156DEE1DCB744F007DC6F1 /* MusicFeeder-macOSTests.xctest */,
+				67156E021DCB748A007DC6F1 /* MusicFeeder.framework */,
+				67156E0A1DCB748A007DC6F1 /* MusicFeeder-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -399,16 +856,107 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		67156DE31DCB744F007DC6F1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156DF61DCB744F007DC6F1 /* MusicFeeder-macOS.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156DFF1DCB748A007DC6F1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156E121DCB748A007DC6F1 /* MusicFeeder-tvOS.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		679C52791B70F24A00BE6614 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67156E281DCB756C007DC6F1 /* MusicFeeder-iOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		67156DE51DCB744F007DC6F1 /* MusicFeeder-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67156DFB1DCB744F007DC6F1 /* Build configuration list for PBXNativeTarget "MusicFeeder-macOS" */;
+			buildPhases = (
+				67156DE11DCB744F007DC6F1 /* Sources */,
+				67156DE21DCB744F007DC6F1 /* Frameworks */,
+				67156DE31DCB744F007DC6F1 /* Headers */,
+				67156DE41DCB744F007DC6F1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MusicFeeder-macOS";
+			productName = "MusicFeeder-macOS";
+			productReference = 67156DE61DCB744F007DC6F1 /* MusicFeeder.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		67156DED1DCB744F007DC6F1 /* MusicFeeder-macOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67156DFC1DCB744F007DC6F1 /* Build configuration list for PBXNativeTarget "MusicFeeder-macOSTests" */;
+			buildPhases = (
+				67156DEA1DCB744F007DC6F1 /* Sources */,
+				67156DEB1DCB744F007DC6F1 /* Frameworks */,
+				67156DEC1DCB744F007DC6F1 /* Resources */,
+				67156F0B1DCB7A55007DC6F1 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67156DF11DCB744F007DC6F1 /* PBXTargetDependency */,
+			);
+			name = "MusicFeeder-macOSTests";
+			productName = "MusicFeeder-macOSTests";
+			productReference = 67156DEE1DCB744F007DC6F1 /* MusicFeeder-macOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		67156E011DCB748A007DC6F1 /* MusicFeeder-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67156E131DCB748A007DC6F1 /* Build configuration list for PBXNativeTarget "MusicFeeder-tvOS" */;
+			buildPhases = (
+				67156DFD1DCB748A007DC6F1 /* Sources */,
+				67156DFE1DCB748A007DC6F1 /* Frameworks */,
+				67156DFF1DCB748A007DC6F1 /* Headers */,
+				67156E001DCB748A007DC6F1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MusicFeeder-tvOS";
+			productName = "MusicFeeder-tvOS";
+			productReference = 67156E021DCB748A007DC6F1 /* MusicFeeder.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		67156E091DCB748A007DC6F1 /* MusicFeeder-tvOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67156E161DCB748A007DC6F1 /* Build configuration list for PBXNativeTarget "MusicFeeder-tvOSTests" */;
+			buildPhases = (
+				67156E061DCB748A007DC6F1 /* Sources */,
+				67156E071DCB748A007DC6F1 /* Frameworks */,
+				67156E081DCB748A007DC6F1 /* Resources */,
+				67156F331DCB7ABA007DC6F1 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67156E0D1DCB748A007DC6F1 /* PBXTargetDependency */,
+			);
+			name = "MusicFeeder-tvOSTests";
+			productName = "MusicFeeder-tvOSTests";
+			productReference = 67156E0A1DCB748A007DC6F1 /* MusicFeeder-tvOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		679C527B1B70F24A00BE6614 /* MusicFeeder-iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 679C528F1B70F24A00BE6614 /* Build configuration list for PBXNativeTarget "MusicFeeder-iOS" */;
@@ -452,10 +1000,26 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0810;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = kumabook;
 				TargetAttributes = {
+					67156DE51DCB744F007DC6F1 = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+					67156DED1DCB744F007DC6F1 = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+					67156E011DCB748A007DC6F1 = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+					67156E091DCB748A007DC6F1 = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
 					679C527B1B70F24A00BE6614 = {
 						CreatedOnToolsVersion = 6.4;
 						LastSwiftMigration = 0810;
@@ -480,11 +1044,49 @@
 			targets = (
 				679C527B1B70F24A00BE6614 /* MusicFeeder-iOS */,
 				679C52851B70F24A00BE6614 /* MusicFeeder-iOSTests */,
+				67156DE51DCB744F007DC6F1 /* MusicFeeder-macOS */,
+				67156DED1DCB744F007DC6F1 /* MusicFeeder-macOSTests */,
+				67156E011DCB748A007DC6F1 /* MusicFeeder-tvOS */,
+				67156E091DCB748A007DC6F1 /* MusicFeeder-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		67156DE41DCB744F007DC6F1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156DEC1DCB744F007DC6F1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156EFA1DCB7A44007DC6F1 /* playlist.json in Resources */,
+				67156EFB1DCB7A44007DC6F1 /* track.json in Resources */,
+				67156EFC1DCB7A44007DC6F1 /* account.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156E001DCB748A007DC6F1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156E081DCB748A007DC6F1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156F301DCB7AB7007DC6F1 /* playlist.json in Resources */,
+				67156F311DCB7AB7007DC6F1 /* track.json in Resources */,
+				67156F321DCB7AB7007DC6F1 /* account.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		679C52841B70F24A00BE6614 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -498,6 +1100,126 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		67156DE11DCB744F007DC6F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156E301DCB762D007DC6F1 /* TopicRepository.swift in Sources */,
+				67156E311DCB762D007DC6F1 /* TrackRepository.swift in Sources */,
+				67156E321DCB762D007DC6F1 /* PlaylistRepository.swift in Sources */,
+				67156E331DCB762D007DC6F1 /* StreamRepository.swift in Sources */,
+				67156E341DCB762D007DC6F1 /* PaginatedCollectionRepository.swift in Sources */,
+				67156E351DCB762D007DC6F1 /* EntryRepository.swift in Sources */,
+				67156E361DCB762D007DC6F1 /* SavedStreamRepository.swift in Sources */,
+				67156E371DCB762D007DC6F1 /* TrackStreamRepository.swift in Sources */,
+				67156E381DCB762D007DC6F1 /* HistoryRepository.swift in Sources */,
+				67156E391DCB762D007DC6F1 /* TimeSpecifiedEntryRepository.swift in Sources */,
+				67156E3A1DCB762D007DC6F1 /* TimeSpecifiedTrackStreamRepository.swift in Sources */,
+				67156E3B1DCB762D007DC6F1 /* Track.swift in Sources */,
+				67156E3C1DCB762D007DC6F1 /* Playlist.swift in Sources */,
+				67156E3D1DCB762D007DC6F1 /* History.swift in Sources */,
+				67156E3E1DCB762D007DC6F1 /* Entry.swift in Sources */,
+				67156E3F1DCB762D007DC6F1 /* Category.swift in Sources */,
+				67156E401DCB762D007DC6F1 /* TrackStream.swift in Sources */,
+				67156E411DCB762D007DC6F1 /* Topic.swift in Sources */,
+				67156E421DCB762D007DC6F1 /* Journal.swift in Sources */,
+				67156E431DCB762D007DC6F1 /* PlaylistQueue.swift in Sources */,
+				67156E441DCB762D007DC6F1 /* PlaylistStore.swift in Sources */,
+				67156E451DCB762D007DC6F1 /* CategoryStore.swift in Sources */,
+				67156E461DCB762D007DC6F1 /* RealmMigration.swift in Sources */,
+				67156E471DCB762D007DC6F1 /* EntryStore.swift in Sources */,
+				67156E481DCB762D007DC6F1 /* HistoryStore.swift in Sources */,
+				67156E491DCB762D007DC6F1 /* TrackStore.swift in Sources */,
+				67156E4A1DCB762D007DC6F1 /* SubscriptionStore.swift in Sources */,
+				67156E4B1DCB762D007DC6F1 /* ListenItLaterEntryStore.swift in Sources */,
+				67156E4C1DCB762D007DC6F1 /* ProfileStore.swift in Sources */,
+				67156E4D1DCB762D007DC6F1 /* TopicStore.swift in Sources */,
+				67156E4E1DCB762D007DC6F1 /* Cacheable.swift in Sources */,
+				67156E4F1DCB762D007DC6F1 /* TopicCache.swift in Sources */,
+				67156E501DCB762D007DC6F1 /* EntryCache.swift in Sources */,
+				67156E511DCB762D007DC6F1 /* TrackCache.swift in Sources */,
+				67156E521DCB762D007DC6F1 /* Player.swift in Sources */,
+				67156E531DCB762D007DC6F1 /* PinkSpiderAPIClient.swift in Sources */,
+				67156E541DCB762D007DC6F1 /* CloudAPIClientExtension.swift in Sources */,
+				67156E551DCB762D007DC6F1 /* MusicFeederAPIClient.swift in Sources */,
+				67156E561DCB762D007DC6F1 /* XCDYouTubeClient.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156DEA1DCB744F007DC6F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156EF61DCB7A3D007DC6F1 /* FeedlyAPISpec.swift in Sources */,
+				67156EF71DCB7A3D007DC6F1 /* TopicRepositorySpec.swift in Sources */,
+				67156EF81DCB7A3D007DC6F1 /* EntryRepositorySpec.swift in Sources */,
+				67156EF91DCB7A3D007DC6F1 /* TrackRespoistorySpec.swift in Sources */,
+				67156EF31DCB7A35007DC6F1 /* PlaylistSpec.swift in Sources */,
+				67156EF41DCB7A35007DC6F1 /* SpecHelper.swift in Sources */,
+				67156EF51DCB7A35007DC6F1 /* TrackSpec.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156DFD1DCB748A007DC6F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156E751DCB768E007DC6F1 /* TopicRepository.swift in Sources */,
+				67156E761DCB768E007DC6F1 /* TrackRepository.swift in Sources */,
+				67156E771DCB768E007DC6F1 /* PlaylistRepository.swift in Sources */,
+				67156E781DCB768E007DC6F1 /* StreamRepository.swift in Sources */,
+				67156E791DCB768E007DC6F1 /* PaginatedCollectionRepository.swift in Sources */,
+				67156E7A1DCB768E007DC6F1 /* EntryRepository.swift in Sources */,
+				67156E7B1DCB768E007DC6F1 /* SavedStreamRepository.swift in Sources */,
+				67156E7C1DCB768E007DC6F1 /* TrackStreamRepository.swift in Sources */,
+				67156E7D1DCB768E007DC6F1 /* HistoryRepository.swift in Sources */,
+				67156E7E1DCB768E007DC6F1 /* TimeSpecifiedEntryRepository.swift in Sources */,
+				67156E7F1DCB768E007DC6F1 /* TimeSpecifiedTrackStreamRepository.swift in Sources */,
+				67156E801DCB768E007DC6F1 /* Track.swift in Sources */,
+				67156E811DCB768E007DC6F1 /* Playlist.swift in Sources */,
+				67156E821DCB768E007DC6F1 /* History.swift in Sources */,
+				67156E831DCB768E007DC6F1 /* Entry.swift in Sources */,
+				67156E841DCB768E007DC6F1 /* Category.swift in Sources */,
+				67156E851DCB768E007DC6F1 /* TrackStream.swift in Sources */,
+				67156E861DCB768E007DC6F1 /* Topic.swift in Sources */,
+				67156E871DCB768E007DC6F1 /* Journal.swift in Sources */,
+				67156E881DCB768E007DC6F1 /* PlaylistQueue.swift in Sources */,
+				67156E891DCB768E007DC6F1 /* PlaylistStore.swift in Sources */,
+				67156E8A1DCB768E007DC6F1 /* CategoryStore.swift in Sources */,
+				67156E8B1DCB768E007DC6F1 /* RealmMigration.swift in Sources */,
+				67156E8C1DCB768E007DC6F1 /* EntryStore.swift in Sources */,
+				67156E8D1DCB768E007DC6F1 /* HistoryStore.swift in Sources */,
+				67156E8E1DCB768E007DC6F1 /* TrackStore.swift in Sources */,
+				67156E8F1DCB768E007DC6F1 /* SubscriptionStore.swift in Sources */,
+				67156E901DCB768E007DC6F1 /* ListenItLaterEntryStore.swift in Sources */,
+				67156E911DCB768E007DC6F1 /* ProfileStore.swift in Sources */,
+				67156E921DCB768E007DC6F1 /* TopicStore.swift in Sources */,
+				67156E931DCB768E007DC6F1 /* Cacheable.swift in Sources */,
+				67156E941DCB768E007DC6F1 /* TopicCache.swift in Sources */,
+				67156E951DCB768E007DC6F1 /* EntryCache.swift in Sources */,
+				67156E961DCB768E007DC6F1 /* TrackCache.swift in Sources */,
+				67156E971DCB768E007DC6F1 /* Player.swift in Sources */,
+				67156E981DCB768E007DC6F1 /* PinkSpiderAPIClient.swift in Sources */,
+				67156E991DCB768E007DC6F1 /* CloudAPIClientExtension.swift in Sources */,
+				67156E9A1DCB768E007DC6F1 /* MusicFeederAPIClient.swift in Sources */,
+				67156E9B1DCB768E007DC6F1 /* XCDYouTubeClient.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67156E061DCB748A007DC6F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67156F2C1DCB7AAD007DC6F1 /* FeedlyAPISpec.swift in Sources */,
+				67156F2D1DCB7AAD007DC6F1 /* TopicRepositorySpec.swift in Sources */,
+				67156F2E1DCB7AAD007DC6F1 /* EntryRepositorySpec.swift in Sources */,
+				67156F2F1DCB7AAD007DC6F1 /* TrackRespoistorySpec.swift in Sources */,
+				67156F291DCB7AA8007DC6F1 /* PlaylistSpec.swift in Sources */,
+				67156F2A1DCB7AA8007DC6F1 /* SpecHelper.swift in Sources */,
+				67156F2B1DCB7AA8007DC6F1 /* TrackSpec.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		679C52771B70F24A00BE6614 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -561,6 +1283,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		67156DF11DCB744F007DC6F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67156DE51DCB744F007DC6F1 /* MusicFeeder-macOS */;
+			targetProxy = 67156DF01DCB744F007DC6F1 /* PBXContainerItemProxy */;
+		};
+		67156E0D1DCB748A007DC6F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67156E011DCB748A007DC6F1 /* MusicFeeder-tvOS */;
+			targetProxy = 67156E0C1DCB748A007DC6F1 /* PBXContainerItemProxy */;
+		};
 		679C52891B70F24A00BE6614 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 679C527B1B70F24A00BE6614 /* MusicFeeder-iOS */;
@@ -569,6 +1301,216 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		67156DF71DCB744F007DC6F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.kumabook.MusicFeeder-macOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		67156DF81DCB744F007DC6F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.kumabook.MusicFeeder-macOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		67156DF91DCB744F007DC6F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Spec/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.kumabook.MusicFeeder-macOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		67156DFA1DCB744F007DC6F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Spec/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.kumabook.MusicFeeder-macOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		67156E141DCB748A007DC6F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.kumabook.MusicFeeder-tvOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		67156E151DCB748A007DC6F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.kumabook.MusicFeeder-tvOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		67156E171DCB748A007DC6F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = Spec/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.kumabook.MusicFeeder-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		67156E181DCB748A007DC6F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = Spec/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.kumabook.MusicFeeder-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 3.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 		679C52901B70F24A00BE6614 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -749,6 +1691,42 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		67156DFB1DCB744F007DC6F1 /* Build configuration list for PBXNativeTarget "MusicFeeder-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67156DF71DCB744F007DC6F1 /* Debug */,
+				67156DF81DCB744F007DC6F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67156DFC1DCB744F007DC6F1 /* Build configuration list for PBXNativeTarget "MusicFeeder-macOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67156DF91DCB744F007DC6F1 /* Debug */,
+				67156DFA1DCB744F007DC6F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67156E131DCB748A007DC6F1 /* Build configuration list for PBXNativeTarget "MusicFeeder-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67156E141DCB748A007DC6F1 /* Debug */,
+				67156E151DCB748A007DC6F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67156E161DCB748A007DC6F1 /* Build configuration list for PBXNativeTarget "MusicFeeder-tvOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67156E171DCB748A007DC6F1 /* Debug */,
+				67156E181DCB748A007DC6F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		679C528F1B70F24A00BE6614 /* Build configuration list for PBXNativeTarget "MusicFeeder-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
