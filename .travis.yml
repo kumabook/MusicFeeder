@@ -3,5 +3,5 @@ language: objective-c
 before_script:
     - brew update
     - brew install carthage || true
-    - carthage bootstrap --platform all --verbose | xcpretty
-script: make
+    - carthage bootstrap --platform macOS --verbose
+script: xcodebuild -scheme MusicFeeder-macOS test
