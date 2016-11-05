@@ -221,7 +221,7 @@ open class StreamRepository {
 
     open func moveSubscriptionTo(_ sourceIndex: Int, toIndex:Int) -> PersistentResult {
         let result = SubscriptionStore.moveSubscriptionInSharedList(sourceIndex, toIndex: toIndex)
-        let _ = loadLocalSubscriptions()
+        let _ = loadLocalSubscriptions().start()
         return result
     }
 }
