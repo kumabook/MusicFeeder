@@ -141,14 +141,10 @@ extension CacheSet where Item: Cacheable, Object: RLMObject, Entity: RLMObject, 
     }
     public static func delete(_ id: String) -> Bool {
         guard let obj = get(id) else { return false }
-        switch materialize(try realm.transaction()
-            {
-                Self.realm.delete(obj)
-            }
-        ) {
-        case .success: return true
-        case .failure: return false
-        }
+        guard let _ = try? realm.transaction({
+            Self.realm.delete(obj)
+        }) else { return false }
+        return true
     }
     public static func deleteAllItems() {
        let _ =  materialize(try realm.transaction()
