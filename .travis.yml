@@ -5,4 +5,5 @@ before_script:
     - brew install carthage || true
     - brew upgrade carthage || true
     - carthage bootstrap --platform macOS --verbose
+    - curl http://spread-beaver.herokuapp.com/
 script: xcodebuild -scheme MusicFeeder-macOS test
