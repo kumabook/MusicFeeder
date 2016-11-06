@@ -122,6 +122,7 @@ public class StreamRepository {
             for category in Category.findAll() {
                 self.streamListOfCategory[category] = [] as [Stream]
             }
+            self.streamListOfCategory[self.uncategorized] = []
             for subscription in Subscription.findAll() {
                 let categories = subscription.categories.count > 0 ? subscription.categories : [self.uncategorized]
                 for category in categories {
@@ -221,7 +222,7 @@ public class StreamRepository {
 
     public func moveSubscriptionTo(sourceIndex: Int, toIndex:Int) -> PersistentResult {
         let result = SubscriptionStore.moveSubscriptionInSharedList(sourceIndex, toIndex: toIndex)
-        loadLocalSubscriptions()
+        loadLocalSubscriptions().start()
         return result
     }
 }
