@@ -223,6 +223,7 @@ public class PaginatedCollectionRepository<C: PaginatedCollection, I where C.Ite
                 completed: {
             }).start()
     }
+    public var cacheKey: String { return stream.streamId }
     public func addCacheItems(items: [C.ItemType]) {}
     public func loadCacheItems() {}
     public func clearCacheItems() {}

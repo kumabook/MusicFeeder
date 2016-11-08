@@ -77,13 +77,13 @@ public class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollec
     // MARK: - PaginatedCollectionRepository protocol
 
     public override func addCacheItems(items: [Entry]) {
-        EntryCacheList.findOrCreate(stream.streamId).add(items)
+        EntryCacheList.findOrCreate(cacheKey).add(items)
     }
     public override func loadCacheItems() {
-        cacheItems = EntryCacheList.findOrCreate(stream.streamId).items.map { Entry(store: $0 as! EntryStore) }
+        cacheItems = EntryCacheList.findOrCreate(cacheKey).items.map { Entry(store: $0 as! EntryStore) }
     }
     public override func clearCacheItems() {
-        EntryCacheList.findOrCreate(stream.streamId).clear()
+        EntryCacheList.findOrCreate(cacheKey).clear()
     }
     public override func itemsUpdated() {
         fetchAllPlaylists()
