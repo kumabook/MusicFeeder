@@ -43,7 +43,7 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
     open fileprivate(set) var playlistQueue:      PlaylistQueue
     open var playlistifier:      Disposable?
 
-    public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
+     override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
         needsPlaylist    = true
         playlistsOfEntry = [:]
         playlistQueue    = PlaylistQueue(playlists: [])

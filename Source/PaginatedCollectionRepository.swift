@@ -223,6 +223,7 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
                 completed: {
             }).start()
     }
+    open var cacheKey: String { return stream.streamId }
     open func addCacheItems(_ items: [C.ItemType]) {}
     open func loadCacheItems() {}
     open func clearCacheItems() {}
