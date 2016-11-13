@@ -22,7 +22,7 @@ public enum Provider: String {
     case Raw        = "Raw"
 }
 
-public enum YouTubeVideoQuality: UInt {
+public enum YouTubeVideoQuality: Int64 {
     case audioOnly = 140
     case small240  = 36
     case medium360 = 18
@@ -34,6 +34,9 @@ public enum YouTubeVideoQuality: UInt {
         case .medium360: return  "Medium 360".localize()
         case .hd720:     return  "HD 720".localize()
         }
+    }
+    public var key: AnyHashable {
+        return NSNumber(value: rawValue)
     }
     #if os(iOS)
     public static func buildAlertActions(_ handler: @escaping () -> ()) -> [UIAlertAction] {
@@ -60,7 +63,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     fileprivate static let userDefaults = UserDefaults.standard
     public static var youTubeVideoQuality: YouTubeVideoQuality {
         get {
-            if let quality = YouTubeVideoQuality(rawValue: UInt(userDefaults.integer(forKey: "youtube_video_quality"))) {
+            if let quality = YouTubeVideoQuality(rawValue: Int64(userDefaults.integer(forKey: "youtube_video_quality"))) {
                 return quality
             } else {
                 return YouTubeVideoQuality.medium360
@@ -92,7 +95,20 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public fileprivate(set) var likers:       [Profile]?
     public fileprivate(set) var expiresAt:    Int64
     public fileprivate(set) var artist:       String?
-    public var artworkUrl: URL? {
+    public var streamURL: URL? {
+        switch provider {
+        case .YouTube:
+            return youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] ?? streamUrl
+        case .SoundCloud:
+            return soundcloudTrack.map { URL(string: $0.streamUrl + "?client_id=" + APIClient.clientId) } ?? streamUrl
+        case .Raw:
+            return self.identifier.toURL()
+        }
+    }
+    public var thumbnailURL: URL? {
+        return thumbnailUrl
+    }
+    public var artworkURL: URL? {
         switch self.provider {
         case .YouTube:
             let url = youtubeVideo?.largeThumbnailURL ?? youtubeVideo?.mediumThumbnailURL ?? youtubeVideo?.smallThumbnailURL
@@ -117,13 +133,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public fileprivate(set) var streamUrl:  URL?
     public fileprivate(set) var youtubeVideo:    XCDYouTubeVideo?
     public fileprivate(set) var soundcloudTrack: SoundCloudKit.Track?
-
-    public var streamURL: URL? {
-        if let video = youtubeVideo {
-            streamUrl = video.streamURLs[Track.youTubeVideoQuality.rawValue]
-        }
-        return streamUrl
-    }
 
     public var subtitle: String? {
         switch provider {
@@ -268,7 +277,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         title        = video.title
         duration     = video.duration
         thumbnailUrl = video.mediumThumbnailURL
-        streamUrl    = youtubeVideo?.streamURLs[Track.youTubeVideoQuality.rawValue] // for cache
+        streamUrl    = youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] // for cache
         expiresAt    = youtubeVideo?.expirationDate?.timestamp ?? Int64.max
         status       = .available
     }

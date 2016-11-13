@@ -30,7 +30,7 @@ open class Playlist: PlayerKit.Playlist, Equatable, Hashable {
 
     open var tracks: [PlayerKit.Track] { return _tracks.map { $0 as PlayerKit.Track }}
     open var validTracksCount: Int {
-        return tracks.filter({ $0.streamUrl != nil}).count
+        return tracks.filter({ $0.streamURL != nil}).count
     }
 
     open func getTracks() -> [Track] { return _tracks }
