@@ -60,7 +60,6 @@ open class StreamRepository {
             uncategorized = FeedlyKit.Category.Uncategorized(userId)
         }
         streamListOfCategory[uncategorized] = []
-        let _ = loadLocalSubscriptions()
     }
 
     deinit {
@@ -97,18 +96,22 @@ open class StreamRepository {
     open func refresh() {
         state = .fetching
         observer.send(value: .startLoading)
-        apiClient.fetchSubscriptions().on(
-            value: { subscriptions in
-                self.updateSubscriptions(subscriptions)
-        }, failed: { error in
-            CloudAPIClient.handleError(error: error)
-            self.state = .error
-            self.observer.send(value: .failToLoad(error))
-        }, completed: {
-            self.state = .normal
+        let _ = loadLocalSubscriptions().on(completed: {
             self.observer.send(value: .completeLoading)
+        }).start()
+        if isLoggedIn {
+            apiClient.fetchSubscriptions().on(
+                value: { subscriptions in
+                    self.updateSubscriptions(subscriptions)
+            }, failed: { error in
+                CloudAPIClient.handleError(error: error)
+                self.state = .error
+                self.observer.send(value: .failToLoad(error))
+            }, completed: {
+                self.state = .normal
+                self.observer.send(value: .completeLoading)
+            }).start()
         }
-        ).start()
     }
     
     open func updateSubscriptions(_ subscriptions: [Subscription]) {
