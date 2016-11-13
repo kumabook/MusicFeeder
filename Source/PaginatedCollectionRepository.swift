@@ -151,7 +151,7 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
             .on(
                 value: { paginatedCollection in
                     let latestItems = paginatedCollection.items
-                    self.items = latestItems
+                    self.items.insert(contentsOf: latestItems, at: 0)
                     self.updateLastUpdated()
                     if latestItems.count > 0 {
                         self.clearCacheItems()
