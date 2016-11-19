@@ -38,13 +38,11 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
         dispose()
     }
 
-    open fileprivate(set) var needsPlaylist:      Bool
     open fileprivate(set) var playlistsOfEntry:   [Entry:Playlist]
     open fileprivate(set) var playlistQueue:      PlaylistQueue
     open var playlistifier:      Disposable?
 
     public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
-        needsPlaylist    = true
         playlistsOfEntry = [:]
         playlistQueue    = PlaylistQueue(playlists: [])
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
@@ -58,14 +56,8 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
         self.init(stream: stream, unreadOnly: unreadOnly, perPage: CloudAPIClient.perPage)
     }
 
-    public convenience init(stream: FeedlyKit.Stream, perPage: Int, needsPlaylist: Bool) {
+    public convenience init(stream: FeedlyKit.Stream, perPage: Int) {
         self.init(stream: stream, unreadOnly: false, perPage: perPage)
-        self.needsPlaylist = needsPlaylist
-    }
-
-    public convenience init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int, needsPlaylist: Bool) {
-        self.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
-        self.needsPlaylist = needsPlaylist
     }
 
     open var playlists: [Playlist] {
