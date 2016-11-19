@@ -43,3 +43,6 @@
 [submodule "Carthage/Checkouts/ReactiveSwift"]
 	path = Carthage/Checkouts/ReactiveSwift
 	url = https://github.com/ReactiveCocoa/ReactiveSwift.git
+[submodule "Carthage/Checkouts/FLAnimatedImage"]
+	path = Carthage/Checkouts/FLAnimatedImage
+	url = https://github.com/Flipboard/FLAnimatedImage.git
