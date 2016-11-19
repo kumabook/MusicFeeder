@@ -32,7 +32,7 @@ open class SavedStream: FeedlyKit.Stream {
     }
 }
 
-open class SavedStreamRepository: EntryRepository {
+open class SavedEntryRepository: EntryRepository {
     public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
     }
