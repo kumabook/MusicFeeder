@@ -14,7 +14,9 @@ import Nimble
 class EntryRepositorySpec: QuickSpec {
     var entryRepository: EntryRepository!
     var stream: Feed = Feed(id: "feed/http://spincoaster.com/feed", title: "Spincoaster", description: "", subscribers: 0)
+
     override func spec() {
+        SpecHelper.cleanRealmDBs()
         SpecHelper.ping() // wake up test server
         describe("A EntryRepository") {
             var started = false
@@ -49,7 +51,6 @@ class EntryRepositorySpec: QuickSpec {
                     expect(started).toFinally(beTrue())
                     expect(completed).toFinally(beTrue())
                     expect(self.entryRepository.items.count).toFinally(beGreaterThan(0))
-                    print(self.entryRepository.items.count)
                 }
             }
             context("when it has cache") {

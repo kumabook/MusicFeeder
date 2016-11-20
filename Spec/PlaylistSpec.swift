@@ -15,7 +15,6 @@ class PlaylistSpec: QuickSpec {
     override func spec() {
         var playlist: Playlist!
         beforeSuite {
-            RealmMigration.migrateAll()
             TrackCacheSet.deleteAllItems()
         }
         beforeEach {

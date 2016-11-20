@@ -11,6 +11,7 @@ import Nimble
 import FeedlyKit
 import MusicFeeder
 import SwiftyJSON
+import Realm
 
 open class Account {
     var baseUrl:      String
@@ -76,6 +77,18 @@ open class SpecHelper {
         }.resume()
         let _ = semaphore.wait(timeout: .distantFuture)
         print("ping complete: \(data)")
+    }
+    open class func cleanRealmDBs() {
+        removeFile(url: RLMRealmConfiguration.default().fileURL)
+        removeFile(url: URL(string: "file://\(RealmMigration.historyPath)"))
+        removeFile(url: URL(string: "file://\(RealmMigration.listenItLaterPath)"))
+        removeFile(url: URL(string: "file://\(RealmMigration.cacheListPath)"))
+        removeFile(url: URL(string: "file://\(RealmMigration.cacheSetPath)"))
+    }
+    private class func removeFile(url: URL?) {
+        guard let url = url else { return }
+        let fm = FileManager.default
+        try? fm.removeItem(at: url)
     }
 }
 
