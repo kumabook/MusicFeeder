@@ -29,7 +29,7 @@ class EntryRepositorySpec: QuickSpec {
                     expect(CloudAPIClient.isLoggedIn).toFinally(beTrue())
                     started = false
                     completed = false
-                    self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20, needsPlaylist: false)
+                    self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20)
                     self.entryRepository.signal.observeResult({ result in
                         guard let event = result.value else { return }
                         switch event {
@@ -54,7 +54,7 @@ class EntryRepositorySpec: QuickSpec {
             }
             context("when it has cache") {
                 beforeEach {
-                    self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20, needsPlaylist: false)
+                    self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20)
                 }
                 it("fetches entries from cache") {
                     expect(self.entryRepository.state).toFinally(equal(PaginatedCollectionRepositoryState.init))
