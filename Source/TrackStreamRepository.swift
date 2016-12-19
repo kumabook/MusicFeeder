@@ -35,13 +35,13 @@ open class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrackCo
     // MARK: - PaginatedCollectionRepository protocol
     
     open override func addCacheItems(_ items: [Track]) {
-        let _ = TrackCacheList.findOrCreate(stream.streamId).add(items)
+        let _ = TrackCacheList.findOrCreate(cacheKey).add(items)
     }
     open override func loadCacheItems() {
-        cacheItems = realize(TrackCacheList.findOrCreate(stream.streamId).items).map { Track(store: $0 as! TrackStore) }
+        cacheItems = realize(TrackCacheList.findOrCreate(cacheKey).items).map { Track(store: $0 as! TrackStore) }
     }
     open override func clearCacheItems() {
-        let _ = TrackCacheList.findOrCreate(stream.streamId).clear()
+        let _ = TrackCacheList.findOrCreate(cacheKey).clear()
     }
     open override func cacheItemsUpdated() {
         QueueScheduler().schedule() {
