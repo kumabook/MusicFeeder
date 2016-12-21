@@ -85,6 +85,10 @@ open class PlaylistStore: RLMObject {
         return "id"
     }
 
+    open override class func requiredProperties() -> [String] {
+        return ["id", "title"]
+    }
+
     class var realm: RLMRealm {
         get {
             return RLMRealm.default()

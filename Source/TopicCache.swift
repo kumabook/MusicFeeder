@@ -18,7 +18,11 @@ public final class TopicCacheList: RLMObject, CacheList {
     public override class func primaryKey() -> String {
         return "id"
     }
-    
+
+    public override class func requiredProperties() -> [String] {
+        return ["id"]
+    }
+
     dynamic public var id:        String   = ""
     dynamic public var timestamp: Int64    = 0
     dynamic public var items:     RLMArray = RLMArray(objectClassName: TopicCacheList.objectClassName)

@@ -81,35 +81,45 @@ open class RealmMigration {
             if (oldVersion < 12) {
                 touchAllStore(migration: migration)
             }
+            if (oldVersion < 13) {
+                migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
+                    if let _ = oldObject, let new = newObject {
+                        new["entriesCount"] = 0
+                    }
+                }
+            }
         }
         return config
     }
 
     private class func touchAllStore(migration: RLMMigration) {
-        [PlaylistStore.className(),
-         TrackStore.className(),
-         EntryStore.className(),
-         ContentStore.className(),
-         LinkStore.className(),
-         TagStore.className(),
-         KeywordStore.className(),
-         OriginStore.className(),
-         VisualStore.className(),
-         HistoryStore.className(),
-         SubscriptionStore.className(),
-         ProfileStore.className(),
-         TopicStore.className(),
-        ].forEach {
-            migration.enumerateObjects($0, block: {_, _ in })
-        }
-        [EntryCacheList.className(),
-         TopicCacheList.className(),
-         TrackCacheList.className(),
-         TrackCacheSet.className(),
-         TrackCacheEntity.className()].forEach {
-            migration.enumerateObjects($0, block: {oldObject, newObject in
+        let objects: [(String, [String])] =
+        [(ContentStore.className(),      ContentStore.requiredProperties()),
+         (LinkStore.className(),         LinkStore.requiredProperties()),
+         (KeywordStore.className(),      KeywordStore.requiredProperties()),
+         (OriginStore.className(),       OriginStore.requiredProperties()),
+         (VisualStore.className(),       VisualStore.requiredProperties()),
+         (HistoryStore.className(),      HistoryStore.requiredProperties()),
+         (TopicStore.className(),        TopicStore.requiredProperties()),
+         (SubscriptionStore.className(), SubscriptionStore.requiredProperties()),
+         (PlaylistStore.className(),     PlaylistStore.requiredProperties()),
+         (TrackStore.className(),        TrackStore.requiredProperties()),
+         (TagStore.className(),          TagStore.requiredProperties()),
+         (EntryStore.className(),        EntryStore.requiredProperties()),
+         (ProfileStore.className(),      ProfileStore.requiredProperties()),
+         (EntryCacheList.className(),    EntryCacheList.requiredProperties()),
+         (TopicCacheList.className(),    TopicCacheList.requiredProperties()),
+         (TrackCacheList.className(),    TrackCacheList.requiredProperties()),
+         (TrackCacheSet.className(),     TrackCacheSet.requiredProperties()),
+         (TrackCacheEntity.className(),  TrackCacheEntity.requiredProperties())]
+        objects.forEach {
+            let className = $0.0
+            let props     = $0.1
+            migration.enumerateObjects(className, block: {oldObject, newObject in
                 if let old = oldObject, let new = newObject {
-                    new["id"] = old["id"]
+                    for prop in props {
+                        new[prop] = old[prop]
+                    }
                 }
             })
         }
