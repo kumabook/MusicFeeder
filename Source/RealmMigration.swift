@@ -86,30 +86,33 @@ open class RealmMigration {
     }
 
     private class func touchAllStore(migration: RLMMigration) {
-        [PlaylistStore.className(),
-         TrackStore.className(),
-         EntryStore.className(),
-         ContentStore.className(),
-         LinkStore.className(),
-         TagStore.className(),
-         KeywordStore.className(),
-         OriginStore.className(),
-         VisualStore.className(),
-         HistoryStore.className(),
-         SubscriptionStore.className(),
-         ProfileStore.className(),
-         TopicStore.className(),
-        ].forEach {
-            migration.enumerateObjects($0, block: {_, _ in })
-        }
-        [EntryCacheList.className(),
-         TopicCacheList.className(),
-         TrackCacheList.className(),
-         TrackCacheSet.className(),
-         TrackCacheEntity.className()].forEach {
-            migration.enumerateObjects($0, block: {oldObject, newObject in
+        let objects: [(String, [String])] =
+        [(ContentStore.className(), ["direction", "content"]),
+         (LinkStore.className(), ["href", "type"]),
+         (KeywordStore.className(), ["name"]),
+         (OriginStore.className(), ["streamId", "title", "htmlUrl"]),
+         (VisualStore.className(), ["url", "contentType"]),
+         (HistoryStore.className(), ["id", "type"]),
+         (TopicStore.className(), ["id", "label", "desc"]),
+         (SubscriptionStore.className(), ["id", "title", ]),
+         (PlaylistStore.className(), ["id", "title"]),
+         (TrackStore.className(), ["id", "url", "providerRaw", "identifier", "title", "streamUrl", "thumbnailUrl", "artist"]),
+         (TagStore.className(), ["id", "label"]),
+         (EntryStore.className(), ["id"]),
+         (ProfileStore.className(), ["id", "email"]),
+         (EntryCacheList.className(), ["id"]),
+         (TopicCacheList.className(), ["id"]),
+         (TrackCacheList.className(), ["id"]),
+         (TrackCacheSet.className(), ["id"]),
+         (TrackCacheEntity.className(), ["id"])]
+        objects.forEach {
+            let className = $0.0
+            let props     = $0.1
+            migration.enumerateObjects(className, block: {oldObject, newObject in
                 if let old = oldObject, let new = newObject {
-                    new["id"] = old["id"]
+                    for prop in props {
+                        new[prop] = old[prop]
+                    }
                 }
             })
         }
