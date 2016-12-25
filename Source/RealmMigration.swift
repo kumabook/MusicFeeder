@@ -20,7 +20,7 @@ open class RealmMigration {
 
     open class func mainConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration.default()
-        config.schemaVersion = 12
+        config.schemaVersion = 13
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
@@ -152,7 +152,7 @@ open class RealmMigration {
     open class func configurationOf(_ path: String) -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
         config.fileURL = URL(fileURLWithPath: path)
-        config.schemaVersion = 6
+        config.schemaVersion = 7
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(ListenItLaterEntryStore.className()) { oldObject, newObject in }
@@ -179,6 +179,13 @@ open class RealmMigration {
             }
             if (oldVersion < 6) {
                 touchAllStore(migration: migration)
+            }
+            if (oldVersion < 7) {
+                migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
+                    if let _ = oldObject, let new = newObject {
+                        new["entriesCount"] = 0
+                    }
+                }
             }
         }
         return config

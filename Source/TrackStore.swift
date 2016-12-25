@@ -20,6 +20,7 @@ open class TrackStore: RLMObject {
     dynamic var thumbnailUrl: String = ""
     dynamic var duration:     Int    = 0
     dynamic var likesCount:   Int64  = 0
+    dynamic var entriesCount: Int64  = 0
     dynamic var expiresAt:    Int64  = 0
     dynamic var artist:       String = ""
 

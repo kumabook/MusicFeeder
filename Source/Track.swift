@@ -88,6 +88,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
 
     public fileprivate(set) var url:          String
     public fileprivate(set) var entries:      [Entry]?
+    public fileprivate(set) var entriesCount: Int64?
     public fileprivate(set) var title:        String?
     public fileprivate(set) var thumbnailUrl: URL?
     public fileprivate(set) var duration:     TimeInterval
@@ -171,35 +172,38 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
 
     public init(json: JSON) {
-        id          = json["id"].stringValue
-        provider    = Provider(rawValue: json["provider"].stringValue)!
-        title       = nil
-        url         = json["url"].stringValue
-        identifier  = json["identifier"].stringValue
-        likesCount  = 0
-        duration    = 0 as TimeInterval
-        status      = .init
-        likers      = []
-        entries     = []
-        expiresAt   = 0
+        id           = json["id"].stringValue
+        provider     = Provider(rawValue: json["provider"].stringValue)!
+        title        = nil
+        url          = json["url"].stringValue
+        identifier   = json["identifier"].stringValue
+        likesCount   = 0
+        entriesCount = 0
+        duration     = 0 as TimeInterval
+        status       = .init
+        likers       = []
+        entries      = []
+        expiresAt    = 0
         // prefer to cache
-        likesCount  = json["likesCount"].int64Value
-        likers      = json["likers"].array?.map  { Profile(json: $0) }
-        entries     = json["entries"].array?.map { Entry(json: $0) }
+        likesCount   = json["likesCount"].int64Value
+        likers       = json["likers"].array?.map  { Profile(json: $0) }
+        entries      = json["entries"].array?.map { Entry(json: $0) }
+        entriesCount = json["entriesCount"].int64Value
     }
 
     public init(store: TrackStore) {
-        id          = store.id
-        provider    = Provider(rawValue: store.providerRaw)!
-        title       = store.title
-        url         = store.url
-        identifier  = store.identifier
-        duration    = TimeInterval(store.duration)
-        status      = .init
-        likesCount = store.likesCount
-        likers     = realize(store.likers).map  { Profile(store: $0 as! ProfileStore) }
-        entries    = realize(store.entries).map { Entry(store: $0 as! EntryStore) }
-        expiresAt  = store.expiresAt
+        id           = store.id
+        provider     = Provider(rawValue: store.providerRaw)!
+        title        = store.title
+        url          = store.url
+        identifier   = store.identifier
+        duration     = TimeInterval(store.duration)
+        status       = .init
+        likesCount   = store.likesCount
+        likers       = realize(store.likers).map  { Profile(store: $0 as! ProfileStore) }
+        entries      = realize(store.entries).map { Entry(store: $0 as! EntryStore) }
+        entriesCount = store.entriesCount
+        expiresAt    = store.expiresAt
         if let url = URL(string: store.thumbnailUrl), !store.thumbnailUrl.isEmpty {
             thumbnailUrl = url
         }
@@ -211,15 +215,16 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         components?.queryItems?.forEach {
             dic[$0.name] = $0.value
         }
-        id          = dic["id"].flatMap { $0 } ?? ""
-        provider    = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.YouTube
-        title       = dic["title"]
-        url         = urlString
-        identifier  = dic["identifier"] ?? ""
-        duration    = dic["duration"].flatMap { Int64($0) }.flatMap { TimeInterval( $0 / 1000) } ?? 0
-        likesCount  = dic["likesCount"].flatMap { Int64($0) }
-        status      = .init
-        expiresAt   = 0
+        id           = dic["id"].flatMap { $0 } ?? ""
+        provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.YouTube
+        title        = dic["title"]
+        url          = urlString
+        identifier   = dic["identifier"] ?? ""
+        duration     = dic["duration"].flatMap { Int64($0) }.flatMap { TimeInterval( $0 / 1000) } ?? 0
+        likesCount   = dic["likesCount"].flatMap { Int64($0) }
+        entriesCount = dic["entriesCount"].flatMap { Int64($0) }
+        status       = .init
+        expiresAt    = 0
     }
 
     public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
@@ -303,10 +308,11 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
 
     public func updateProperties(_ store: TrackStore) {
-        url        = store.url
-        likesCount = store.likesCount
-        likers     = realize(store.likers).map  { Profile(store: $0 as! ProfileStore) }
-        entries    = realize(store.entries).map { Entry(store: $0 as! EntryStore) }
+        url          = store.url
+        likesCount   = store.likesCount
+        entriesCount = store.entriesCount
+        likers       = realize(store.likers).map  { Profile(store: $0 as! ProfileStore) }
+        entries      = realize(store.entries).map { Entry(store: $0 as! EntryStore) }
     }
 
     internal func toStoreObject() -> TrackStore {
@@ -320,6 +326,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         store.streamUrl      = streamUrl?.absoluteString ?? ""
         store.duration       = Int(duration)
         store.likesCount     = likesCount ?? 0
+        store.entriesCount   = entriesCount ?? 0
         // entries and likers are not neccesary, depends on the store
         store.expiresAt      = expiresAt
         store.artist         = artist ?? ""
@@ -357,8 +364,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     fileprivate func fetchTrack() -> SignalProducer<Track, NSError> {
         if status == .init || status == .cache || status == .dirty {
             return CloudAPIClient.sharedInstance.fetchTrack(id).map {
-                self.likesCount = $0.likesCount
-                self.entries    = $0.entries
+                self.likesCount   = $0.likesCount
+                self.entriesCount = $0.entriesCount
+                self.entries      = $0.entries
                 return self
             }
         } else {
