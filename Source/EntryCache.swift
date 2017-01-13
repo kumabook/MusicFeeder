@@ -26,15 +26,6 @@ public final class EntryCacheList: RLMObject, CacheList {
     dynamic public var id:        String   = ""
     dynamic public var timestamp: Int64    = 0
     dynamic public var items:     RLMArray = RLMArray(objectClassName: EntryStore.className())
-
-    public static func deleteAllItems() {
-        let _ = materialize(try realm.transaction()
-            {
-                realm.deleteObjects(EntryStore.allObjects(in: realm))
-                realm.deleteObjects(allObjects(in: realm))
-            }
-        )
-    }
 }
 
 extension Entry: Cacheable {

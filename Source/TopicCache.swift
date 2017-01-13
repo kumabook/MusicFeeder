@@ -26,15 +26,6 @@ public final class TopicCacheList: RLMObject, CacheList {
     dynamic public var id:        String   = ""
     dynamic public var timestamp: Int64    = 0
     dynamic public var items:     RLMArray = RLMArray(objectClassName: TopicCacheList.objectClassName)
-    
-    public static func deleteAllItems() {
-        let _ = materialize(try realm.transaction()
-            {
-                realm.deleteObjects(TopicStore.allObjects(in: realm))
-                realm.deleteObjects(allObjects(in: realm))
-            }
-        )
-    }
 }
 
 extension Topic: Cacheable {

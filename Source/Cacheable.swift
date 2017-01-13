@@ -32,7 +32,7 @@ public protocol CacheList: class {
     static func findOrCreate(_ id: String) -> Self
     static func create(_ id: String) -> Self
     static func deleteAllItems()
-    static func deleteOldItems()
+    static func deleteOldItems(before: Int64)
 }
 
 public protocol CacheSet: class {
@@ -47,7 +47,7 @@ public protocol CacheSet: class {
     static func getAllItems() -> [Entity]
     static func delete(_ id: String) -> Bool
     static func deleteAllItems()
-    static func deleteOldItems()
+    static func deleteOldItems(before: Int64)
 }
 
 public protocol CacheEntity: class {
@@ -102,11 +102,21 @@ extension CacheList where Self: RLMObject, Item: Cacheable, Object: RLMObject, I
     public static func deleteAllItems() {
         let _ = materialize(try realm.transaction()
             {
-                realm.deleteObjects(allObjects(in: realm))
+                realm.deleteAllObjects()
             }
         )
     }
-    public static func deleteOldItems() {
+    public static func deleteOldItems(before: Int64) {
+        let _ =  materialize(try realm.transaction()
+            {
+                let caches = Self.objects(in: realm, with: NSPredicate(format: "timestamp <= \(before)"))
+                realizeResults(caches).forEach {
+                    if let cache = $0 as? Self {
+                        realm.deleteObjects(cache.items)
+                    }
+                }
+                realm.deleteObjects(caches)
+            })
     }
 }
 
@@ -149,10 +159,21 @@ extension CacheSet where Item: Cacheable, Object: RLMObject, Entity: RLMObject, 
     public static func deleteAllItems() {
        let _ =  materialize(try realm.transaction()
             {
-                Self.realm.deleteAllObjects()
+                realm.deleteAllObjects()
             })
     }
-    public static func deleteOldItems() {
+    public static func deleteOldItems(before: Int64) {
+        let _ = materialize(try realm.transaction()
+            {
+                let cacheEntities = Entity.objects(in: realm, with: NSPredicate(format: "timestamp <= \(before)"))
+                realizeResults(cacheEntities).forEach {
+                    if let cacheEntity = $0 as? Entity, let item = cacheEntity.item {
+                        realm.delete(item)
+                    }
+                }
+                realm.deleteObjects(cacheEntities)
+            }
+        )
     }
 }
 
