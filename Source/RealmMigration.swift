@@ -35,8 +35,8 @@ open class RealmMigration {
             } catch {
                 print("Failed to delete realm file")
             }
-            UserDefaults.standard.setValue(schemaVersion, forKey: key)
         }
+        UserDefaults.standard.setValue(schemaVersion, forKey: key)
     }
 
     open class func deleteAllCacheItems() {
