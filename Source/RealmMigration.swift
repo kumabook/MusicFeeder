@@ -11,16 +11,43 @@ import Realm
 
 open class RealmMigration {
     open static var groupIdentifier: String = "group.com.your.app"
+    open static var schemaVersion:    UInt64 = 13
+    open static var subSchemaVersion: UInt64 = 7
     open class func migrateAll() {
         migrateMain()
 //        migrateListenItLater()
         migrateHistory()
         migrateCache()
     }
+    
+    open class func deleteCacheRealmIfNeeded() {
+        let key = "schema_version"
+        let val = UserDefaults.standard.value(forKey: key) as? UInt64 ?? 0
+        let fileManager = FileManager.default
+        if val == 0 {
+            let _ = try? fileManager.removeItem(atPath: cacheSetPath)
+            let _ = try? fileManager.removeItem(atPath: cacheListPath)
+            UserDefaults.standard.setValue(schemaVersion, forKey: key)
+        }
+    }
+
+    open class func deleteAllCacheItems() {
+        TopicCacheList.deleteAllItems()
+        EntryCacheList.deleteAllItems()
+        TrackCacheList.deleteAllItems()
+        TrackCacheSet.deleteAllItems()
+    }
+    
+    open class func deleteOldCacheItems(before: Int64) {
+        TopicCacheList.deleteOldItems(before: before)
+        EntryCacheList.deleteOldItems(before: before)
+        TrackCacheList.deleteOldItems(before: before)
+        TrackCacheSet.deleteOldItems(before: before)
+    }
 
     open class func mainConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration.default()
-        config.schemaVersion = 13
+        config.schemaVersion = schemaVersion
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(TrackStore.className()) { oldObject, newObject in
@@ -152,7 +179,7 @@ open class RealmMigration {
     open class func configurationOf(_ path: String) -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration()
         config.fileURL = URL(fileURLWithPath: path)
-        config.schemaVersion = 7
+        config.schemaVersion = subSchemaVersion
         config.migrationBlock = { migration, oldVersion in
             if (oldVersion < 1) {
                 migration.enumerateObjects(ListenItLaterEntryStore.className()) { oldObject, newObject in }
