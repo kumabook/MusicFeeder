@@ -24,9 +24,17 @@ open class RealmMigration {
         let key = "schema_version"
         let val = UserDefaults.standard.value(forKey: key) as? UInt64 ?? 0
         let fileManager = FileManager.default
+        print("Current local schema version is \(val), latest schema version is \(schemaVersion)")
         if val == 0 {
-            let _ = try? fileManager.removeItem(atPath: cacheSetPath)
-            let _ = try? fileManager.removeItem(atPath: cacheListPath)
+            print("No schem version, delete local realm db first")
+            do {
+                try fileManager.removeItem(atPath: cacheSetPath)
+                print("Succeeded delete realm file: \(cacheSetPath)")
+                try fileManager.removeItem(atPath: cacheListPath)
+                print("Succeeded delete realm file: \(cacheSetPath)")
+            } catch {
+                print("Failed to delete realm file")
+            }
             UserDefaults.standard.setValue(schemaVersion, forKey: key)
         }
     }
