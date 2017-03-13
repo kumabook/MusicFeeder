@@ -14,7 +14,7 @@ import Alamofire
 import FeedlyKit
 
 open class PinkSpiderAPIClient {
-    static let baseUrl   = "http://pink-spider.herokuapp.com"
+    static var baseUrl   = "http://pink-spider.herokuapp.com"
     open static var sharedInstance = PinkSpiderAPIClient()
     static var sharedManager: Alamofire.SessionManager! = Alamofire.SessionManager()
 
