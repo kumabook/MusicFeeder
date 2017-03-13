@@ -63,6 +63,8 @@ public enum YouTubeVideoQuality: Int64 {
 
 final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
     fileprivate static let userDefaults = UserDefaults.standard
+    public static var appleMusicCurrentCountry: String = "jp"
+    public static var isSpotifyPremiumUser: Bool = false
     public static var youTubeVideoQuality: YouTubeVideoQuality {
         get {
             if let quality = YouTubeVideoQuality(rawValue: Int64(userDefaults.integer(forKey: "youtube_video_quality"))) {
@@ -93,19 +95,71 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public fileprivate(set) var entriesCount: Int64?
     public fileprivate(set) var title:        String?
     public fileprivate(set) var thumbnailUrl: URL?
+    public fileprivate(set) var audioUrl:     URL?
     public fileprivate(set) var duration:     TimeInterval
     public fileprivate(set) var likesCount:   Int64?
     public fileprivate(set) var likers:       [Profile]?
     public fileprivate(set) var expiresAt:    Int64
     public fileprivate(set) var artist:       String?
+    public var playerType: PlayerType {
+        switch provider {
+        case .appleMusic:
+            if let c = country, c == Track.appleMusicCurrentCountry {
+                return .appleMusic
+            }
+            return .normal
+        case .spotify:    return Track.isSpotifyPremiumUser ? .spotify : .normal
+        default:          return .normal
+        }
+    }
+    public var isValid: Bool {
+        switch provider {
+        case .appleMusic:
+            if let c = country {
+                return c == Track.appleMusicCurrentCountry
+            }
+            return audioUrl != nil
+        case .spotify:
+            return spotifyURI != nil
+        default:
+            return streamURL != nil
+        }
+    }
+    public var country: String? {
+        if let country = _country {
+            return country
+        }
+        let pattern = "\\/geo\\.itunes\\.apple\\.com\\/([a-zA-Z]+)\\/"
+        let strings = url.matchingStrings(regex: pattern)
+        _country = strings.get(0)?.get(1) ?? "none"
+        return _country
+    }
+    fileprivate var _country: String?
     public var streamURL: URL? {
         switch provider {
-        case .YouTube:
-            return youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] ?? streamUrl
-        case .SoundCloud:
-            return soundcloudTrack.map { URL(string: $0.streamUrl + "?client_id=" + APIClient.clientId) } ?? streamUrl
-        case .Raw:
-            return self.identifier.toURL()
+        case  .appleMusic:
+            return audioUrl
+        case .spotify:
+            return audioUrl
+        case .youTube:
+            return youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] ?? audioUrl
+        case .soundCloud:
+            return soundcloudTrack.map { URL(string: $0.streamUrl + "?client_id=" + APIClient.clientId) } ??
+                audioUrl.map { URL(string: $0.absoluteString + "?client_id=" + APIClient.clientId) } ?? nil
+        case .raw:
+            return audioUrl
+        }
+    }
+    public var appleMusicID: String? {
+        switch provider {
+        case  .appleMusic: return identifier
+        default:           return nil
+        }
+    }
+    public var spotifyURI: String? {
+        switch provider {
+        case  .spotify: return url
+        default:        return nil
         }
     }
     public var thumbnailURL: URL? {
@@ -113,10 +167,14 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
     public var artworkURL: URL? {
         switch self.provider {
-        case .YouTube:
+        case .appleMusic:
+            return thumbnailUrl
+        case .spotify:
+            return thumbnailUrl
+        case .youTube:
             let url = youtubeVideo?.largeThumbnailURL ?? youtubeVideo?.mediumThumbnailURL ?? youtubeVideo?.smallThumbnailURL
             return url ?? thumbnailUrl
-        case .SoundCloud:
+        case .soundCloud:
             guard let sc = soundcloudTrack else { return thumbnailUrl }
             return sc.artworkURL ?? thumbnailUrl
         default:
@@ -126,22 +184,25 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
 
     public var isVideo: Bool {
-        return provider == Provider.YouTube && Track.youTubeVideoQuality != YouTubeVideoQuality.audioOnly
+        return provider == Provider.youTube && Track.youTubeVideoQuality != YouTubeVideoQuality.audioOnly
     }
 
     public var likable: Bool { return !id.isEmpty }
 
     public fileprivate(set) var status: Status
 
-    public fileprivate(set) var streamUrl:  URL?
     public fileprivate(set) var youtubeVideo:    XCDYouTubeVideo?
     public fileprivate(set) var soundcloudTrack: SoundCloudKit.Track?
 
     public var subtitle: String? {
         switch provider {
-        case .YouTube:
-            return nil
-        case .SoundCloud:
+        case .appleMusic:
+            return artist
+        case .spotify:
+            return artist
+        case .youTube:
+            return artist
+        case .soundCloud:
             return soundcloudTrack?.user.username
         default:
             return nil
@@ -176,12 +237,13 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public init(json: JSON) {
         id           = json["id"].stringValue
         provider     = Provider(rawValue: json["provider"].stringValue)!
-        title        = nil
+        title        = json["title"].string
         url          = json["url"].stringValue
         identifier   = json["identifier"].stringValue
         likesCount   = 0
-        entriesCount = 0
-        duration     = 0 as TimeInterval
+        duration     = json["duration"].doubleValue
+        thumbnailUrl = json["thumbnail_url"].string.flatMap { URL(string: $0) }
+        audioUrl     = json["audio_url"].string.flatMap { URL(string: $0) }
         status       = .init
         likers       = []
         entries      = []
@@ -189,8 +251,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         // prefer to cache
         likesCount   = json["likesCount"].int64Value
         likers       = json["likers"].array?.map  { Profile(json: $0) }
-        entries      = json["entries"].array?.map { Entry(json: $0) }
         entriesCount = json["entriesCount"].int64Value
+        entries      = json["entries"].array?.map { Entry(json: $0) }
+        artist       = json["owner_name"].string
     }
 
     public init(store: TrackStore) {
@@ -218,7 +281,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
             dic[$0.name] = $0.value
         }
         id           = dic["id"].flatMap { $0 } ?? ""
-        provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.YouTube
+        provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.youTube
         title        = dic["title"]
         url          = urlString
         identifier   = dic["identifier"] ?? ""
@@ -230,9 +293,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
 
     public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
-        if streamUrl == nil || expiresAt < Date().timestamp {
+        if audioUrl == nil || expiresAt < Date().timestamp {
             status       = .init
-            streamUrl    = nil
+            audioUrl     = nil
             youtubeVideo = nil
             expiresAt    = 0
             return fetchPropertiesFromProvider(false)
@@ -270,7 +333,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         soundcloudTrack = track
         title           = track.title
         duration        = TimeInterval(track.duration / 1000)
-        streamUrl       = URL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
+        audioUrl        = URL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
         artist          = soundcloudTrack?.user.username
         status          = .available
 
@@ -284,7 +347,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         title        = video.title
         duration     = video.duration
         thumbnailUrl = video.mediumThumbnailURL
-        streamUrl    = youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] // for cache
+        audioUrl     = youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] // for cache
         expiresAt    = youtubeVideo?.expirationDate?.timestamp ?? Int64.max
         status       = .available
     }
@@ -296,13 +359,13 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
             thumbnailUrl = url
         }
         if let url = URL(string: store.streamUrl), !store.streamUrl.isEmpty {
-            streamUrl = url
+            audioUrl = url
         }
         artist = store.artist
         switch provider {
-        case .YouTube:
+        case .youTube:
             expiresAt = store.expiresAt
-        case .SoundCloud:
+        case .soundCloud:
             expiresAt = Int64.max
         default:
             expiresAt = Int64.max
@@ -325,7 +388,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         store.identifier     = identifier
         store.title          = title ?? ""
         store.thumbnailUrl   = thumbnailUrl?.absoluteString ?? ""
-        store.streamUrl      = streamUrl?.absoluteString ?? ""
+        store.streamUrl      = audioUrl?.absoluteString ?? ""
         store.duration       = Int(duration)
         store.likesCount     = likesCount ?? 0
         store.entriesCount   = entriesCount ?? 0
@@ -334,6 +397,14 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         store.artist         = artist ?? ""
         return store
     }
+
+    #if os(iOS)
+    public func open() {
+        if let url = URL(string: url) {
+            UIApplication.shared.openURL(url)
+        }
+    }
+    #endif
 
     public func markAsLiked() -> ReactiveSwift.SignalProducer<Track, NSError> {
         return CloudAPIClient.sharedInstance.markTracksAsLiked([self]).flatMap(.concat) {
@@ -385,7 +456,15 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
             }
             self.status = .loading
             switch self.provider {
-            case .YouTube:
+            case .appleMusic:
+                self.status = .available
+                observer.send(value: self)
+                observer.sendCompleted()
+            case .spotify:
+                self.status = .available
+                observer.send(value: self)
+                observer.sendCompleted()
+            case .youTube:
                 let disp = XCDYouTubeClient.default().fetchVideo(self.identifier).on(
                     value: { video in
                         self.updateProperties(video)
@@ -404,7 +483,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
                     disp.dispose()
                 }
                 return
-            case .SoundCloud:
+            case .soundCloud:
                 typealias R = SoundCloudKit.APIClient.Router
                 SoundCloudKit.APIClient.sharedInstance.fetchItem(R.track(self.identifier)) { (req:
                     URLRequest?, res: HTTPURLResponse?, result: Alamofire.Result<SoundCloudKit.Track>) -> Void in
@@ -419,8 +498,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
                     }
                 }
                 return
-            case .Raw:
-                self.streamUrl = self.identifier.toURL()
+            case .raw:
+                self.audioUrl = self.identifier.toURL()
                 self.status    = .available
                 observer.send(value: self)
                 observer.sendCompleted()

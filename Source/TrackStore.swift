@@ -92,7 +92,7 @@ open class TrackStore: RLMObject {
         if let store = findBy(url: track.url) {
             try! realm.transaction() {
                 if let title        = track.title                        { store.title        = title }
-                if let streamUrl    = track.streamUrl?.absoluteString    { store.streamUrl    = streamUrl }
+                if let audioUrl     = track.audioUrl?.absoluteString     { store.streamUrl    = audioUrl }
                 if let thumbnailUrl = track.thumbnailUrl?.absoluteString { store.thumbnailUrl = thumbnailUrl }
             }
             return true
