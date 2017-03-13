@@ -49,7 +49,7 @@ extension Entry {
     public var audioTracks: [Track] {
         return enclosure.map {
             $0.filter { $0.type.contains("audio") }.map {
-                Track(id: "", provider: .Raw, url: $0.href, identifier: $0.href, title: self.title)
+                Track(id: "", provider: .raw, url: $0.href, identifier: $0.href, title: self.title)
             }
         } ?? []
     }
