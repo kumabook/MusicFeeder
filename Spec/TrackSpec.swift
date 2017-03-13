@@ -24,7 +24,7 @@ class TrackSpec: QuickSpec {
         describe("A Track") {
             it("should be constructed with json") {
                 expect(track).notTo(beNil())
-                expect(track.provider).to(equal(Provider.YouTube))
+                expect(track.provider).to(equal(Provider.youTube))
                 expect(track.identifier).to(equal("abcdefg"))
             }
 
@@ -50,7 +50,7 @@ class TrackSpec: QuickSpec {
                 let t = Track(urlString: url)
                 expect(t.id).to(equal("aaaa"))
                 expect(t.identifier).to(equal("I6l151j_NHQ"))
-                expect(t.provider).to(equal(Provider.YouTube))
+                expect(t.provider).to(equal(Provider.youTube))
                 expect(t.title).to(equal(""))
                 expect(t.likesCount!).to(equal(10))
                 

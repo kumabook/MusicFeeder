@@ -14,7 +14,7 @@ class CacheableSpec: QuickSpec {
     var tracks: [Track] = []
     override func spec() {
         beforeEach {
-            self.tracks = (0..<50).map { Track(id: "track_\($0)", provider: Provider.YouTube, url: "https://test.com", identifier: "\($0)", title: "track_\($0)" ) }
+            self.tracks = (0..<50).map { Track(id: "track_\($0)", provider: Provider.youTube, url: "https://test.com", identifier: "\($0)", title: "track_\($0)" ) }
         }
         afterEach {
             TrackCacheList.deleteAllItems()

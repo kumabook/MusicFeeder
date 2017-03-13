@@ -53,10 +53,10 @@ class FeedlyAPISpec: QuickSpec {
         describe("POST /v3/oauth/token") {
             beforeEach {
                 self.client.fetchAccessToken(self.email, password: self.password, clientId: CloudAPIClient.clientId, clientSecret: CloudAPIClient.clientSecret)
-                    .on(value: {
-                        self.accessToken = $0
-                    }, failed: {
+                    .on(failed: {
                         print("error \($0.code)")
+                    }, value: {
+                        self.accessToken = $0
                     }).start()
             }
             it("should fetch accessToken") {
@@ -135,10 +135,10 @@ class FeedlyAPISpec: QuickSpec {
                     return self.client.markTracksAsLiked(ts)
                 }.flatMap(.concat) {(_: ()) -> SignalProducer<[Track], NSError> in
                     self.client.fetchTracks([track.id])
-                }.on(value: { tracks in
-                    newLikesCount = tracks[0].likesCount!
-                }, disposed: {
+                }.on(disposed: {
                     isFinish = true
+                }, value: { tracks in
+                    newLikesCount = tracks[0].likesCount!
                 }).start()
             }
             it("should fetch a user") {
