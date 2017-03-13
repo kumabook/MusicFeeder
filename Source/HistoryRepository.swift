@@ -76,10 +76,10 @@ open class HistoryRepository: EntryRepository {
                         .map { _,t in (t, playlist) })
             }
             typealias S = SignalProducer<SignalProducer<(Track, Playlist), NSError>, NSError>
-            let signal: S = pinkspiderClient.playlistify(url, errorOnFailure: false).map { pl in
+            let signal: S = pinkspiderClient.playlistify(url, errorOnFailure: false).map { en in
                 var tracks = entry.audioTracks
-                tracks.append(contentsOf: pl.getTracks())
-                let playlist = Playlist(id: pl.id, title: pl.title, tracks: tracks)
+                tracks.append(contentsOf: en.tracks)
+                let playlist = Playlist(id: en.id, title: en.title ?? "", tracks: tracks)
                 self.playlistsOfHistory[history] = playlist
                 self.playlistQueue.enqueue(playlist)
                 UIScheduler().schedule {

@@ -54,7 +54,7 @@ open class SavedEntryRepository: EntryRepository {
             QueueScheduler().schedule {
                 // TODO: support pagination
                 let entries: [Entry] = EntryStore.findAll().map { Entry(store: $0) }.reversed()
-                self.playlistifier = entries.map { self.loadPlaylistOfEntry($0) }
+                self.playlistifier = entries.map { self.playlistify($0) }
                                             .reduce(SignalProducer<(Track, Playlist), NSError>.empty, { $0.concat($1) })
                                             .start()
                 self.items = entries
