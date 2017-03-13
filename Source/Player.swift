@@ -9,8 +9,8 @@
 import Foundation
 import PlayerKit
 
-public typealias Player            = PlayerKit.Player
-public typealias PlayerObserver    = PlayerKit.PlayerObserver
-public typealias PlayerState       = PlayerKit.PlayerState
-public typealias PlayerKitPlaylist = PlayerKit.Playlist
-public typealias PlayerKitTrack    = PlayerKit.Track
+public typealias QueuePlayer         = PlayerKit.QueuePlayer
+public typealias QueuePlayerObserver = PlayerKit.QueuePlayerObserver
+public typealias PlayerState         = PlayerKit.PlayerState
+public typealias PlayerKitPlaylist   = PlayerKit.Playlist
+public typealias PlayerKitTrack      = PlayerKit.Track
