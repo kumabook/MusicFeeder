@@ -67,16 +67,16 @@ open class TopicRepository {
         }
         observer.send(value: .startLoading)
         cloudApiClient.fetchTopics().on(
-            value: { topics in
-                let _ = self.cacheList.clear()
-                self.cacheList = TopicCacheList.findOrCreate(self.KEY)
-                let _ = self.cacheList.add(topics)
-                self.items = topics
-        }, failed: { error in
-            print("Failed to fetch topics \(error)")
+            failed: { error in
+                print("Failed to fetch topics \(error)")
         }, completed: {
             self.state = .normal
             self.observer.send(value: .completeLoading)
+        }, value: { topics in
+            let _ = self.cacheList.clear()
+            self.cacheList = TopicCacheList.findOrCreate(self.KEY)
+            let _ = self.cacheList.add(topics)
+            self.items = topics
         }
         ).start()
     }

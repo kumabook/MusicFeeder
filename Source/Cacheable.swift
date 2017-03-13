@@ -27,8 +27,8 @@ public protocol CacheList: class {
     var id:        String   { get }
     var timestamp: Int64    { get set }
     var items:     RLMArray<RLMObject> { get set }
-    func add(_ items: [Item]) -> Result<(), NSError>
-    func clear() -> Result<(), NSError>
+    func add(_ items: [Item]) -> Result<(), AnyError>
+    func clear() -> Result<(), AnyError>
     static func findOrCreate(_ id: String) -> Self
     static func create(_ id: String) -> Self
     static func deleteAllItems()
@@ -60,7 +60,7 @@ public protocol CacheEntity: class {
 extension CacheList where Self: RLMObject, Item: Cacheable, Object: RLMObject, Item.Object == Object {
     public static var realm: RLMRealm { return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.cacheListPath)) }
 
-    public func add(_ items: [Item]) -> Result<(), NSError> {
+    public func add(_ items: [Item]) -> Result<(), AnyError> {
         return materialize(try Self.realm.transaction()
             {
                 items.forEach {item in
@@ -74,7 +74,7 @@ extension CacheList where Self: RLMObject, Item: Cacheable, Object: RLMObject, I
         )
     }
     
-    public func clear() -> Result<(), NSError> {
+    public func clear() -> Result<(), AnyError> {
         return materialize(try Self.realm.transaction()
             {
                 Self.realm.deleteObjects(items)
@@ -93,30 +93,26 @@ extension CacheList where Self: RLMObject, Item: Cacheable, Object: RLMObject, I
     }
     public static func create(_ id: String) -> Self {
         let list = Self(value: ["id":id])
-        let _ = materialize(try realm.transaction()
-            {
-                Self.realm.addOrUpdate(list)
-            })
+        try? realm.transaction() {
+            Self.realm.addOrUpdate(list)
+        }
         return list
     }
     public static func deleteAllItems() {
-        let _ = materialize(try realm.transaction()
-            {
-                realm.deleteAllObjects()
-            }
-        )
+        try? realm.transaction() {
+            realm.deleteAllObjects()
+        }
     }
     public static func deleteOldItems(before: Int64) {
-        let _ =  materialize(try realm.transaction()
-            {
-                let caches = Self.objects(in: realm, with: NSPredicate(format: "timestamp <= \(before)"))
-                realizeResults(caches).forEach {
-                    if let cache = $0 as? Self {
-                        realm.deleteObjects(cache.items)
-                    }
+        try? realm.transaction() {
+            let caches = Self.objects(in: realm, with: NSPredicate(format: "timestamp <= \(before)"))
+            realizeResults(caches).forEach {
+                if let cache = $0 as? Self {
+                    realm.deleteObjects(cache.items)
                 }
-                realm.deleteObjects(caches)
-            })
+            }
+            realm.deleteObjects(caches)
+        }
     }
 }
 
@@ -124,7 +120,7 @@ extension CacheSet where Item: Cacheable, Object: RLMObject, Entity: RLMObject, 
     public static var realm: RLMRealm { return try! RLMRealm(configuration: RealmMigration.configurationOf(RealmMigration.cacheSetPath)) }
 
     public static func set(_ id: String, item: Item) -> Bool {
-        switch materialize(try realm.transaction()
+        let result: Result<(), AnyError> = materialize(try realm.transaction()
             {
                 let entity       = Entity(value: ["id": id])
                 let itemCache    = item.toCacheStoreObject(Self.realm)
@@ -133,7 +129,7 @@ extension CacheSet where Item: Cacheable, Object: RLMObject, Entity: RLMObject, 
                 entity.item = itemCache
                 Self.realm.addOrUpdate(entity)
             })
-        {
+        switch result {
         case .success: return true
         case .failure: return false
         }
@@ -157,23 +153,20 @@ extension CacheSet where Item: Cacheable, Object: RLMObject, Entity: RLMObject, 
         return true
     }
     public static func deleteAllItems() {
-       let _ =  materialize(try realm.transaction()
-            {
-                realm.deleteAllObjects()
-            })
+        try? realm.transaction() {
+            realm.deleteAllObjects()
+        }
     }
     public static func deleteOldItems(before: Int64) {
-        let _ = materialize(try realm.transaction()
-            {
-                let cacheEntities = Entity.objects(in: realm, with: NSPredicate(format: "timestamp <= \(before)"))
-                realizeResults(cacheEntities).forEach {
-                    if let cacheEntity = $0 as? Entity, let item = cacheEntity.item {
-                        realm.delete(item)
-                    }
+        try? realm.transaction() {
+            let cacheEntities = Entity.objects(in: realm, with: NSPredicate(format: "timestamp <= \(before)"))
+            realizeResults(cacheEntities).forEach {
+                if let cacheEntity = $0 as? Entity, let item = cacheEntity.item {
+                    realm.delete(item)
                 }
-                realm.deleteObjects(cacheEntities)
             }
-        )
+            realm.deleteObjects(cacheEntities)
+        }
     }
 }
 

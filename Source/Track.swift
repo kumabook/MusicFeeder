@@ -466,19 +466,19 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
                 observer.sendCompleted()
             case .youTube:
                 let disp = XCDYouTubeClient.default().fetchVideo(self.identifier).on(
-                    value: { video in
-                        self.updateProperties(video)
-                        observer.send(value: self)
-                        observer.sendCompleted()
-                    }, failed: { error in
+                    failed: { error in
                         if self.status != .available { self.status = .unavailable }
                         observer.send(value: self)
                         observer.sendCompleted()
-                    }, interrupted: {
-                        if self.status != .available { self.status = .init }
-                        observer.send(value: self)
-                        observer.sendCompleted()
-                    }).start()
+                }, interrupted: {
+                    if self.status != .available { self.status = .init }
+                    observer.send(value: self)
+                    observer.sendCompleted()
+                }, value: { video in
+                    self.updateProperties(video)
+                    observer.send(value: self)
+                    observer.sendCompleted()
+                }).start()
                 disposable.add {
                     disp.dispose()
                 }

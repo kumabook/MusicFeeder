@@ -101,15 +101,15 @@ open class StreamRepository {
         }).start()
         if isLoggedIn {
             apiClient.fetchSubscriptions().on(
-                value: { subscriptions in
-                    self.updateSubscriptions(subscriptions)
-            }, failed: { error in
-                CloudAPIClient.handleError(error: error)
-                self.state = .error
-                self.observer.send(value: .failToLoad(error))
+                failed: { error in
+                    CloudAPIClient.handleError(error: error)
+                    self.state = .error
+                    self.observer.send(value: .failToLoad(error))
             }, completed: {
                 self.state = .normal
                 self.observer.send(value: .completeLoading)
+            }, value: { subscriptions in
+                self.updateSubscriptions(subscriptions)
             }).start()
         }
     }

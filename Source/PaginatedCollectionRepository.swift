@@ -149,6 +149,9 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
         disposable = producer
             .start(on: QueueScheduler())
             .on(
+                failed: { error in CloudAPIClient.handleError(error: error) },
+                completed: {
+                },
                 value: { paginatedCollection in
                     let latestItems = paginatedCollection.items
                     self.items.insert(contentsOf: latestItems, at: 0)
@@ -168,9 +171,6 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
                             self.state = .normal
                         }
                     }
-                },
-                failed: { error in CloudAPIClient.handleError(error: error) },
-                completed: {
                 }
             ).start()
     }
@@ -190,6 +190,15 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
         disposable = producer
             .start(on: QueueScheduler())
             .on(
+                failed: {error in
+                    CloudAPIClient.handleError(error: error)
+                    DispatchQueue.main.async() {
+                        self.observer.send(value: .failToLoadNext)
+                    }
+                    self.state = .error
+                },
+                completed: {
+                },
                 value: { paginatedCollection in
                     let items = paginatedCollection.items
                     self.items.append(contentsOf: items)
@@ -212,15 +221,6 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
                             self.state = .normal
                         }
                     }
-                },
-                failed: {error in
-                    CloudAPIClient.handleError(error: error)
-                    DispatchQueue.main.async() {
-                        self.observer.send(value: .failToLoadNext)
-                    }
-                    self.state = .error
-                },
-                completed: {
             }).start()
     }
     open var cacheKey: String { return stream.streamId }
