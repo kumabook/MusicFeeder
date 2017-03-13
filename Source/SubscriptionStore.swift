@@ -89,7 +89,7 @@ open class SubscriptionStore: RLMObject {
     }
 
     open class func findAll(_ orderBy: OrderBy = OrderBy.number(.desc)) -> RLMResults<SubscriptionStore> {
-        return SubscriptionStore.allObjects(in: realm).sortedResults(usingProperty: orderBy.name, ascending: orderBy.ascending) as! RLMResults<SubscriptionStore>
+        return SubscriptionStore.allObjects(in: realm).sortedResults(usingKeyPath: orderBy.name, ascending: orderBy.ascending) as! RLMResults<SubscriptionStore>
     }
 
     open class func findBy(id: String) -> SubscriptionStore? {

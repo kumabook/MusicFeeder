@@ -182,7 +182,7 @@ open class PlaylistStore: RLMObject {
     }
 
     internal class func findAll(_ orderBy: OrderBy = OrderBy.number(.desc)) -> RLMResults<RLMObject> {
-        return PlaylistStore.allObjects(in: realm).sortedResults(usingProperty: orderBy.name, ascending: orderBy.ascending)
+        return PlaylistStore.allObjects(in: realm).sortedResults(usingKeyPath: orderBy.name, ascending: orderBy.ascending)
     }
 
     internal class func findBy(id: String) -> PlaylistStore? {

@@ -102,7 +102,7 @@ open class HistoryStore: RLMObject {
 
     fileprivate class func removeOldestIfExceed() {
         var results = HistoryStore.allObjects(in: realm)
-        results = results.sortedResults(usingProperty: "timestamp", ascending: true)
+        results = results.sortedResults(usingKeyPath: "timestamp", ascending: true)
         if results.count >= maxLength {
             if let h = results[0] as? HistoryStore {
                 switch HistoryType(rawValue: h.type)! {
@@ -131,7 +131,7 @@ open class HistoryStore: RLMObject {
 
     open class func find(_ range: CountableRange<UInt>) -> [HistoryStore] {
         var results = HistoryStore.allObjects(in: realm)
-        results = results.sortedResults(usingProperty: "timestamp", ascending: false)
+        results = results.sortedResults(usingKeyPath: "timestamp", ascending: false)
 
         var r: CountableRange<UInt>
         if range.upperBound > results.count {
