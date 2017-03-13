@@ -17,9 +17,11 @@ import Alamofire
 import FeedlyKit
 
 public enum Provider: String {
-    case YouTube    = "YouTube"
-    case SoundCloud = "SoundCloud"
-    case Raw        = "Raw"
+    case appleMusic = "AppleMusic"
+    case spotify    = "Spotify"
+    case youTube    = "YouTube"
+    case soundCloud = "SoundCloud"
+    case raw        = "Raw"
 }
 
 public enum YouTubeVideoQuality: Int64 {
