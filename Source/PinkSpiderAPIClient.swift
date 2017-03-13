@@ -18,16 +18,16 @@ open class PinkSpiderAPIClient {
     open static var sharedInstance = PinkSpiderAPIClient()
     static var sharedManager: Alamofire.SessionManager! = Alamofire.SessionManager()
 
-    open func playlistify(_ targetUrl: NSURL, errorOnFailure: Bool) -> SignalProducer<Playlist, NSError> {
+    open func playlistify(_ targetUrl: NSURL, errorOnFailure: Bool) -> SignalProducer<PlaylistifiedEntry, NSError> {
         return SignalProducer { (observer, disposable) in
-            let url = String(format: "%@/playlistify", PinkSpiderAPIClient.baseUrl)
+            let url = String(format: "%@/v1/playlistify", PinkSpiderAPIClient.baseUrl)
             let request = PinkSpiderAPIClient.sharedManager.request(url, parameters: ["url": targetUrl], encoding: URLEncoding.default)
             .responseJSON(options: JSONSerialization.ReadingOptions()) { response in
                 if let e = response.result.error {
                     if errorOnFailure { observer.send(error: e as NSError) }
                     else              { observer.sendCompleted() }
                 } else {
-                    observer.send(value: Playlist(json: JSON(response.result.value!)))
+                    observer.send(value: PlaylistifiedEntry(json: JSON(response.result.value!)))
                     observer.sendCompleted()
                 }
             }
