@@ -219,13 +219,16 @@
 		674804921DB4087100D6FD33 /* EntryRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */; };
 		674804941DB5896700D6FD33 /* TrackRespoistorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804931DB5896700D6FD33 /* TrackRespoistorySpec.swift */; };
 		674804971DB6196B00D6FD33 /* account.json in Resources */ = {isa = PBXBuildFile; fileRef = 674804951DB6176E00D6FD33 /* account.json */; };
+		675120EA1E76F11B00489729 /* Enclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675120E91E76F11B00489729 /* Enclosure.swift */; };
+		675120EC1E78294A00489729 /* Enclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675120E91E76F11B00489729 /* Enclosure.swift */; };
+		675120ED1E78294A00489729 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671207CE1E72F7DF008BD75A /* StringExtension.swift */; };
+		675120EE1E78295100489729 /* Enclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675120E91E76F11B00489729 /* Enclosure.swift */; };
+		675120EF1E78295100489729 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671207CE1E72F7DF008BD75A /* StringExtension.swift */; };
 		677791FF1E75307D00ACC53D /* PlayerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 677791FE1E75307D00ACC53D /* PlayerKit.framework */; };
 		677792141E75622E00ACC53D /* ServicePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792131E75622E00ACC53D /* ServicePlaylist.swift */; };
 		677792151E75622E00ACC53D /* ServicePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792131E75622E00ACC53D /* ServicePlaylist.swift */; };
 		677792161E75622E00ACC53D /* ServicePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792131E75622E00ACC53D /* ServicePlaylist.swift */; };
 		677792191E75645000ACC53D /* AppleMusicClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792181E75645000ACC53D /* AppleMusicClient.swift */; };
-		6777921A1E75645000ACC53D /* AppleMusicClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792181E75645000ACC53D /* AppleMusicClient.swift */; };
-		6777921B1E75645000ACC53D /* AppleMusicClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792181E75645000ACC53D /* AppleMusicClient.swift */; };
 		6777921D1E7566B000ACC53D /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6777921C1E7566B000ACC53D /* MediaPlayer.framework */; };
 		6777921F1E7566B600ACC53D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6777921E1E7566B600ACC53D /* StoreKit.framework */; };
 		677792211E7573D500ACC53D /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792201E7573D500ACC53D /* Album.swift */; };
@@ -485,6 +488,9 @@
 		674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryRepositorySpec.swift; path = Spec/EntryRepositorySpec.swift; sourceTree = SOURCE_ROOT; };
 		674804931DB5896700D6FD33 /* TrackRespoistorySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackRespoistorySpec.swift; path = Spec/TrackRespoistorySpec.swift; sourceTree = SOURCE_ROOT; };
 		674804951DB6176E00D6FD33 /* account.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = account.json; path = Fixtures/account.json; sourceTree = SOURCE_ROOT; };
+		675120E91E76F11B00489729 /* Enclosure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Enclosure.swift; path = Source/Enclosure.swift; sourceTree = SOURCE_ROOT; };
+		675120F01E782AD100489729 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		675120F21E782ADA00489729 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS10.1.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		677791FE1E75307D00ACC53D /* PlayerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PlayerKit.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/MusicFav-dqzbpqjokazzligypyxgmxrxkzvs/Build/Products/Debug-iphoneos/PlayerKit.framework"; sourceTree = "<group>"; };
 		677792131E75622E00ACC53D /* ServicePlaylist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServicePlaylist.swift; path = Source/ServicePlaylist.swift; sourceTree = SOURCE_ROOT; };
 		677792181E75645000ACC53D /* AppleMusicClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppleMusicClient.swift; path = Source/AppleMusicClient.swift; sourceTree = SOURCE_ROOT; };
@@ -802,10 +808,12 @@
 		6777922C1E757BA000ACC53D /* Enclosure */ = {
 			isa = PBXGroup;
 			children = (
+				675120E91E76F11B00489729 /* Enclosure.swift */,
 				677792241E7574EE00ACC53D /* EnclosureState.swift */,
 				677792281E757B8E00ACC53D /* PlaylistifiedEntry.swift */,
 				677792131E75622E00ACC53D /* ServicePlaylist.swift */,
 				677792201E7573D500ACC53D /* Album.swift */,
+				670505A41B6E1398006EAA84 /* Track.swift */,
 			);
 			name = Enclosure;
 			sourceTree = "<group>";
@@ -824,6 +832,8 @@
 		679C52751B70F16800BE6614 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				675120F21E782ADA00489729 /* StoreKit.framework */,
+				675120F01E782AD100489729 /* StoreKit.framework */,
 				6777921E1E7566B600ACC53D /* StoreKit.framework */,
 				6777921C1E7566B000ACC53D /* MediaPlayer.framework */,
 				677791FE1E75307D00ACC53D /* PlayerKit.framework */,
@@ -839,7 +849,6 @@
 			isa = PBXGroup;
 			children = (
 				6777922C1E757BA000ACC53D /* Enclosure */,
-				670505A41B6E1398006EAA84 /* Track.swift */,
 				6705059F1B6E1398006EAA84 /* Playlist.swift */,
 				670576211BE4E9C60087063A /* History.swift */,
 				67FBBE341B6CE76300B567CB /* Entry.swift */,
@@ -1161,6 +1170,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				675120EC1E78294A00489729 /* Enclosure.swift in Sources */,
+				675120ED1E78294A00489729 /* StringExtension.swift in Sources */,
 				67156E301DCB762D007DC6F1 /* TopicRepository.swift in Sources */,
 				67156E311DCB762D007DC6F1 /* TrackRepository.swift in Sources */,
 				67156E321DCB762D007DC6F1 /* PlaylistRepository.swift in Sources */,
@@ -1176,7 +1187,6 @@
 				6777922A1E757B8E00ACC53D /* PlaylistifiedEntry.swift in Sources */,
 				677792151E75622E00ACC53D /* ServicePlaylist.swift in Sources */,
 				67156E3B1DCB762D007DC6F1 /* Track.swift in Sources */,
-				6777921A1E75645000ACC53D /* AppleMusicClient.swift in Sources */,
 				67156E3C1DCB762D007DC6F1 /* Playlist.swift in Sources */,
 				67156E3D1DCB762D007DC6F1 /* History.swift in Sources */,
 				67156E3E1DCB762D007DC6F1 /* Entry.swift in Sources */,
@@ -1226,6 +1236,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				675120EE1E78295100489729 /* Enclosure.swift in Sources */,
+				675120EF1E78295100489729 /* StringExtension.swift in Sources */,
 				67156E751DCB768E007DC6F1 /* TopicRepository.swift in Sources */,
 				67156E761DCB768E007DC6F1 /* TrackRepository.swift in Sources */,
 				67156E771DCB768E007DC6F1 /* PlaylistRepository.swift in Sources */,
@@ -1241,7 +1253,6 @@
 				6777922B1E757B8E00ACC53D /* PlaylistifiedEntry.swift in Sources */,
 				677792161E75622E00ACC53D /* ServicePlaylist.swift in Sources */,
 				67156E801DCB768E007DC6F1 /* Track.swift in Sources */,
-				6777921B1E75645000ACC53D /* AppleMusicClient.swift in Sources */,
 				67156E811DCB768E007DC6F1 /* Playlist.swift in Sources */,
 				67156E821DCB768E007DC6F1 /* History.swift in Sources */,
 				67156E831DCB768E007DC6F1 /* Entry.swift in Sources */,
@@ -1307,6 +1318,7 @@
 				678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */,
 				679C52DB1B70F3DD00BE6614 /* Track.swift in Sources */,
 				6726A7FE1DA13F6400FDF28F /* Journal.swift in Sources */,
+				675120EA1E76F11B00489729 /* Enclosure.swift in Sources */,
 				677792211E7573D500ACC53D /* Album.swift in Sources */,
 				67D7F3461CAD33DE00C173B4 /* TrackStreamRepository.swift in Sources */,
 				679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */,
