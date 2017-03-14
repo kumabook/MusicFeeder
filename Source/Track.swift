@@ -313,6 +313,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         createdAt    = dic["updated_at"].flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
         updatedAt    = dic["created_at"].flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
         state        = dic["state"].flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
+        artist       = dic["owner_name"]
 
         likesCount   = dic["likesCount"].flatMap { Int64($0) }
         entriesCount = dic["entriesCount"].flatMap { Int64($0) }
