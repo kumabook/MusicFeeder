@@ -128,25 +128,28 @@ struct FetchEnclosuresAPI<T: Enclosure>: API {
     }
 }
 
+enum MarkerAction: String {
+    case Like   = "markAsLiked"
+    case Unlike = "markAsUnliked"
+}
+
 struct EnclosureMarkerAPI<T: Enclosure>: API {
-    enum Action: String {
-        case Like   = "markAsLiked"
-        case Unlike = "markAsUnliked"
-    }
     var items: [T]
-    var action: Action
+    var action: MarkerAction
 
     var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/markers" }
     var method:     Alamofire.HTTPMethod { return .post }
     func asURLRequest() throws -> URLRequest {
         let params: [String: Any] = ["type": T.resourceName as AnyObject,
                                    "action": action.rawValue as AnyObject,
-                                T.idListKey: self.tracks.map { $0.id }]
+                                T.idListKey: self.items.map { $0.id }]
         var req = URLRequest(url: URL(string: url)!)
         req.httpMethod = method.rawValue
         return try URLEncoding.default.encode(req, with: params)
     }
 }
+
+typealias TrackMarkerAPI = EnclosureMarkerAPI<Track>
 
 public protocol ParameterEncodable {
     func toParameters() -> [String: Any]
@@ -326,8 +329,8 @@ extension CloudAPIClient {
         }
     }
 
-    fileprivate func markTracksAs(_ tracks: [Track], action: TrackMarkerAPI.Action) -> SignalProducer<Void, NSError> {
-        let route = Router.api(TrackMarkerAPI(tracks: tracks, action: action))
+    fileprivate func markEnclosuresAs<T: Enclosure>(_ items: [T], action: MarkerAction) -> SignalProducer<Void, NSError> {
+        let route = Router.api(EnclosureMarkerAPI<T>(items: items, action: action))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().response() { (r: DataResponse<Void>) -> Void in
                 if let e = r.result.error {
@@ -342,10 +345,26 @@ extension CloudAPIClient {
     }
 
     public func markTracksAsLiked(_ tracks: [Track]) -> SignalProducer<Void, NSError> {
-        return markTracksAs(tracks, action: TrackMarkerAPI.Action.Like)
+        return markEnclosuresAs(tracks, action: MarkerAction.Like)
     }
 
     public func markTracksAsUnliked(_ tracks: [Track]) -> SignalProducer<Void, NSError> {
-        return markTracksAs(tracks, action: TrackMarkerAPI.Action.Unlike)
+        return markEnclosuresAs(tracks, action: MarkerAction.Unlike)
+    }
+
+    public func markAlbumsAsLiked(_ albums: [Album]) -> SignalProducer<Void, NSError> {
+        return markEnclosuresAs(albums, action: MarkerAction.Like)
+    }
+
+    public func markAlbumsAsUnliked(_ albums: [Album]) -> SignalProducer<Void, NSError> {
+        return markEnclosuresAs(albums, action: MarkerAction.Unlike)
+    }
+
+    public func markPlaylistAsLiked(_ playlists: [ServicePlaylist]) -> SignalProducer<Void, NSError> {
+        return markEnclosuresAs(playlists, action: MarkerAction.Like)
+    }
+
+    public func markPlaylistsAsUnliked(_ playlists: [ServicePlaylist]) -> SignalProducer<Void, NSError> {
+        return markEnclosuresAs(playlists, action: MarkerAction.Unlike)
     }
 }

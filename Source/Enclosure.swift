@@ -7,12 +7,15 @@
 //
 
 import Foundation
+import SwiftyJSON
 import FeedlyKit
 
 public protocol Enclosure: ResponseObjectSerializable, ResponseCollectionSerializable {
     static var resourceName: String { get }
     static var idListKey:    String { get }
     init?(urlString: String)
+    init(json: JSON)
+    var id: String { get }
     static func parseURI(uri: String) -> [String: String]
 }
 
