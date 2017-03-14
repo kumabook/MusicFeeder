@@ -176,11 +176,12 @@ open class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
     }
 }
 
-struct FetchTracksOfStreamAPI: API {
+struct FetchEnclosuresOfStreamAPI<T: Enclosure>: API {
+    private let baseUrl = CloudAPIClient.sharedInstance.target.baseUrl
     var streamId:  String
     var params:    MusicFeeder.PaginationParams
-    var url:       String { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/streams/\(urlEncode(streamId))/tracks/contents" }
-    var method:     Alamofire.HTTPMethod { return .get }
+    var url:       String { return "\(baseUrl)/v3/streams/\(urlEncode(streamId))/\(T.resourceName)/contents" }
+    var method:    Alamofire.HTTPMethod { return .get }
     func asURLRequest() throws -> URLRequest {
         var req = URLRequest(url: URL(string: url)!)
         req.httpMethod = method.rawValue
@@ -188,14 +189,18 @@ struct FetchTracksOfStreamAPI: API {
     }
 }
 
-open class PaginatedTrackCollection: ResponseObjectSerializable, PaginatedCollection {
+typealias FetchTracksOfStreamAPI = FetchEnclosuresOfStreamAPI<Track>
+typealias FetchAlbumsOfStreamAPI = FetchEnclosuresOfStreamAPI<Album>
+typealias FetchPlaylistsOfStreamAPI = FetchEnclosuresOfStreamAPI<ServicePlaylist>
+
+open class PaginatedEnclosureCollection<T: Enclosure>: ResponseObjectSerializable, PaginatedCollection {
     open let id:           String
     open let updated:      Int64?
     open let continuation: String?
     open let title:        String?
     open let direction:    String?
     open let alternate:    Link?
-    open let items:        [Track]
+    open let items:        [T]
     required public init?(response: HTTPURLResponse, representation: Any) {
         let json     = JSON(representation)
         id           = json["id"].stringValue
@@ -204,9 +209,13 @@ open class PaginatedTrackCollection: ResponseObjectSerializable, PaginatedCollec
         title        = json["title"].string
         direction    = json["direction"].string
         alternate    = json["alternate"].isEmpty ? nil : Link(json: json["alternate"])
-        items        = json["items"].arrayValue.map( {Track(json: $0)} )
+        items        = json["items"].arrayValue.map( {T(json: $0)} )
     }
 }
+
+public typealias PaginatedTrackCollection = PaginatedEnclosureCollection<Track>
+public typealias PaginatedAlbumCollection = PaginatedEnclosureCollection<Album>
+public typealias PaginatedPlaylistCollection = PaginatedEnclosureCollection<ServicePlaylist>
 
 extension CloudAPIClient {
     public func createProfile(_ email: String, password: String) -> SignalProducer<Profile, NSError> {
@@ -284,8 +293,8 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchEnclosure<T: Enclosure>(_ enclosureId: String) -> SignalProducer<T, NSError> {
-        let route = Router.api(FetchEnclosureAPI<T>(enclosureId: enclosureId))
+    public func fetchEnclosure<T: Enclosure>(_ id: String) -> SignalProducer<T, NSError> {
+        let route = Router.api(FetchEnclosureAPI<T>(enclosureId: id))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<T>) -> Void in
                 if let e = r.result.error {
@@ -299,8 +308,18 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchEnclosures<T: Enclosure>(_ enclosureIds: [String]) -> SignalProducer<[T], NSError> {
-        let route = Router.api(FetchEnclosuresAPI<T>(enclosureIds: enclosureIds))
+    public func fetchTrack(_ id: String) -> SignalProducer<Track, NSError> {
+        return fetchEnclosure(id)
+    }
+    public func fetchAlbum(_ id: String) -> SignalProducer<Album, NSError> {
+        return fetchEnclosure(id)
+    }
+    public func fetchPlaylist(_ id: String) -> SignalProducer<ServicePlaylist, NSError> {
+        return fetchEnclosure(id)
+    }
+
+    public func fetchEnclosures<T: Enclosure>(_ ids: [String]) -> SignalProducer<[T], NSError> {
+        let route = Router.api(FetchEnclosuresAPI<T>(enclosureIds: ids))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().responseCollection() { (r: DataResponse<[T]>) -> Void in
                 if let e = r.result.error {
@@ -314,19 +333,41 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchTracksOf(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
-        let route = Router.api(FetchTracksOfStreamAPI(streamId: streamId, params: paginationParams))
+    public func fetchTracks(_ ids: [String]) -> SignalProducer<[Track], NSError> {
+        return fetchEnclosures(ids)
+    }
+    public func fetchAlbums(_ ids: [String]) -> SignalProducer<[Album], NSError> {
+        return fetchEnclosures(ids)
+    }
+    public func fetchPlaylists(_ ids: [String]) -> SignalProducer<[ServicePlaylist], NSError> {
+        return fetchEnclosures(ids)
+    }
+
+    public func fetchEnclosuresOf<T: Enclosure>(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
+        let route = Router.api(FetchEnclosuresOfStreamAPI<T>(streamId: streamId, params: paginationParams))
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<PaginatedTrackCollection>) -> Void in
+            let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<PaginatedEnclosureCollection<T>>) -> Void in
                 if let e = r.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
-                } else if let tracks = r.result.value {
-                    observer.send(value: tracks)
+                } else if let items = r.result.value {
+                    observer.send(value: items)
                     observer.sendCompleted()
                 }
             }
             disposable.add() { req.cancel() }
         }
+    }
+
+    public func fetchTracksOf(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
+        return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
+    }
+
+    public func fetchAlbumsOf(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedAlbumCollection, NSError> {
+        return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
+    }
+
+    public func fetchPlaylistsOf(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
+        return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
     }
 
     fileprivate func markEnclosuresAs<T: Enclosure>(_ items: [T], action: MarkerAction) -> SignalProducer<Void, NSError> {
