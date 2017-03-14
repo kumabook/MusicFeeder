@@ -46,16 +46,16 @@ class TrackSpec: QuickSpec {
             }
             
             it("should be constructed with a url string that has query") {
-                let url = "http://localhost:3000/v3/tracks/65?id=aaaa&identifier=I6l151j_NHQ&likesCount=10&provider=YouTube&title="
-                let t = Track(urlString: url)
+                let url = "typica://v3/tracks/aaaa?id=aaaa&identifier=I6l151j_NHQ&likesCount=10&provider=YouTube&title=title"
+                let t = Track(urlString: url)!
                 expect(t.id).to(equal("aaaa"))
                 expect(t.identifier).to(equal("I6l151j_NHQ"))
                 expect(t.provider).to(equal(Provider.youTube))
                 expect(t.title).to(equal(""))
                 expect(t.likesCount!).to(equal(10))
                 
-                let url2 = "http://localhost:3000/v3/tracks/65?id=bbbb&identifier=I6l151j_NHQ&likesCount=10&provider=YouTube&title=title"
-                let t2 = Track(urlString: url2)
+                let url2 = "typica://v3/tracks/bbbb?id=bbbb&identifier=I6l151j_NHQ&likesCount=10&provider=YouTube&title=title"
+                let t2 = Track(urlString: url2)!
                 expect(t2.title).to(equal("title"))
             }
         }
