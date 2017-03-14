@@ -61,7 +61,8 @@ public enum YouTubeVideoQuality: Int64 {
     #endif
 }
 
-final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
+final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
+    public static var resourceName: String = "tracks"
     fileprivate static let userDefaults = UserDefaults.standard
     public static var appleMusicCurrentCountry: String = "jp"
     public static var isSpotifyPremiumUser: Bool = false
@@ -95,12 +96,17 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     public fileprivate(set) var entriesCount: Int64?
     public fileprivate(set) var title:        String?
     public fileprivate(set) var thumbnailUrl: URL?
+    public fileprivate(set) var artworkUrl:   URL?
     public fileprivate(set) var audioUrl:     URL?
     public fileprivate(set) var duration:     TimeInterval
     public fileprivate(set) var likesCount:   Int64?
     public fileprivate(set) var likers:       [Profile]?
     public fileprivate(set) var expiresAt:    Int64
     public fileprivate(set) var artist:       String?
+    public fileprivate(set) var publishedAt:  Int64
+    public fileprivate(set) var updatedAt:    Int64
+    public fileprivate(set) var createdAt:    Int64
+    public fileprivate(set) var state:        EnclosureState
     public var playerType: PlayerType {
         switch provider {
         case .appleMusic:
@@ -224,14 +230,18 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
     }
 
     public init(id: String, provider: Provider, url: String, identifier: String, title: String?) {
-        self.id         = id
-        self.provider   = provider
-        self.url        = url
-        self.identifier = identifier
-        self.title      = title
-        self.duration   = 0 as TimeInterval
-        self.status     = .init
-        self.expiresAt  = 0
+        self.id          = id
+        self.provider    = provider
+        self.url         = url
+        self.identifier  = identifier
+        self.title       = title
+        self.duration    = 0 as TimeInterval
+        self.status      = .init
+        self.expiresAt   = Int64.max
+        self.publishedAt = 0
+        self.createdAt   = 0
+        self.updatedAt   = 0
+        self.state       = EnclosureState.alive
     }
 
     public init(json: JSON) {
@@ -243,17 +253,22 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         likesCount   = 0
         duration     = json["duration"].doubleValue
         thumbnailUrl = json["thumbnail_url"].string.flatMap { URL(string: $0) }
+        artworkUrl   = json["artwork_url"].string.flatMap { URL(string: $0) }
         audioUrl     = json["audio_url"].string.flatMap { URL(string: $0) }
         status       = .init
         likers       = []
         entries      = []
-        expiresAt    = 0
+        expiresAt    = Int64.max
         // prefer to cache
         likesCount   = json["likesCount"].int64Value
         likers       = json["likers"].array?.map  { Profile(json: $0) }
         entriesCount = json["entriesCount"].int64Value
         entries      = json["entries"].array?.map { Entry(json: $0) }
         artist       = json["owner_name"].string
+        publishedAt  = json["published_at"].string.flatMap { $0.dateFromISO8601?.timestamp } ?? 0
+        createdAt    = json["updated_at"].string.flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
+        updatedAt    = json["created_at"].string.flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
+        state        = json["state"].string.flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
     }
 
     public init(store: TrackStore) {
@@ -269,27 +284,42 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, ResponseObjectSe
         entries      = realize(store.entries).map { Entry(store: $0 as! EntryStore) }
         entriesCount = store.entriesCount
         expiresAt    = store.expiresAt
-        if let url = URL(string: store.thumbnailUrl), !store.thumbnailUrl.isEmpty {
-            thumbnailUrl = url
+        if let u = URL(string: store.thumbnailUrl), !store.thumbnailUrl.isEmpty {
+            thumbnailUrl = u
         }
+        artworkUrl   = nil
+        if let u = URL(string: store.streamUrl), !store.streamUrl.isEmpty {
+            audioUrl = u
+        }
+        publishedAt  = 0
+        createdAt    = 0
+        updatedAt    = 0
+        state        = EnclosureState.alive
     }
 
-    public init(urlString: String) {
-        let components: URLComponents? = URLComponents(string: urlString)
-        var dic: [String:String] = [:]
-        components?.queryItems?.forEach {
-            dic[$0.name] = $0.value
+    public init?(urlString: String) {
+        var dic      = Track.parseURI(uri: urlString)
+        if dic["type"] != "tracks" {
+            return nil
         }
         id           = dic["id"].flatMap { $0 } ?? ""
         provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.youTube
-        title        = dic["title"]
-        url          = urlString
         identifier   = dic["identifier"] ?? ""
+        url          = dic["url"] ?? urlString
+        title        = dic["title"]
         duration     = dic["duration"].flatMap { Int64($0) }.flatMap { TimeInterval( $0 / 1000) } ?? 0
+        thumbnailUrl = dic["thumbnail_url"].flatMap { URL(string: $0) }
+        artworkUrl   = dic["artwork_url"].flatMap { URL(string: $0) }
+        audioUrl     = dic["audio_url"].flatMap { URL(string: $0) }
+        publishedAt  = dic["published_at"].flatMap { $0.dateFromISO8601?.timestamp } ?? 0
+        createdAt    = dic["updated_at"].flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
+        updatedAt    = dic["created_at"].flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
+        state        = dic["state"].flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
+
         likesCount   = dic["likesCount"].flatMap { Int64($0) }
         entriesCount = dic["entriesCount"].flatMap { Int64($0) }
         status       = .init
-        expiresAt    = 0
+        expiresAt    = Int64.max
     }
 
     public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
