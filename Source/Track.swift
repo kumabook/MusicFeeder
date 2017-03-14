@@ -464,10 +464,10 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     
     fileprivate func fetchTrack() -> SignalProducer<Track, NSError> {
         if status == .init || status == .cache || status == .dirty {
-            return CloudAPIClient.sharedInstance.fetchTrack(id).map {
-                self.likesCount   = $0.likesCount
-                self.entriesCount = $0.entriesCount
-                self.entries      = $0.entries
+            return CloudAPIClient.sharedInstance.fetchEnclosure(id).map { (track: Track) -> Track in
+                self.likesCount   = track.likesCount
+                self.entriesCount = track.entriesCount
+                self.entries      = track.entries
                 return self
             }
         } else {
