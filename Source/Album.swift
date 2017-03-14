@@ -11,7 +11,8 @@ import SwiftyJSON
 import Breit
 import FeedlyKit
 
-public struct Album: Equatable, Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
+public struct Album: Equatable, Hashable, Enclosure {
+    public static var resourceName:           String = "albums"
     public fileprivate(set) var id:           String = ""
     public fileprivate(set) var provider:     Provider
     public fileprivate(set) var identifier:   String = ""
@@ -35,6 +36,31 @@ public struct Album: Equatable, Hashable, ResponseObjectSerializable, ResponseCo
     public var hashValue: Int {
         return "\(provider):\(identifier)".hashValue
     }
+
+    public init?(urlString: String) {
+        var dic      = Album.parseURI(uri: urlString)
+        if dic["type"] != "albums" {
+            return nil
+        }
+        id           = dic["id"] ?? ""
+        provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.youTube
+        identifier   = dic["identifier"] ?? ""
+        owner_id     = dic["owner_id"] ?? ""
+        owner_name   = dic["onwer_name"] ?? ""
+        url          = urlString
+        title        = dic["title"] ?? ""
+        description  = dic["description"] ?? ""
+        thumbnailUrl = dic["thumbnail_url"].flatMap { URL(string: $0) }
+        artworkUrl   = dic["artwork_url"].flatMap { URL(string: $0) }
+        publishedAt  = dic["published_at"].flatMap { $0.dateFromISO8601?.timestamp } ?? 0
+        createdAt    = dic["updated_at"].flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
+        updatedAt    = dic["created_at"].flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
+        state        = dic["state"].flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
+
+        likesCount   = dic["likesCount"].flatMap { Int64($0) }
+        entriesCount = dic["entriesCount"].flatMap { Int64($0) }
+    }
+
     public static func collection(_ response: HTTPURLResponse, representation: Any) -> [Album]? {
         let json = JSON(representation)
         return json.arrayValue.map({ Album(json: $0) })
