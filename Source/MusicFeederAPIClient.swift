@@ -98,11 +98,14 @@ struct DeleteTopicAPI: API {
     }
 }
 
-struct FetchTrackAPI: API {
-    var trackId: String
-
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/tracks/\(trackId)" }
-    var method:     Alamofire.HTTPMethod { return .get }
+struct FetchEnclosureAPI<T: Enclosure>: API {
+    var enclosureId: String
+    var url:         String {
+        return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/\(T.resourceName)/\(enclosureId)"
+    }
+    var method:      Alamofire.HTTPMethod {
+        return .get
+    }
     func asURLRequest() throws -> URLRequest {
         var req = URLRequest(url: URL(string: url)!)
         req.httpMethod = method.rawValue
@@ -110,15 +113,16 @@ struct FetchTrackAPI: API {
     }
 }
 
-struct FetchTracksAPI: API {
-    var trackIds: [String]
-
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/tracks/.mget" }
+struct FetchEnclosuresAPI<T: Enclosure>: API {
+    var enclosureIds: [String]
+    var url:          String {
+        return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/\(T.resourceName)/.mget"
+    }
     var method:     Alamofire.HTTPMethod { return .post }
     func asURLRequest() throws -> URLRequest {
         var req = URLRequest(url: URL(string: url)!)
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        req.httpBody = try JSONSerialization.data(withJSONObject: trackIds, options: [])
+        req.httpBody = try JSONSerialization.data(withJSONObject: enclosureIds, options: [])
         req.httpMethod = method.rawValue
         return req
     }
@@ -277,14 +281,14 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchTrack(_ trackId: String) -> SignalProducer<Track, NSError> {
-        let route = Router.api(FetchTrackAPI(trackId: trackId))
+    public func fetchEnclosure<T: Enclosure>(_ enclosureId: String) -> SignalProducer<T, NSError> {
+        let route = Router.api(FetchEnclosureAPI<T>(enclosureId: enclosureId))
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<Track>) -> Void in
+            let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<T>) -> Void in
                 if let e = r.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
-                } else if let track = r.result.value {
-                    observer.send(value: track)
+                } else if let enclosure = r.result.value {
+                    observer.send(value: enclosure)
                     observer.sendCompleted()
                 }
             }
@@ -292,14 +296,14 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchTracks(_ trackIds: [String]) -> SignalProducer<[Track], NSError> {
-        let route = Router.api(FetchTracksAPI(trackIds: trackIds))
+    public func fetchEnclosures<T: Enclosure>(_ enclosureIds: [String]) -> SignalProducer<[T], NSError> {
+        let route = Router.api(FetchEnclosuresAPI<T>(enclosureIds: enclosureIds))
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().responseCollection() { (r: DataResponse<[Track]>) -> Void in
+            let req = self.manager.request(route).validate().responseCollection() { (r: DataResponse<[T]>) -> Void in
                 if let e = r.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
-                } else if let tracks = r.result.value {
-                    observer.send(value: tracks)
+                } else if let enclosures = r.result.value {
+                    observer.send(value: enclosures)
                     observer.sendCompleted()
                 }
             }
