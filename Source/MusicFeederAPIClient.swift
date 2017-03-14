@@ -128,20 +128,20 @@ struct FetchEnclosuresAPI<T: Enclosure>: API {
     }
 }
 
-struct TrackMarkerAPI: API {
+struct EnclosureMarkerAPI<T: Enclosure>: API {
     enum Action: String {
         case Like   = "markAsLiked"
         case Unlike = "markAsUnliked"
     }
-    var tracks: [Track]
+    var items: [T]
     var action: Action
 
     var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/markers" }
     var method:     Alamofire.HTTPMethod { return .post }
     func asURLRequest() throws -> URLRequest {
-        let params: [String: Any] = ["type": "tracks" as AnyObject,
+        let params: [String: Any] = ["type": T.resourceName as AnyObject,
                                    "action": action.rawValue as AnyObject,
-                                 "trackIds": self.tracks.map { $0.id }]
+                                T.idListKey: self.tracks.map { $0.id }]
         var req = URLRequest(url: URL(string: url)!)
         req.httpMethod = method.rawValue
         return try URLEncoding.default.encode(req, with: params)

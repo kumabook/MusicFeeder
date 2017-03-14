@@ -11,6 +11,7 @@ import FeedlyKit
 
 public protocol Enclosure: ResponseObjectSerializable, ResponseCollectionSerializable {
     static var resourceName: String { get }
+    static var idListKey:    String { get }
     init?(urlString: String)
     static func parseURI(uri: String) -> [String: String]
 }

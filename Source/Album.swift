@@ -13,6 +13,7 @@ import FeedlyKit
 
 public struct Album: Equatable, Hashable, Enclosure {
     public static var resourceName:           String = "albums"
+    public static var idListKey:              String = "albumIds"
     public fileprivate(set) var id:           String = ""
     public fileprivate(set) var provider:     Provider
     public fileprivate(set) var identifier:   String = ""

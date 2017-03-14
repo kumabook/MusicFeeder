@@ -13,6 +13,7 @@ import FeedlyKit
 
 public struct ServicePlaylist: Equatable, Hashable, Enclosure {
     public static var resourceName:           String = "playlists"
+    public static var idListKey:              String = "playlistIds"
     public fileprivate(set) var id:           String = ""
     public fileprivate(set) var provider:     Provider
     public fileprivate(set) var identifier:   String = ""

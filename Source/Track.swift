@@ -63,6 +63,7 @@ public enum YouTubeVideoQuality: Int64 {
 
 final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public static var resourceName: String = "tracks"
+    public static var idListKey:    String = "trackIds"
     fileprivate static let userDefaults = UserDefaults.standard
     public static var appleMusicCurrentCountry: String = "jp"
     public static var isSpotifyPremiumUser: Bool = false
