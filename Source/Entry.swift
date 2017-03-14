@@ -9,7 +9,9 @@
 import Foundation
 import FeedlyKit
 
-var StoredPropertyKeyForTracks: UInt8 = 0
+var StoredPropertyKeyForTracks:    UInt8 = 0
+var StoredPropertyKeyForAlbums:    UInt8 = 1
+var StoredPropertyKeyForPlaylists: UInt8 = 2
 
 extension Entry {
     public var url: NSURL? {
@@ -26,13 +28,13 @@ extension Entry {
             return storedTracks
         }
         self.storedTracks = enclosure.map {
-            $0.filter { $0.type.contains("application/json") }.map {
-                Track(urlString: $0.href)
+            $0.filter { $0.type.contains("application/json") }.flatMap {
+                Track(urlString: $0.href).map { [$0] } ?? []
             }
-        } ?? []
-        return self.storedTracks!
+        }
+        return self.storedTracks ?? []
     }
-    
+
     fileprivate var storedTracks: [Track]? {
         get {
             guard let tracks = objc_getAssociatedObject(self, &StoredPropertyKeyForTracks) as? [Track] else {
@@ -45,6 +47,53 @@ extension Entry {
         }
     }
 
+    public var albums: [Album] {
+        if let storedAlbums = self.storedAlbums {
+            return storedAlbums
+        }
+        self.storedAlbums = enclosure.map {
+            $0.filter { $0.type.contains("application/json") }.flatMap {
+                Album(urlString: $0.href).map { [$0] } ?? []
+            }
+        }
+        return self.storedAlbums ?? []
+    }
+
+    fileprivate var storedAlbums: [Album]? {
+        get {
+            guard let albums = objc_getAssociatedObject(self, &StoredPropertyKeyForAlbums) as? [Album] else {
+                return nil
+            }
+            return albums
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForAlbums, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+
+    public var playlists: [ServicePlaylist] {
+        if let storedPlaylists = self.storedPlaylists {
+            return storedPlaylists
+        }
+        self.storedPlaylists = enclosure.map {
+            $0.filter { $0.type.contains("application/json") }.flatMap {
+                ServicePlaylist(urlString: $0.href).map { [$0] } ?? []
+            }
+        }
+        return self.storedPlaylists ?? []
+    }
+
+    fileprivate var storedPlaylists: [ServicePlaylist]? {
+        get {
+            guard let playlists = objc_getAssociatedObject(self, &StoredPropertyKeyForPlaylists) as? [ServicePlaylist] else {
+                return nil
+            }
+            return playlists
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForPlaylists, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
 
     public var audioTracks: [Track] {
         return enclosure.map {
