@@ -48,7 +48,7 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
         identifier   = dic["identifier"] ?? ""
         owner_id     = dic["owner_id"]
         owner_name   = dic["onwer_name"]
-        url          = urlString
+        url          = dic["url"] ?? urlString
         title        = dic["title"] ?? ""
         description  = dic["description"] ?? ""
         thumbnailUrl = dic["thumbnail_url"].flatMap { URL(string: $0) }
