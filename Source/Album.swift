@@ -17,8 +17,8 @@ public struct Album: Equatable, Hashable, Enclosure {
     public fileprivate(set) var id:           String = ""
     public fileprivate(set) var provider:     Provider
     public fileprivate(set) var identifier:   String = ""
-    public fileprivate(set) var owner_id:     String = ""
-    public fileprivate(set) var owner_name:   String = ""
+    public fileprivate(set) var owner_id:     String?
+    public fileprivate(set) var owner_name:   String?
     public fileprivate(set) var url:          String = ""
     public fileprivate(set) var title:        String?
     public fileprivate(set) var description:  String?
@@ -46,8 +46,8 @@ public struct Album: Equatable, Hashable, Enclosure {
         id           = dic["id"] ?? ""
         provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.youTube
         identifier   = dic["identifier"] ?? ""
-        owner_id     = dic["owner_id"] ?? ""
-        owner_name   = dic["onwer_name"] ?? ""
+        owner_id     = dic["owner_id"]
+        owner_name   = dic["onwer_name"]
         url          = urlString
         title        = dic["title"] ?? ""
         description  = dic["description"] ?? ""
@@ -84,6 +84,8 @@ public struct Album: Equatable, Hashable, Enclosure {
         id           = json["id"].stringValue
         provider     = Provider(rawValue: json["provider"].stringValue)!
         identifier   = json["identifier"].stringValue
+        owner_id     = json["owner_id"].string
+        owner_name   = json["onwer_name"].string
         url          = json["url"].stringValue
         title        = json["title"].string
         description  = json["description"].string
