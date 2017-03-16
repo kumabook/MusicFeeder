@@ -21,7 +21,7 @@ public protocol Enclosure: ResponseObjectSerializable, ResponseCollectionSeriali
 
 public extension Enclosure {
     static func parseURI(uri: String) -> [String: String] {
-        let components: URLComponents? = URLComponents(string: uri)
+        let components: URLComponents? = URLComponents(string: uri.replace("+", withString: "%20"))
         var dic: [String:String] = [:]
         components?.queryItems?.forEach {
             dic[$0.name] = $0.value
