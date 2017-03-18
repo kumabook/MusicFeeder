@@ -36,31 +36,31 @@ public extension Enclosure {
     }
 
     public func markAsLiked() -> SignalProducer<Self, NSError> {
-        return markAs(action: MarkerAction.Like)
+        return markAs(action: MarkerAction.liked)
     }
 
     public func markAsUnliked() -> SignalProducer<Self, NSError> {
-        return markAs(action: MarkerAction.Unlike)
+        return markAs(action: MarkerAction.unliked)
     }
 
     public func markAsSaved() -> SignalProducer<Self, NSError> {
-        return markAs(action: MarkerAction.Save)
+        return markAs(action: MarkerAction.saved)
     }
 
     public func markAsUnsaved() -> SignalProducer<Self, NSError> {
-        return markAs(action: MarkerAction.Unsave)
+        return markAs(action: MarkerAction.unsaved)
     }
 
     public func markAsOpened() -> SignalProducer<Self, NSError> {
-        return markAs(action: MarkerAction.Open)
+        return markAs(action: MarkerAction.opened)
     }
 
     public func markAsUnopened() -> SignalProducer<Self, NSError> {
-        return markAs(action: MarkerAction.Unopen)
+        return markAs(action: MarkerAction.unopened)
     }
 
     internal func markAs(action: MarkerAction) -> SignalProducer<Self, NSError> {
-        return CloudAPIClient.sharedInstance.markEnclosuresAs([self], action: action)
+        return CloudAPIClient.sharedInstance.markEnclosuresAs(action, items: [self])
                                             .flatMap(.concat) { () ->  SignalProducer<Self, NSError> in
             self.invalidate()
             return self.fetch()

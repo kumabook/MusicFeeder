@@ -132,7 +132,7 @@ class FeedlyAPISpec: QuickSpec {
                     self.client.fetchTracks([track.id])
                 }.flatMap(.concat) { (tracks: [Track]) -> SignalProducer<Void, NSError> in
                     oldLikesCount = tracks[0].likesCount!
-                    return self.client.markTracksAs(.like, items: ts)
+                    return self.client.markTracksAs(.liked, items: ts)
                 }.flatMap(.concat) {(_: ()) -> SignalProducer<[Track], NSError> in
                     self.client.fetchTracks([track.id])
                 }.on(disposed: {

@@ -128,13 +128,13 @@ struct FetchEnclosuresAPI<T: Enclosure>: API {
     }
 }
 
-enum MarkerAction: String {
-    case Like    = "markAsLiked"
-    case Unlike  = "markAsUnliked"
-    case Save    = "markAsSaved"
-    case Unsave  = "markAsUnsaved"
-    case Open    = "markAsOpened"
-    case Unopen  = "markAsUnopened"
+public enum MarkerAction: String {
+    case liked    = "markAsLiked"
+    case unliked  = "markAsUnliked"
+    case saved    = "markAsSaved"
+    case unsaved  = "markAsUnsaved"
+    case opened   = "markAsOpened"
+    case unopened = "markAsUnopened"
 }
 
 struct EnclosureMarkerAPI<T: Enclosure>: API {
@@ -374,7 +374,7 @@ extension CloudAPIClient {
         return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
     }
 
-    internal func markEnclosuresAs<T: Enclosure>(_ items: [T], action: MarkerAction) -> SignalProducer<Void, NSError> {
+    internal func markEnclosuresAs<T: Enclosure>(_ action: MarkerAction, items: [T]) -> SignalProducer<Void, NSError> {
         let route = Router.api(EnclosureMarkerAPI<T>(items: items, action: action))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().response() { (r: DataResponse<Void>) -> Void in
@@ -388,4 +388,15 @@ extension CloudAPIClient {
             disposable.add() { req.cancel() }
         }
     }
+
+    public func markTracksAs(_ action: MarkerAction, items: [Track]) -> SignalProducer<Void, NSError> {
+        return markEnclosuresAs(action, items: items)
+    }
+    public func markAlbumsAs(_ action: MarkerAction, items: [Album]) -> SignalProducer<Void, NSError> {
+        return markEnclosuresAs(action, items: items)
+    }
+    public func markPlaylistsAs(_ action: MarkerAction, items: [ServicePlaylist]) -> SignalProducer<Void, NSError> {
+        return markEnclosuresAs(action, items: items)
+    }
+
 }
