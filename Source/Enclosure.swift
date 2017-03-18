@@ -17,6 +17,7 @@ public protocol Enclosure: ResponseObjectSerializable, ResponseCollectionSeriali
     init?(urlString: String)
     init(json: JSON)
     var id: String { get }
+    func invalidate()
     static func parseURI(uri: String) -> [String: String]
 }
 
@@ -29,6 +30,9 @@ public extension Enclosure {
         }
         dic["type"] = components?.path.components(separatedBy: "/").get(1) ?? ""
         return dic
+    }
+
+    public func invalidate() {
     }
 
     public func markAsLiked() -> SignalProducer<Self, NSError> {
@@ -56,8 +60,10 @@ public extension Enclosure {
     }
 
     internal func markAs(action: MarkerAction) -> SignalProducer<Self, NSError> {
-        return CloudAPIClient.sharedInstance.markEnclosuresAs([self], action: action).flatMap(.concat) {
-            self.fetch()
+        return CloudAPIClient.sharedInstance.markEnclosuresAs([self], action: action)
+                                            .flatMap(.concat) { () ->  SignalProducer<Self, NSError> in
+            self.invalidate()
+            return self.fetch()
         }
     }
 
