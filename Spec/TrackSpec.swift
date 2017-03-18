@@ -51,7 +51,7 @@ class TrackSpec: QuickSpec {
                 expect(t.id).to(equal("aaaa"))
                 expect(t.identifier).to(equal("I6l151j_NHQ"))
                 expect(t.provider).to(equal(Provider.youTube))
-                expect(t.title).to(equal(""))
+                expect(t.title).to(equal("title"))
                 expect(t.likesCount!).to(equal(10))
                 
                 let url2 = "typica://v3/tracks/bbbb?id=bbbb&identifier=I6l151j_NHQ&likesCount=10&provider=YouTube&title=title"

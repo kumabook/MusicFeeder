@@ -115,7 +115,7 @@ class FeedlyAPISpec: QuickSpec {
                 self.tracks = self.entries.flatMap { $0.map { $0.tracks }.flatMap { $0 } }.map { Array($0.prefix(1)) }
                 for t in self.tracks! {
                     expect(t.id).notTo(beNil())
-                    expect(t.likesCount).to(beNil())
+                    expect(t.likesCount).notTo(beNil())
                     expect(t.likers).to(beNil())
                 }
             }
@@ -128,11 +128,11 @@ class FeedlyAPISpec: QuickSpec {
             beforeEach {
                 guard let ts = self.tracks else { return }
                 let track = ts[0]
-                self.client.markTracksAsUnliked(ts).flatMap(.concat) {
+                self.client.markTracksAs(.unliked, items: ts).flatMap(.concat) {
                     self.client.fetchTracks([track.id])
                 }.flatMap(.concat) { (tracks: [Track]) -> SignalProducer<Void, NSError> in
                     oldLikesCount = tracks[0].likesCount!
-                    return self.client.markTracksAsLiked(ts)
+                    return self.client.markTracksAs(.like, items: ts)
                 }.flatMap(.concat) {(_: ()) -> SignalProducer<[Track], NSError> in
                     self.client.fetchTracks([track.id])
                 }.on(disposed: {
@@ -141,7 +141,7 @@ class FeedlyAPISpec: QuickSpec {
                     newLikesCount = tracks[0].likesCount!
                 }).start()
             }
-            it("should fetch a user") {
+            it("should mark as liked") {
                 expect(isFinish).toFinally(equal(true))
                 expect(self.tracks).toFinallyNot(beNil())
                 expect(newLikesCount).to(equal(oldLikesCount + 1))

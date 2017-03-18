@@ -53,14 +53,16 @@ class TrackRespoistorySpec: QuickSpec {
                     let entry = self.entryRepository.getItems()[0]
                     expect(entry.tracks.count).to(beGreaterThan(0))
                     let track = entry.tracks[0]
-                    expect(track.status).to(equal(Track.Status.loading))
-                    expect(track.title!.characters.count).to(equal(0))
-                    expect(track.thumbnailUrl).to(beNil())
-
-//                    expect(track.status).toFinally(equal(Track.Status.Available))
-//                    expect(track.title!.characters.count).toFinally(beGreaterThan(0))
-//                    expect(track.thumbnailUrl).notTo(beNil())
-//                    expect(track.entries!.count).to(beGreaterThan(0))
+                    if track.status == .loading {
+                        expect(track.status).to(equal(Track.Status.loading))
+                        expect(track.title!.characters.count).to(equal(0))
+                        expect(track.thumbnailUrl).to(beNil())
+                    } else {
+                        expect(track.status).toFinally(equal(Track.Status.available))
+                        expect(track.title!.characters.count).toFinally(beGreaterThan(0))
+                        expect(track.thumbnailUrl).notTo(beNil())
+                        expect(track.entries).to(beNil())
+                    }
                 }
             }
             context("when it has cache") {
@@ -75,13 +77,12 @@ class TrackRespoistorySpec: QuickSpec {
                     if self.entryRepository.getItems().count > 0 {
                         let entry = self.entryRepository.getItems()[0]
                         expect(entry.tracks.count).to(beGreaterThan(0))
-/*                        if let track = entry.tracks.get(0) {
- currently not load track
-                                expect(track.status).toFinally(equal(Track.Status.Cache))
-                                expect(track.entries!.count).to(beGreaterThan(0))
-                                expect(track.title!.characters.count).to(beGreaterThan(0))
-                                expect(track.thumbnailUrl).notTo(beNil())
- */
+                        if let track = entry.tracks.get(0) {
+                            expect(track.status).toFinally(equal(Track.Status.init))
+                            expect(track.entries).to(beNil())
+                            expect(track.title?.characters.count ?? 0).to(beGreaterThan(0))
+                            expect(track.thumbnailUrl).notTo(beNil())
+                        }
                     }
                 }
             }
