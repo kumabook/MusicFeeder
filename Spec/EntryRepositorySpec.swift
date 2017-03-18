@@ -17,11 +17,11 @@ class EntryRepositorySpec: QuickSpec {
 
     override func spec() {
         SpecHelper.cleanRealmDBs()
-        SpecHelper.ping() // wake up test server
         describe("A EntryRepository") {
             var started = false
             var completed = false
             beforeSuite {
+                SpecHelper.ping() // wake up test server
                 CloudAPIClient.sharedInstance = SpecHelper.api
                 SpecHelper.login()
                 EntryCacheList.deleteAllItems()
