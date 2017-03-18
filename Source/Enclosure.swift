@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 import FeedlyKit
+import ReactiveSwift
 
 public protocol Enclosure: ResponseObjectSerializable, ResponseCollectionSerializable {
     static var resourceName: String { get }
@@ -28,5 +29,39 @@ public extension Enclosure {
         }
         dic["type"] = components?.path.components(separatedBy: "/").get(1) ?? ""
         return dic
+    }
+
+    public func markAsLiked() -> SignalProducer<Self, NSError> {
+        return markAs(action: MarkerAction.Like)
+    }
+
+    public func markAsUnliked() -> SignalProducer<Self, NSError> {
+        return markAs(action: MarkerAction.Unlike)
+    }
+
+    public func markAsSaved() -> SignalProducer<Self, NSError> {
+        return markAs(action: MarkerAction.Save)
+    }
+
+    public func markAsUnsaved() -> SignalProducer<Self, NSError> {
+        return markAs(action: MarkerAction.Unsave)
+    }
+
+    public func markAsOpened() -> SignalProducer<Self, NSError> {
+        return markAs(action: MarkerAction.Open)
+    }
+
+    public func markAsUnopened() -> SignalProducer<Self, NSError> {
+        return markAs(action: MarkerAction.Unopen)
+    }
+
+    internal func markAs(action: MarkerAction) -> SignalProducer<Self, NSError> {
+        return CloudAPIClient.sharedInstance.markEnclosuresAs([self], action: action).flatMap(.concat) {
+            self.fetch()
+        }
+    }
+
+    public func fetch() -> SignalProducer<Self, NSError> {
+        return CloudAPIClient.sharedInstance.fetchEnclosure(id)
     }
 }

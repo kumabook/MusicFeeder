@@ -129,8 +129,12 @@ struct FetchEnclosuresAPI<T: Enclosure>: API {
 }
 
 enum MarkerAction: String {
-    case Like   = "markAsLiked"
-    case Unlike = "markAsUnliked"
+    case Like    = "markAsLiked"
+    case Unlike  = "markAsUnliked"
+    case Save    = "markAsSaved"
+    case Unsave  = "markAsUnsaved"
+    case Open    = "markAsOpened"
+    case Unopen  = "markAsUnopened"
 }
 
 struct EnclosureMarkerAPI<T: Enclosure>: API {
@@ -370,7 +374,7 @@ extension CloudAPIClient {
         return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
     }
 
-    fileprivate func markEnclosuresAs<T: Enclosure>(_ items: [T], action: MarkerAction) -> SignalProducer<Void, NSError> {
+    internal func markEnclosuresAs<T: Enclosure>(_ items: [T], action: MarkerAction) -> SignalProducer<Void, NSError> {
         let route = Router.api(EnclosureMarkerAPI<T>(items: items, action: action))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().response() { (r: DataResponse<Void>) -> Void in
@@ -384,6 +388,8 @@ extension CloudAPIClient {
             disposable.add() { req.cancel() }
         }
     }
+    
+    // Like api
 
     public func markTracksAsLiked(_ tracks: [Track]) -> SignalProducer<Void, NSError> {
         return markEnclosuresAs(tracks, action: MarkerAction.Like)

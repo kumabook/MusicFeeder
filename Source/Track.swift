@@ -435,18 +435,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     }
     #endif
 
-    public func markAsLiked() -> ReactiveSwift.SignalProducer<Track, NSError> {
-        return CloudAPIClient.sharedInstance.markTracksAsLiked([self]).flatMap(.concat) {
-            self.invalidate().fetchDetail()
-        }
-    }
-    
-    public func markAsUnliked() -> ReactiveSwift.SignalProducer<Track, NSError> {
-        return CloudAPIClient.sharedInstance.markTracksAsUnliked([self]).flatMap(.concat) {
-            self.invalidate().fetchDetail()
-        }
-    }
-
     public func fetchDetail() -> SignalProducer<Track, NSError> {
         if CloudAPIClient.includesTrack {
             return fetchTrack().combineLatest(with: fetchPropertiesFromProviderIfNeed()).map {_,_ in
