@@ -66,18 +66,32 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
         let json = JSON(representation)
         return json.arrayValue.map({ ServicePlaylist(json: $0) })
     }
-    
+
     public init?(response: HTTPURLResponse, representation: Any) {
         let json = JSON(representation)
         self.init(json: json)
     }
-    
-    public init(id: String, provider: Provider, url: String, identifier: String, title: String?) {
-        self.id         = id
-        self.provider   = provider
-        self.url        = url
-        self.identifier = identifier
-        self.title      = title
+
+    public init(id: String, provider: Provider, identifier: String, url: String,
+                title: String? = nil, description: String? = nil,
+                owner_id: String? = nil, owner_name: String?,
+                thumbnailUrl: URL? = nil, artworkUrl: URL? = nil,
+                publishedAt: Int64 = 0, createdAt: Int64 = 0, updatedAt: Int64 = 0,
+                state: EnclosureState = .alive) {
+        self.id           = id
+        self.provider     = provider
+        self.url          = url
+        self.identifier   = identifier
+        self.title        = title
+        self.description  = description
+        self.owner_id     = owner_id
+        self.owner_name   = owner_name
+        self.thumbnailUrl = thumbnailUrl
+        self.artworkUrl   = artworkUrl
+        self.publishedAt  = publishedAt
+        self.createdAt    = createdAt
+        self.updatedAt    = updatedAt
+        self.state        = state
     }
 
     public init(json: JSON) {
