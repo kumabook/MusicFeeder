@@ -227,19 +227,27 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         self.init(json: json)
     }
 
-    public init(id: String, provider: Provider, url: String, identifier: String, title: String?) {
-        self.id          = id
-        self.provider    = provider
-        self.url         = url
-        self.identifier  = identifier
-        self.title       = title
-        self.duration    = 0 as TimeInterval
-        self.status      = .init
-        self.expiresAt   = Int64.max
-        self.publishedAt = 0
-        self.createdAt   = 0
-        self.updatedAt   = 0
-        self.state       = EnclosureState.alive
+    public init(id: String, provider: Provider, url: String, identifier: String,
+                title: String? = nil, duration: TimeInterval = 0,
+                thumbnailUrl: URL? = nil, artworkUrl: URL? = nil, audioUrl: URL? = nil,
+                artist: String? = nil, status: Status = .init,
+                expiresAt: Int64 = Int64.max, publishedAt: Int64 = 0, createdAt: Int64 = 0, updatedAt: Int64 = 0, state: EnclosureState = .alive) {
+        self.id           = id
+        self.provider     = provider
+        self.identifier   = identifier
+        self.url          = url
+        self.title        = title
+        self.thumbnailUrl = thumbnailUrl
+        self.artworkUrl   = artworkUrl
+        self.audioUrl     = audioUrl
+        self.duration     = duration
+        self.artist       = artist
+        self.status       = .init
+        self.expiresAt    = Int64.max
+        self.publishedAt  = publishedAt
+        self.createdAt    = createdAt
+        self.updatedAt    = updatedAt
+        self.state        = state
     }
 
     public init(json: JSON) {
@@ -453,7 +461,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     
     fileprivate func fetchTrack() -> SignalProducer<Track, NSError> {
         if status == .init || status == .cache || status == .dirty {
-            return CloudAPIClient.sharedInstance.fetchEnclosure(id).map { (track: Track) -> Track in
+            return fetch().map { (track: Track) -> Track in
                 self.likesCount   = track.likesCount
                 self.entriesCount = track.entriesCount
                 self.entries      = track.entries

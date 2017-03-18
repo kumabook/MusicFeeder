@@ -388,30 +388,4 @@ extension CloudAPIClient {
             disposable.add() { req.cancel() }
         }
     }
-    
-    // Like api
-
-    public func markTracksAsLiked(_ tracks: [Track]) -> SignalProducer<Void, NSError> {
-        return markEnclosuresAs(tracks, action: MarkerAction.Like)
-    }
-
-    public func markTracksAsUnliked(_ tracks: [Track]) -> SignalProducer<Void, NSError> {
-        return markEnclosuresAs(tracks, action: MarkerAction.Unlike)
-    }
-
-    public func markAlbumsAsLiked(_ albums: [Album]) -> SignalProducer<Void, NSError> {
-        return markEnclosuresAs(albums, action: MarkerAction.Like)
-    }
-
-    public func markAlbumsAsUnliked(_ albums: [Album]) -> SignalProducer<Void, NSError> {
-        return markEnclosuresAs(albums, action: MarkerAction.Unlike)
-    }
-
-    public func markPlaylistAsLiked(_ playlists: [ServicePlaylist]) -> SignalProducer<Void, NSError> {
-        return markEnclosuresAs(playlists, action: MarkerAction.Like)
-    }
-
-    public func markPlaylistsAsUnliked(_ playlists: [ServicePlaylist]) -> SignalProducer<Void, NSError> {
-        return markEnclosuresAs(playlists, action: MarkerAction.Unlike)
-    }
 }
