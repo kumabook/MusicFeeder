@@ -108,6 +108,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public fileprivate(set) var updatedAt:    Int64
     public fileprivate(set) var createdAt:    Int64
     public fileprivate(set) var state:        EnclosureState
+    public                  var isLiked:      Bool?
+    public                  var isSaved:      Bool?
+    public                  var isPlayed:     Bool?
     public var playerType: PlayerType {
         switch provider {
         case .appleMusic:
@@ -231,7 +234,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
                 title: String? = nil, duration: TimeInterval = 0,
                 thumbnailUrl: URL? = nil, artworkUrl: URL? = nil, audioUrl: URL? = nil,
                 artist: String? = nil, status: Status = .init,
-                expiresAt: Int64 = Int64.max, publishedAt: Int64 = 0, createdAt: Int64 = 0, updatedAt: Int64 = 0, state: EnclosureState = .alive) {
+                expiresAt: Int64 = Int64.max, publishedAt: Int64 = 0, createdAt: Int64 = 0, updatedAt: Int64 = 0, state: EnclosureState = .alive,
+                isLiked: Bool? = nil, isSaved: Bool? = nil, isPlayed: Bool? = nil) {
         self.id           = id
         self.provider     = provider
         self.identifier   = identifier
@@ -248,6 +252,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         self.createdAt    = createdAt
         self.updatedAt    = updatedAt
         self.state        = state
+        self.isLiked      = isLiked
+        self.isSaved      = isSaved
+        self.isPlayed     = isPlayed
     }
 
     public init(json: JSON) {
@@ -275,6 +282,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         createdAt    = json["updated_at"].string.flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
         updatedAt    = json["created_at"].string.flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
         state        = json["state"].string.flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
+        isLiked      = json["is_liked"].bool
+        isSaved      = json["is_saved"].bool
+        isPlayed     = json["is_opened"].bool
     }
 
     public init(store: TrackStore) {
@@ -301,6 +311,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         createdAt    = 0
         updatedAt    = 0
         state        = EnclosureState.alive
+        isLiked      = false
+        isSaved      = false
+        isPlayed     = false
     }
 
     public init?(urlString: String) {
@@ -327,6 +340,10 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         entriesCount = dic["entriesCount"].flatMap { Int64($0) }
         status       = .init
         expiresAt    = Int64.max
+
+        isLiked      = dic["is_liked"].flatMap { $0 == "true" }
+        isSaved      = dic["is_saved"].flatMap { $0 == "true" }
+        isPlayed     = dic["is_opened"].flatMap { $0 == "true" }
     }
 
     public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
