@@ -124,27 +124,28 @@ class FeedlyAPISpec: QuickSpec {
         describe("POST /v3/markers") {
             var isFinish = false
             var oldLikesCount: Int64 = 0
-            var newLikesCount: Int64 = 0
+            var track: Track?
             beforeEach {
                 guard let ts = self.tracks else { return }
-                let track = ts[0]
+                track = ts[0]
                 self.client.markTracksAs(.unliked, items: ts).flatMap(.concat) {
-                    self.client.fetchTracks([track.id])
+                    self.client.fetchTracks([track!.id])
                 }.flatMap(.concat) { (tracks: [Track]) -> SignalProducer<Void, NSError> in
                     oldLikesCount = tracks[0].likesCount!
                     return self.client.markTracksAs(.liked, items: ts)
                 }.flatMap(.concat) {(_: ()) -> SignalProducer<[Track], NSError> in
-                    self.client.fetchTracks([track.id])
+                    self.client.fetchTracks([track!.id])
                 }.on(disposed: {
                     isFinish = true
                 }, value: { tracks in
-                    newLikesCount = tracks[0].likesCount!
+                    track         = tracks[0]
                 }).start()
             }
             it("should mark as liked") {
                 expect(isFinish).toFinally(equal(true))
                 expect(self.tracks).toFinallyNot(beNil())
-                expect(newLikesCount).to(equal(oldLikesCount + 1))
+                expect(track!.isLiked).to(beTrue())
+                expect(track!.likesCount).to(equal(oldLikesCount + 1))
             }
         }
 
