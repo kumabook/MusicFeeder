@@ -9,7 +9,7 @@
 import Foundation
 import FeedlyKit
 
-open class TrackStream: FeedlyKit.Stream {
+open class EnclosureStream<T: Enclosure>: FeedlyKit.Stream {
     open fileprivate(set) var id:    String
     open fileprivate(set) var title: String
     open override var streamId: String {
@@ -24,3 +24,7 @@ open class TrackStream: FeedlyKit.Stream {
         self.title = title
     }
 }
+
+public typealias TrackStream    = EnclosureStream<Track>
+public typealias AlbumStream    = EnclosureStream<Album>
+public typealias PlaylistStream = EnclosureStream<ServicePlaylist>
