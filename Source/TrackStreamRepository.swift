@@ -10,28 +10,11 @@ import FeedlyKit
 import ReactiveSwift
 import Result
 
-open class TrackStreamRepository: PaginatedCollectionRepository<PaginatedTrackCollection, Track> {
-    public typealias State = PaginatedCollectionRepositoryState
-    public typealias Event = PaginatedCollectionRepositoryEvent
-    
-    open fileprivate(set) var feedlyClient        = CloudAPIClient.sharedInstance
-    open fileprivate(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
-
+open class TrackStreamRepository: EnclosureStreamRepository<Track> {
+    open fileprivate(set) var pinkspiderClient             = PinkSpiderAPIClient.sharedInstance
     open fileprivate(set) var playlistQueue: PlaylistQueue = PlaylistQueue(playlists: [])
 
-    open override func fetchCollection(streamId: String, paginationParams: MusicFeeder.PaginationParams)-> SignalProducer<PaginatedTrackCollection, NSError> {
-        return feedlyClient.fetchTracksOf(streamId, paginationParams: paginationParams)
-    }
-
-    deinit {
-        dispose()
-    }
     
-    open var detailLoader: Disposable?
-    
-    public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
-        super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
-    }
     // MARK: - PaginatedCollectionRepository protocol
     
     open override func addCacheItems(_ items: [Track]) {
