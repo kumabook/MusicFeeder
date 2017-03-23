@@ -42,7 +42,7 @@
 		67156E3D1DCB762D007DC6F1 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576211BE4E9C60087063A /* History.swift */; };
 		67156E3E1DCB762D007DC6F1 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
 		67156E3F1DCB762D007DC6F1 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE321B6CE76300B567CB /* Category.swift */; };
-		67156E401DCB762D007DC6F1 /* TrackStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */; };
+		67156E401DCB762D007DC6F1 /* EnclosureStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BCCEA81CAFBF6E00310AF3 /* EnclosureStream.swift */; };
 		67156E411DCB762D007DC6F1 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841DD1CD2D40B005904EF /* Topic.swift */; };
 		67156E421DCB762D007DC6F1 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FD1DA13F6400FDF28F /* Journal.swift */; };
 		67156E431DCB762D007DC6F1 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
@@ -93,7 +93,7 @@
 		67156E821DCB768E007DC6F1 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670576211BE4E9C60087063A /* History.swift */; };
 		67156E831DCB768E007DC6F1 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
 		67156E841DCB768E007DC6F1 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE321B6CE76300B567CB /* Category.swift */; };
-		67156E851DCB768E007DC6F1 /* TrackStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */; };
+		67156E851DCB768E007DC6F1 /* EnclosureStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BCCEA81CAFBF6E00310AF3 /* EnclosureStream.swift */; };
 		67156E861DCB768E007DC6F1 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841DD1CD2D40B005904EF /* Topic.swift */; };
 		67156E871DCB768E007DC6F1 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FD1DA13F6400FDF28F /* Journal.swift */; };
 		67156E881DCB768E007DC6F1 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
@@ -277,7 +277,7 @@
 		67B7A84F1DCB344B00EB2604 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B7A84E1DCB344B00EB2604 /* SDWebImage.framework */; };
 		67B7A8511DCB346100EB2604 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B7A8501DCB346100EB2604 /* ReactiveSwift.framework */; };
 		67B7A8561DCB6E7000EB2604 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B7A8501DCB346100EB2604 /* ReactiveSwift.framework */; };
-		67BCCEA91CAFBF6E00310AF3 /* TrackStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */; };
+		67BCCEA91CAFBF6E00310AF3 /* EnclosureStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BCCEA81CAFBF6E00310AF3 /* EnclosureStream.swift */; };
 		67D265731BACE16A000240FB /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0601B73798E003A1450 /* Alamofire.framework */; };
 		67D265741BACE16A000240FB /* FeedlyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0631B7379CB003A1450 /* FeedlyKit.framework */; };
 		67D265751BACE16A000240FB /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B07B1B7379DD003A1450 /* Nimble.framework */; };
@@ -301,6 +301,15 @@
 		67D265911BACE17B000240FB /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */; };
 		67D7F3461CAD33DE00C173B4 /* TrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */; };
 		67D7F34A1CAD348200C173B4 /* PaginatedCollectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */; };
+		67E1F3781E82554D003A8080 /* EnclosureStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3771E82554D003A8080 /* EnclosureStreamRepository.swift */; };
+		67E1F3791E82554D003A8080 /* EnclosureStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3771E82554D003A8080 /* EnclosureStreamRepository.swift */; };
+		67E1F37A1E82554D003A8080 /* EnclosureStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3771E82554D003A8080 /* EnclosureStreamRepository.swift */; };
+		67E1F37D1E8257C1003A8080 /* AlbumStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F37C1E8257C1003A8080 /* AlbumStreamRepository.swift */; };
+		67E1F37E1E8257C1003A8080 /* AlbumStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F37C1E8257C1003A8080 /* AlbumStreamRepository.swift */; };
+		67E1F37F1E8257C1003A8080 /* AlbumStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F37C1E8257C1003A8080 /* AlbumStreamRepository.swift */; };
+		67E1F3811E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */; };
+		67E1F3821E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */; };
+		67E1F3831E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */; };
 		67E315761DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */; };
 		67E315781DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */; };
 /* End PBXBuildFile section */
@@ -513,11 +522,14 @@
 		67AD468B1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListenItLaterEntryStore.swift; path = Source/ListenItLaterEntryStore.swift; sourceTree = SOURCE_ROOT; };
 		67B7A84E1DCB344B00EB2604 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
 		67B7A8501DCB346100EB2604 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
-		67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackStream.swift; path = Source/TrackStream.swift; sourceTree = SOURCE_ROOT; };
+		67BCCEA81CAFBF6E00310AF3 /* EnclosureStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnclosureStream.swift; path = Source/EnclosureStream.swift; sourceTree = SOURCE_ROOT; };
 		67D2657E1BACE16B000240FB /* Breit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Breit.framework; path = Carthage/Build/iOS/Breit.framework; sourceTree = "<group>"; };
 		67D2657F1BACE16B000240FB /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackStreamRepository.swift; path = Source/TrackStreamRepository.swift; sourceTree = SOURCE_ROOT; };
 		67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaginatedCollectionRepository.swift; path = Source/PaginatedCollectionRepository.swift; sourceTree = SOURCE_ROOT; };
+		67E1F3771E82554D003A8080 /* EnclosureStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnclosureStreamRepository.swift; path = Source/EnclosureStreamRepository.swift; sourceTree = SOURCE_ROOT; };
+		67E1F37C1E8257C1003A8080 /* AlbumStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlbumStreamRepository.swift; path = Source/AlbumStreamRepository.swift; sourceTree = SOURCE_ROOT; };
+		67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistStreamRepository.swift; path = Source/PlaylistStreamRepository.swift; sourceTree = SOURCE_ROOT; };
 		67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSpecifiedEntryRepository.swift; path = Source/TimeSpecifiedEntryRepository.swift; sourceTree = SOURCE_ROOT; };
 		67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSpecifiedTrackStreamRepository.swift; path = Source/TimeSpecifiedTrackStreamRepository.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE271B6CE4EF00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Spec/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -767,6 +779,7 @@
 		671841E51CD2E1CF005904EF /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				67E1F37B1E8257A6003A8080 /* Enclosure */,
 				671841E61CD2E1E2005904EF /* TopicRepository.swift */,
 				6726A7FF1DAB648500FDF28F /* TrackRepository.swift */,
 				670505A01B6E1398006EAA84 /* PlaylistRepository.swift */,
@@ -774,7 +787,6 @@
 				67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */,
 				670505A31B6E1398006EAA84 /* EntryRepository.swift */,
 				671132811BC1212E00A036B0 /* SavedStreamRepository.swift */,
-				67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */,
 				6705761B1BDE73A00087063A /* HistoryRepository.swift */,
 				67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */,
 				67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */,
@@ -808,6 +820,7 @@
 		6777922C1E757BA000ACC53D /* Enclosure */ = {
 			isa = PBXGroup;
 			children = (
+				67BCCEA81CAFBF6E00310AF3 /* EnclosureStream.swift */,
 				675120E91E76F11B00489729 /* Enclosure.swift */,
 				677792241E7574EE00ACC53D /* EnclosureState.swift */,
 				677792281E757B8E00ACC53D /* PlaylistifiedEntry.swift */,
@@ -853,13 +866,23 @@
 				670576211BE4E9C60087063A /* History.swift */,
 				67FBBE341B6CE76300B567CB /* Entry.swift */,
 				67FBBE321B6CE76300B567CB /* Category.swift */,
-				67BCCEA81CAFBF6E00310AF3 /* TrackStream.swift */,
 				671841DD1CD2D40B005904EF /* Topic.swift */,
 				6726A7FD1DA13F6400FDF28F /* Journal.swift */,
 				673672C41D1F918C006259F9 /* PlaylistQueue.swift */,
 				671207CE1E72F7DF008BD75A /* StringExtension.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		67E1F37B1E8257A6003A8080 /* Enclosure */ = {
+			isa = PBXGroup;
+			children = (
+				67E1F3771E82554D003A8080 /* EnclosureStreamRepository.swift */,
+				67E1F37C1E8257C1003A8080 /* AlbumStreamRepository.swift */,
+				67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */,
+				67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */,
+			);
+			name = Enclosure;
 			sourceTree = "<group>";
 		};
 		67FBBDFC1B6CE43100B567CB = {
@@ -1180,6 +1203,7 @@
 				677792221E7573D500ACC53D /* Album.swift in Sources */,
 				67156E351DCB762D007DC6F1 /* EntryRepository.swift in Sources */,
 				67156E361DCB762D007DC6F1 /* SavedStreamRepository.swift in Sources */,
+				67E1F3821E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */,
 				67156E371DCB762D007DC6F1 /* TrackStreamRepository.swift in Sources */,
 				67156E381DCB762D007DC6F1 /* HistoryRepository.swift in Sources */,
 				67156E391DCB762D007DC6F1 /* TimeSpecifiedEntryRepository.swift in Sources */,
@@ -1191,7 +1215,7 @@
 				67156E3D1DCB762D007DC6F1 /* History.swift in Sources */,
 				67156E3E1DCB762D007DC6F1 /* Entry.swift in Sources */,
 				67156E3F1DCB762D007DC6F1 /* Category.swift in Sources */,
-				67156E401DCB762D007DC6F1 /* TrackStream.swift in Sources */,
+				67156E401DCB762D007DC6F1 /* EnclosureStream.swift in Sources */,
 				67156E411DCB762D007DC6F1 /* Topic.swift in Sources */,
 				67156E421DCB762D007DC6F1 /* Journal.swift in Sources */,
 				67156E431DCB762D007DC6F1 /* PlaylistQueue.swift in Sources */,
@@ -1200,10 +1224,12 @@
 				67156E461DCB762D007DC6F1 /* RealmMigration.swift in Sources */,
 				67156E471DCB762D007DC6F1 /* EntryStore.swift in Sources */,
 				67156E481DCB762D007DC6F1 /* HistoryStore.swift in Sources */,
+				67E1F3791E82554D003A8080 /* EnclosureStreamRepository.swift in Sources */,
 				67156E491DCB762D007DC6F1 /* TrackStore.swift in Sources */,
 				67156E4A1DCB762D007DC6F1 /* SubscriptionStore.swift in Sources */,
 				67156E4B1DCB762D007DC6F1 /* ListenItLaterEntryStore.swift in Sources */,
 				67156E4C1DCB762D007DC6F1 /* ProfileStore.swift in Sources */,
+				67E1F37E1E8257C1003A8080 /* AlbumStreamRepository.swift in Sources */,
 				67156E4D1DCB762D007DC6F1 /* TopicStore.swift in Sources */,
 				67156E4E1DCB762D007DC6F1 /* Cacheable.swift in Sources */,
 				67156E4F1DCB762D007DC6F1 /* TopicCache.swift in Sources */,
@@ -1246,6 +1272,7 @@
 				677792231E7573D500ACC53D /* Album.swift in Sources */,
 				67156E7A1DCB768E007DC6F1 /* EntryRepository.swift in Sources */,
 				67156E7B1DCB768E007DC6F1 /* SavedStreamRepository.swift in Sources */,
+				67E1F3831E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */,
 				67156E7C1DCB768E007DC6F1 /* TrackStreamRepository.swift in Sources */,
 				67156E7D1DCB768E007DC6F1 /* HistoryRepository.swift in Sources */,
 				67156E7E1DCB768E007DC6F1 /* TimeSpecifiedEntryRepository.swift in Sources */,
@@ -1257,7 +1284,7 @@
 				67156E821DCB768E007DC6F1 /* History.swift in Sources */,
 				67156E831DCB768E007DC6F1 /* Entry.swift in Sources */,
 				67156E841DCB768E007DC6F1 /* Category.swift in Sources */,
-				67156E851DCB768E007DC6F1 /* TrackStream.swift in Sources */,
+				67156E851DCB768E007DC6F1 /* EnclosureStream.swift in Sources */,
 				67156E861DCB768E007DC6F1 /* Topic.swift in Sources */,
 				67156E871DCB768E007DC6F1 /* Journal.swift in Sources */,
 				67156E881DCB768E007DC6F1 /* PlaylistQueue.swift in Sources */,
@@ -1266,10 +1293,12 @@
 				67156E8B1DCB768E007DC6F1 /* RealmMigration.swift in Sources */,
 				67156E8C1DCB768E007DC6F1 /* EntryStore.swift in Sources */,
 				67156E8D1DCB768E007DC6F1 /* HistoryStore.swift in Sources */,
+				67E1F37A1E82554D003A8080 /* EnclosureStreamRepository.swift in Sources */,
 				67156E8E1DCB768E007DC6F1 /* TrackStore.swift in Sources */,
 				67156E8F1DCB768E007DC6F1 /* SubscriptionStore.swift in Sources */,
 				67156E901DCB768E007DC6F1 /* ListenItLaterEntryStore.swift in Sources */,
 				67156E911DCB768E007DC6F1 /* ProfileStore.swift in Sources */,
+				67E1F37F1E8257C1003A8080 /* AlbumStreamRepository.swift in Sources */,
 				67156E921DCB768E007DC6F1 /* TopicStore.swift in Sources */,
 				67156E931DCB768E007DC6F1 /* Cacheable.swift in Sources */,
 				67156E941DCB768E007DC6F1 /* TopicCache.swift in Sources */,
@@ -1312,7 +1341,7 @@
 				67AD468C1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift in Sources */,
 				67E315781DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift in Sources */,
 				679C52D81B70F3DD00BE6614 /* PlaylistStore.swift in Sources */,
-				67BCCEA91CAFBF6E00310AF3 /* TrackStream.swift in Sources */,
+				67BCCEA91CAFBF6E00310AF3 /* EnclosureStream.swift in Sources */,
 				679C52DA1B70F3DD00BE6614 /* EntryRepository.swift in Sources */,
 				6709D4071DAD4C20004DE304 /* TopicStore.swift in Sources */,
 				678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */,
@@ -1324,7 +1353,9 @@
 				679C52DC1B70F3DD00BE6614 /* TrackStore.swift in Sources */,
 				6709D4091DAD4D77004DE304 /* Cacheable.swift in Sources */,
 				677792141E75622E00ACC53D /* ServicePlaylist.swift in Sources */,
+				67E1F3781E82554D003A8080 /* EnclosureStreamRepository.swift in Sources */,
 				6719A19E1DABDF6700280349 /* ProfileStore.swift in Sources */,
+				67E1F37D1E8257C1003A8080 /* AlbumStreamRepository.swift in Sources */,
 				679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */,
 				678305851B9897A000A83F52 /* CategoryStore.swift in Sources */,
 				677792251E7574EE00ACC53D /* EnclosureState.swift in Sources */,
@@ -1337,6 +1368,7 @@
 				679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */,
 				679C52E11B70F3DD00BE6614 /* CloudAPIClientExtension.swift in Sources */,
 				671841E71CD2E1E2005904EF /* TopicRepository.swift in Sources */,
+				67E1F3811E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */,
 				679C52E31B70F3DD00BE6614 /* StreamRepository.swift in Sources */,
 				679C53521B72385900BE6614 /* Player.swift in Sources */,
 				673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */,
