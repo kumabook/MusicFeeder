@@ -64,6 +64,12 @@ extension CloudAPIClient {
 
     public class func setAccessToken(_ token: String) {
         CloudAPIClient.sharedInstance.setAccessToken(token)
+        var defaultHeaders                    = Alamofire.SessionManager.defaultHTTPHeaders
+        defaultHeaders["X-Api-Version"]       = "1"
+        let configuration                     = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders   = defaultHeaders
+        let sessionManager                    = SessionManager(configuration: configuration)
+        CloudAPIClient.sharedInstance.manager = sessionManager
     }
 
     public class var isLoggedIn: Bool {
