@@ -264,8 +264,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         title        = json["title"].string
         url          = json["url"].stringValue
         identifier   = json["identifier"].stringValue
-        likesCount   = nil
-        playCount    = nil
         duration     = json["duration"].doubleValue
         thumbnailUrl = json["thumbnail_url"].string.flatMap { URL(string: $0) }
         artworkUrl   = json["artwork_url"].string.flatMap { URL(string: $0) }
@@ -300,6 +298,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         status       = .init
         likesCount   = store.likesCount
         likers       = realize(store.likers).map  { Profile(store: $0 as! ProfileStore) }
+        playCount    = nil
         entries      = realize(store.entries).map { Entry(store: $0 as! EntryStore) }
         entriesCount = store.entriesCount
         expiresAt    = store.expiresAt
@@ -314,9 +313,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         createdAt    = 0
         updatedAt    = 0
         state        = EnclosureState.alive
-        isLiked      = false
-        isSaved      = false
-        isPlayed     = false
+        isLiked      = nil
+        isSaved      = nil
+        isPlayed     = nil
     }
 
     public init?(urlString: String) {
