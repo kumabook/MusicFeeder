@@ -33,10 +33,11 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
     public fileprivate(set) var likesCount:   Int64?
     public fileprivate(set) var entries:      [Entry]?
     public fileprivate(set) var entriesCount: Int64?
+    public fileprivate(set) var playCount:   Int64?
 
     public                  var isLiked:      Bool?
     public                  var isSaved:      Bool?
-    public                  var isOpened:     Bool?
+    public                  var isPlayed:     Bool?
 
     public var hashValue: Int {
         return "\(provider):\(identifier)".hashValue
@@ -62,12 +63,13 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
         updatedAt    = dic["created_at"].flatMap { $0.dateFromISO8601?.timestamp } ?? 0
         state        = dic["state"].flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
         
-        likesCount   = dic["likesCount"].flatMap { Int64($0) }
-        entriesCount = dic["entriesCount"].flatMap { Int64($0) }
+        likesCount   = dic["likes_count"].flatMap { Int64($0) }
+        entriesCount = dic["entries_count"].flatMap { Int64($0) }
+        playCount    = dic["play_count"].flatMap { Int64($0) }
 
         isLiked      = dic["is_liked"].flatMap { $0 == "true" }
         isSaved      = dic["is_saved"].flatMap { $0 == "true" }
-        isOpened     = dic["is_opened"].flatMap { $0 == "true" }
+        isPlayed     = dic["is_played"].flatMap { $0 == "true" }
     }
 
     public static func collection(_ response: HTTPURLResponse, representation: Any) -> [ServicePlaylist]? {
@@ -86,7 +88,7 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
                 thumbnailUrl: URL? = nil, artworkUrl: URL? = nil,
                 publishedAt: Int64 = 0, createdAt: Int64 = 0, updatedAt: Int64 = 0,
                 state: EnclosureState = .alive,
-                isLiked: Bool? = nil, isSaved: Bool? = nil, isOpened: Bool? = nil) {
+                isLiked: Bool? = nil, isSaved: Bool? = nil, isPlayed: Bool? = nil) {
         self.id           = id
         self.provider     = provider
         self.identifier   = identifier
@@ -103,7 +105,7 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
         self.state        = state
         self.isLiked      = isLiked
         self.isSaved      = isSaved
-        self.isOpened     = isOpened
+        self.isPlayed     = isPlayed
     }
 
     public init(json: JSON) {
@@ -118,22 +120,19 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
         thumbnailUrl = json["thumbnail_url"].string.flatMap { URL(string: $0) }
         artworkUrl   = json["artwork_url"].string.flatMap { URL(string: $0) }
         state        = EnclosureState(rawValue: json["state"].stringValue)!
-        likers       = []
-        likesCount   = 0
-        entries      = []
         publishedAt  = json["published_at"].string?.dateFromISO8601?.timestamp ?? 0
         updatedAt    = json["updated_at"].string?.dateFromISO8601?.timestamp ?? 0
         createdAt    = json["created_at"].string?.dateFromISO8601?.timestamp ?? 0
 
-        // prefer to cache
         likers       = json["likers"].array?.map  { Profile(json: $0) }
-        likesCount   = json["likesCount"].int64Value
+        likesCount   = json["likes_count"].int64Value
         entries      = json["entries"].array?.map { Entry(json: $0) }
-        entriesCount = json["likesCount"].int64Value
+        entriesCount = json["entries_count"].int64Value
+        playCount    = json["play_count"].int64Value
 
         isLiked      = json["is_liked"].bool
         isSaved      = json["is_saved"].bool
-        isOpened     = json["is_opened"].bool
+        isPlayed     = json["is_played"].bool
     }
 
     #if os(iOS)

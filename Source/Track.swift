@@ -102,6 +102,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public fileprivate(set) var duration:     TimeInterval
     public fileprivate(set) var likesCount:   Int64?
     public fileprivate(set) var likers:       [Profile]?
+    public fileprivate(set) var playCount:    Int64?
     public fileprivate(set) var expiresAt:    Int64
     public fileprivate(set) var artist:       String?
     public fileprivate(set) var publishedAt:  Int64
@@ -263,7 +264,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         title        = json["title"].string
         url          = json["url"].stringValue
         identifier   = json["identifier"].stringValue
-        likesCount   = 0
+        likesCount   = nil
+        playCount    = nil
         duration     = json["duration"].doubleValue
         thumbnailUrl = json["thumbnail_url"].string.flatMap { URL(string: $0) }
         artworkUrl   = json["artwork_url"].string.flatMap { URL(string: $0) }
@@ -273,9 +275,10 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         entries      = []
         expiresAt    = Int64.max
         // prefer to cache
-        likesCount   = json["likesCount"].int64Value
+        likesCount   = json["likes_count"].int64Value
         likers       = json["likers"].array?.map  { Profile(json: $0) }
-        entriesCount = json["entriesCount"].int64Value
+        playCount    = json["play_count"].int64Value
+        entriesCount = json["entries_count"].int64Value
         entries      = json["entries"].array?.map { Entry(json: $0) }
         artist       = json["owner_name"].string
         publishedAt  = json["published_at"].string.flatMap { $0.dateFromISO8601?.timestamp } ?? 0
@@ -284,7 +287,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         state        = json["state"].string.flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
         isLiked      = json["is_liked"].bool
         isSaved      = json["is_saved"].bool
-        isPlayed     = json["is_opened"].bool
+        isPlayed     = json["is_played"].bool
     }
 
     public init(store: TrackStore) {
@@ -336,14 +339,15 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         state        = dic["state"].flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
         artist       = dic["owner_name"] ?? dic["owner_id"]
 
-        likesCount   = dic["likesCount"].flatMap { Int64($0) }
-        entriesCount = dic["entriesCount"].flatMap { Int64($0) }
+        likesCount   = dic["likes_count"].flatMap { Int64($0) }
+        playCount    = dic["play_count"].flatMap { Int64($0) }
+        entriesCount = dic["entries_count"].flatMap { Int64($0) }
         status       = .init
         expiresAt    = Int64.max
 
         isLiked      = dic["is_liked"].flatMap { $0 == "true" }
         isSaved      = dic["is_saved"].flatMap { $0 == "true" }
-        isPlayed     = dic["is_opened"].flatMap { $0 == "true" }
+        isPlayed     = dic["is_played"].flatMap { $0 == "true" }
     }
 
     public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
