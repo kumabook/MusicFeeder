@@ -51,12 +51,8 @@ public extension Enclosure {
         return markAs(action: MarkerAction.unsaved)
     }
 
-    public func markAsOpened() -> SignalProducer<Self, NSError> {
-        return markAs(action: MarkerAction.opened)
-    }
-
-    public func markAsUnopened() -> SignalProducer<Self, NSError> {
-        return markAs(action: MarkerAction.unopened)
+    public func markAsPlayed() -> SignalProducer<Self, NSError> {
+        return markAs(action: MarkerAction.played)
     }
 
     internal func markAs(action: MarkerAction) -> SignalProducer<Self, NSError> {

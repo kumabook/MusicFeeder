@@ -133,8 +133,7 @@ public enum MarkerAction: String {
     case unliked  = "markAsUnliked"
     case saved    = "markAsSaved"
     case unsaved  = "markAsUnsaved"
-    case opened   = "markAsOpened"
-    case unopened = "markAsUnopened"
+    case played   = "markAsPlayed"
 }
 
 struct EnclosureMarkerAPI<T: Enclosure>: API {
