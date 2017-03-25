@@ -55,13 +55,12 @@ class TrackRespoistorySpec: QuickSpec {
                     let track = entry.tracks[0]
                     if track.status == .loading {
                         expect(track.status).to(equal(Track.Status.loading))
-                        expect(track.title!.characters.count).to(equal(0))
-                        expect(track.thumbnailUrl).to(beNil())
+                        expect(track.isLiked).to(beNil())
+                        expect(track.isPlayed).to(beNil())
                     } else {
                         expect(track.status).toFinally(equal(Track.Status.available))
-                        expect(track.title!.characters.count).toFinally(beGreaterThan(0))
-                        expect(track.thumbnailUrl).notTo(beNil())
-                        expect(track.entries).to(beNil())
+                        expect(track.isLiked).notTo(beNil())
+                        expect(track.isPlayed).notTo(beNil())
                     }
                 }
             }
