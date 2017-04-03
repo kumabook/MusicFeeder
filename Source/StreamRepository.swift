@@ -115,31 +115,50 @@ open class StreamRepository {
     }
     
     open func updateSubscriptions(_ subscriptions: [Subscription]) {
+        var previous = Subscription.findAll()
+        var needsDelete = previous
         for subscription in subscriptions {
             let _ = SubscriptionStore.create(subscription)
+            if let i = needsDelete.index(of: subscription) {
+                needsDelete.remove(at: i)
+            }
+        }
+        for subscription in needsDelete {
+            SubscriptionStore.remove(subscription)
+        }
+        setSubscriptionsAndCategory(subscriptions: subscriptions)
+    }
+
+    private func setSubscriptionsAndCategory(subscriptions: [Subscription]) {
+        self.streamListOfCategory = [:]
+        for category in Category.findAll() {
+            self.streamListOfCategory[category] = [] as [FeedlyKit.Stream]
+        }
+        uncategorized = FeedlyKit.Category.Uncategorized()
+        if let userId = CloudAPIClient.profile?.id {
+            uncategorized = FeedlyKit.Category.Uncategorized(userId)
+        }
+        streamListOfCategory[uncategorized] = []
+        for subscription in subscriptions {
+            let categories = subscription.categories.count > 0 ? subscription.categories : [self.uncategorized]
+            for category in categories {
+                if (self.streamListOfCategory[category]!).index(of: subscription) == nil {
+                    self.streamListOfCategory[category]!.append(subscription)
+                }
+            }
+        }
+        for key in self.streamListOfCategory.keys {
+            if self.streamListOfCategory[key]!.isEmpty {
+                if key != self.uncategorized {
+                    self.streamListOfCategory.removeValue(forKey: key)
+                }
+            }
         }
     }
 
     open func loadLocalSubscriptions() -> SignalProducer<[FeedlyKit.Category: [FeedlyKit.Stream]], NSError> {
         return SignalProducer { (_observer, disposable) in
-            for category in Category.findAll() {
-                self.streamListOfCategory[category] = [] as [FeedlyKit.Stream]
-            }
-            for subscription in Subscription.findAll() {
-                let categories = subscription.categories.count > 0 ? subscription.categories : [self.uncategorized]
-                for category in categories {
-                    if (self.streamListOfCategory[category]!).index(of: subscription) == nil {
-                        self.streamListOfCategory[category]!.append(subscription)
-                    }
-                }
-            }
-            for key in self.streamListOfCategory.keys {
-                if self.streamListOfCategory[key]!.isEmpty {
-                    if key != self.uncategorized {
-                        self.streamListOfCategory.removeValue(forKey: key)
-                    }
-                }
-            }
+            self.setSubscriptionsAndCategory(subscriptions: Subscription.findAll())
             _observer.send(value: self.streamListOfCategory)
             _observer.sendCompleted()
             return
