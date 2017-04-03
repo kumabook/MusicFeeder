@@ -40,7 +40,7 @@ extension CloudAPIClient {
         case Logout
     }
 
-    public class func handleError(error:Error) {
+    public class func handleError(error: Error) {
         let e = error as NSError
         if let dic = e.userInfo as NSDictionary? {
             if let response:HTTPURLResponse = dic[errorResponseKey] as? HTTPURLResponse {

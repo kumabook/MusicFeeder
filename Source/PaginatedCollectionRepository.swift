@@ -28,7 +28,7 @@ public enum PaginatedCollectionRepositoryEvent {
     case completeLoadingLatest
     case startLoadingNext
     case completeLoadingNext
-    case failToLoadNext
+    case failToLoadNext(NSError)
     case completeLoadingPlaylist(Playlist, Entry)
     case completeLoadingTrackDetail(Track)
     case removeAt(Int)
@@ -193,7 +193,7 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
                 failed: {error in
                     CloudAPIClient.handleError(error: error)
                     DispatchQueue.main.async() {
-                        self.observer.send(value: .failToLoadNext)
+                        self.observer.send(value: .failToLoadNext(error))
                     }
                     self.state = .error
                 },
