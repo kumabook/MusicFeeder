@@ -29,7 +29,7 @@
 		67156E301DCB762D007DC6F1 /* TopicRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841E61CD2E1E2005904EF /* TopicRepository.swift */; };
 		67156E311DCB762D007DC6F1 /* TrackRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FF1DAB648500FDF28F /* TrackRepository.swift */; };
 		67156E321DCB762D007DC6F1 /* PlaylistRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A01B6E1398006EAA84 /* PlaylistRepository.swift */; };
-		67156E331DCB762D007DC6F1 /* StreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* StreamRepository.swift */; };
+		67156E331DCB762D007DC6F1 /* SubscriptionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* SubscriptionRepository.swift */; };
 		67156E341DCB762D007DC6F1 /* PaginatedCollectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */; };
 		67156E351DCB762D007DC6F1 /* EntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A31B6E1398006EAA84 /* EntryRepository.swift */; };
 		67156E361DCB762D007DC6F1 /* SavedStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamRepository.swift */; };
@@ -80,7 +80,7 @@
 		67156E751DCB768E007DC6F1 /* TopicRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841E61CD2E1E2005904EF /* TopicRepository.swift */; };
 		67156E761DCB768E007DC6F1 /* TrackRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FF1DAB648500FDF28F /* TrackRepository.swift */; };
 		67156E771DCB768E007DC6F1 /* PlaylistRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A01B6E1398006EAA84 /* PlaylistRepository.swift */; };
-		67156E781DCB768E007DC6F1 /* StreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* StreamRepository.swift */; };
+		67156E781DCB768E007DC6F1 /* SubscriptionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* SubscriptionRepository.swift */; };
 		67156E791DCB768E007DC6F1 /* PaginatedCollectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */; };
 		67156E7A1DCB768E007DC6F1 /* EntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A31B6E1398006EAA84 /* EntryRepository.swift */; };
 		67156E7B1DCB768E007DC6F1 /* SavedStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671132811BC1212E00A036B0 /* SavedStreamRepository.swift */; };
@@ -265,7 +265,7 @@
 		679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE321B6CE76300B567CB /* Category.swift */; };
 		679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
 		679C52E11B70F3DD00BE6614 /* CloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */; };
-		679C52E31B70F3DD00BE6614 /* StreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* StreamRepository.swift */; };
+		679C52E31B70F3DD00BE6614 /* SubscriptionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* SubscriptionRepository.swift */; };
 		679C52E51B70F3DD00BE6614 /* XCDYouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */; };
 		679C52F41B70F3FC00BE6614 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DD1B70E4B600BE6614 /* playlist.json */; };
 		679C52F51B70F3FC00BE6614 /* track.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DE1B70E4B600BE6614 /* track.json */; };
@@ -537,7 +537,7 @@
 		67FBBE321B6CE76300B567CB /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Category.swift; path = Source/Category.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE341B6CE76300B567CB /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entry.swift; path = Source/Entry.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudAPIClientExtension.swift; path = Source/CloudAPIClientExtension.swift; sourceTree = SOURCE_ROOT; };
-		67FBBE3B1B6CE76300B567CB /* StreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StreamRepository.swift; path = Source/StreamRepository.swift; sourceTree = SOURCE_ROOT; };
+		67FBBE3B1B6CE76300B567CB /* SubscriptionRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionRepository.swift; path = Source/SubscriptionRepository.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCDYouTubeClient.swift; path = Source/XCDYouTubeClient.swift; sourceTree = SOURCE_ROOT; };
 		67FCFAA01B946CED008359BB /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/iOS/SoundCloudKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -783,7 +783,7 @@
 				671841E61CD2E1E2005904EF /* TopicRepository.swift */,
 				6726A7FF1DAB648500FDF28F /* TrackRepository.swift */,
 				670505A01B6E1398006EAA84 /* PlaylistRepository.swift */,
-				67FBBE3B1B6CE76300B567CB /* StreamRepository.swift */,
+				67FBBE3B1B6CE76300B567CB /* SubscriptionRepository.swift */,
 				67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */,
 				670505A31B6E1398006EAA84 /* EntryRepository.swift */,
 				671132811BC1212E00A036B0 /* SavedStreamRepository.swift */,
@@ -1198,7 +1198,7 @@
 				67156E301DCB762D007DC6F1 /* TopicRepository.swift in Sources */,
 				67156E311DCB762D007DC6F1 /* TrackRepository.swift in Sources */,
 				67156E321DCB762D007DC6F1 /* PlaylistRepository.swift in Sources */,
-				67156E331DCB762D007DC6F1 /* StreamRepository.swift in Sources */,
+				67156E331DCB762D007DC6F1 /* SubscriptionRepository.swift in Sources */,
 				67156E341DCB762D007DC6F1 /* PaginatedCollectionRepository.swift in Sources */,
 				677792221E7573D500ACC53D /* Album.swift in Sources */,
 				67156E351DCB762D007DC6F1 /* EntryRepository.swift in Sources */,
@@ -1267,7 +1267,7 @@
 				67156E751DCB768E007DC6F1 /* TopicRepository.swift in Sources */,
 				67156E761DCB768E007DC6F1 /* TrackRepository.swift in Sources */,
 				67156E771DCB768E007DC6F1 /* PlaylistRepository.swift in Sources */,
-				67156E781DCB768E007DC6F1 /* StreamRepository.swift in Sources */,
+				67156E781DCB768E007DC6F1 /* SubscriptionRepository.swift in Sources */,
 				67156E791DCB768E007DC6F1 /* PaginatedCollectionRepository.swift in Sources */,
 				677792231E7573D500ACC53D /* Album.swift in Sources */,
 				67156E7A1DCB768E007DC6F1 /* EntryRepository.swift in Sources */,
@@ -1369,7 +1369,7 @@
 				679C52E11B70F3DD00BE6614 /* CloudAPIClientExtension.swift in Sources */,
 				671841E71CD2E1E2005904EF /* TopicRepository.swift in Sources */,
 				67E1F3811E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */,
-				679C52E31B70F3DD00BE6614 /* StreamRepository.swift in Sources */,
+				679C52E31B70F3DD00BE6614 /* SubscriptionRepository.swift in Sources */,
 				679C53521B72385900BE6614 /* Player.swift in Sources */,
 				673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */,
 				6719A19A1DABCECC00280349 /* TrackCache.swift in Sources */,

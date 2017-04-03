@@ -1,6 +1,6 @@
 
 //
-//  StreamRepository.swift
+//  SubscriptionRepository.swift
 //  MusicFeeder
 //
 //  Created by Hiroki Kumamoto on 4/15/15.
@@ -12,7 +12,7 @@ import FeedlyKit
 import ReactiveSwift
 import Result
 
-open class StreamRepository {
+open class SubscriptionRepository {
     public enum State {
         case normal
         case fetching
