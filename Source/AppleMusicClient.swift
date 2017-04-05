@@ -27,7 +27,7 @@ public class AppleMusicClient {
             }
         }
     }
-    func requestCapabilities() -> SignalProducer<SKCloudServiceCapability, NSError> {
+    public func requestCapabilities() -> SignalProducer<SKCloudServiceCapability, NSError> {
         return SignalProducer { (observer, disposable) in
             self.cloudServiceController.requestCapabilities { (capability: SKCloudServiceCapability, error: Error?) in
                 if let error = error {
