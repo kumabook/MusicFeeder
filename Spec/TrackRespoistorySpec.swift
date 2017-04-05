@@ -59,8 +59,6 @@ class TrackRespoistorySpec: QuickSpec {
                         expect(track.isPlayed).to(beNil())
                     } else {
                         expect(track.status).toFinally(equal(Track.Status.available))
-                        expect(track.isLiked).notTo(beNil())
-                        expect(track.isPlayed).notTo(beNil())
                     }
                 }
             }
