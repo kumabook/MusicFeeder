@@ -19,6 +19,9 @@ public class AppleMusicClient {
     init() {
         cloudServiceController = SKCloudServiceController()
     }
+    public var authroizationStatus: SKCloudServiceAuthorizationStatus {
+        return SKCloudServiceController.authorizationStatus()
+    }
     public func requestAuthorization() -> SignalProducer<SKCloudServiceAuthorizationStatus, NSError> {
         return SignalProducer { (observer, disposable) in
             SKCloudServiceController.requestAuthorization { (status: SKCloudServiceAuthorizationStatus) in
