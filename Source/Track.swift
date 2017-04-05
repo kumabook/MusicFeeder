@@ -137,6 +137,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
             return streamURL != nil
         }
     }
+    public var canPlayBackground: Bool {
+        return playerType != .youtube
+    }
     public var country: String? {
         if let country = _country {
             return country
