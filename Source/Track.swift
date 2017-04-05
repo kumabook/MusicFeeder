@@ -170,6 +170,12 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         default:        return nil
         }
     }
+    public var youtubeVideoID: String? {
+        switch provider {
+        case .youTube: return identifier
+        default:       return nil
+        }
+    }
     public var thumbnailURL: URL? {
         return thumbnailUrl
     }
