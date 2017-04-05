@@ -67,7 +67,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     fileprivate static let userDefaults = UserDefaults.standard
     public static var appleMusicCurrentCountry: String? = nil
     public static var isSpotifyPremiumUser: Bool = false
-    public static var canPlayYouTube: Bool       = false
+    public static var canPlayYouTubeWithAVPlayer: Bool = false
     public static var youTubeVideoQuality: YouTubeVideoQuality {
         get {
             if let quality = YouTubeVideoQuality(rawValue: Int64(userDefaults.integer(forKey: "youtube_video_quality"))) {
@@ -121,7 +121,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
             }
             return .normal
         case .spotify:    return Track.isSpotifyPremiumUser ? .spotify : .normal
-        case .youTube:    return Track.canPlayYouTube ? .normal : .youtube
+        case .youTube:    return Track.canPlayYouTubeWithAVPlayer ? .normal : .youtube
         default:          return .normal
         }
     }
@@ -523,22 +523,28 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
                 observer.send(value: self)
                 observer.sendCompleted()
             case .youTube:
-                let disp = XCDYouTubeClient.default().fetchVideo(self.identifier).on(
-                    failed: { error in
-                        if self.status != .available { self.status = .unavailable }
+                if Track.canPlayYouTubeWithAVPlayer {
+                    let disp = XCDYouTubeClient.default().fetchVideo(self.identifier).on(
+                        failed: { error in
+                            if self.status != .available { self.status = .unavailable }
+                            observer.send(value: self)
+                            observer.sendCompleted()
+                    }, interrupted: {
+                        if self.status != .available { self.status = .init }
                         observer.send(value: self)
                         observer.sendCompleted()
-                }, interrupted: {
-                    if self.status != .available { self.status = .init }
+                    }, value: { video in
+                        self.updateProperties(video)
+                        observer.send(value: self)
+                        observer.sendCompleted()
+                    }).start()
+                    disposable.add {
+                        disp.dispose()
+                    }
+                } else {
+                    self.status = .available
                     observer.send(value: self)
                     observer.sendCompleted()
-                }, value: { video in
-                    self.updateProperties(video)
-                    observer.send(value: self)
-                    observer.sendCompleted()
-                }).start()
-                disposable.add {
-                    disp.dispose()
                 }
                 return
             case .soundCloud:
