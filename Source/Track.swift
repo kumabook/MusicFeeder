@@ -67,6 +67,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     fileprivate static let userDefaults = UserDefaults.standard
     public static var appleMusicCurrentCountry: String? = nil
     public static var isSpotifyPremiumUser: Bool = false
+    public static var canPlayYouTube: Bool       = false
     public static var youTubeVideoQuality: YouTubeVideoQuality {
         get {
             if let quality = YouTubeVideoQuality(rawValue: Int64(userDefaults.integer(forKey: "youtube_video_quality"))) {
@@ -120,11 +121,14 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
             }
             return .normal
         case .spotify:    return Track.isSpotifyPremiumUser ? .spotify : .normal
+        case .youTube:    return Track.canPlayYouTube ? .normal : .youtube
         default:          return .normal
         }
     }
     public var isValid: Bool {
         switch provider {
+        case .youTube:
+            return true
         case .appleMusic:
             return country == Track.appleMusicCurrentCountry || audioUrl != nil
         case .spotify:
