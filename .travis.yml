@@ -1,5 +1,6 @@
 osx_image: xcode8.2
 language: objective-c
+before_install: rvm use 2.4 --install --binary --fuzzy
 before_script:
     - brew update
     - brew install carthage || true
@@ -7,3 +8,4 @@ before_script:
     - carthage bootstrap --platform macOS || true
     - curl http://spread-beaver.herokuapp.com/
 script: xcodebuild -scheme MusicFeeder-macOS test
+after_success: slather
