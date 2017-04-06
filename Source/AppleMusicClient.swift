@@ -25,6 +25,22 @@ public class AppleMusicClient {
         return SKCloudServiceController.authorizationStatus()
     }
 
+    public var canAddToCloudMusicLibrary: Bool {
+        return capability?.contains(SKCloudServiceCapability.addToCloudMusicLibrary) ?? false
+    }
+
+    public var canPlayback: Bool {
+        return capability?.contains(SKCloudServiceCapability.musicCatalogPlayback) ?? false
+    }
+
+    public var subscriptionEligible: Bool {
+        if #available(iOS 10.1, *) {
+            return capability?.contains(SKCloudServiceCapability.musicCatalogSubscriptionEligible) ?? false
+        } else {
+            return false
+        }
+    }
+
     public func fetchCountryCode() -> SignalProducer<String?, NSError> {
         return SignalProducer { (observer, disposable) in
             self.cloudServiceController.requestStorefrontIdentifier { (identifier, error) in
@@ -50,6 +66,7 @@ public class AppleMusicClient {
             }
         }
     }
+
     public func requestCapabilities() -> SignalProducer<SKCloudServiceCapability, NSError> {
         return SignalProducer { (observer, disposable) in
             self.cloudServiceController.requestCapabilities { (capability: SKCloudServiceCapability, error: Error?) in
