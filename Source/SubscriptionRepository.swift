@@ -115,7 +115,7 @@ open class SubscriptionRepository {
     }
     
     open func updateSubscriptions(_ subscriptions: [Subscription]) {
-        var previous = Subscription.findAll()
+        let previous = Subscription.findAll()
         var needsDelete = previous
         for subscription in subscriptions {
             let _ = SubscriptionStore.create(subscription)
