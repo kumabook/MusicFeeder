@@ -13,9 +13,11 @@ import ReactiveSwift
 
 @available(iOS 9.3, *)
 public class AppleMusicClient {
-    open private(set) var countryCode: String = ""
+    open private(set) var countryCode: String?
+    open private(set) var capability: SKCloudServiceCapability?
     open static var shared: AppleMusicClient = AppleMusicClient()
     open var cloudServiceController: SKCloudServiceController
+
     init() {
         cloudServiceController = SKCloudServiceController()
     }
@@ -58,6 +60,39 @@ public class AppleMusicClient {
                 observer.send(value: capability)
                 observer.sendCompleted()
             }
+        }
+    }
+
+    public func connect(silent: Bool = false) -> SignalProducer<(), NSError> {
+        var signal = SignalProducer<SKCloudServiceAuthorizationStatus, NSError>.empty
+        switch authroizationStatus {
+        case .authorized:
+            signal = SignalProducer(value: authroizationStatus)
+        default:
+            if silent {
+                signal = SignalProducer(error: NSError(domain: "musicfeeder", code: -999, userInfo: ["reason":"unauthorized"]))
+            } else {
+                signal = requestAuthorization()
+            }
+        }
+        return signal.flatMap(.concat) { (status: SKCloudServiceAuthorizationStatus) -> SignalProducer<SKCloudServiceCapability, NSError> in
+            return self.requestCapabilities()
+        }.flatMap(.concat) { (capability: SKCloudServiceCapability) -> SignalProducer<(SKCloudServiceCapability, String?), NSError> in
+            return self.fetchCountryCode().map {
+                return (capability, $0)
+            }
+        }.map { (capability, countryCode) in
+            self.setAppleMusicCurrentCountry(capability: capability, countryCode: countryCode)
+            return ()
+        }
+    }
+
+    private func setAppleMusicCurrentCountry(capability: SKCloudServiceCapability, countryCode: String?) {
+        self.capability  = capability
+        self.countryCode = countryCode
+        guard let countryCode = countryCode else { return }
+        if capability.contains(SKCloudServiceCapability.musicCatalogPlayback) {
+            Track.appleMusicCurrentCountry = countryCode
         }
     }
 
