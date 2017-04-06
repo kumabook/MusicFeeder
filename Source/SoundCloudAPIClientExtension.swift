@@ -11,6 +11,36 @@ import SoundCloudKit
 import ReactiveSwift
 import Alamofire
 
+extension Playlist {
+    public convenience init(playlist: SoundCloudKit.Playlist) {
+        self.init(id: String(playlist.id), title: playlist.title, tracks: playlist.tracks.map {
+            Track(track: $0)
+        })
+    }
+}
+
+extension Track {
+    public convenience init(track: SoundCloudKit.Track) {
+        self.init(id: "",
+              provider: .soundCloud,
+              url: track.permalinkUrl,
+              identifier: String(track.id),
+              title: track.title,
+              duration: TimeInterval(track.duration),
+              thumbnailUrl: track.thumbnailURL,
+              artworkUrl: track.artworkURL,
+              audioUrl: URL(string: track.streamUrl),
+              artist: track.user.username,
+              status: .available,
+              expiresAt: Int64.max,
+              publishedAt:  0, createdAt: 0, updatedAt: 0,
+              state: EnclosureState.alive,
+              isLiked: nil,
+              isSaved: nil,
+              isPlayed: nil)
+    }
+}
+
 extension SoundCloudKit.APIClient {
     public func fetchItem<T: JSONInitializable>(_ route: Router) -> SignalProducer<T, NSError> {
         return SignalProducer { observer, disposable in
