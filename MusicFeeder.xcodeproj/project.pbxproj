@@ -213,6 +213,7 @@
 		6719A19E1DABDF6700280349 /* ProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6719A19D1DABDF6700280349 /* ProfileStore.swift */; };
 		6726A7FE1DA13F6400FDF28F /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FD1DA13F6400FDF28F /* Journal.swift */; };
 		6726A8001DAB648500FDF28F /* TrackRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FF1DAB648500FDF28F /* TrackRepository.swift */; };
+		673293E21E96244A00A06FE9 /* StoreFrontID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673293E11E96244A00A06FE9 /* StoreFrontID.swift */; };
 		673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
 		6748048D1DB268C000D6FD33 /* TopicCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6748048C1DB268C000D6FD33 /* TopicCache.swift */; };
 		6748048E1DB2715C00D6FD33 /* TopicRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4041DAD4B68004DE304 /* TopicRepositorySpec.swift */; };
@@ -492,6 +493,7 @@
 		6719A19D1DABDF6700280349 /* ProfileStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileStore.swift; path = Source/ProfileStore.swift; sourceTree = SOURCE_ROOT; };
 		6726A7FD1DA13F6400FDF28F /* Journal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Journal.swift; path = Source/Journal.swift; sourceTree = SOURCE_ROOT; };
 		6726A7FF1DAB648500FDF28F /* TrackRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackRepository.swift; path = Source/TrackRepository.swift; sourceTree = SOURCE_ROOT; };
+		673293E11E96244A00A06FE9 /* StoreFrontID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoreFrontID.swift; path = Source/StoreFrontID.swift; sourceTree = SOURCE_ROOT; };
 		673672C41D1F918C006259F9 /* PlaylistQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistQueue.swift; path = Source/PlaylistQueue.swift; sourceTree = SOURCE_ROOT; };
 		6748048C1DB268C000D6FD33 /* TopicCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopicCache.swift; path = Source/TopicCache.swift; sourceTree = SOURCE_ROOT; };
 		674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryRepositorySpec.swift; path = Spec/EntryRepositorySpec.swift; sourceTree = SOURCE_ROOT; };
@@ -808,6 +810,7 @@
 		677792171E75638C00ACC53D /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				673293E11E96244A00A06FE9 /* StoreFrontID.swift */,
 				6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */,
 				67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */,
 				670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */,
@@ -1355,6 +1358,7 @@
 				677792141E75622E00ACC53D /* ServicePlaylist.swift in Sources */,
 				67E1F3781E82554D003A8080 /* EnclosureStreamRepository.swift in Sources */,
 				6719A19E1DABDF6700280349 /* ProfileStore.swift in Sources */,
+				673293E21E96244A00A06FE9 /* StoreFrontID.swift in Sources */,
 				67E1F37D1E8257C1003A8080 /* AlbumStreamRepository.swift in Sources */,
 				679C52DE1B70F3DD00BE6614 /* Category.swift in Sources */,
 				678305851B9897A000A83F52 /* CategoryStore.swift in Sources */,

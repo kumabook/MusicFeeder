@@ -22,6 +22,24 @@ public class AppleMusicClient {
     public var authroizationStatus: SKCloudServiceAuthorizationStatus {
         return SKCloudServiceController.authorizationStatus()
     }
+
+    public func fetchCountryCode() -> SignalProducer<String?, NSError> {
+        return SignalProducer { (observer, disposable) in
+            self.cloudServiceController.requestStorefrontIdentifier { (identifier, error) in
+                if let error = error as? NSError {
+                    observer.send(error: error)
+                } else {
+                    observer.send(value: identifier.flatMap {
+                        $0.characters.split(separator: "-").first
+                    }.flatMap {
+                        StoreFrontIDs[String($0)]
+                    })
+                    observer.sendCompleted()
+                }
+            }
+        }
+    }
+
     public func requestAuthorization() -> SignalProducer<SKCloudServiceAuthorizationStatus, NSError> {
         return SignalProducer { (observer, disposable) in
             SKCloudServiceController.requestAuthorization { (status: SKCloudServiceAuthorizationStatus) in
