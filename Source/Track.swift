@@ -212,8 +212,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
 
     public fileprivate(set) var status: Status
 
-    public fileprivate(set) var youtubeVideo:    XCDYouTubeVideo?
-    public fileprivate(set) var soundcloudTrack: SoundCloudKit.Track?
+    public internal(set) var youtubeVideo:    XCDYouTubeVideo?
+    public internal(set) var soundcloudTrack: SoundCloudKit.Track?
 
     public var subtitle: String? {
         switch provider {

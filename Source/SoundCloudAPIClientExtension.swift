@@ -38,6 +38,7 @@ extension Track {
               isLiked: nil,
               isSaved: nil,
               isPlayed: nil)
+        self.soundcloudTrack = track
     }
 }
 
