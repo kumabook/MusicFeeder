@@ -21,23 +21,25 @@ extension Playlist {
 
 extension Track {
     public convenience init(track: SoundCloudKit.Track) {
-        self.init(id: "",
-              provider: .soundCloud,
-              url: track.permalinkUrl,
-              identifier: String(track.id),
-              title: track.title,
-              duration: TimeInterval(track.duration),
+        self.init(id:       "",
+              provider:     .soundCloud,
+              url:          track.permalinkUrl,
+              identifier:   String(track.id),
+              title:        track.title,
+              duration:     TimeInterval(track.duration),
               thumbnailUrl: track.thumbnailURL,
-              artworkUrl: track.artworkURL,
-              audioUrl: URL(string: track.streamUrl),
-              artist: track.user.username,
-              status: .available,
-              expiresAt: Int64.max,
-              publishedAt:  0, createdAt: 0, updatedAt: 0,
-              state: EnclosureState.alive,
-              isLiked: nil,
-              isSaved: nil,
-              isPlayed: nil)
+              artworkUrl:   track.artworkURL,
+              audioUrl:     URL(string: track.streamUrl),
+              artist:       track.user.username,
+              status:       .available,
+              expiresAt:    Int64.max,
+              publishedAt:  0,
+              createdAt:    0,
+              updatedAt:    0,
+              state:        EnclosureState.alive,
+              isLiked:      nil,
+              isSaved:      nil,
+              isPlayed:     nil)
         self.soundcloudTrack = track
     }
 }
