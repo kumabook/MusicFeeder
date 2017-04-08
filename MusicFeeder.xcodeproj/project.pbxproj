@@ -230,7 +230,6 @@
 		675120ED1E78294A00489729 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671207CE1E72F7DF008BD75A /* StringExtension.swift */; };
 		675120EE1E78295100489729 /* Enclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675120E91E76F11B00489729 /* Enclosure.swift */; };
 		675120EF1E78295100489729 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671207CE1E72F7DF008BD75A /* StringExtension.swift */; };
-		677791FF1E75307D00ACC53D /* PlayerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 677791FE1E75307D00ACC53D /* PlayerKit.framework */; };
 		677792141E75622E00ACC53D /* ServicePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792131E75622E00ACC53D /* ServicePlaylist.swift */; };
 		677792151E75622E00ACC53D /* ServicePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792131E75622E00ACC53D /* ServicePlaylist.swift */; };
 		677792161E75622E00ACC53D /* ServicePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792131E75622E00ACC53D /* ServicePlaylist.swift */; };
@@ -512,7 +511,6 @@
 		675120E91E76F11B00489729 /* Enclosure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Enclosure.swift; path = Source/Enclosure.swift; sourceTree = SOURCE_ROOT; };
 		675120F01E782AD100489729 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		675120F21E782ADA00489729 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS10.1.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
-		677791FE1E75307D00ACC53D /* PlayerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PlayerKit.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/MusicFav-dqzbpqjokazzligypyxgmxrxkzvs/Build/Products/Debug-iphoneos/PlayerKit.framework"; sourceTree = "<group>"; };
 		677792131E75622E00ACC53D /* ServicePlaylist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServicePlaylist.swift; path = Source/ServicePlaylist.swift; sourceTree = SOURCE_ROOT; };
 		677792181E75645000ACC53D /* AppleMusicClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppleMusicClient.swift; path = Source/AppleMusicClient.swift; sourceTree = SOURCE_ROOT; };
 		6777921C1E7566B000ACC53D /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -649,7 +647,6 @@
 				67D265841BACE17B000240FB /* Alamofire.framework in Frameworks */,
 				67D265851BACE17B000240FB /* Breit.framework in Frameworks */,
 				67D265861BACE17B000240FB /* FeedlyKit.framework in Frameworks */,
-				677791FF1E75307D00ACC53D /* PlayerKit.framework in Frameworks */,
 				67D2658B1BACE17B000240FB /* Realm.framework in Frameworks */,
 				67D2658C1BACE17B000240FB /* Result.framework in Frameworks */,
 				67D2658D1BACE17B000240FB /* SnapKit.framework in Frameworks */,
@@ -715,6 +712,9 @@
 		67156E571DCB763C007DC6F1 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				6777921C1E7566B000ACC53D /* MediaPlayer.framework */,
+				6777921E1E7566B600ACC53D /* StoreKit.framework */,
+				673B94071E978710004F0C22 /* YouTubeKit.framework */,
 				67B7A8501DCB346100EB2604 /* ReactiveSwift.framework */,
 				67B7A84E1DCB344B00EB2604 /* SDWebImage.framework */,
 				67D2657E1BACE16B000240FB /* Breit.framework */,
@@ -736,6 +736,8 @@
 		67156E581DCB7646007DC6F1 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				675120F01E782AD100489729 /* StoreKit.framework */,
+				673B94091E978725004F0C22 /* YouTubeKit.framework */,
 				67156E591DCB7672007DC6F1 /* Alamofire.framework */,
 				67156E5A1DCB7672007DC6F1 /* Breit.framework */,
 				67156E5B1DCB7672007DC6F1 /* FeedlyKit.framework */,
@@ -757,6 +759,8 @@
 		67156EB81DCB76BC007DC6F1 /* tvOS */ = {
 			isa = PBXGroup;
 			children = (
+				675120F21E782ADA00489729 /* StoreKit.framework */,
+				673B940B1E97873A004F0C22 /* YouTubeKit.framework */,
 				67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */,
 				67156E9D1DCB76B2007DC6F1 /* Breit.framework */,
 				67156E9E1DCB76B2007DC6F1 /* FeedlyKit.framework */,
@@ -863,14 +867,6 @@
 		679C52751B70F16800BE6614 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				673B940B1E97873A004F0C22 /* YouTubeKit.framework */,
-				673B94091E978725004F0C22 /* YouTubeKit.framework */,
-				673B94071E978710004F0C22 /* YouTubeKit.framework */,
-				675120F21E782ADA00489729 /* StoreKit.framework */,
-				675120F01E782AD100489729 /* StoreKit.framework */,
-				6777921E1E7566B600ACC53D /* StoreKit.framework */,
-				6777921C1E7566B000ACC53D /* MediaPlayer.framework */,
-				677791FE1E75307D00ACC53D /* PlayerKit.framework */,
 				67156E571DCB763C007DC6F1 /* iOS */,
 				67156E581DCB7646007DC6F1 /* macOS */,
 				67156EB81DCB76BC007DC6F1 /* tvOS */,
