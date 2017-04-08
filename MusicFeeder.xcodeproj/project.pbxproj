@@ -216,6 +216,9 @@
 		673293E21E96244A00A06FE9 /* StoreFrontID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673293E11E96244A00A06FE9 /* StoreFrontID.swift */; };
 		673293E41E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673293E31E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift */; };
 		673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
+		673B94101E978D1B004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B940B1E97873A004F0C22 /* YouTubeKit.framework */; };
+		673B94111E978D1E004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94091E978725004F0C22 /* YouTubeKit.framework */; };
+		673B94121E978D24004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94071E978710004F0C22 /* YouTubeKit.framework */; };
 		6748048D1DB268C000D6FD33 /* TopicCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6748048C1DB268C000D6FD33 /* TopicCache.swift */; };
 		6748048E1DB2715C00D6FD33 /* TopicRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4041DAD4B68004DE304 /* TopicRepositorySpec.swift */; };
 		674804921DB4087100D6FD33 /* EntryRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */; };
@@ -497,6 +500,9 @@
 		673293E11E96244A00A06FE9 /* StoreFrontID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoreFrontID.swift; path = Source/StoreFrontID.swift; sourceTree = SOURCE_ROOT; };
 		673293E31E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SoundCloudAPIClientExtension.swift; path = Source/SoundCloudAPIClientExtension.swift; sourceTree = SOURCE_ROOT; };
 		673672C41D1F918C006259F9 /* PlaylistQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistQueue.swift; path = Source/PlaylistQueue.swift; sourceTree = SOURCE_ROOT; };
+		673B94071E978710004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/iOS/YouTubeKit.framework; sourceTree = "<group>"; };
+		673B94091E978725004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/Mac/YouTubeKit.framework; sourceTree = "<group>"; };
+		673B940B1E97873A004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/tvOS/YouTubeKit.framework; sourceTree = "<group>"; };
 		6748048C1DB268C000D6FD33 /* TopicCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopicCache.swift; path = Source/TopicCache.swift; sourceTree = SOURCE_ROOT; };
 		674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryRepositorySpec.swift; path = Spec/EntryRepositorySpec.swift; sourceTree = SOURCE_ROOT; };
 		674804931DB5896700D6FD33 /* TrackRespoistorySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackRespoistorySpec.swift; path = Spec/TrackRespoistorySpec.swift; sourceTree = SOURCE_ROOT; };
@@ -551,6 +557,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673B94111E978D1E004F0C22 /* YouTubeKit.framework in Frameworks */,
 				67156E671DCB7672007DC6F1 /* Alamofire.framework in Frameworks */,
 				67156E681DCB7672007DC6F1 /* Breit.framework in Frameworks */,
 				67156E691DCB7672007DC6F1 /* FeedlyKit.framework in Frameworks */,
@@ -592,6 +599,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673B94101E978D1B004F0C22 /* YouTubeKit.framework in Frameworks */,
 				67156EAA1DCB76B3007DC6F1 /* Alamofire.framework in Frameworks */,
 				67156EAB1DCB76B3007DC6F1 /* Breit.framework in Frameworks */,
 				67156EAC1DCB76B3007DC6F1 /* FeedlyKit.framework in Frameworks */,
@@ -633,6 +641,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673B94121E978D24004F0C22 /* YouTubeKit.framework in Frameworks */,
 				6777921F1E7566B600ACC53D /* StoreKit.framework in Frameworks */,
 				6777921D1E7566B000ACC53D /* MediaPlayer.framework in Frameworks */,
 				67D265841BACE17B000240FB /* Alamofire.framework in Frameworks */,
@@ -851,6 +860,9 @@
 		679C52751B70F16800BE6614 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				673B940B1E97873A004F0C22 /* YouTubeKit.framework */,
+				673B94091E978725004F0C22 /* YouTubeKit.framework */,
+				673B94071E978710004F0C22 /* YouTubeKit.framework */,
 				675120F21E782ADA00489729 /* StoreKit.framework */,
 				675120F01E782AD100489729 /* StoreKit.framework */,
 				6777921E1E7566B600ACC53D /* StoreKit.framework */,

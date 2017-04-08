@@ -46,3 +46,6 @@
 [submodule "Carthage/Checkouts/XCDYouTubeKit"]
 	path = Carthage/Checkouts/XCDYouTubeKit
 	url = https://github.com/0xced/XCDYouTubeKit.git
+[submodule "Carthage/Checkouts/YouTubeKit"]
+	path = Carthage/Checkouts/YouTubeKit
+	url = https://github.com/kumabook/YouTubeKit.git
