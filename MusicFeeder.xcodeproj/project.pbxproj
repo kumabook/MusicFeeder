@@ -216,6 +216,7 @@
 		673293E21E96244A00A06FE9 /* StoreFrontID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673293E11E96244A00A06FE9 /* StoreFrontID.swift */; };
 		673293E41E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673293E31E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift */; };
 		673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
+		673B94061E978425004F0C22 /* YouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B94051E978425004F0C22 /* YouTubeClient.swift */; };
 		673B94101E978D1B004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B940B1E97873A004F0C22 /* YouTubeKit.framework */; };
 		673B94111E978D1E004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94091E978725004F0C22 /* YouTubeKit.framework */; };
 		673B94121E978D24004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94071E978710004F0C22 /* YouTubeKit.framework */; };
@@ -500,6 +501,7 @@
 		673293E11E96244A00A06FE9 /* StoreFrontID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoreFrontID.swift; path = Source/StoreFrontID.swift; sourceTree = SOURCE_ROOT; };
 		673293E31E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SoundCloudAPIClientExtension.swift; path = Source/SoundCloudAPIClientExtension.swift; sourceTree = SOURCE_ROOT; };
 		673672C41D1F918C006259F9 /* PlaylistQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistQueue.swift; path = Source/PlaylistQueue.swift; sourceTree = SOURCE_ROOT; };
+		673B94051E978425004F0C22 /* YouTubeClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YouTubeClient.swift; path = Source/YouTubeClient.swift; sourceTree = SOURCE_ROOT; };
 		673B94071E978710004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/iOS/YouTubeKit.framework; sourceTree = "<group>"; };
 		673B94091E978725004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/Mac/YouTubeKit.framework; sourceTree = "<group>"; };
 		673B940B1E97873A004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/tvOS/YouTubeKit.framework; sourceTree = "<group>"; };
@@ -828,6 +830,7 @@
 				670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */,
 				67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */,
 				677792181E75645000ACC53D /* AppleMusicClient.swift */,
+				673B94051E978425004F0C22 /* YouTubeClient.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -1359,6 +1362,7 @@
 				67AD468C1C0F2C2E0058E176 /* ListenItLaterEntryStore.swift in Sources */,
 				67E315781DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift in Sources */,
 				679C52D81B70F3DD00BE6614 /* PlaylistStore.swift in Sources */,
+				673B94061E978425004F0C22 /* YouTubeClient.swift in Sources */,
 				67BCCEA91CAFBF6E00310AF3 /* EnclosureStream.swift in Sources */,
 				679C52DA1B70F3DD00BE6614 /* EntryRepository.swift in Sources */,
 				6709D4071DAD4C20004DE304 /* TopicStore.swift in Sources */,
