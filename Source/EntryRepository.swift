@@ -139,8 +139,8 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
 
     open var removeMark: RemoveMark {
         if let userId = CloudAPIClient._profile?.id {
-            if stream == Tag.Saved(userId) { return .unsave }
-            if stream == Tag.Read(userId)  { return .unread }
+            if stream == Tag.saved(userId) { return .unsave }
+            if stream == Tag.read(userId)  { return .unread }
         }
         return .read
     }

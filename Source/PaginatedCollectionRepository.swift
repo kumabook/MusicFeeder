@@ -86,8 +86,8 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
         signal           = pipe.0
         observer         = pipe.1
         if let userId = CloudAPIClient._profile?.id {
-            if stream == Tag.Saved(userId) { self.unreadOnly = false }
-            if stream == Tag.Read(userId)  { self.unreadOnly = false }
+            if stream == Tag.saved(userId) { self.unreadOnly = false }
+            if stream == Tag.read(userId)  { self.unreadOnly = false }
         }
     }
 

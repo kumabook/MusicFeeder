@@ -219,6 +219,8 @@
 		673B947B1E98D8FE004F0C22 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B947A1E98D8FE004F0C22 /* Provider.swift */; };
 		673B947C1E98D8FE004F0C22 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B947A1E98D8FE004F0C22 /* Provider.swift */; };
 		673B947D1E98D8FE004F0C22 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B947A1E98D8FE004F0C22 /* Provider.swift */; };
+		673B947E1E98E788004F0C22 /* YouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B94051E978425004F0C22 /* YouTubeClient.swift */; };
+		673B947F1E98E790004F0C22 /* YouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B94051E978425004F0C22 /* YouTubeClient.swift */; };
 		6748048D1DB268C000D6FD33 /* TopicCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6748048C1DB268C000D6FD33 /* TopicCache.swift */; };
 		6748048E1DB2715C00D6FD33 /* TopicRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4041DAD4B68004DE304 /* TopicRepositorySpec.swift */; };
 		674804921DB4087100D6FD33 /* EntryRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */; };
@@ -1204,6 +1206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673B947E1E98E788004F0C22 /* YouTubeClient.swift in Sources */,
 				675120EC1E78294A00489729 /* Enclosure.swift in Sources */,
 				675120ED1E78294A00489729 /* StringExtension.swift in Sources */,
 				67156E301DCB762D007DC6F1 /* TopicRepository.swift in Sources */,
@@ -1273,6 +1276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673B947F1E98E790004F0C22 /* YouTubeClient.swift in Sources */,
 				675120EE1E78295100489729 /* Enclosure.swift in Sources */,
 				675120EF1E78295100489729 /* StringExtension.swift in Sources */,
 				67156E751DCB768E007DC6F1 /* TopicRepository.swift in Sources */,

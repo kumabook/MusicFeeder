@@ -57,7 +57,7 @@ open class SubscriptionRepository {
         observer             = pipe.1
         uncategorized        = FeedlyKit.Category.Uncategorized()
         if let userId = CloudAPIClient.profile?.id {
-            uncategorized = FeedlyKit.Category.Uncategorized(userId)
+            uncategorized = FeedlyKit.Category.uncategorized(userId)
         }
         streamListOfCategory[uncategorized] = []
     }
@@ -136,7 +136,7 @@ open class SubscriptionRepository {
         }
         uncategorized = FeedlyKit.Category.Uncategorized()
         if let userId = CloudAPIClient.profile?.id {
-            uncategorized = FeedlyKit.Category.Uncategorized(userId)
+            uncategorized = FeedlyKit.Category.uncategorized(userId)
         }
         streamListOfCategory[uncategorized] = []
         for subscription in subscriptions {
