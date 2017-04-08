@@ -64,7 +64,6 @@
 		67156E531DCB762D007DC6F1 /* PinkSpiderAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */; };
 		67156E541DCB762D007DC6F1 /* CloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */; };
 		67156E551DCB762D007DC6F1 /* MusicFeederAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */; };
-		67156E561DCB762D007DC6F1 /* XCDYouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */; };
 		67156E671DCB7672007DC6F1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E591DCB7672007DC6F1 /* Alamofire.framework */; };
 		67156E681DCB7672007DC6F1 /* Breit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5A1DCB7672007DC6F1 /* Breit.framework */; };
 		67156E691DCB7672007DC6F1 /* FeedlyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E5B1DCB7672007DC6F1 /* FeedlyKit.framework */; };
@@ -76,7 +75,6 @@
 		67156E711DCB7672007DC6F1 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E631DCB7672007DC6F1 /* SnapKit.framework */; };
 		67156E721DCB7672007DC6F1 /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */; };
 		67156E731DCB7672007DC6F1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */; };
-		67156E741DCB7672007DC6F1 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */; };
 		67156E751DCB768E007DC6F1 /* TopicRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841E61CD2E1E2005904EF /* TopicRepository.swift */; };
 		67156E761DCB768E007DC6F1 /* TrackRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6726A7FF1DAB648500FDF28F /* TrackRepository.swift */; };
 		67156E771DCB768E007DC6F1 /* PlaylistRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670505A01B6E1398006EAA84 /* PlaylistRepository.swift */; };
@@ -115,7 +113,6 @@
 		67156E981DCB768E007DC6F1 /* PinkSpiderAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */; };
 		67156E991DCB768E007DC6F1 /* CloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */; };
 		67156E9A1DCB768E007DC6F1 /* MusicFeederAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */; };
-		67156E9B1DCB768E007DC6F1 /* XCDYouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */; };
 		67156EAA1DCB76B3007DC6F1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */; };
 		67156EAB1DCB76B3007DC6F1 /* Breit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9D1DCB76B2007DC6F1 /* Breit.framework */; };
 		67156EAC1DCB76B3007DC6F1 /* FeedlyKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9E1DCB76B2007DC6F1 /* FeedlyKit.framework */; };
@@ -127,7 +124,6 @@
 		67156EB41DCB76B3007DC6F1 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA61DCB76B3007DC6F1 /* SnapKit.framework */; };
 		67156EB51DCB76B3007DC6F1 /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */; };
 		67156EB61DCB76B3007DC6F1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */; };
-		67156EB71DCB76B3007DC6F1 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */; };
 		67156EF31DCB7A35007DC6F1 /* PlaylistSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D61B70E44000BE6614 /* PlaylistSpec.swift */; };
 		67156EF41DCB7A35007DC6F1 /* SpecHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D71B70E44000BE6614 /* SpecHelper.swift */; };
 		67156EF51DCB7A35007DC6F1 /* TrackSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D81B70E44000BE6614 /* TrackSpec.swift */; };
@@ -274,7 +270,6 @@
 		679C52E01B70F3DD00BE6614 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE341B6CE76300B567CB /* Entry.swift */; };
 		679C52E11B70F3DD00BE6614 /* CloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */; };
 		679C52E31B70F3DD00BE6614 /* SubscriptionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE3B1B6CE76300B567CB /* SubscriptionRepository.swift */; };
-		679C52E51B70F3DD00BE6614 /* XCDYouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */; };
 		679C52F41B70F3FC00BE6614 /* playlist.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DD1B70E4B600BE6614 /* playlist.json */; };
 		679C52F51B70F3FC00BE6614 /* track.json in Resources */ = {isa = PBXBuildFile; fileRef = 679C51DE1B70E4B600BE6614 /* track.json */; };
 		679C532D1B70F68600BE6614 /* SpecHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D71B70E44000BE6614 /* SpecHelper.swift */; };
@@ -306,7 +301,6 @@
 		67D2658D1BACE17B000240FB /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67D2657F1BACE16B000240FB /* SnapKit.framework */; };
 		67D2658E1BACE17B000240FB /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FCFAA01B946CED008359BB /* SoundCloudKit.framework */; };
 		67D2658F1BACE17B000240FB /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0681B7379CB003A1450 /* SwiftyJSON.framework */; };
-		67D265911BACE17B000240FB /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */; };
 		67D7F3461CAD33DE00C173B4 /* TrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3451CAD33DE00C173B4 /* TrackStreamRepository.swift */; };
 		67D7F34A1CAD348200C173B4 /* PaginatedCollectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D7F3491CAD348200C173B4 /* PaginatedCollectionRepository.swift */; };
 		67E1F3781E82554D003A8080 /* EnclosureStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3771E82554D003A8080 /* EnclosureStreamRepository.swift */; };
@@ -552,7 +546,6 @@
 		67FBBE341B6CE76300B567CB /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entry.swift; path = Source/Entry.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloudAPIClientExtension.swift; path = Source/CloudAPIClientExtension.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE3B1B6CE76300B567CB /* SubscriptionRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionRepository.swift; path = Source/SubscriptionRepository.swift; sourceTree = SOURCE_ROOT; };
-		67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XCDYouTubeClient.swift; path = Source/XCDYouTubeClient.swift; sourceTree = SOURCE_ROOT; };
 		67FCFAA01B946CED008359BB /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/iOS/SoundCloudKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -573,7 +566,6 @@
 				67156E711DCB7672007DC6F1 /* SnapKit.framework in Frameworks */,
 				67156E721DCB7672007DC6F1 /* SoundCloudKit.framework in Frameworks */,
 				67156E731DCB7672007DC6F1 /* SwiftyJSON.framework in Frameworks */,
-				67156E741DCB7672007DC6F1 /* XCDYouTubeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,7 +607,6 @@
 				67156EB41DCB76B3007DC6F1 /* SnapKit.framework in Frameworks */,
 				67156EB51DCB76B3007DC6F1 /* SoundCloudKit.framework in Frameworks */,
 				67156EB61DCB76B3007DC6F1 /* SwiftyJSON.framework in Frameworks */,
-				67156EB71DCB76B3007DC6F1 /* XCDYouTubeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,7 +649,6 @@
 				67D2658E1BACE17B000240FB /* SoundCloudKit.framework in Frameworks */,
 				67D2658F1BACE17B000240FB /* SwiftyJSON.framework in Frameworks */,
 				67B7A84F1DCB344B00EB2604 /* SDWebImage.framework in Frameworks */,
-				67D265911BACE17B000240FB /* XCDYouTubeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,7 +826,6 @@
 				6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */,
 				67FBBE351B6CE76300B567CB /* CloudAPIClientExtension.swift */,
 				670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */,
-				67FBBE401B6CE76300B567CB /* XCDYouTubeClient.swift */,
 				677792181E75645000ACC53D /* AppleMusicClient.swift */,
 				673B94051E978425004F0C22 /* YouTubeClient.swift */,
 			);
@@ -1263,7 +1252,6 @@
 				67156E541DCB762D007DC6F1 /* CloudAPIClientExtension.swift in Sources */,
 				67156E551DCB762D007DC6F1 /* MusicFeederAPIClient.swift in Sources */,
 				677792261E7574EE00ACC53D /* EnclosureState.swift in Sources */,
-				67156E561DCB762D007DC6F1 /* XCDYouTubeClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1333,7 +1321,6 @@
 				67156E991DCB768E007DC6F1 /* CloudAPIClientExtension.swift in Sources */,
 				67156E9A1DCB768E007DC6F1 /* MusicFeederAPIClient.swift in Sources */,
 				677792271E7574EE00ACC53D /* EnclosureState.swift in Sources */,
-				67156E9B1DCB768E007DC6F1 /* XCDYouTubeClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1406,7 +1393,6 @@
 				673B947B1E98D8FE004F0C22 /* Provider.swift in Sources */,
 				6748048D1DB268C000D6FD33 /* TopicCache.swift in Sources */,
 				677792291E757B8E00ACC53D /* PlaylistifiedEntry.swift in Sources */,
-				679C52E51B70F3DD00BE6614 /* XCDYouTubeClient.swift in Sources */,
 				67E315761DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
