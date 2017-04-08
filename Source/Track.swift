@@ -116,7 +116,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public var playerType: PlayerType {
         switch provider {
         case .appleMusic:
-            if let c = country, c == Track.appleMusicCurrentCountry {
+            if let c = country, c.lowercased() == Track.appleMusicCurrentCountry?.lowercased() {
                 return .appleMusic
             }
             return .normal
