@@ -47,6 +47,28 @@ public enum YouTubeVideoQuality: Int64 {
     #endif
 }
 
+public protocol YouTubeVideo {
+    var identifier: String { get }
+    var title: String { get }
+    var duration: TimeInterval { get }
+    var smallThumbnailURL: URL? { get }
+    var mediumThumbnailURL: URL? { get }
+    var largeThumbnailURL: URL? { get }
+    var streamURLs: [AnyHashable : URL] { get }
+    var expirationDate: Date? { get }
+}
+
+public protocol YouTubeAPIClient {
+    func fetchVideo(_ identifier: String) -> SignalProducer<YouTubeVideo, NSError>
+}
+
+extension Playlist {
+    public convenience init(id: String, title: String, items: PaginatedResponse<PlaylistItem>) {
+        self.init(id: id, title: title, tracks: items.items.map {
+            Track(playlistItem: $0)
+        })
+    }
+}
 
 extension Track {
     public convenience init(playlistItem: YouTubeKit.PlaylistItem) {

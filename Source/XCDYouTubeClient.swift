@@ -28,3 +28,5 @@ extension XCDYouTubeClient {
         }
     }
 }
+
+extension XCDYouTubeVideo: YouTubeVideo {}

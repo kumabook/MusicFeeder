@@ -9,7 +9,6 @@
 import SwiftyJSON
 import ReactiveSwift
 import Result
-import XCDYouTubeKit
 import PlayerKit
 import Breit
 import SoundCloudKit
@@ -20,9 +19,12 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public static var resourceName: String = "tracks"
     public static var idListKey:    String = "trackIds"
     fileprivate static let userDefaults = UserDefaults.standard
+    public static var youtubeAPIClient: YouTubeAPIClient?
     public static var appleMusicCurrentCountry: String? = nil
     public static var isSpotifyPremiumUser: Bool = false
-    public static var canPlayYouTubeWithAVPlayer: Bool = false
+    public static var canPlayYouTubeWithAVPlayer: Bool {
+        return Track.youtubeAPIClient != nil
+    }
     public static var youTubeVideoQuality: YouTubeVideoQuality {
         get {
             if let quality = YouTubeVideoQuality(rawValue: Int64(userDefaults.integer(forKey: "youtube_video_quality"))) {
@@ -167,7 +169,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
 
     public fileprivate(set) var status: Status
 
-    public internal(set) var youtubeVideo:    XCDYouTubeVideo?
+    public internal(set) var youtubeVideo:    YouTubeVideo?
     public internal(set) var soundcloudTrack: SoundCloudKit.Track?
 
     public var subtitle: String? {
@@ -367,7 +369,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         }
     }
     
-    public func updateProperties(_ video: XCDYouTubeVideo) {
+    public func updateProperties(_ video: YouTubeVideo) {
         youtubeVideo = video
         title        = video.title
         duration     = video.duration
@@ -478,12 +480,17 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
                 observer.send(value: self)
                 observer.sendCompleted()
             case .youTube:
-                if Track.canPlayYouTubeWithAVPlayer {
-                    let disp = XCDYouTubeClient.default().fetchVideo(self.identifier).on(
-                        failed: { error in
-                            if self.status != .available { self.status = .unavailable }
-                            observer.send(value: self)
-                            observer.sendCompleted()
+                guard let apiClient = Track.youtubeAPIClient else {
+                    self.status = .available
+                    observer.send(value: self)
+                    observer.sendCompleted()
+                    return
+                }
+                let disp = apiClient.fetchVideo(self.identifier).on(
+                    failed: { error in
+                        if self.status != .available { self.status = .unavailable }
+                        observer.send(value: self)
+                        observer.sendCompleted()
                     }, interrupted: {
                         if self.status != .available { self.status = .init }
                         observer.send(value: self)
@@ -493,15 +500,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
                         observer.send(value: self)
                         observer.sendCompleted()
                     }).start()
-                    disposable.add {
-                        disp.dispose()
-                    }
-                } else {
-                    self.status = .available
-                    observer.send(value: self)
-                    observer.sendCompleted()
+                disposable.add {
+                    disp.dispose()
                 }
-                return
             case .soundCloud:
                 typealias R = SoundCloudKit.APIClient.Router
                 SoundCloudKit.APIClient.sharedInstance.fetchItem(R.track(self.identifier)) { (req:
