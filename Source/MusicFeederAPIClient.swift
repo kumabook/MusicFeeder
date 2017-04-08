@@ -269,10 +269,10 @@ extension CloudAPIClient {
     public func updateTopic(_ topic: Topic) -> SignalProducer<Void, NSError> {
         let route = Router.api(UpdateTopicAPI(topicId: topic.id))
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().response() { (r: DataResponse<Void>) -> Void in
-                if let e = r.result.error {
+            let req = self.manager.request(route).validate().response() { (r: DefaultDataResponse) -> Void in
+                if let e = r.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
-                } else if let _ = r.result.value {
+                } else {
                     observer.send(value: ())
                     observer.sendCompleted()
                 }
@@ -284,10 +284,10 @@ extension CloudAPIClient {
     public func deleteTopic(_ topic: Topic) -> SignalProducer<Void, NSError> {
         let route = Router.api(DeleteTopicAPI(topicId: topic.id))
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().response() { (r: DataResponse<Void>) -> Void in
-                if let e = r.result.error {
+            let req = self.manager.request(route).validate().response() { (r: DefaultDataResponse) -> Void in
+                if let e = r.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
-                } else if let _ = r.result.value {
+                } else {
                     observer.send(value: ())
                     observer.sendCompleted()
                 }
@@ -376,8 +376,8 @@ extension CloudAPIClient {
     internal func markEnclosuresAs<T: Enclosure>(_ action: MarkerAction, items: [T]) -> SignalProducer<Void, NSError> {
         let route = Router.api(EnclosureMarkerAPI<T>(items: items, action: action))
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().response() { (r: DataResponse<Void>) -> Void in
-                if let e = r.result.error {
+            let req = self.manager.request(route).validate().response() { (r: DefaultDataResponse) -> Void in
+                if let e = r.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
                 } else {
                     observer.send(value: ())
