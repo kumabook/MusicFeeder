@@ -16,51 +16,6 @@ import SoundCloudKit
 import Alamofire
 import FeedlyKit
 
-public enum Provider: String {
-    case appleMusic = "AppleMusic"
-    case spotify    = "Spotify"
-    case youTube    = "YouTube"
-    case soundCloud = "SoundCloud"
-    case raw        = "Raw"
-}
-
-public enum YouTubeVideoQuality: Int64 {
-    case audioOnly = 140
-    case small240  = 36
-    case medium360 = 18
-    case hd720     = 22
-    public var label: String {
-        switch self {
-        case .audioOnly: return  "Audio only".localize()
-        case .small240:  return  "Small 240".localize()
-        case .medium360: return  "Medium 360".localize()
-        case .hd720:     return  "HD 720".localize()
-        }
-    }
-    public var key: AnyHashable {
-        return NSNumber(value: rawValue)
-    }
-    #if os(iOS)
-    public static func buildAlertActions(_ handler: @escaping () -> ()) -> [UIAlertAction] {
-        var actions: [UIAlertAction] = []
-        actions.append(UIAlertAction(title: YouTubeVideoQuality.audioOnly.label,
-                                     style: .default,
-                                  handler: { action in Track.youTubeVideoQuality = .audioOnly; handler() }))
-
-        actions.append(UIAlertAction(title: YouTubeVideoQuality.small240.label,
-                                     style: .default,
-                                   handler: { action in Track.youTubeVideoQuality = .small240; handler() }))
-        actions.append(UIAlertAction(title: YouTubeVideoQuality.medium360.label,
-                                     style: .default,
-                                   handler: { action in Track.youTubeVideoQuality = .medium360; handler() }))
-        actions.append(UIAlertAction(title: YouTubeVideoQuality.hd720.label,
-                                     style: .default,
-                                   handler: { action in  Track.youTubeVideoQuality = .hd720; handler() }))
-        return actions
-    }
-    #endif
-}
-
 final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public static var resourceName: String = "tracks"
     public static var idListKey:    String = "trackIds"

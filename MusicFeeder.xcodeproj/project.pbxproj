@@ -220,6 +220,9 @@
 		673B94101E978D1B004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B940B1E97873A004F0C22 /* YouTubeKit.framework */; };
 		673B94111E978D1E004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94091E978725004F0C22 /* YouTubeKit.framework */; };
 		673B94121E978D24004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94071E978710004F0C22 /* YouTubeKit.framework */; };
+		673B947B1E98D8FE004F0C22 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B947A1E98D8FE004F0C22 /* Provider.swift */; };
+		673B947C1E98D8FE004F0C22 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B947A1E98D8FE004F0C22 /* Provider.swift */; };
+		673B947D1E98D8FE004F0C22 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B947A1E98D8FE004F0C22 /* Provider.swift */; };
 		6748048D1DB268C000D6FD33 /* TopicCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6748048C1DB268C000D6FD33 /* TopicCache.swift */; };
 		6748048E1DB2715C00D6FD33 /* TopicRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6709D4041DAD4B68004DE304 /* TopicRepositorySpec.swift */; };
 		674804921DB4087100D6FD33 /* EntryRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */; };
@@ -504,6 +507,7 @@
 		673B94071E978710004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/iOS/YouTubeKit.framework; sourceTree = "<group>"; };
 		673B94091E978725004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/Mac/YouTubeKit.framework; sourceTree = "<group>"; };
 		673B940B1E97873A004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/tvOS/YouTubeKit.framework; sourceTree = "<group>"; };
+		673B947A1E98D8FE004F0C22 /* Provider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Provider.swift; path = Source/Provider.swift; sourceTree = SOURCE_ROOT; };
 		6748048C1DB268C000D6FD33 /* TopicCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TopicCache.swift; path = Source/TopicCache.swift; sourceTree = SOURCE_ROOT; };
 		674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryRepositorySpec.swift; path = Spec/EntryRepositorySpec.swift; sourceTree = SOURCE_ROOT; };
 		674804931DB5896700D6FD33 /* TrackRespoistorySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackRespoistorySpec.swift; path = Spec/TrackRespoistorySpec.swift; sourceTree = SOURCE_ROOT; };
@@ -849,6 +853,7 @@
 				677792131E75622E00ACC53D /* ServicePlaylist.swift */,
 				677792201E7573D500ACC53D /* Album.swift */,
 				670505A41B6E1398006EAA84 /* Track.swift */,
+				673B947A1E98D8FE004F0C22 /* Provider.swift */,
 			);
 			name = Enclosure;
 			sourceTree = "<group>";
@@ -1214,6 +1219,7 @@
 				675120ED1E78294A00489729 /* StringExtension.swift in Sources */,
 				67156E301DCB762D007DC6F1 /* TopicRepository.swift in Sources */,
 				67156E311DCB762D007DC6F1 /* TrackRepository.swift in Sources */,
+				673B947C1E98D8FE004F0C22 /* Provider.swift in Sources */,
 				67156E321DCB762D007DC6F1 /* PlaylistRepository.swift in Sources */,
 				67156E331DCB762D007DC6F1 /* SubscriptionRepository.swift in Sources */,
 				67156E341DCB762D007DC6F1 /* PaginatedCollectionRepository.swift in Sources */,
@@ -1283,6 +1289,7 @@
 				675120EF1E78295100489729 /* StringExtension.swift in Sources */,
 				67156E751DCB768E007DC6F1 /* TopicRepository.swift in Sources */,
 				67156E761DCB768E007DC6F1 /* TrackRepository.swift in Sources */,
+				673B947D1E98D8FE004F0C22 /* Provider.swift in Sources */,
 				67156E771DCB768E007DC6F1 /* PlaylistRepository.swift in Sources */,
 				67156E781DCB768E007DC6F1 /* SubscriptionRepository.swift in Sources */,
 				67156E791DCB768E007DC6F1 /* PaginatedCollectionRepository.swift in Sources */,
@@ -1396,6 +1403,7 @@
 				6719A1981DABB70200280349 /* EntryCache.swift in Sources */,
 				67120B3F1C18821C00240F8B /* RealmMigration.swift in Sources */,
 				671207CF1E72F7DF008BD75A /* StringExtension.swift in Sources */,
+				673B947B1E98D8FE004F0C22 /* Provider.swift in Sources */,
 				6748048D1DB268C000D6FD33 /* TopicCache.swift in Sources */,
 				677792291E757B8E00ACC53D /* PlaylistifiedEntry.swift in Sources */,
 				679C52E51B70F3DD00BE6614 /* XCDYouTubeClient.swift in Sources */,
