@@ -150,7 +150,7 @@ public class AppleMusicClient {
 
     open func addToLibrary(playlist: ServicePlaylist) -> SignalProducer<[MPMediaEntity], NSError> {
         return SignalProducer { (observer, disposable) in
-            MPMediaLibrary.default().addItem(withProductID: playlist.identifier) { (entities, error) in
+            MPMediaLibrary.default().addItem(withProductID: "pl.\(playlist.identifier)") { (entities, error) in
                 UIScheduler().schedule {
                     if let e = error as? NSError {
                         observer.send(error: e as NSError)
