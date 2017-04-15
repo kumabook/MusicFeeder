@@ -134,6 +134,24 @@ public enum MarkerAction: String {
     case saved    = "markAsSaved"
     case unsaved  = "markAsUnsaved"
     case played   = "markAsPlayed"
+    case read     = "markAsRead"
+    case unread   = "markAsUnread"
+}
+
+struct EntryMarkerAPI: API {
+    var items: [Entry]
+    var action: MarkerAction
+
+    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/markers" }
+    var method:     Alamofire.HTTPMethod { return .post }
+    func asURLRequest() throws -> URLRequest {
+        let params: [String: Any] = ["type"    : "entries",
+                                     "action"  : action.rawValue as AnyObject,
+                                     "entryIds": self.items.map { $0.id }]
+        var req = URLRequest(url: URL(string: url)!)
+        req.httpMethod = method.rawValue
+        return try URLEncoding.default.encode(req, with: params)
+    }
 }
 
 struct EnclosureMarkerAPI<T: Enclosure>: API {
@@ -371,6 +389,21 @@ extension CloudAPIClient {
 
     public func fetchPlaylistsOf(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
         return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
+    }
+
+    public func markEntriesAs(_ action: MarkerAction, items: [Entry]) -> SignalProducer<Void, NSError> {
+        let route = Router.api(EntryMarkerAPI(items: items, action: action))
+        return SignalProducer { (observer, disposable) in
+            let req = self.manager.request(route).validate().response() { (r: DefaultDataResponse) -> Void in
+                if let e = r.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: r.response))
+                } else {
+                    observer.send(value: ())
+                    observer.sendCompleted()
+                }
+            }
+            disposable.add() { req.cancel() }
+        }
     }
 
     internal func markEnclosuresAs<T: Enclosure>(_ action: MarkerAction, items: [T]) -> SignalProducer<Void, NSError> {
