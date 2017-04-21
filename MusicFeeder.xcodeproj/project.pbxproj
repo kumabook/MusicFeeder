@@ -147,7 +147,6 @@
 		67156F071DCB7A4D007DC6F1 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E631DCB7672007DC6F1 /* SnapKit.framework */; };
 		67156F081DCB7A4D007DC6F1 /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */; };
 		67156F091DCB7A4D007DC6F1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */; };
-		67156F0A1DCB7A4D007DC6F1 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */; };
 		67156F0C1DCB7A6E007DC6F1 /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E591DCB7672007DC6F1 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F0D1DCB7A6E007DC6F1 /* Breit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E5A1DCB7672007DC6F1 /* Breit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F0E1DCB7A6E007DC6F1 /* FeedlyKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E5B1DCB7672007DC6F1 /* FeedlyKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -161,7 +160,6 @@
 		67156F161DCB7A6E007DC6F1 /* SnapKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E631DCB7672007DC6F1 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F171DCB7A6E007DC6F1 /* SoundCloudKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F181DCB7A6E007DC6F1 /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		67156F191DCB7A6E007DC6F1 /* XCDYouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F1A1DCB7A83007DC6F1 /* MusicFeeder.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156DE61DCB744F007DC6F1 /* MusicFeeder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F1B1DCB7A96007DC6F1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */; };
 		67156F1C1DCB7A96007DC6F1 /* Breit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156E9D1DCB76B2007DC6F1 /* Breit.framework */; };
@@ -176,7 +174,6 @@
 		67156F251DCB7A96007DC6F1 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA61DCB76B3007DC6F1 /* SnapKit.framework */; };
 		67156F261DCB7A96007DC6F1 /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */; };
 		67156F271DCB7A96007DC6F1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */; };
-		67156F281DCB7A96007DC6F1 /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */; };
 		67156F291DCB7AA8007DC6F1 /* PlaylistSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D61B70E44000BE6614 /* PlaylistSpec.swift */; };
 		67156F2A1DCB7AA8007DC6F1 /* SpecHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D71B70E44000BE6614 /* SpecHelper.swift */; };
 		67156F2B1DCB7AA8007DC6F1 /* TrackSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679C51D81B70E44000BE6614 /* TrackSpec.swift */; };
@@ -200,7 +197,6 @@
 		67156F3E1DCB7ACD007DC6F1 /* SnapKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA61DCB76B3007DC6F1 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F3F1DCB7ACD007DC6F1 /* SoundCloudKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F401DCB7ACD007DC6F1 /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		67156F411DCB7ACD007DC6F1 /* XCDYouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67156F421DCB7AE1007DC6F1 /* MusicFeeder.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 67156E021DCB748A007DC6F1 /* MusicFeeder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		671841DE1CD2D40B005904EF /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841DD1CD2D40B005904EF /* Topic.swift */; };
 		671841E71CD2E1E2005904EF /* TopicRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671841E61CD2E1E2005904EF /* TopicRepository.swift */; };
@@ -212,6 +208,13 @@
 		673293E21E96244A00A06FE9 /* StoreFrontID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673293E11E96244A00A06FE9 /* StoreFrontID.swift */; };
 		673293E41E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673293E31E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift */; };
 		673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
+		673841E71EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673841E61EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework */; };
+		673841E81EA9BA3B00436285 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 675120F01E782AD100489729 /* StoreKit.framework */; };
+		673841E91EA9BA7000436285 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94091E978725004F0C22 /* YouTubeKit.framework */; };
+		673841EA1EA9BA8200436285 /* YouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 673B94091E978725004F0C22 /* YouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		673841EB1EA9BD5C00436285 /* YouTubeiOSPlayerHelper.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 673841E61EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		673841EC1EA9BD5F00436285 /* YouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 673B94071E978710004F0C22 /* YouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		673841ED1EA9BD7900436285 /* YouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 673B940B1E97873A004F0C22 /* YouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		673B94061E978425004F0C22 /* YouTubeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B94051E978425004F0C22 /* YouTubeClient.swift */; };
 		673B94101E978D1B004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B940B1E97873A004F0C22 /* YouTubeKit.framework */; };
 		673B94111E978D1E004F0C22 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94091E978725004F0C22 /* YouTubeKit.framework */; };
@@ -259,7 +262,6 @@
 		67916DB91BAEB768004419B0 /* Realm.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6713B0661B7379CB003A1450 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67916DBA1BAEB768004419B0 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6713B0671B7379CB003A1450 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67916DBB1BAEB768004419B0 /* SwiftyJSON.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6713B0681B7379CB003A1450 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		67916DBC1BAEB768004419B0 /* XCDYouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67916DBD1BAEB768004419B0 /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6713B0601B73798E003A1450 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		679C52D51B70F3DD00BE6614 /* PinkSpiderAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059D1B6E1398006EAA84 /* PinkSpiderAPIClient.swift */; };
 		679C52D61B70F3DD00BE6614 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6705059F1B6E1398006EAA84 /* Playlist.swift */; };
@@ -292,7 +294,6 @@
 		67D2657A1BACE16A000240FB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0671B7379CB003A1450 /* Result.framework */; };
 		67D2657B1BACE16A000240FB /* SoundCloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67FCFAA01B946CED008359BB /* SoundCloudKit.framework */; };
 		67D2657C1BACE16A000240FB /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0681B7379CB003A1450 /* SwiftyJSON.framework */; };
-		67D2657D1BACE16A000240FB /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */; };
 		67D265811BACE16B000240FB /* Breit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67D2657E1BACE16B000240FB /* Breit.framework */; };
 		67D265821BACE16B000240FB /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67D2657F1BACE16B000240FB /* SnapKit.framework */; };
 		67D265841BACE17B000240FB /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6713B0601B73798E003A1450 /* Alamofire.framework */; };
@@ -349,6 +350,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				673841EA1EA9BA8200436285 /* YouTubeKit.framework in CopyFiles */,
 				67156F1A1DCB7A83007DC6F1 /* MusicFeeder.framework in CopyFiles */,
 				67156F0C1DCB7A6E007DC6F1 /* Alamofire.framework in CopyFiles */,
 				67156F0D1DCB7A6E007DC6F1 /* Breit.framework in CopyFiles */,
@@ -363,7 +365,6 @@
 				67156F161DCB7A6E007DC6F1 /* SnapKit.framework in CopyFiles */,
 				67156F171DCB7A6E007DC6F1 /* SoundCloudKit.framework in CopyFiles */,
 				67156F181DCB7A6E007DC6F1 /* SwiftyJSON.framework in CopyFiles */,
-				67156F191DCB7A6E007DC6F1 /* XCDYouTubeKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +375,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				67156F421DCB7AE1007DC6F1 /* MusicFeeder.framework in CopyFiles */,
+				673841ED1EA9BD7900436285 /* YouTubeKit.framework in CopyFiles */,
 				67156F341DCB7ACD007DC6F1 /* Alamofire.framework in CopyFiles */,
 				67156F351DCB7ACD007DC6F1 /* Breit.framework in CopyFiles */,
 				67156F361DCB7ACD007DC6F1 /* FeedlyKit.framework in CopyFiles */,
@@ -387,7 +389,6 @@
 				67156F3E1DCB7ACD007DC6F1 /* SnapKit.framework in CopyFiles */,
 				67156F3F1DCB7ACD007DC6F1 /* SoundCloudKit.framework in CopyFiles */,
 				67156F401DCB7ACD007DC6F1 /* SwiftyJSON.framework in CopyFiles */,
-				67156F411DCB7ACD007DC6F1 /* XCDYouTubeKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +398,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				673841EB1EA9BD5C00436285 /* YouTubeiOSPlayerHelper.framework in CopyFiles */,
+				673841EC1EA9BD5F00436285 /* YouTubeKit.framework in CopyFiles */,
 				67916DB01BAEB767004419B0 /* Breit.framework in CopyFiles */,
 				67916DB11BAEB767004419B0 /* SnapKit.framework in CopyFiles */,
 				67916DB31BAEB767004419B0 /* SoundCloudKit.framework in CopyFiles */,
@@ -407,7 +410,6 @@
 				67916DB91BAEB768004419B0 /* Realm.framework in CopyFiles */,
 				67916DBA1BAEB768004419B0 /* Result.framework in CopyFiles */,
 				67916DBB1BAEB768004419B0 /* SwiftyJSON.framework in CopyFiles */,
-				67916DBC1BAEB768004419B0 /* XCDYouTubeKit.framework in CopyFiles */,
 				67156DDF1DCB6F06007DC6F1 /* SDWebImage.framework in CopyFiles */,
 				67916DBD1BAEB768004419B0 /* Alamofire.framework in CopyFiles */,
 				67156DDE1DCB6EB9007DC6F1 /* ReactiveSwift.framework in CopyFiles */,
@@ -442,7 +444,6 @@
 		6713B0661B7379CB003A1450 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		6713B0671B7379CB003A1450 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		6713B0681B7379CB003A1450 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
-		6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
 		6713B07B1B7379DD003A1450 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		6713B07C1B7379DD003A1450 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		67156DE61DCB744F007DC6F1 /* MusicFeeder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MusicFeeder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -465,7 +466,6 @@
 		67156E631DCB7672007DC6F1 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/Mac/SnapKit.framework; sourceTree = "<group>"; };
 		67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/Mac/SoundCloudKit.framework; sourceTree = "<group>"; };
 		67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/Mac/SwiftyJSON.framework; sourceTree = "<group>"; };
-		67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/Mac/XCDYouTubeKit.framework; sourceTree = "<group>"; };
 		67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/tvOS/Alamofire.framework; sourceTree = "<group>"; };
 		67156E9D1DCB76B2007DC6F1 /* Breit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Breit.framework; path = Carthage/Build/tvOS/Breit.framework; sourceTree = "<group>"; };
 		67156E9E1DCB76B2007DC6F1 /* FeedlyKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedlyKit.framework; path = Carthage/Build/tvOS/FeedlyKit.framework; sourceTree = "<group>"; };
@@ -479,7 +479,6 @@
 		67156EA61DCB76B3007DC6F1 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/tvOS/SnapKit.framework; sourceTree = "<group>"; };
 		67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SoundCloudKit.framework; path = Carthage/Build/tvOS/SoundCloudKit.framework; sourceTree = "<group>"; };
 		67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/tvOS/SwiftyJSON.framework; sourceTree = "<group>"; };
-		67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/tvOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
 		67156EBA1DCB770A007DC6F1 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/watchOS/Alamofire.framework; sourceTree = "<group>"; };
 		67156EBB1DCB770A007DC6F1 /* Breit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Breit.framework; path = Carthage/Build/watchOS/Breit.framework; sourceTree = "<group>"; };
 		67156EBC1DCB770A007DC6F1 /* FeedlyKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedlyKit.framework; path = Carthage/Build/watchOS/FeedlyKit.framework; sourceTree = "<group>"; };
@@ -499,6 +498,7 @@
 		673293E11E96244A00A06FE9 /* StoreFrontID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoreFrontID.swift; path = Source/StoreFrontID.swift; sourceTree = SOURCE_ROOT; };
 		673293E31E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SoundCloudAPIClientExtension.swift; path = Source/SoundCloudAPIClientExtension.swift; sourceTree = SOURCE_ROOT; };
 		673672C41D1F918C006259F9 /* PlaylistQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistQueue.swift; path = Source/PlaylistQueue.swift; sourceTree = SOURCE_ROOT; };
+		673841E61EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeiOSPlayerHelper.framework; path = Carthage/Build/iOS/YouTubeiOSPlayerHelper.framework; sourceTree = "<group>"; };
 		673B94051E978425004F0C22 /* YouTubeClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YouTubeClient.swift; path = Source/YouTubeClient.swift; sourceTree = SOURCE_ROOT; };
 		673B94071E978710004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/iOS/YouTubeKit.framework; sourceTree = "<group>"; };
 		673B94091E978725004F0C22 /* YouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubeKit.framework; path = Carthage/Build/Mac/YouTubeKit.framework; sourceTree = "<group>"; };
@@ -575,6 +575,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673841E91EA9BA7000436285 /* YouTubeKit.framework in Frameworks */,
+				673841E81EA9BA3B00436285 /* StoreKit.framework in Frameworks */,
 				67156DEF1DCB744F007DC6F1 /* MusicFeeder.framework in Frameworks */,
 				67156EFD1DCB7A4D007DC6F1 /* Alamofire.framework in Frameworks */,
 				67156EFE1DCB7A4D007DC6F1 /* Breit.framework in Frameworks */,
@@ -589,7 +591,6 @@
 				67156F071DCB7A4D007DC6F1 /* SnapKit.framework in Frameworks */,
 				67156F081DCB7A4D007DC6F1 /* SoundCloudKit.framework in Frameworks */,
 				67156F091DCB7A4D007DC6F1 /* SwiftyJSON.framework in Frameworks */,
-				67156F0A1DCB7A4D007DC6F1 /* XCDYouTubeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,7 +630,6 @@
 				67156F251DCB7A96007DC6F1 /* SnapKit.framework in Frameworks */,
 				67156F261DCB7A96007DC6F1 /* SoundCloudKit.framework in Frameworks */,
 				67156F271DCB7A96007DC6F1 /* SwiftyJSON.framework in Frameworks */,
-				67156F281DCB7A96007DC6F1 /* XCDYouTubeKit.framework in Frameworks */,
 				67156E0B1DCB748A007DC6F1 /* MusicFeeder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -638,6 +638,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				673841E71EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework in Frameworks */,
 				673B94121E978D24004F0C22 /* YouTubeKit.framework in Frameworks */,
 				6777921F1E7566B600ACC53D /* StoreKit.framework in Frameworks */,
 				6777921D1E7566B000ACC53D /* MediaPlayer.framework in Frameworks */,
@@ -671,7 +672,6 @@
 				67D2657A1BACE16A000240FB /* Result.framework in Frameworks */,
 				67D2657B1BACE16A000240FB /* SoundCloudKit.framework in Frameworks */,
 				67D2657C1BACE16A000240FB /* SwiftyJSON.framework in Frameworks */,
-				67D2657D1BACE16A000240FB /* XCDYouTubeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -708,6 +708,7 @@
 		67156E571DCB763C007DC6F1 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				673841E61EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework */,
 				6777921C1E7566B000ACC53D /* MediaPlayer.framework */,
 				6777921E1E7566B600ACC53D /* StoreKit.framework */,
 				673B94071E978710004F0C22 /* YouTubeKit.framework */,
@@ -723,7 +724,6 @@
 				6713B0661B7379CB003A1450 /* Realm.framework */,
 				6713B0671B7379CB003A1450 /* Result.framework */,
 				6713B0681B7379CB003A1450 /* SwiftyJSON.framework */,
-				6713B0691B7379CB003A1450 /* XCDYouTubeKit.framework */,
 				6713B0601B73798E003A1450 /* Alamofire.framework */,
 			);
 			name = iOS;
@@ -747,7 +747,6 @@
 				67156E631DCB7672007DC6F1 /* SnapKit.framework */,
 				67156E641DCB7672007DC6F1 /* SoundCloudKit.framework */,
 				67156E651DCB7672007DC6F1 /* SwiftyJSON.framework */,
-				67156E661DCB7672007DC6F1 /* XCDYouTubeKit.framework */,
 			);
 			name = macOS;
 			sourceTree = "<group>";
@@ -770,7 +769,6 @@
 				67156EA61DCB76B3007DC6F1 /* SnapKit.framework */,
 				67156EA71DCB76B3007DC6F1 /* SoundCloudKit.framework */,
 				67156EA81DCB76B3007DC6F1 /* SwiftyJSON.framework */,
-				67156EA91DCB76B3007DC6F1 /* XCDYouTubeKit.framework */,
 			);
 			name = tvOS;
 			sourceTree = "<group>";
