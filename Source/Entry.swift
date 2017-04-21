@@ -7,13 +7,91 @@
 //
 
 import Foundation
+import SwiftyJSON
 import FeedlyKit
 
 var StoredPropertyKeyForTracks:    UInt8 = 0
 var StoredPropertyKeyForAlbums:    UInt8 = 1
 var StoredPropertyKeyForPlaylists: UInt8 = 2
 
+var StoredPropertyKeyForIsSaved:   UInt8 = 4
+var StoredPropertyKeyForIsLiked:   UInt8 = 5
+var StoredPropertyKeyForIsRead:    UInt8 = 6
+
+var StoredPropertyKeyForSavedCount: UInt8 = 7
+var StoredPropertyKeyForLikesCount: UInt8 = 8
+var StoredPropertyKeyForReadCount:  UInt8 = 9
+
+
 extension Entry {
+    public static func setupHookFunctions() {
+        Entry.instanceDidInitialize = { (entry: Entry, json: JSON) in
+            entry.initExtentedProperties(json: json)
+        }
+    }
+    public func initExtentedProperties(json: JSON) {
+        isLiked    = json["is_liked"].bool
+        isSaved    = json["is_saved"].bool
+        likesCount = json["likes_count"].intValue
+        savedCount = json["saved_count"].intValue
+        readCount  = json["read_count"].intValue
+    }
+    public var isSaved: Bool? {
+        get {
+            guard let saved = objc_getAssociatedObject(self, &StoredPropertyKeyForIsSaved) as? Bool? else {
+                return nil
+            }
+            return saved
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForIsSaved, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+    public var isLiked: Bool? {
+        get {
+            guard let liked = objc_getAssociatedObject(self, &StoredPropertyKeyForIsLiked) as? Bool? else {
+                return nil
+            }
+            return liked
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForIsLiked, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+    public var savedCount: Int {
+        get {
+            guard let count = objc_getAssociatedObject(self, &StoredPropertyKeyForSavedCount) as? Int else {
+                return 0
+            }
+            return count
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForSavedCount, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+    public var likesCount: Int {
+        get {
+            guard let count = objc_getAssociatedObject(self, &StoredPropertyKeyForLikesCount) as? Int else {
+                return 0
+            }
+            return count
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForLikesCount, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+    public var readCount: Int {
+        get {
+            guard let count = objc_getAssociatedObject(self, &StoredPropertyKeyForReadCount) as? Int else {
+                return 0
+            }
+            return count
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForReadCount, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+
     public var url: NSURL? {
         if let alternate = self.alternate {
             if alternate.count > 0 {
