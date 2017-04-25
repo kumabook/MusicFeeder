@@ -11,7 +11,7 @@ import Realm
 import FeedlyKit
 
 extension Entry {
-    convenience init(store: EntryStore) {
+    public convenience init(store: EntryStore) {
         self.init(id: store.id)
         id              = store.id
         title           = store.title
@@ -38,12 +38,12 @@ extension Entry {
         categories = realize(store.categories).map { return Category(store: $0 as! CategoryStore) }
         enclosure  = realize(store.enclusure).map  { return Link(store: $0 as! LinkStore) }
     }
-    func toStoreObject() -> EntryStore {
+    public func toStoreObject() -> EntryStore {
         let store = EntryStore()
         updateProperties(store)
         return store
     }
-    func updateProperties(_ store: EntryStore) {
+    public func updateProperties(_ store: EntryStore) {
         store.id              = id
         store.title           = title
         store.author          = author
@@ -77,10 +77,10 @@ extension Entry {
 }
 
 extension Content {
-    convenience init(store: ContentStore) {
+    public convenience init(store: ContentStore) {
         self.init(direction: store.direction, content: store.content)
     }
-    func toStoreObject() -> ContentStore {
+    public func toStoreObject() -> ContentStore {
         let store = ContentStore()
         store.direction = direction
         store.content   = content
@@ -89,10 +89,10 @@ extension Content {
 }
 
 extension Link {
-    convenience init(store: LinkStore) {
+    public convenience init(store: LinkStore) {
         self.init(href: store.href, type: store.type, length: store.length)
     }
-    func toStoreObject() -> LinkStore {
+    public func toStoreObject() -> LinkStore {
         let store = LinkStore()
         store.href   = href
         store.type   = type
@@ -102,11 +102,11 @@ extension Link {
 }
 
 extension Tag {
-    convenience init(store: TagStore) {
+    public convenience init(store: TagStore) {
         self.init(id: store.id, label: store.label)
     }
 
-    func toStoreObject() -> TagStore {
+    public func toStoreObject() -> TagStore {
         let store = TagStore()
         store.id    = id
         store.label = label
@@ -115,10 +115,10 @@ extension Tag {
 }
 
 extension Origin {
-    convenience init(store: OriginStore) {
+    public convenience init(store: OriginStore) {
         self.init(streamId: store.streamId, title: store.title, htmlUrl: store.htmlUrl)
     }
-    func toStoreObject() -> OriginStore {
+    public func toStoreObject() -> OriginStore {
         let store = OriginStore()
         store.streamId = streamId
         store.title    = title
@@ -128,10 +128,10 @@ extension Origin {
 }
 
 extension Visual {
-    convenience init(store: VisualStore) {
+    public convenience init(store: VisualStore) {
         self.init(url: store.url, width: store.width, height: store.height, contentType: store.contentType)
     }
-    func toStoreObject() -> VisualStore {
+    public func toStoreObject() -> VisualStore {
         let store = VisualStore()
         store.url         = url
         store.width       = width
@@ -142,33 +142,33 @@ extension Visual {
 }
 
 public class ContentStore: RLMObject {
-    dynamic var direction: String = ""
-    dynamic var content:   String = ""
+    public dynamic var direction: String = ""
+    public dynamic var content:   String = ""
     public override class func requiredProperties() -> [String] {
         return ["direction", "content"]
     }
 }
 public class LinkStore: RLMObject {
-    dynamic var href:   String = ""
-    dynamic var type:   String = ""
-    dynamic var length: Int    = 0
+    public dynamic var href:   String = ""
+    public dynamic var type:   String = ""
+    public dynamic var length: Int    = 0
     public override class func requiredProperties() -> [String] {
         return ["href", "type"]
     }
 }
 public class TagStore:      RLMObject {
-    dynamic var id:    String = ""
-    dynamic var label: String = ""
+    public dynamic var id:    String = ""
+    public dynamic var label: String = ""
     public override class func requiredProperties() -> [String] {
         return ["id", "label"]
     }
 }
 public class KeywordStore:  RLMObject {
-    dynamic var name: String = ""
-    override init() {
+    public dynamic var name: String = ""
+    public override init() {
         super.init()
     }
-    convenience init(name: String) {
+    public convenience init(name: String) {
         self.init()
         self.name = name
     }
@@ -178,46 +178,46 @@ public class KeywordStore:  RLMObject {
 }
 
 public class OriginStore: RLMObject {
-    dynamic var streamId: String = ""
-    dynamic var title:    String = ""
-    dynamic var htmlUrl:  String = ""
+    public dynamic var streamId: String = ""
+    public dynamic var title:    String = ""
+    public dynamic var htmlUrl:  String = ""
     public override class func requiredProperties() -> [String] {
         return ["streamId", "title", "htmlUrl"]
     }
 }
 public class VisualStore: RLMObject {
-    dynamic var url:         String = ""
-    dynamic var width:       Int    = 0
-    dynamic var height:      Int    = 0
-    dynamic var contentType: String = ""
+    public dynamic var url:         String = ""
+    public dynamic var width:       Int    = 0
+    public dynamic var height:      Int    = 0
+    public dynamic var contentType: String = ""
     public override class func requiredProperties() -> [String] {
         return ["url", "contentType"]
     }
 }
 
 open class EntryStore: RLMObject {
-    dynamic var id:              String = ""
-    dynamic var title:           String?
-    dynamic var author:          String?
-    dynamic var crawled:         Int64         = 0
-    dynamic var recrawled:       Int64         = 0
-    dynamic var published:       Int64         = 0
-    dynamic var updated:         Int64         = 0
-    dynamic var unread:          Bool          = false
-    dynamic var engagement:      Int           = 0
-    dynamic var actionTimestamp: Int64         = 0
-    dynamic var fingerprint:     String?
-    dynamic var originId:        String?
-    dynamic var sid:             String?
-    dynamic var content:         ContentStore?
-    dynamic var summary:         ContentStore?
-    dynamic var origin:          OriginStore?
-    dynamic var visual:          VisualStore?
-    dynamic var alternate  = RLMArray(objectClassName: LinkStore.className())
-    dynamic var keywords   = RLMArray(objectClassName: KeywordStore.className())
-    dynamic var tags       = RLMArray(objectClassName: TagStore.className())
-    dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
-    dynamic var enclusure  = RLMArray(objectClassName: LinkStore.className())
+    public dynamic var id:              String = ""
+    public dynamic var title:           String?
+    public dynamic var author:          String?
+    public dynamic var crawled:         Int64         = 0
+    public dynamic var recrawled:       Int64         = 0
+    public dynamic var published:       Int64         = 0
+    public dynamic var updated:         Int64         = 0
+    public dynamic var unread:          Bool          = false
+    public dynamic var engagement:      Int           = 0
+    public dynamic var actionTimestamp: Int64         = 0
+    public dynamic var fingerprint:     String?
+    public dynamic var originId:        String?
+    public dynamic var sid:             String?
+    public dynamic var content:         ContentStore?
+    public dynamic var summary:         ContentStore?
+    public dynamic var origin:          OriginStore?
+    public dynamic var visual:          VisualStore?
+    public dynamic var alternate  = RLMArray(objectClassName: LinkStore.className())
+    public dynamic var keywords   = RLMArray(objectClassName: KeywordStore.className())
+    public dynamic var tags       = RLMArray(objectClassName: TagStore.className())
+    public dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
+    public dynamic var enclusure  = RLMArray(objectClassName: LinkStore.className())
 
     class var realm: RLMRealm {
         get {
