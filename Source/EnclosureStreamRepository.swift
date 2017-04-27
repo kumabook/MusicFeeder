@@ -15,6 +15,7 @@ open class EnclosureStreamRepository<T: Enclosure>: PaginatedCollectionRepositor
     public typealias Event = PaginatedCollectionRepositoryEvent
     
     open fileprivate(set) var feedlyClient = CloudAPIClient.sharedInstance
+    open var sharedObserver: Disposable?
 
     open override func fetchCollection(streamId: String, paginationParams: MusicFeeder.PaginationParams)-> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
         return feedlyClient.fetchEnclosuresOf(streamId, paginationParams: paginationParams)
@@ -28,7 +29,18 @@ open class EnclosureStreamRepository<T: Enclosure>: PaginatedCollectionRepositor
     
     public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+        observe()
     }
+
+    public func observe() {
+        fatalError("should be overrided")
+    }
+
+    open override func dispose() {
+        sharedObserver?.dispose()
+        sharedObserver = nil
+    }
+
     // MARK: - PaginatedCollectionRepository protocol
     
     open override func addCacheItems(_ items: [T]) {
@@ -44,5 +56,19 @@ open class EnclosureStreamRepository<T: Enclosure>: PaginatedCollectionRepositor
         // not support
     }
     open override func itemsUpdated() {
+    }
+    open func markAs(_ action: MarkerAction, at index: Int) {
+        let item = items[index]
+        item.markAs(action: action).startWithResult { result in
+            if let error = result.error {
+                print("Failed to mark as \(action) \(error)")
+            } else if let newItem = result.value {
+                print("Succeeded in marking as \(action)")
+                self.items[index] = newItem
+                item.updateMarkProperties(item: newItem)
+                self.observer.send(value: .updatedAt(index))
+                newItem.sendToSharedPipe()
+            }
+        }
     }
 }

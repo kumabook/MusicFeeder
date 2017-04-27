@@ -32,6 +32,7 @@ public enum PaginatedCollectionRepositoryEvent {
     case completeLoadingPlaylist(Playlist, Entry)
     case completeLoadingTrackDetail(Track)
     case removeAt(Int)
+    case updatedAt(Int)
 }
 
 public protocol PaginatedCollection {

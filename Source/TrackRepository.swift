@@ -12,7 +12,6 @@ import Result
 
 open class TrackRepository {
     open static var sharedInstance: TrackRepository = TrackRepository()
-
     open func getCacheTrackStore(_ id: String) -> TrackStore? {
         if let entity = TrackCacheSet.get(id), let store = entity.item {
             return store

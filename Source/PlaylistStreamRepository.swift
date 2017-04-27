@@ -11,4 +11,11 @@ import ReactiveSwift
 
 open class PlaylistStreamRepository: EnclosureStreamRepository<ServicePlaylist> {
     open static var sharedPipe: (Signal<ServicePlaylist, NSError>, Signal<ServicePlaylist, NSError>.Observer)! = Signal<ServicePlaylist, NSError>.pipe()
+    public override func observe() {
+        PlaylistStreamRepository.sharedPipe.0.observe {
+            guard let item = $0.value else { return }
+            guard let index = self.items.index(of: item) else { return }
+            self.items[index] = item
+        }
+    }
 }

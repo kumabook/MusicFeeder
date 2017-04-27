@@ -206,4 +206,12 @@ extension Entry {
             return Playlist(id: "playlist_\(id)", title: "", tracks: tracks)
         }
     }
+
+    public func updateExtentedProperties(_ entry: Entry) {
+        isLiked    = entry.isLiked
+        isSaved    = entry.isSaved
+        likesCount = entry.likesCount
+        savedCount = entry.savedCount
+        readCount  = entry.readCount
+    }
 }

@@ -14,6 +14,7 @@ import Realm
 extension PaginatedEntryCollection: PaginatedCollection {}
 
 open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollection, Entry> {
+    open static var sharedPipe: (Signal<Entry, NSError>, Signal<Entry, NSError>.Observer)! = Signal<Entry, NSError>.pipe()
     public typealias State = PaginatedCollectionRepositoryState
     public typealias Event = PaginatedCollectionRepositoryEvent
     public enum RemoveMark {
@@ -42,12 +43,16 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
     open fileprivate(set) var playlistifiedEntriesOfEntry: [Entry:PlaylistifiedEntry]
     open fileprivate(set) var playlistQueue:               PlaylistQueue
     open var playlistifier:      Disposable?
+    open var trackObserver:      Disposable?
+    open var albumObserver:      Disposable?
+    open var playlistObserver:   Disposable?
 
     public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
         playlistsOfEntry            = [:]
         playlistifiedEntriesOfEntry = [:]
         playlistQueue               = PlaylistQueue(playlists: [])
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+        observe()
     }
 
     public convenience init(stream: FeedlyKit.Stream) {
@@ -60,6 +65,40 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
 
     public convenience init(stream: FeedlyKit.Stream, perPage: Int) {
         self.init(stream: stream, unreadOnly: false, perPage: perPage)
+    }
+
+    public func observe() {
+        trackObserver = TrackStreamRepository.sharedPipe.0.observe {
+            guard let track = $0.value else { return }
+            for entry in self.items {
+                if let index = entry.tracks.index(of: track) {
+                    var items = entry.tracks
+                    items[index] = track
+                    entry.tracks = items
+                }
+            }
+        }
+        albumObserver = AlbumStreamRepository.sharedPipe.0.observe {
+            guard let album = $0.value else { return }
+            for entry in self.items {
+                if let index = entry.albums.index(of: album) {
+                    var items = entry.albums
+                    items[index] = album
+                    entry.albums = items
+                }
+            }
+        }
+        playlistObserver = PlaylistStreamRepository.sharedPipe.0.observe {
+            guard let playlist = $0.value else { return }
+            for entry in self.items {
+                if let index = entry.playlists.index(of: playlist) {
+                    var items = entry.playlists
+                    items[index] = playlist
+                    entry.playlists = items
+                }
+            }
+        }
+
     }
 
     open var playlists: [Playlist] {
@@ -186,5 +225,22 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
         }
         items.remove(at: index)
         observer.send(value: .removeAt(index))
+    }
+
+    open func markAs(_ action: MarkerAction, at index: Int) {
+        let entry = items[index]
+        feedlyClient.markEntriesAs(action, items: [entry]).flatMap(.concat) {
+          self.feedlyClient.fetchEntry(entryId: entry.id)
+        }.startWithResult { result in
+            if let error = result.error {
+                print("Failed to mark as \(action) \(error)")
+            } else if let newEntry = result.value {
+                print("Succeeded in marking as \(action)")
+                self.items[index] = newEntry
+                entry.updateExtentedProperties(newEntry)
+                self.observer.send(value: .updatedAt(index))
+                EntryRepository.sharedPipe.1.send(value: newEntry)
+            }
+        }
     }
 }
