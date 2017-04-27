@@ -102,15 +102,20 @@ extension Entry {
     }
 
     public var tracks: [Track] {
-        if let storedTracks = self.storedTracks {
-            return storedTracks
-        }
-        self.storedTracks = enclosure.map {
-            $0.filter { $0.type.contains("application/json") }.flatMap {
-                Track(urlString: $0.href).map { [$0] } ?? []
+        get {
+            if let storedTracks = self.storedTracks {
+                return storedTracks
             }
+            self.storedTracks = enclosure.map {
+                $0.filter { $0.type.contains("application/json") }.flatMap {
+                    Track(urlString: $0.href).map { [$0] } ?? []
+                }
+            }
+            return self.storedTracks ?? []
         }
-        return self.storedTracks ?? []
+        set {
+            storedTracks = newValue
+        }
     }
 
     fileprivate var storedTracks: [Track]? {
@@ -126,15 +131,20 @@ extension Entry {
     }
 
     public var albums: [Album] {
-        if let storedAlbums = self.storedAlbums {
-            return storedAlbums
-        }
-        self.storedAlbums = enclosure.map {
-            $0.filter { $0.type.contains("application/json") }.flatMap {
-                Album(urlString: $0.href).map { [$0] } ?? []
+        get {
+            if let storedAlbums = self.storedAlbums {
+                return storedAlbums
             }
+            self.storedAlbums = enclosure.map {
+                $0.filter { $0.type.contains("application/json") }.flatMap {
+                    Album(urlString: $0.href).map { [$0] } ?? []
+                }
+            }
+            return self.storedAlbums ?? []
         }
-        return self.storedAlbums ?? []
+        set {
+            storedAlbums = newValue
+        }
     }
 
     fileprivate var storedAlbums: [Album]? {
@@ -150,15 +160,20 @@ extension Entry {
     }
 
     public var playlists: [ServicePlaylist] {
-        if let storedPlaylists = self.storedPlaylists {
-            return storedPlaylists
-        }
-        self.storedPlaylists = enclosure.map {
-            $0.filter { $0.type.contains("application/json") }.flatMap {
-                ServicePlaylist(urlString: $0.href).map { [$0] } ?? []
+        get {
+            if let storedPlaylists = self.storedPlaylists {
+                return storedPlaylists
             }
+            self.storedPlaylists = enclosure.map {
+                $0.filter { $0.type.contains("application/json") }.flatMap {
+                    ServicePlaylist(urlString: $0.href).map { [$0] } ?? []
+                }
+            }
+            return self.storedPlaylists ?? []
         }
-        return self.storedPlaylists ?? []
+        set {
+            storedPlaylists = newValue
+        }
     }
 
     fileprivate var storedPlaylists: [ServicePlaylist]? {
