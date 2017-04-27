@@ -137,6 +137,16 @@ public final class Album: Equatable, Hashable, Enclosure {
         isSaved      = json["is_saved"].bool
         isPlayed     = json["is_played"].bool
     }
+
+    public func updateMarkProperties(item: Album) {
+        isLiked      = item.isLiked
+        isSaved      = item.isSaved
+        isPlayed     = item.isPlayed
+        likesCount   = item.likesCount
+        savedCount   = item.savedCount
+        playCount    = item.playCount
+    }
+
     #if os(iOS)
     public func open() {
         if let url = URL(string: url) {

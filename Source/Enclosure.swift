@@ -19,6 +19,7 @@ public protocol Enclosure: class, ResponseObjectSerializable, ResponseCollection
     var id: String { get }
     func invalidate()
     func sendToSharedPipe()
+    func updateMarkProperties(item: Self)
     static func parseURI(uri: String) -> [String: String]
 }
 

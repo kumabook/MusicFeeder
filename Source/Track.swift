@@ -321,6 +321,14 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         isPlayed     = dic["is_played"].flatMap { $0 == "true" }
     }
 
+    public func updateMarkProperties(item: Track) {
+        isLiked    = item.isLiked
+        isSaved    = item.isSaved
+        likesCount = item.likesCount
+        savedCount = item.savedCount
+        playCount  = item.playCount
+    }
+
     public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
         if audioUrl == nil || expiresAt < Date().timestamp {
             status       = .init

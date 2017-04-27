@@ -138,6 +138,15 @@ public final class ServicePlaylist: Equatable, Hashable, Enclosure {
         isPlayed     = json["is_played"].bool
     }
 
+    public func updateMarkProperties(item: ServicePlaylist) {
+        isLiked      = item.isLiked
+        isSaved      = item.isSaved
+        isPlayed     = item.isPlayed
+        likesCount   = item.likesCount
+        savedCount   = item.savedCount
+        playCount    = item.playCount
+    }
+
     #if os(iOS)
     public func open() {
         if let url = URL(string: url) {
