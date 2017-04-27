@@ -144,6 +144,9 @@ public final class Album: Equatable, Hashable, Enclosure {
         }
     }
     #endif
+    public func sendToSharedPipe() {
+        AlbumStreamRepository.sharedPipe.1.send(value: self)
+    }
 }
 
 public func ==(lhs: Album, rhs: Album) -> Bool {

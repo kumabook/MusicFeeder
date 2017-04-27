@@ -550,6 +550,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public class func removeAll() {
         return TrackStore.removeAll()
     }
+    open func sendToSharedPipe() {
+        TrackStreamRepository.sharedPipe.1.send(value: self)
+    }
 }
 
 public func ==(lhs: Track, rhs: Track) -> Bool {

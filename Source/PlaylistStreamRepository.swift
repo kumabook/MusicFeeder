@@ -7,7 +7,8 @@
 //
 
 import Foundation
+import ReactiveSwift
 
 open class PlaylistStreamRepository: EnclosureStreamRepository<ServicePlaylist> {
-    
+    open static var sharedPipe: (Signal<ServicePlaylist, NSError>, Signal<ServicePlaylist, NSError>.Observer)! = Signal<ServicePlaylist, NSError>.pipe()
 }

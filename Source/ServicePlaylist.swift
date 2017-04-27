@@ -145,6 +145,9 @@ public final class ServicePlaylist: Equatable, Hashable, Enclosure {
         }
     }
     #endif
+    public func sendToSharedPipe() {
+        PlaylistStreamRepository.sharedPipe.1.send(value: self)
+    }
 }
 
 public func ==(lhs: ServicePlaylist, rhs: ServicePlaylist) -> Bool {

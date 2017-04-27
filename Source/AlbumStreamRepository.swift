@@ -7,7 +7,8 @@
 //
 
 import Foundation
+import ReactiveSwift
 
 open class AlbumStreamRepository: EnclosureStreamRepository<Album> {
-    
+    open static var sharedPipe: (Signal<Album, NSError>, Signal<Album, NSError>.Observer)! = Signal<Album, NSError>.pipe()
 }

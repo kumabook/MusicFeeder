@@ -18,6 +18,7 @@ public protocol Enclosure: class, ResponseObjectSerializable, ResponseCollection
     init(json: JSON)
     var id: String { get }
     func invalidate()
+    func sendToSharedPipe()
     static func parseURI(uri: String) -> [String: String]
 }
 
@@ -59,7 +60,11 @@ public extension Enclosure {
         return CloudAPIClient.sharedInstance.markEnclosuresAs(action, items: [self])
                                             .flatMap(.concat) { () ->  SignalProducer<Self, NSError> in
             self.invalidate()
-            return self.fetch()
+            return self.fetch().map {
+                self.updateMarkProperties(item: $0)
+                $0.sendToSharedPipe()
+                return $0
+            }
         }
     }
 

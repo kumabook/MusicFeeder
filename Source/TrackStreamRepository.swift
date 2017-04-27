@@ -11,10 +11,10 @@ import ReactiveSwift
 import Result
 
 open class TrackStreamRepository: EnclosureStreamRepository<Track> {
+    open static var sharedPipe: (Signal<Track, NSError>, Signal<Track, NSError>.Observer)! = Signal<Track, NSError>.pipe()
     open fileprivate(set) var pinkspiderClient             = PinkSpiderAPIClient.sharedInstance
     open fileprivate(set) var playlistQueue: PlaylistQueue = PlaylistQueue(playlists: [])
 
-    
     // MARK: - PaginatedCollectionRepository protocol
     
     open override func addCacheItems(_ items: [Track]) {
