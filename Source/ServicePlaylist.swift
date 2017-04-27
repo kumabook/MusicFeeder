@@ -11,7 +11,7 @@ import SwiftyJSON
 import Breit
 import FeedlyKit
 
-public struct ServicePlaylist: Equatable, Hashable, Enclosure {
+public final class ServicePlaylist: Equatable, Hashable, Enclosure {
     public static var resourceName:           String = "playlists"
     public static var idListKey:              String = "playlistIds"
     public fileprivate(set) var id:           String = ""
@@ -43,7 +43,7 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
         return "\(provider):\(identifier)".hashValue
     }
 
-    public init?(urlString: String) {
+    public required init?(urlString: String) {
         var dic      = ServicePlaylist.parseURI(uri: urlString)
         if dic["type"] != "playlists" {
             return nil
@@ -77,7 +77,7 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
         return json.arrayValue.map({ ServicePlaylist(json: $0) })
     }
 
-    public init?(response: HTTPURLResponse, representation: Any) {
+    public required convenience init?(response: HTTPURLResponse, representation: Any) {
         let json = JSON(representation)
         self.init(json: json)
     }
@@ -108,7 +108,7 @@ public struct ServicePlaylist: Equatable, Hashable, Enclosure {
         self.isPlayed     = isPlayed
     }
 
-    public init(json: JSON) {
+    public required init(json: JSON) {
         id           = json["id"].stringValue
         provider     = Provider(rawValue: json["provider"].stringValue)!
         identifier   = json["identifier"].stringValue

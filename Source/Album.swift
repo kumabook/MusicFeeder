@@ -11,7 +11,7 @@ import SwiftyJSON
 import Breit
 import FeedlyKit
 
-public struct Album: Equatable, Hashable, Enclosure {
+public final class Album: Equatable, Hashable, Enclosure {
     public static var resourceName:           String = "albums"
     public static var idListKey:              String = "albumIds"
     public fileprivate(set) var id:           String = ""
@@ -43,7 +43,7 @@ public struct Album: Equatable, Hashable, Enclosure {
         return "\(provider):\(identifier)".hashValue
     }
 
-    public init?(urlString: String) {
+    public required init?(urlString: String) {
         var dic      = Album.parseURI(uri: urlString)
         if dic["type"] != "albums" {
             return nil
@@ -77,7 +77,7 @@ public struct Album: Equatable, Hashable, Enclosure {
         return json.arrayValue.map({ Album(json: $0) })
     }
     
-    public init?(response: HTTPURLResponse, representation: Any) {
+    public convenience required init?(response: HTTPURLResponse, representation: Any) {
         let json = JSON(representation)
         self.init(json: json)
     }
@@ -108,7 +108,7 @@ public struct Album: Equatable, Hashable, Enclosure {
         self.isPlayed     = isPlayed
     }
     
-    public init(json: JSON) {
+    public required init(json: JSON) {
         id           = json["id"].stringValue
         provider     = Provider(rawValue: json["provider"].stringValue)!
         identifier   = json["identifier"].stringValue
