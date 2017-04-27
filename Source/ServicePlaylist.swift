@@ -33,7 +33,8 @@ public final class ServicePlaylist: Equatable, Hashable, Enclosure {
     public fileprivate(set) var likesCount:   Int64?
     public fileprivate(set) var entries:      [Entry]?
     public fileprivate(set) var entriesCount: Int64?
-    public fileprivate(set) var playCount:   Int64?
+    public fileprivate(set) var savedCount:   Int64?
+    public fileprivate(set) var playCount:    Int64?
 
     public                  var isLiked:      Bool?
     public                  var isSaved:      Bool?
@@ -65,6 +66,7 @@ public final class ServicePlaylist: Equatable, Hashable, Enclosure {
         
         likesCount   = dic["likes_count"].flatMap { Int64($0) }
         entriesCount = dic["entries_count"].flatMap { Int64($0) }
+        savedCount   = dic["saved_count"].flatMap { Int64($0) }
         playCount    = dic["play_count"].flatMap { Int64($0) }
 
         isLiked      = dic["is_liked"].flatMap { $0 == "true" }
@@ -125,10 +127,11 @@ public final class ServicePlaylist: Equatable, Hashable, Enclosure {
         createdAt    = json["created_at"].string?.dateFromISO8601?.timestamp ?? 0
 
         likers       = json["likers"].array?.map  { Profile(json: $0) }
-        likesCount   = json["likes_count"].int64Value
+        likesCount   = json["likes_count"].int64
         entries      = json["entries"].array?.map { Entry(json: $0) }
-        entriesCount = json["entries_count"].int64Value
-        playCount    = json["play_count"].int64Value
+        entriesCount = json["entries_count"].int64
+        savedCount   = json["saved_count"].int64
+        playCount    = json["play_count"].int64
 
         isLiked      = json["is_liked"].bool
         isSaved      = json["is_saved"].bool

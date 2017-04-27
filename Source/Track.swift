@@ -60,6 +60,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public fileprivate(set) var duration:     TimeInterval
     public fileprivate(set) var likesCount:   Int64?
     public fileprivate(set) var likers:       [Profile]?
+    public fileprivate(set) var savedCount:   Int64?
     public fileprivate(set) var playCount:    Int64?
     public fileprivate(set) var expiresAt:    Int64
     public fileprivate(set) var artist:       String?
@@ -243,10 +244,11 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         entries      = []
         expiresAt    = Int64.max
         // prefer to cache
-        likesCount   = json["likes_count"].int64Value
+        likesCount   = json["likes_count"].int64
         likers       = json["likers"].array?.map  { Profile(json: $0) }
-        playCount    = json["play_count"].int64Value
-        entriesCount = json["entries_count"].int64Value
+        savedCount   = json["saved_count"].int64
+        playCount    = json["play_count"].int64
+        entriesCount = json["entries_count"].int64
         entries      = json["entries"].array?.map { Entry(json: $0) }
         artist       = json["owner_name"].string
         publishedAt  = json["published_at"].string.flatMap { $0.dateFromISO8601?.timestamp } ?? 0

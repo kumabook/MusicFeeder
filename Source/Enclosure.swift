@@ -11,7 +11,7 @@ import SwiftyJSON
 import FeedlyKit
 import ReactiveSwift
 
-public protocol Enclosure: ResponseObjectSerializable, ResponseCollectionSerializable {
+public protocol Enclosure: class, ResponseObjectSerializable, ResponseCollectionSerializable {
     static var resourceName: String { get }
     static var idListKey:    String { get }
     init?(urlString: String)
