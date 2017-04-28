@@ -400,7 +400,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         if let url = URL(string: store.thumbnailUrl), !store.thumbnailUrl.isEmpty {
             thumbnailUrl = url
         }
-        if let url = URL(string: store.streamUrl), !store.streamUrl.isEmpty {
+        if let url = URL(string: store.streamUrl), !store.streamUrl.isEmpty, audioUrl == nil {
             audioUrl = url
         }
         artist = store.artist
