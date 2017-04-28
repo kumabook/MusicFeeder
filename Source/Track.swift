@@ -117,8 +117,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         case .youTube:
             return youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] ?? audioUrl
         case .soundCloud:
-            return soundcloudTrack.map { URL(string: $0.streamUrl + "?client_id=" + APIClient.clientId) } ??
-                audioUrl.map { URL(string: $0.absoluteString + "?client_id=" + APIClient.clientId) } ?? nil
+            return soundcloudTrack.flatMap { URL(string: $0.streamUrl + "?client_id=" + APIClient.clientId) } ??
+                audioUrl.flatMap { URL(string: $0.absoluteString + "?client_id=" + APIClient.clientId) }
         case .raw:
             return audioUrl
         }
@@ -519,20 +519,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
                     disp.dispose()
                 }
             case .soundCloud:
-                typealias R = SoundCloudKit.APIClient.Router
-                SoundCloudKit.APIClient.sharedInstance.fetchItem(R.track(self.identifier)) { (req:
-                    URLRequest?, res: HTTPURLResponse?, result: Alamofire.Result<SoundCloudKit.Track>) -> Void in
-                    if let track = result.value {
-                        self.updateProperties(track)
-                        observer.send(value: self)
-                        observer.sendCompleted()
-                    } else {
-                        self.status = .unavailable
-                        observer.send(value: self)
-                        observer.sendCompleted()
-                    }
-                }
-                return
+                self.status    = .available
+                observer.send(value: self)
+                observer.sendCompleted()
             case .raw:
                 self.audioUrl = self.identifier.toURL()
                 self.status    = .available
