@@ -330,15 +330,20 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     }
 
     public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
-        if audioUrl == nil || expiresAt < Date().timestamp {
-            status       = .init
-            audioUrl     = nil
-            youtubeVideo = nil
-            expiresAt    = 0
+        switch provider {
+        case .youTube:
+            if Track.canPlayYouTubeWithAVPlayer && (audioUrl == nil || expiresAt < Date().timestamp) {
+                status       = .init
+                audioUrl     = nil
+                youtubeVideo = nil
+                expiresAt    = 0
+                return fetchPropertiesFromProvider(false)
+            } else {
+                status = .available
+                return SignalProducer<Track, NSError>(value: self)
+            }
+        default:
             return fetchPropertiesFromProvider(false)
-        } else {
-            status = .available
-            return SignalProducer<Track, NSError>(value: self)
         }
     }
 
