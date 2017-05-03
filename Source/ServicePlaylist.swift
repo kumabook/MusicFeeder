@@ -112,7 +112,7 @@ public final class ServicePlaylist: Equatable, Hashable, Enclosure {
 
     public required init(json: JSON) {
         id           = json["id"].stringValue
-        provider     = Provider(rawValue: json["provider"].stringValue)!
+        provider     = Provider(rawValue: json["provider"].stringValue) ?? .raw
         identifier   = json["identifier"].stringValue
         owner_id     = json["owner_id"].string
         owner_name   = json["owner_name"].string
@@ -121,7 +121,7 @@ public final class ServicePlaylist: Equatable, Hashable, Enclosure {
         description  = json["description"].string
         thumbnailUrl = json["thumbnail_url"].string.flatMap { URL(string: $0) }
         artworkUrl   = json["artwork_url"].string.flatMap { URL(string: $0) }
-        state        = EnclosureState(rawValue: json["state"].stringValue)!
+        state        = EnclosureState(rawValue: json["state"].stringValue) ?? .dead
         publishedAt  = json["published_at"].string?.dateFromISO8601?.timestamp ?? 0
         updatedAt    = json["updated_at"].string?.dateFromISO8601?.timestamp ?? 0
         createdAt    = json["created_at"].string?.dateFromISO8601?.timestamp ?? 0

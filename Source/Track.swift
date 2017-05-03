@@ -231,7 +231,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
 
     public init(json: JSON) {
         id           = json["id"].stringValue
-        provider     = Provider(rawValue: json["provider"].stringValue)!
+        provider     = Provider(rawValue: json["provider"].stringValue) ?? .raw
         title        = json["title"].string
         url          = json["url"].stringValue
         identifier   = json["identifier"].stringValue
@@ -262,7 +262,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
 
     public init(store: TrackStore) {
         id           = store.id
-        provider     = Provider(rawValue: store.providerRaw)!
+        provider     = Provider(rawValue: store.providerRaw) ?? .raw
         title        = store.title
         url          = store.url
         identifier   = store.identifier
