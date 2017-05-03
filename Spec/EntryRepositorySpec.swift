@@ -45,7 +45,7 @@ class EntryRepositorySpec: QuickSpec {
                             break
                         }
                     })
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
                         self.entryRepository.fetchItems()
                     }
                 }
