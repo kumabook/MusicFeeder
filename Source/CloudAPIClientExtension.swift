@@ -42,12 +42,10 @@ extension CloudAPIClient {
 
     public class func handleError(error: Error) {
         let e = error as NSError
-        if let dic = e.userInfo as NSDictionary? {
-            if let response:HTTPURLResponse = dic[errorResponseKey] as? HTTPURLResponse {
-                if response.statusCode == 401 {
-                    if isLoggedIn { logout() }
-                }
-            }
+        if let response:HTTPURLResponse = e.userInfo[errorResponseKey] as? HTTPURLResponse {
+            if response.statusCode == 401 {
+                if isLoggedIn { logout() }
+             }
         }
     }
 
