@@ -70,13 +70,10 @@ open class SpecHelper {
         
         let request = URLRequest(url: url)
         let semaphore = DispatchSemaphore(value: 0)
-        var data: Data? = nil
-        URLSession.shared.dataTask(with: request) { (responseData, _, _) -> Void in
-            data = responseData
+        URLSession.shared.dataTask(with: request) { (_, _, _) -> Void in
             semaphore.signal()
         }.resume()
         let _ = semaphore.wait(timeout: .distantFuture)
-        print("ping complete: \(data)")
     }
     open class func cleanRealmDBs() {
         removeFile(url: RLMRealmConfiguration.default().fileURL)
@@ -93,11 +90,11 @@ open class SpecHelper {
 }
 
 extension Expectation {
-    public func toFinally<U>(_ matcher: U) where U : Matcher, U.ValueType == T {
-        self.toEventually(matcher, timeout: 10)
+    public func toFinally(_ predicate: Predicate<T>) {
+        self.toEventually(predicate, timeout: 10)
     }
     
-    public func toFinallyNot<U>(_ matcher: U) where U : Matcher, U.ValueType == T {
-        self.toEventuallyNot(matcher, timeout: 10)
+    public func toFinallyNot(_ predicate: Predicate<T>) {
+        self.toEventuallyNot(predicate, timeout: 10)
     }
 }
