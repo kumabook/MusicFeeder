@@ -45,7 +45,9 @@ class EntryRepositorySpec: QuickSpec {
                             break
                         }
                     })
-                    self.entryRepository.fetchItems()
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+                        self.entryRepository.fetchItems()
+                    }
                 }
                 it("fetches entries from server") {
                     expect(started).toFinally(beTrue())
