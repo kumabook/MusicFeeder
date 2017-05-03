@@ -187,8 +187,7 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
         DispatchQueue.main.async() {
             self.observer.send(value: .startLoadingNext)
         }
-        let producer = fetchCollection(streamId: stream.streamId, paginationParams: paginationParams)
-        disposable = producer
+        disposable = fetchCollection(streamId: stream.streamId, paginationParams: paginationParams)
             .start(on: QueueScheduler())
             .on(
                 failed: {error in
