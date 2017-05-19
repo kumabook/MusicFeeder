@@ -157,6 +157,15 @@ struct EnclosureMarkerAPI<T: Enclosure>: API {
 
 typealias TrackMarkerAPI = EnclosureMarkerAPI<Track>
 
+struct FetchWallAPI: API {
+    var id:  String
+    var url: String { return "\(CloudAPIClient.shared.target.baseUrl)/v3/walls/\(urlEncode(id))" }
+    var method: Alamofire.HTTPMethod { return .get }
+    func asURLRequest() throws -> URLRequest {
+        return try URLRequest(url: URL(string: url)!, method: method)
+    }
+}
+
 public protocol ParameterEncodable {
     func toParameters() -> [String: Any]
 }
@@ -408,5 +417,35 @@ extension CloudAPIClient {
     public func markPlaylistsAs(_ action: MarkerAction, items: [ServicePlaylist]) -> SignalProducer<Void, NSError> {
         return markEnclosuresAs(action, items: items)
     }
-
+    public func fetchWall(_ id: String, useCache: Bool = false) -> SignalProducer<Wall, NSError> {
+        let route = Router.api(FetchWallAPI(id: id))
+        return SignalProducer { (observer, disposable) in
+            var urlRequest = try! route.asURLRequest()
+            if useCache {
+                if let url = urlRequest.url?.absoluteString, let json = JSONCacheSet.get(url)?.item?.value {
+                    let wall = Wall(json: JSON.parse(json))
+                    observer.send(value: wall)
+                } else {
+                    observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
+                }
+                return
+            }
+            let req = self.manager.request(urlRequest).validate().responseJSON() { (r: DataResponse<Any>) -> Void in
+                if let e = r.result.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: r.response))
+                } else if let value = r.result.value {
+                    let json = JSON(value)
+                    if let url = r.request?.url?.absoluteString {
+                        if let str = json.rawString() {
+                            let _ = JSONCacheSet.set(url, item: JSONItem(id: url, value: str))
+                        }
+                    }
+                    let wall = Wall(json: json)
+                    observer.send(value: wall)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.add() { req.cancel() }
+        }
+    }
 }
