@@ -30,7 +30,7 @@ open class SubscriptionRepository {
         case remove(Subscription)
     }
 
-    var apiClient: CloudAPIClient { return CloudAPIClient.sharedInstance }
+    var apiClient: CloudAPIClient { return CloudAPIClient.shared }
 
     open var state:                State
     open var signal:               Signal<Event, NSError>
@@ -200,7 +200,7 @@ open class SubscriptionRepository {
                         CloudAPIClient.handleError(error: e)
                         self.state = .error
                         self.observer.send(value: .failToUpdate(e))
-                        _observer.send(error: CloudAPIClient.sharedInstance.buildError(error: e as NSError, response: response.response))
+                        _observer.send(error: CloudAPIClient.shared.buildError(error: e as NSError, response: response.response))
                     } else {
                         self.addSubscription(subscription)
                         self.state = .normal
@@ -227,7 +227,7 @@ open class SubscriptionRepository {
                 if let e = response.error, response.response?.statusCode ?? 0 != 404 {
                     self.state = .error
                     self.observer.send(value: .failToUpdate(e))
-                    _observer.send(error: CloudAPIClient.sharedInstance.buildError(error: e as NSError, response: response.response))
+                    _observer.send(error: CloudAPIClient.shared.buildError(error: e as NSError, response: response.response))
                     _observer.sendCompleted()
                 } else {
                     SubscriptionStore.remove(subscription)

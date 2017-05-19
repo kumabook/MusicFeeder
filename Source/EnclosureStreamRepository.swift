@@ -14,7 +14,7 @@ open class EnclosureStreamRepository<T: Enclosure>: PaginatedCollectionRepositor
     public typealias State = PaginatedCollectionRepositoryState
     public typealias Event = PaginatedCollectionRepositoryEvent
     
-    open fileprivate(set) var feedlyClient = CloudAPIClient.sharedInstance
+    open fileprivate(set) var feedlyClient = CloudAPIClient.shared
     open var sharedObserver: Disposable?
 
     open override func fetchCollection(streamId: String, paginationParams: MusicFeeder.PaginationParams)-> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {

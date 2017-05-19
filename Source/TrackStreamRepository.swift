@@ -12,7 +12,7 @@ import Result
 
 open class TrackStreamRepository: EnclosureStreamRepository<Track> {
     open static var sharedPipe: (Signal<Track, NSError>, Signal<Track, NSError>.Observer)! = Signal<Track, NSError>.pipe()
-    open fileprivate(set) var pinkspiderClient             = PinkSpiderAPIClient.sharedInstance
+    open fileprivate(set) var pinkspiderClient             = PinkSpiderAPIClient.shared
     open fileprivate(set) var playlistQueue: PlaylistQueue = PlaylistQueue(playlists: [])
     public override func observe() {
         TrackStreamRepository.sharedPipe.0.observe {

@@ -58,7 +58,7 @@ public extension Enclosure {
     }
 
     internal func markAs(action: MarkerAction) -> SignalProducer<Self, NSError> {
-        return CloudAPIClient.sharedInstance.markEnclosuresAs(action, items: [self])
+        return CloudAPIClient.shared.markEnclosuresAs(action, items: [self])
                                             .flatMap(.concat) { () ->  SignalProducer<Self, NSError> in
             self.invalidate()
             return self.fetch().map {
@@ -70,6 +70,6 @@ public extension Enclosure {
     }
 
     public func fetch() -> SignalProducer<Self, NSError> {
-        return CloudAPIClient.sharedInstance.fetchEnclosure(id)
+        return CloudAPIClient.shared.fetchEnclosure(id)
     }
 }

@@ -27,7 +27,7 @@ open class TopicRepository {
         case failToUpdate(Error)
     }
     fileprivate let KEY: String = "topics"
-    open static var sharedInstance: TopicRepository = TopicRepository(cloudApiClient: CloudAPIClient.sharedInstance)
+    open static var shared: TopicRepository = TopicRepository(cloudApiClient: CloudAPIClient.shared)
     open fileprivate(set) var items:      [Topic] = []
     open fileprivate(set) var cacheItems: [Topic] = []
     fileprivate var cacheList: TopicCacheList

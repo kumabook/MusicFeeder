@@ -15,7 +15,7 @@ import FeedlyKit
 
 open class PinkSpiderAPIClient {
     static var baseUrl   = "http://pink-spider.herokuapp.com"
-    open static var sharedInstance = PinkSpiderAPIClient()
+    open static var shared = PinkSpiderAPIClient()
     static var sharedManager: Alamofire.SessionManager! = Alamofire.SessionManager()
 
     open func playlistify(_ targetUrl: NSURL, errorOnFailure: Bool) -> SignalProducer<PlaylistifiedEntry, NSError> {

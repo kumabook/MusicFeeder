@@ -37,7 +37,7 @@ struct CreateProfileAPI: API {
     var email:      String
     var password:   String
 
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/profile" }
+    var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/profile" }
     var method:     Alamofire.HTTPMethod { return .put }
     func asURLRequest() throws -> URLRequest {
         var req = URLRequest(url: URL(string: url)!)
@@ -52,7 +52,7 @@ struct FetchAccessTokenAPI: API {
     var clientId:     String
     var clientSecret: String
 
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/oauth/token" }
+    var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/oauth/token" }
     var method:     Alamofire.HTTPMethod { return .post }
     func asURLRequest() throws -> URLRequest {
         let params = ["grant_type": "password",
@@ -67,7 +67,7 @@ struct FetchAccessTokenAPI: API {
 }
 
 struct FetchTopicsAPI: API {
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/topics" }
+    var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/topics" }
     var method:     Alamofire.HTTPMethod { return .get }
     func asURLRequest() throws -> URLRequest {
         var req = URLRequest(url: URL(string: url)!)
@@ -78,7 +78,7 @@ struct FetchTopicsAPI: API {
 
 struct UpdateTopicAPI: API {
     var topicId:    String
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/topics/\(urlEncode(topicId))" }
+    var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/topics/\(urlEncode(topicId))" }
     var method:     Alamofire.HTTPMethod { return .put }
     func asURLRequest() throws -> URLRequest {
         var req = URLRequest(url: URL(string: url)!)
@@ -89,7 +89,7 @@ struct UpdateTopicAPI: API {
 
 struct DeleteTopicAPI: API {
     var topicId:    String
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/topics/\(urlEncode(topicId))" }
+    var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/topics/\(urlEncode(topicId))" }
     var method:     Alamofire.HTTPMethod { return .delete }
     func asURLRequest() throws -> URLRequest {
         var req = URLRequest(url: URL(string: url)!)
@@ -101,10 +101,7 @@ struct DeleteTopicAPI: API {
 struct FetchEnclosureAPI<T: Enclosure>: API {
     var enclosureId: String
     var url:         String {
-        return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/\(T.resourceName)/\(enclosureId)"
-    }
-    var method:      Alamofire.HTTPMethod {
-        return .get
+        return "\(CloudAPIClient.shared.target.baseUrl)/v3/\(T.resourceName)/\(enclosureId)"
     }
     func asURLRequest() throws -> URLRequest {
         var req = URLRequest(url: URL(string: url)!)
@@ -116,7 +113,7 @@ struct FetchEnclosureAPI<T: Enclosure>: API {
 struct FetchEnclosuresAPI<T: Enclosure>: API {
     var enclosureIds: [String]
     var url:          String {
-        return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/\(T.resourceName)/.mget"
+        return "\(CloudAPIClient.shared.target.baseUrl)/v3/\(T.resourceName)/.mget"
     }
     var method:     Alamofire.HTTPMethod { return .post }
     func asURLRequest() throws -> URLRequest {
@@ -198,7 +195,7 @@ open class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
 }
 
 struct FetchEnclosuresOfStreamAPI<T: Enclosure>: API {
-    private let baseUrl = CloudAPIClient.sharedInstance.target.baseUrl
+    private let baseUrl = CloudAPIClient.shared.target.baseUrl
     var streamId:  String
     var params:    MusicFeeder.PaginationParams
     var url:       String { return "\(baseUrl)/v3/streams/\(urlEncode(streamId))/\(T.resourceName)/contents" }

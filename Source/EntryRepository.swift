@@ -23,8 +23,8 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
         case unsave
     }
 
-    open fileprivate(set) var feedlyClient        = CloudAPIClient.sharedInstance
-    open fileprivate(set) var pinkspiderClient    = PinkSpiderAPIClient.sharedInstance
+    open fileprivate(set) var feedlyClient        = CloudAPIClient.shared
+    open fileprivate(set) var pinkspiderClient    = PinkSpiderAPIClient.shared
 
     open override func fetchCollection(streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
         return feedlyClient.fetchEntries(streamId: streamId, paginationParams: paginatedParams)

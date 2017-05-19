@@ -27,7 +27,7 @@ extension CloudAPIClient {
     public static let keyChainGroup = "Feedly"
     public static var includesTrack = false
 
-    public static var sharedInstance: CloudAPIClient = CloudAPIClient(target: Target.sandbox)
+    public static var shared: CloudAPIClient = CloudAPIClient(target: Target.sandbox)
     static let errorResponseKey = "com.alamofire.serialization.response.error.response"
 
     public static var _profile: Profile?
@@ -61,10 +61,10 @@ extension CloudAPIClient {
     #endif
 
     public class func setAccessToken(_ token: String) {
-        CloudAPIClient.sharedInstance.setAccessToken(token)
-        let configuration = CloudAPIClient.sharedInstance.manager.session.configuration
+        CloudAPIClient.shared.setAccessToken(token)
+        let configuration = CloudAPIClient.shared.manager.session.configuration
         configuration.httpAdditionalHeaders?["X-Api-Version"] = "1"
-        CloudAPIClient.sharedInstance.manager = Alamofire.SessionManager(configuration: configuration)
+        CloudAPIClient.shared.manager = Alamofire.SessionManager(configuration: configuration)
     }
 
     public class var isLoggedIn: Bool {
