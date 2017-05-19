@@ -40,8 +40,7 @@ struct CreateProfileAPI: API {
     var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/profile" }
     var method:     Alamofire.HTTPMethod { return .put }
     func asURLRequest() throws -> URLRequest {
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
+        let req = try URLRequest(url: URL(string: url)!, method: method)
         return try URLEncoding.default.encode(req, with: ["email": email, "password": password, "password_confirmation": password])
     }
 }
@@ -60,8 +59,7 @@ struct FetchAccessTokenAPI: API {
                    "client_secret": clientSecret,
                            "email": email,
                         "password": password]
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
+        let req = try URLRequest(url: URL(string: url)!, method: method)
         return try URLEncoding.default.encode(req, with: params)
     }
 }
@@ -70,9 +68,7 @@ struct FetchTopicsAPI: API {
     var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/topics" }
     var method:     Alamofire.HTTPMethod { return .get }
     func asURLRequest() throws -> URLRequest {
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
-        return req
+        return try URLRequest(url: URL(string: url)!, method: method)
     }
 }
 
@@ -81,9 +77,7 @@ struct UpdateTopicAPI: API {
     var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/topics/\(urlEncode(topicId))" }
     var method:     Alamofire.HTTPMethod { return .put }
     func asURLRequest() throws -> URLRequest {
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
-        return req
+        return try URLRequest(url: URL(string: url)!, method: method)
     }
 }
 
@@ -92,9 +86,7 @@ struct DeleteTopicAPI: API {
     var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/topics/\(urlEncode(topicId))" }
     var method:     Alamofire.HTTPMethod { return .delete }
     func asURLRequest() throws -> URLRequest {
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
-        return req
+        return try URLRequest(url: URL(string: url)!, method: method)
     }
 }
 
@@ -103,10 +95,9 @@ struct FetchEnclosureAPI<T: Enclosure>: API {
     var url:         String {
         return "\(CloudAPIClient.shared.target.baseUrl)/v3/\(T.resourceName)/\(enclosureId)"
     }
+    var method:      Alamofire.HTTPMethod { return .get }
     func asURLRequest() throws -> URLRequest {
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
-        return req
+        return try URLRequest(url: URL(string: url)!, method: method)
     }
 }
 
@@ -117,10 +108,9 @@ struct FetchEnclosuresAPI<T: Enclosure>: API {
     }
     var method:     Alamofire.HTTPMethod { return .post }
     func asURLRequest() throws -> URLRequest {
-        var req = URLRequest(url: URL(string: url)!)
+        var req = try URLRequest(url: URL(string: url)!, method: method)
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.httpBody = try JSONSerialization.data(withJSONObject: enclosureIds, options: [])
-        req.httpMethod = method.rawValue
         return req
     }
 }
@@ -145,8 +135,7 @@ struct EntryMarkerAPI: API {
         let params: [String: Any] = ["type"    : "entries",
                                      "action"  : action.rawValue as AnyObject,
                                      "entryIds": self.items.map { $0.id }]
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
+        let req = try URLRequest(url: URL(string: url)!, method: method)
         return try URLEncoding.default.encode(req, with: params)
     }
 }
@@ -161,8 +150,7 @@ struct EnclosureMarkerAPI<T: Enclosure>: API {
         let params: [String: Any] = ["type": T.resourceName as AnyObject,
                                    "action": action.rawValue as AnyObject,
                                 T.idListKey: self.items.map { $0.id }]
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
+        let req = try URLRequest(url: URL(string: url)!, method: method)
         return try URLEncoding.default.encode(req, with: params)
     }
 }
@@ -201,8 +189,7 @@ struct FetchEnclosuresOfStreamAPI<T: Enclosure>: API {
     var url:       String { return "\(baseUrl)/v3/streams/\(urlEncode(streamId))/\(T.resourceName)/contents" }
     var method:    Alamofire.HTTPMethod { return .get }
     func asURLRequest() throws -> URLRequest {
-        var req = URLRequest(url: URL(string: url)!)
-        req.httpMethod = method.rawValue
+        let req = try URLRequest(url: URL(string: url)!, method: method)
         return try URLEncoding.default.encode(req, with: params.toParameters())
     }
 }
