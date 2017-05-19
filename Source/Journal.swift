@@ -8,6 +8,7 @@
 
 import Foundation
 import FeedlyKit
+import SwiftyJSON
 
 public final class Journal: FeedlyKit.Stream {
     public fileprivate(set) var id:          String
@@ -25,5 +26,10 @@ public final class Journal: FeedlyKit.Stream {
         self.id          = "journal/\(label)"
         self.label       = label
         self.description = description
+    }
+    public init(json: JSON) {
+        id          = json["id"].stringValue
+        label       = json["label"].stringValue
+        description = json["description"].string
     }
 }

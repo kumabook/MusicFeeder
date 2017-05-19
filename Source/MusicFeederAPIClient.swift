@@ -139,7 +139,7 @@ struct EntryMarkerAPI: API {
     var items: [Entry]
     var action: MarkerAction
 
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/markers" }
+    var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/markers" }
     var method:     Alamofire.HTTPMethod { return .post }
     func asURLRequest() throws -> URLRequest {
         let params: [String: Any] = ["type"    : "entries",
@@ -155,7 +155,7 @@ struct EnclosureMarkerAPI<T: Enclosure>: API {
     var items: [T]
     var action: MarkerAction
 
-    var url:        String           { return "\(CloudAPIClient.sharedInstance.target.baseUrl)/v3/markers" }
+    var url:        String           { return "\(CloudAPIClient.shared.target.baseUrl)/v3/markers" }
     var method:     Alamofire.HTTPMethod { return .post }
     func asURLRequest() throws -> URLRequest {
         let params: [String: Any] = ["type": T.resourceName as AnyObject,
