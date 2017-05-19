@@ -44,7 +44,7 @@ public class AppleMusicClient {
     public func fetchCountryCode() -> SignalProducer<String?, NSError> {
         return SignalProducer { (observer, disposable) in
             self.cloudServiceController.requestStorefrontIdentifier { (identifier, error) in
-                if let error = error as? NSError {
+                if let error = error as NSError? {
                     observer.send(error: error)
                 } else {
                     observer.send(value: identifier.flatMap {
@@ -118,7 +118,7 @@ public class AppleMusicClient {
         return SignalProducer { (observer, disposable) in
             MPMediaLibrary.default().addItem(withProductID: track.identifier) { (entities, error) in
                 UIScheduler().schedule {
-                    if let e = error as? NSError {
+                    if let e = error as NSError? {
                         observer.send(error: e as NSError)
                         return
                     }
@@ -132,7 +132,7 @@ public class AppleMusicClient {
         return SignalProducer { (observer, disposable) in
             MPMediaLibrary.default().addItem(withProductID: album.identifier) { (entities, error) in
                 UIScheduler().schedule {
-                    if let e = error as? NSError {
+                    if let e = error as NSError? {
                         observer.send(error: e as NSError)
                         return
                     }
@@ -152,7 +152,7 @@ public class AppleMusicClient {
         return SignalProducer { (observer, disposable) in
             MPMediaLibrary.default().addItem(withProductID: "pl.\(playlist.identifier)") { (entities, error) in
                 UIScheduler().schedule {
-                    if let e = error as? NSError {
+                    if let e = error as NSError? {
                         observer.send(error: e as NSError)
                         return
                     }
@@ -166,7 +166,7 @@ public class AppleMusicClient {
     open func add(track: Track, to playlist: MPMediaPlaylist) -> SignalProducer<Void, NSError> {
         return SignalProducer { (observer, disposable) in
             playlist.addItem(withProductID: track.identifier) { error in
-                if let e = error as? NSError {
+                if let e = error as NSError? {
                     observer.send(error: e as NSError)
                     return
                 }
