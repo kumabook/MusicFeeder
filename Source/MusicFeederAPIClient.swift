@@ -160,12 +160,6 @@ typealias TrackMarkerAPI = EnclosureMarkerAPI<Track>
 public protocol ParameterEncodable {
     func toParameters() -> [String: Any]
 }
-/*
-public extension Alamofire.ParameterEncoding {
-    func encode(_ request: URLRequest, with: ParameterEncodable?) -> (URLRequest, NSError?) {
-        return encode(request, with: with?.toParameters())
-    }
-}*/
 
 open class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
     open var olderThan:    Int64?
