@@ -11,6 +11,17 @@ import SwiftyJSON
 import FeedlyKit
 
 public struct Resource: ResponseObjectSerializable {
+    public enum ResourceType: String {
+        case stream         = "stream"
+        case trackStream    = "track_stream"
+        case albumStream    = "album_stream"
+        case playlistStream = "playlist_stream"
+        case entry          = "entry"
+        case track          = "track"
+        case album          = "album"
+        case playlist       = "playlist"
+        case custom         = "custom"
+    }
     public enum ItemType: String {
         case journal  = "journal"
         case topic    = "topic"
@@ -22,11 +33,11 @@ public struct Resource: ResponseObjectSerializable {
         case popular  = "popular"
     }
     public var resourceId:   String
-    public var resourceType: String
+    public var resourceType: ResourceType
     public var engagement:   Int
     public var itemType:     ItemType?
     public var item:         ResourceItem?
-    public init(resourceId: String, resourceType: String, engagement: Int, itemType: ItemType?, item: ResourceItem?) {
+    public init(resourceId: String, resourceType: ResourceType, engagement: Int, itemType: ItemType?, item: ResourceItem?) {
         self.resourceId   = resourceId
         self.resourceType = resourceType
         self.engagement   = engagement
@@ -39,9 +50,9 @@ public struct Resource: ResponseObjectSerializable {
     }
     public init(json: JSON) {
         resourceId   = json["resource_id"].stringValue
-        resourceType = json["resource_type"].stringValue
+        resourceType = ResourceType(rawValue : json["resource_type"].stringValue) ?? .custom
         engagement   = json["engagement"].intValue
-        itemType     = Resource.ItemType(rawValue: json["item_type"].stringValue)
+        itemType     = ItemType(rawValue: json["item_type"].stringValue)
         item         = ResourceItem(resourceType: resourceType, itemType: itemType, json: json["item"])
     }
 }
@@ -55,27 +66,27 @@ public enum ResourceItem {
     case track(Track)
     case album(Album)
     case playlist(ServicePlaylist)
-    public init?(resourceType: String, itemType: Resource.ItemType?, json: JSON) {
+    public init?(resourceType: Resource.ResourceType, itemType: Resource.ItemType?, json: JSON) {
         if json.type == .null { return nil }
         guard let itemType = itemType else { return nil }
         switch resourceType {
-        case "stream":
+        case .stream:
             self = .stream(ResourceItem.buildStream(itemType:itemType, json: json))
-        case "track_stream":
+        case .trackStream:
             self = .trackStream(ResourceItem.buildStream(itemType:itemType, json: json))
-        case "album_stream":
+        case .albumStream:
             self = .albumStream(ResourceItem.buildStream(itemType:itemType, json: json))
-        case "playlist_stream":
+        case .playlistStream:
             self = .playlistStream(ResourceItem.buildStream(itemType:itemType, json: json))
-        case "entry":
+        case .entry:
             self = .entry(Entry(json: json))
-        case "track":
+        case .track:
             self = .track(Track(json: json))
-        case "album":
+        case .album:
             self = .album(Album(json: json))
-        case "playlist":
+        case .playlist:
             self = .playlist(ServicePlaylist(json: json))
-        default:
+        case .custom:
             return nil
         }
     }
