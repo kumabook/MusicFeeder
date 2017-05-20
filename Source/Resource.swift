@@ -90,6 +90,15 @@ public enum ResourceItem {
             return nil
         }
     }
+    public var stream: FeedlyKit.Stream? {
+        switch self {
+        case .stream(let stream):         return stream
+        case .trackStream(let stream):    return stream
+        case .albumStream(let stream):    return stream
+        case .playlistStream(let stream): return stream
+        default:                          return nil
+        }
+    }
     public static func buildStream(itemType: Resource.ItemType, json: JSON) -> FeedlyKit.Stream {
         switch itemType {
         case .journal:
