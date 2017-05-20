@@ -48,11 +48,11 @@ open class SpecHelper {
         CloudAPIClient.includesTrack = true
         let account = getAccount()
         let c = CloudAPIClient(target: CloudAPIClient.Target.custom(account.baseUrl))
-        CloudAPIClient.clientId       = account.clientId
-        CloudAPIClient.clientSecret   = account.clientSecret
-        CloudAPIClient.sharedInstance = c
+        CloudAPIClient.clientId     = account.clientId
+        CloudAPIClient.clientSecret = account.clientSecret
+        CloudAPIClient.shared       = c
     }
-    open class var api: CloudAPIClient { return CloudAPIClient.sharedInstance }
+    open class var api: CloudAPIClient { return CloudAPIClient.shared }
     open class func login() {
         setupAPI()
         api.fetchAccessToken(self.email, password: self.password, clientId: CloudAPIClient.clientId, clientSecret: CloudAPIClient.clientSecret)

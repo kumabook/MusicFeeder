@@ -20,7 +20,7 @@ class TrackRespoistorySpec: QuickSpec {
             var started = false
             var completed = false
             beforeSuite {
-                CloudAPIClient.sharedInstance = SpecHelper.api
+                CloudAPIClient.shared = SpecHelper.api
                 SpecHelper.login()
                 EntryCacheList.deleteAllItems()
                 TrackCacheSet.deleteAllItems()

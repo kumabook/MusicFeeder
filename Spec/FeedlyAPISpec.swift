@@ -26,7 +26,7 @@ class FeedlyAPISpec: QuickSpec {
     var tracks:  [Track]?
 
     var client: CloudAPIClient {
-        return CloudAPIClient.sharedInstance
+        return CloudAPIClient.shared
     }
 
     override func spec() {
@@ -34,7 +34,7 @@ class FeedlyAPISpec: QuickSpec {
             SpecHelper.setupAPI()
         }
         beforeEach {
-            CloudAPIClient.sharedInstance.setAccessToken(self.accessToken?.accessToken)
+            CloudAPIClient.shared.setAccessToken(self.accessToken?.accessToken)
         }
         describe("PUT /v3/profile") {
             beforeEach {

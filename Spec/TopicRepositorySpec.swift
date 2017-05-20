@@ -19,7 +19,7 @@ class TopicRepositorySpec: QuickSpec {
             var started = false
             var completed = false
             beforeSuite {
-                CloudAPIClient.sharedInstance = SpecHelper.api
+                CloudAPIClient.shared = SpecHelper.api
                 SpecHelper.login()
                 TopicCacheList.deleteAllItems()
             }
@@ -28,7 +28,7 @@ class TopicRepositorySpec: QuickSpec {
                     expect(CloudAPIClient.isLoggedIn).toFinally(beTrue())
                     started = false
                     completed = false
-                    self.topicRepository = TopicRepository(cloudApiClient: CloudAPIClient.sharedInstance)
+                    self.topicRepository = TopicRepository(cloudApiClient: CloudAPIClient.shared)
                     self.topicRepository.signal.observeResult({ result in
                         guard let event = result.value else { return }
                         switch event {
@@ -50,7 +50,7 @@ class TopicRepositorySpec: QuickSpec {
             }
             context("when it has cache") {
                 beforeEach {
-                    self.topicRepository = TopicRepository(cloudApiClient: CloudAPIClient.sharedInstance)
+                    self.topicRepository = TopicRepository(cloudApiClient: CloudAPIClient.shared)
                 }
                 it("fetches topics from cache") {
                     expect(self.topicRepository.getItems().count).to(beGreaterThan(0))

@@ -22,7 +22,7 @@ class EntryRepositorySpec: QuickSpec {
             var completed = false
             beforeSuite {
                 SpecHelper.ping() // wake up test server
-                CloudAPIClient.sharedInstance = SpecHelper.api
+                CloudAPIClient.shared = SpecHelper.api
                 SpecHelper.login()
                 EntryCacheList.deleteAllItems()
             }
