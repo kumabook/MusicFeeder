@@ -23,14 +23,12 @@ public struct Resource: ResponseObjectSerializable {
         case custom         = "custom"
     }
     public enum ItemType: String {
-        case journal  = "journal"
-        case topic    = "topic"
-        case keyword  = "keyword"
-        case tag      = "tag"
-        case category = "category"
-        case latest   = "latest"
-        case hot      = "hot"
-        case popular  = "popular"
+        case journal   = "journal"
+        case topic     = "topic"
+        case keyword   = "keyword"
+        case tag       = "tag"
+        case category  = "category"
+        case globalTag = "global_tag"
     }
     public var resourceId:   String
     public var resourceType: ResourceType
@@ -111,11 +109,7 @@ public enum ResourceItem {
             return Tag(json: json)
         case .category:
             return FeedlyKit.Category(json: json)
-        case .latest:
-            return Tag(json: json)
-        case .hot:
-            return Tag(json: json)
-        case .popular:
+        case .globalTag:
             return Tag(json: json)
         }
     }
