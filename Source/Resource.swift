@@ -26,7 +26,7 @@ public struct Resource: ResponseObjectSerializable {
     public var engagement:   Int
     public var itemType:     ItemType?
     public var item:         ResourceItem?
-    public init(resourceId: String, resourceType: String, engagement: Int, itemType: ItemType, item: ResourceItem) {
+    public init(resourceId: String, resourceType: String, engagement: Int, itemType: ItemType?, item: ResourceItem?) {
         self.resourceId   = resourceId
         self.resourceType = resourceType
         self.engagement   = engagement
