@@ -175,12 +175,12 @@ open class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
     public override init() {}
     open override func toParameters() -> [String : Any] {
         var params: [String:Any] = [:]
-        if let _count        = count        { params["count"]        = _count }
-        if let _ranked       = ranked       { params["ranked"]       = _ranked }
-        if let _unreadOnly   = unreadOnly   { params["unreadOnly"]   = _unreadOnly ? "true" : "false" }
-        if let _newerThan    = newerThan    { params["newerThan"]    = NSNumber(value: _newerThan) }
-        if let _olderThan    = olderThan    { params["olderThan"]    = NSNumber(value: _olderThan as Int64) }
-        if let _continuation = continuation { params["continuation"] = _continuation }
+        if let count        = count        { params["count"]        = count }
+        if let ranked       = ranked       { params["ranked"]       = ranked }
+        if let unreadOnly   = unreadOnly   { params["unreadOnly"]   = unreadOnly ? "true" : "false" }
+        if let newerThan    = newerThan    { params["newerThan"]    = NSNumber(value: newerThan) }
+        if let olderThan    = olderThan    { params["olderThan"]    = NSNumber(value: olderThan as Int64) }
+        if let continuation = continuation { params["continuation"] = continuation }
         return params
     }
 }
