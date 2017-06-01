@@ -185,6 +185,28 @@ open class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
     }
 }
 
+open class MixParams: FeedlyKit.MixParams {
+    open var type:      MixType = .hot
+    open var olderThan: Int64?
+    public override init() {}
+    open override func toParameters() -> [String : Any] {
+        var params: [String:Any] = [:]
+        if let count        = count        { params["count"]        = count }
+        if let unreadOnly   = unreadOnly   { params["unreadOnly"]   = unreadOnly ? "true" : "false" }
+        if let newerThan    = newerThan    { params["newerThan"]    = NSNumber(value: newerThan) }
+        if let olderThan    = olderThan    { params["olderThan"]    = NSNumber(value: olderThan as Int64) }
+        if let continuation = continuation { params["continuation"] = continuation }
+        params["type"] = type.rawValue
+        return params
+    }
+}
+
+public enum MixType: String {
+    case hot      = "hot"
+    case popular  = "popular"
+    case featured = "featured"
+}
+
 struct FetchEnclosuresOfStreamAPI<T: Enclosure>: API {
     private let baseUrl = CloudAPIClient.shared.target.baseUrl
     var streamId:  String
