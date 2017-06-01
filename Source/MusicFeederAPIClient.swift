@@ -223,6 +223,18 @@ typealias FetchTracksOfStreamAPI = FetchEnclosuresOfStreamAPI<Track>
 typealias FetchAlbumsOfStreamAPI = FetchEnclosuresOfStreamAPI<Album>
 typealias FetchPlaylistsOfStreamAPI = FetchEnclosuresOfStreamAPI<ServicePlaylist>
 
+struct FetchEnclosuresOfMixAPI<T: Enclosure>: API {
+    private let baseUrl = CloudAPIClient.shared.target.baseUrl
+    var streamId:  String
+    var params:    FeedlyKit.PaginationParams
+    var url:       String { return "\(baseUrl)/v3/mixes/\(urlEncode(streamId))/\(T.resourceName)/contents" }
+    var method:    Alamofire.HTTPMethod { return .get }
+    func asURLRequest() throws -> URLRequest {
+        let req = try URLRequest(url: URL(string: url)!, method: method)
+        return try URLEncoding.default.encode(req, with: params.toParameters())
+    }
+}
+
 open class PaginatedEnclosureCollection<T: Enclosure>: ResponseObjectSerializable, PaginatedCollection {
     open let id:           String
     open let updated:      Int64?
@@ -388,6 +400,21 @@ extension CloudAPIClient {
         }
     }
 
+    public func fetchEnclosureMixOf<T: Enclosure>(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
+        let route = Router.api(FetchEnclosuresOfMixAPI<T>(streamId: streamId, params: paginationParams))
+        return SignalProducer { (observer, disposable) in
+            let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<PaginatedEnclosureCollection<T>>) -> Void in
+                if let e = r.result.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: r.response))
+                } else if let items = r.result.value {
+                    observer.send(value: items)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.add() { req.cancel() }
+        }
+    }
+
     public func fetchTracksOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
         return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
     }
@@ -398,6 +425,18 @@ extension CloudAPIClient {
 
     public func fetchPlaylistsOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
         return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
+    }
+
+    public func fetchTrackMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
+        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams)
+    }
+
+    public func fetchAlbumMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedAlbumCollection, NSError> {
+        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams)
+    }
+
+    public func fetchPlaylistMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
+        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams)
     }
 
     public func markEntriesAs(_ action: MarkerAction, items: [Entry]) -> SignalProducer<Void, NSError> {

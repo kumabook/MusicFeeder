@@ -172,6 +172,22 @@ extension CloudAPIClient {
         }
     }
 
+    public func fetchMix(streamId: String, paginationParams: MixParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchMix(streamId, paginationParams: paginationParams, completionHandler: { response in
+                if let e = response.result.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
+                } else if let entries = response.result.value {
+                    observer.send(value: entries)
+                    observer.sendCompleted()
+                } else {
+                    observer.send(error: self.buildError(error: NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
+                }
+            })
+            disposable.add({ req.cancel() })
+        }
+    }
+
     public func fetchFeedsByIds(feedIds: [String]) -> SignalProducer<[Feed], NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchFeeds(feedIds, completionHandler: { response in
