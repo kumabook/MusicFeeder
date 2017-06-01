@@ -156,7 +156,7 @@ extension CloudAPIClient {
         return fetchEntries(streamId: streamId, paginationParams: paginationParams)
     }
 
-    public func fetchEntries(streamId: String, paginationParams: PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchEntries(streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchContents(streamId, paginationParams: paginationParams, completionHandler: { response in
                 if let e = response.result.error {

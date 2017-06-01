@@ -49,7 +49,7 @@ open class SavedEntryRepository: EntryRepository {
         fetchItems()
     }
 
-    open override func fetchCollection(streamId: String, paginationParams paginatedParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    open override func fetchCollection(streamId: String, paginationParams paginatedParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
         return SignalProducer { (observer, disposable) in
             QueueScheduler().schedule {
                 // TODO: support pagination

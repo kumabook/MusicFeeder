@@ -171,7 +171,7 @@ public protocol ParameterEncodable {
 }
 
 open class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
-    open var olderThan:    Int64?
+    open var olderThan: Int64?
     public override init() {}
     open override func toParameters() -> [String : Any] {
         var params: [String:Any] = [:]
@@ -188,7 +188,7 @@ open class PaginationParams: FeedlyKit.PaginationParams, ParameterEncodable {
 struct FetchEnclosuresOfStreamAPI<T: Enclosure>: API {
     private let baseUrl = CloudAPIClient.shared.target.baseUrl
     var streamId:  String
-    var params:    MusicFeeder.PaginationParams
+    var params:    FeedlyKit.PaginationParams
     var url:       String { return "\(baseUrl)/v3/streams/\(urlEncode(streamId))/\(T.resourceName)/contents" }
     var method:    Alamofire.HTTPMethod { return .get }
     func asURLRequest() throws -> URLRequest {
@@ -351,7 +351,7 @@ extension CloudAPIClient {
         return fetchEnclosures(ids)
     }
 
-    public func fetchEnclosuresOf<T: Enclosure>(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
+    public func fetchEnclosuresOf<T: Enclosure>(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
         let route = Router.api(FetchEnclosuresOfStreamAPI<T>(streamId: streamId, params: paginationParams))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<PaginatedEnclosureCollection<T>>) -> Void in
@@ -366,15 +366,15 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchTracksOf(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
+    public func fetchTracksOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
         return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
     }
 
-    public func fetchAlbumsOf(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedAlbumCollection, NSError> {
+    public func fetchAlbumsOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedAlbumCollection, NSError> {
         return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
     }
 
-    public func fetchPlaylistsOf(_ streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
+    public func fetchPlaylistsOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
         return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
     }
 

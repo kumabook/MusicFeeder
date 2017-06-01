@@ -59,7 +59,7 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
     open internal(set) var perPage:      Int
     open internal(set) var disposable:   Disposable?
 
-    open var paginationParams: MusicFeeder.PaginationParams {
+    open var paginationParams: FeedlyKit.PaginationParams {
         let params          = MusicFeeder.PaginationParams()
         params.continuation = continuation
         params.unreadOnly   = unreadOnly
@@ -67,7 +67,7 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
         return params
     }
 
-    open var paginationParamsForLatest: MusicFeeder.PaginationParams {
+    open var paginationParamsForLatest: FeedlyKit.PaginationParams {
         let params        = MusicFeeder.PaginationParams()
         params.newerThan  = lastUpdated
         params.unreadOnly = unreadOnly
@@ -113,7 +113,7 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
         }
     }
 
-    open func fetchCollection(streamId: String, paginationParams: MusicFeeder.PaginationParams) -> SignalProducer<C, NSError> {
+    open func fetchCollection(streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<C, NSError> {
         return SignalProducer<C, NSError>.empty
     }
 
