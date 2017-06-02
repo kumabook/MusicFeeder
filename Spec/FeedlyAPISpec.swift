@@ -94,10 +94,12 @@ class FeedlyAPISpec: QuickSpec {
 
         describe("GET /v3/streams/:streamId/contents") {
             beforeEach {
-                self.client.fetchEntries(streamId: self.feeds![0].id, paginationParams: PaginationParams())
+                guard let feed = self.feeds?[0] else { return }
+                self.client.fetchEntries(streamId: feed.id, paginationParams: MusicFeeder.PaginationParams())
                     .on(value: {
                         self.entries = $0.items
                     }).start()
+                return
             }
             it("should fetch entries") {
                 expect(self.entries).toFinallyNot(beNil())
