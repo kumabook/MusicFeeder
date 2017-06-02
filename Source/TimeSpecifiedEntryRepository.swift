@@ -43,4 +43,8 @@ open class TimeSpecifiedEntryRepository: EntryRepository {
         params.olderThan  = olderThan
         return params
     }
+
+    open override func renew() -> TimeSpecifiedEntryRepository {
+        return TimeSpecifiedEntryRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage, newerThan: newerThan, olderThan: olderThan, name: name)
+    }
 }

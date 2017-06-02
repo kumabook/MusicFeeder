@@ -43,4 +43,7 @@ open class TimeSpecifiedTrackStreamRepository: TrackStreamRepository {
         params.olderThan  = olderThan
         return params
     }
+    open override func renew() -> TimeSpecifiedTrackStreamRepository {
+        return TimeSpecifiedTrackStreamRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage, newerThan: newerThan, olderThan: olderThan, name: name)
+    }
 }

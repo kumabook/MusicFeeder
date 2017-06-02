@@ -18,4 +18,7 @@ open class PlaylistStreamRepository: EnclosureStreamRepository<ServicePlaylist> 
             self.items[index] = item
         }
     }
+    open func renew() -> PlaylistStreamRepository {
+        return PlaylistStreamRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+    }
 }

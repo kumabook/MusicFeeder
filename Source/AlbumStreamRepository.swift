@@ -18,4 +18,7 @@ open class AlbumStreamRepository: EnclosureStreamRepository<Album> {
             self.items[index] = item
         }
     }
+    open func renew() -> AlbumStreamRepository {
+        return AlbumStreamRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+    }
 }

@@ -57,4 +57,7 @@ open class TrackMixRepository: TrackStreamRepository {
             fatalError("Invalid params")
         }
     }
+    open override func renew() -> TrackMixRepository {
+        return TrackMixRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage, name: name, type: type, newerThan: newerThan, olderThan: olderThan)
+    }
 }

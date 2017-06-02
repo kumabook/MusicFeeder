@@ -57,4 +57,7 @@ open class EntryMixRepository: EntryRepository {
             fatalError("Invalid params")
         }
     }
+    open override func renew() -> EntryMixRepository {
+        return EntryMixRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage, name: name, type: type, newerThan: newerThan, olderThan: olderThan)
+    }
 }

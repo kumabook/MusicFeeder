@@ -70,4 +70,7 @@ open class TrackStreamRepository: EnclosureStreamRepository<Track> {
             }).start()
         }
     }
+    open func renew() -> TrackStreamRepository {
+        return TrackStreamRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
+    }
 }

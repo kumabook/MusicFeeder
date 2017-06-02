@@ -58,4 +58,7 @@ open class AlbumMixRepository: AlbumStreamRepository {
             fatalError("Invalid params")
         }
     }
+    open override func renew() -> AlbumMixRepository {
+        return AlbumMixRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage, name: name, type: type, newerThan: newerThan, olderThan: olderThan)
+    }
 }

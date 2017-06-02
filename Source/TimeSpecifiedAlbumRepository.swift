@@ -43,4 +43,7 @@ open class TimeSpecifiedAlbumStreamRepository: AlbumStreamRepository {
         params.olderThan  = olderThan
         return params
     }
+    open override func renew() -> TimeSpecifiedAlbumStreamRepository {
+        return TimeSpecifiedAlbumStreamRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage, newerThan: newerThan, olderThan: olderThan, name: name)
+    }
 }

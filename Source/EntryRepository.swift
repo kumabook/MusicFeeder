@@ -243,4 +243,7 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
             }
         }
     }
+    open func renew() -> EntryRepository {
+        return EntryRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage) 
+    }
 }

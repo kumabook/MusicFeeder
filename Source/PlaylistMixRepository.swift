@@ -58,4 +58,7 @@ open class PlaylistMixRepository: PlaylistStreamRepository {
             fatalError("Invalid params")
         }
     }
+    open override func renew() -> PlaylistMixRepository {
+        return PlaylistMixRepository(stream: stream, unreadOnly: unreadOnly, perPage: perPage, name: name, type: type, newerThan: newerThan, olderThan: olderThan)
+    }
 }
