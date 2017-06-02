@@ -21,6 +21,10 @@ public struct Resource: ResponseObjectSerializable {
         case album          = "album"
         case playlist       = "playlist"
         case custom         = "custom"
+        case mix            = "mix"
+        case trackMix       = "track_mix"
+        case albumMix       = "album_mix"
+        case playlistMix    = "playlist_mix"
     }
     public enum ItemType: String {
         case journal   = "journal"
@@ -35,12 +39,14 @@ public struct Resource: ResponseObjectSerializable {
     public var engagement:   Int
     public var itemType:     ItemType?
     public var item:         ResourceItem?
-    public init(resourceId: String, resourceType: ResourceType, engagement: Int, itemType: ItemType?, item: ResourceItem?) {
+    public var options:      [String:Any]?
+    public init(resourceId: String, resourceType: ResourceType, engagement: Int, itemType: ItemType? = nil, item: ResourceItem? = nil, options: [String:Any]? = nil) {
         self.resourceId   = resourceId
         self.resourceType = resourceType
         self.engagement   = engagement
         self.itemType     = itemType
         self.item         = item
+        self.options      = options
     }
     public init?(response: HTTPURLResponse, representation: Any) {
         let json = JSON(representation)
@@ -51,50 +57,75 @@ public struct Resource: ResponseObjectSerializable {
         resourceType = ResourceType(rawValue : json["resource_type"].stringValue) ?? .custom
         engagement   = json["engagement"].intValue
         itemType     = ItemType(rawValue: json["item_type"].stringValue)
-        item         = ResourceItem(resourceType: resourceType, itemType: itemType, json: json["item"])
+        item         = ResourceItem(resourceType: resourceType, itemType: itemType, item: json["item"], options: json["options"])
+        options      = json["options"].dictionaryObject
     }
 }
 
 public enum ResourceItem {
-    case stream(FeedlyKit.Stream)
-    case trackStream(FeedlyKit.Stream)
-    case albumStream(FeedlyKit.Stream)
-    case playlistStream(FeedlyKit.Stream)
+    case stream(FeedlyKit.Stream, MixPeriod)
+    case trackStream(FeedlyKit.Stream, MixPeriod)
+    case albumStream(FeedlyKit.Stream, MixPeriod)
+    case playlistStream(FeedlyKit.Stream, MixPeriod)
+    case mix(FeedlyKit.Stream, MixPeriod, MixType)
+    case trackMix(FeedlyKit.Stream, MixPeriod, MixType)
+    case albumMix(FeedlyKit.Stream, MixPeriod, MixType)
+    case playlistMix(FeedlyKit.Stream, MixPeriod, MixType)
     case entry(Entry)
     case track(Track)
     case album(Album)
     case playlist(ServicePlaylist)
-    public init?(resourceType: Resource.ResourceType, itemType: Resource.ItemType?, json: JSON) {
-        if json.type == .null { return nil }
+    public init?(resourceType: Resource.ResourceType, itemType: Resource.ItemType?, item: JSON, options: JSON) {
+        if item.type == .null { return nil }
         guard let itemType = itemType else { return nil }
         switch resourceType {
         case .stream:
-            self = .stream(ResourceItem.buildStream(itemType:itemType, json: json))
+            self = .stream(ResourceItem.buildStream(itemType:itemType, json: item), ResourceItem.buildMixPeriod(json: options))
         case .trackStream:
-            self = .trackStream(ResourceItem.buildStream(itemType:itemType, json: json))
+            self = .trackStream(ResourceItem.buildStream(itemType:itemType, json: item), ResourceItem.buildMixPeriod(json: options))
         case .albumStream:
-            self = .albumStream(ResourceItem.buildStream(itemType:itemType, json: json))
+            self = .albumStream(ResourceItem.buildStream(itemType:itemType, json: item), ResourceItem.buildMixPeriod(json: options))
         case .playlistStream:
-            self = .playlistStream(ResourceItem.buildStream(itemType:itemType, json: json))
+            self = .playlistStream(ResourceItem.buildStream(itemType:itemType, json: item), ResourceItem.buildMixPeriod(json: options))
+        case .mix:
+            self = .mix(ResourceItem.buildStream(itemType:itemType, json: item),
+                        ResourceItem.buildMixPeriod(json: options),
+                        ResourceItem.buildMixType(json: options))
+        case .trackMix:
+            self = .trackMix(ResourceItem.buildStream(itemType:itemType, json: item),
+                             ResourceItem.buildMixPeriod(json: options),
+                             ResourceItem.buildMixType(json: options))
+        case .albumMix:
+            self = .albumMix(ResourceItem.buildStream(itemType:itemType, json: item),
+                             ResourceItem.buildMixPeriod(json: options),
+                             ResourceItem.buildMixType(json: options))
+        case .playlistMix:
+            self = .playlistMix(ResourceItem.buildStream(itemType:itemType, json: item),
+                                ResourceItem.buildMixPeriod(json: options),
+                                ResourceItem.buildMixType(json: options))
         case .entry:
-            self = .entry(Entry(json: json))
+            self = .entry(Entry(json: item))
         case .track:
-            self = .track(Track(json: json))
+            self = .track(Track(json: item))
         case .album:
-            self = .album(Album(json: json))
+            self = .album(Album(json: item))
         case .playlist:
-            self = .playlist(ServicePlaylist(json: json))
+            self = .playlist(ServicePlaylist(json: item))
         case .custom:
             return nil
         }
     }
     public var stream: FeedlyKit.Stream? {
         switch self {
-        case .stream(let stream):         return stream
-        case .trackStream(let stream):    return stream
-        case .albumStream(let stream):    return stream
-        case .playlistStream(let stream): return stream
-        default:                          return nil
+        case .stream(let stream, _):         return stream
+        case .trackStream(let stream, _):    return stream
+        case .albumStream(let stream, _):    return stream
+        case .playlistStream(let stream, _): return stream
+        case .mix(let stream, _, _):         return stream
+        case .trackMix(let stream, _, _):    return stream
+        case .albumMix(let stream, _, _):    return stream
+        case .playlistMix(let stream, _, _): return stream
+        default:                             return nil
         }
     }
     public static func buildStream(itemType: Resource.ItemType, json: JSON) -> FeedlyKit.Stream {
@@ -112,5 +143,11 @@ public enum ResourceItem {
         case .globalTag:
             return Tag(json: json)
         }
+    }
+    public static func buildMixPeriod(json: JSON) -> MixPeriod {
+        return MixPeriod(rawValue: json["period"].stringValue) ?? .default
+    }
+    public static func buildMixType(json: JSON) -> MixType {
+        return MixType(rawValue: json["type"].stringValue) ?? .hot
     }
 }
