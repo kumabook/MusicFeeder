@@ -201,6 +201,26 @@ open class MixParams: FeedlyKit.MixParams {
     }
 }
 
+public enum MixPeriod: String {
+    case `default` = "default"
+    case daily     = "daily"
+    case weekly    = "weekly"
+    case monthly   = "monthly"
+
+    public var newerThan: Int64? {
+        switch self {
+        case .daily:
+            return Int64(Date(timeIntervalSinceNow: -1 * 24 * 60 * 60).timeIntervalSince1970 * 1000)
+        case .weekly:
+            return Int64(Date(timeIntervalSinceNow: -7 * 24 * 60 * 60).timeIntervalSince1970 * 1000)
+        case .monthly:
+            return Int64(Date(timeIntervalSinceNow: -30 * 24 * 60 * 60).timeIntervalSince1970 * 1000)
+        default:
+            return nil
+        }
+    }
+}
+
 public enum MixType: String {
     case hot      = "hot"
     case popular  = "popular"
