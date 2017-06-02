@@ -12,7 +12,7 @@ import ReactiveSwift
 import Result
 import Realm
 
-open class PlaylistMixRepository<T: Enclosure>: PlaylistStreamRepository {
+open class PlaylistMixRepository: PlaylistStreamRepository {
     var newerThan: Int64?
     var olderThan: Int64?
     var name:      String
