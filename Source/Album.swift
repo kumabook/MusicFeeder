@@ -53,7 +53,7 @@ public final class Album: Equatable, Hashable, Enclosure {
         provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.youTube
         identifier   = dic["identifier"] ?? ""
         owner_id     = dic["owner_id"]
-        owner_name   = dic["onwer_name"]
+        owner_name   = dic["owner_name"]
         url          = dic["url"] ?? urlString
         title        = dic["title"] ?? ""
         description  = dic["description"] ?? ""
@@ -115,7 +115,7 @@ public final class Album: Equatable, Hashable, Enclosure {
         provider     = Provider(rawValue: json["provider"].stringValue) ?? .raw
         identifier   = json["identifier"].stringValue
         owner_id     = json["owner_id"].string
-        owner_name   = json["onwer_name"].string
+        owner_name   = json["owner_name"].string
         url          = json["url"].stringValue
         title        = json["title"].string
         description  = json["description"].string
