@@ -37,6 +37,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
             userDefaults.set(Int(quality.rawValue), forKey: "youtube_video_quality")
         }
     }
+    public static func isExtVideo(ext: String) -> Bool {
+        return ["mp4", "m4v", "3gp", "mov"].contains(ext)
+    }
 
     public enum Status {
         case `init`
@@ -157,13 +160,16 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
             guard let sc = soundcloudTrack else { return thumbnailUrl }
             return sc.artworkURL ?? thumbnailUrl
         default:
-            break
+            return artworkUrl ?? thumbnailUrl
         }
-        return nil
     }
 
     public var isVideo: Bool {
-        return provider == Provider.youTube && Track.youTubeVideoQuality != YouTubeVideoQuality.audioOnly
+        switch provider {
+        case .youTube: return Track.youTubeVideoQuality != YouTubeVideoQuality.audioOnly
+        case .raw:     return (self.audioUrl?.pathExtension.lowercased()).flatMap { Track.isExtVideo(ext: $0) } ?? false
+        default:       return false
+        }
     }
 
     public var likable: Bool { return !id.isEmpty }
