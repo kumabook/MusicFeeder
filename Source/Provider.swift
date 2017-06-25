@@ -13,5 +13,6 @@ public enum Provider: String {
     case spotify    = "Spotify"
     case youTube    = "YouTube"
     case soundCloud = "SoundCloud"
+    case custom     = "Custom"
     case raw        = "Raw"
 }

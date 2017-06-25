@@ -122,6 +122,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         case .soundCloud:
             return soundcloudTrack.flatMap { URL(string: $0.streamUrl + "?client_id=" + APIClient.clientId) } ??
                 audioUrl.flatMap { URL(string: $0.absoluteString + "?client_id=" + APIClient.clientId) }
+        case .custom:
+            return audioUrl
         case .raw:
             return audioUrl
         }
@@ -525,6 +527,10 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
                     disp.dispose()
                 }
             case .soundCloud:
+                self.status    = .available
+                observer.send(value: self)
+                observer.sendCompleted()
+            case .custom:
                 self.status    = .available
                 observer.send(value: self)
                 observer.sendCompleted()
