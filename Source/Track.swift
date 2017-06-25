@@ -529,7 +529,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
                 observer.send(value: self)
                 observer.sendCompleted()
             case .raw:
-                self.audioUrl = self.identifier.toURL()
                 self.status    = .available
                 observer.send(value: self)
                 observer.sendCompleted()
