@@ -32,6 +32,10 @@ public struct Resource: ResponseObjectSerializable {
         case keyword   = "keyword"
         case tag       = "tag"
         case category  = "category"
+        case entry     = "entry"
+        case track     = "track"
+        case album     = "album"
+        case playlist  = "playlist"
         case globalTag = "global_tag"
     }
     public var resourceId:   String
@@ -80,27 +84,35 @@ public enum ResourceItem {
         guard let itemType = itemType else { return nil }
         switch resourceType {
         case .stream:
-            self = .stream(ResourceItem.buildStream(itemType:itemType, json: item), ResourceItem.buildMixPeriod(json: options))
+            guard let stream = ResourceItem.buildStream(itemType:itemType, json: item) else { return nil }
+            self = .stream(stream, ResourceItem.buildMixPeriod(json: options))
         case .trackStream:
-            self = .trackStream(ResourceItem.buildStream(itemType:itemType, json: item), ResourceItem.buildMixPeriod(json: options))
+            guard let stream = ResourceItem.buildStream(itemType:itemType, json: item) else { return nil }
+            self = .trackStream(stream, ResourceItem.buildMixPeriod(json: options))
         case .albumStream:
-            self = .albumStream(ResourceItem.buildStream(itemType:itemType, json: item), ResourceItem.buildMixPeriod(json: options))
+            guard let stream = ResourceItem.buildStream(itemType:itemType, json: item) else { return nil }
+            self = .albumStream(stream, ResourceItem.buildMixPeriod(json: options))
         case .playlistStream:
-            self = .playlistStream(ResourceItem.buildStream(itemType:itemType, json: item), ResourceItem.buildMixPeriod(json: options))
+            guard let stream = ResourceItem.buildStream(itemType:itemType, json: item) else { return nil }
+            self = .playlistStream(stream, ResourceItem.buildMixPeriod(json: options))
         case .mix:
-            self = .mix(ResourceItem.buildStream(itemType:itemType, json: item),
+            guard let stream = ResourceItem.buildStream(itemType:itemType, json: item) else { return nil }
+            self = .mix(stream,
                         ResourceItem.buildMixPeriod(json: options),
                         ResourceItem.buildMixType(json: options))
         case .trackMix:
-            self = .trackMix(ResourceItem.buildStream(itemType:itemType, json: item),
+            guard let stream = ResourceItem.buildStream(itemType:itemType, json: item) else { return nil }
+            self = .trackMix(stream,
                              ResourceItem.buildMixPeriod(json: options),
                              ResourceItem.buildMixType(json: options))
         case .albumMix:
-            self = .albumMix(ResourceItem.buildStream(itemType:itemType, json: item),
+            guard let stream = ResourceItem.buildStream(itemType:itemType, json: item) else { return nil }
+            self = .albumMix(stream,
                              ResourceItem.buildMixPeriod(json: options),
                              ResourceItem.buildMixType(json: options))
         case .playlistMix:
-            self = .playlistMix(ResourceItem.buildStream(itemType:itemType, json: item),
+            guard let stream = ResourceItem.buildStream(itemType:itemType, json: item) else { return nil }
+            self = .playlistMix(stream,
                                 ResourceItem.buildMixPeriod(json: options),
                                 ResourceItem.buildMixType(json: options))
         case .entry:
@@ -128,7 +140,7 @@ public enum ResourceItem {
         default:                             return nil
         }
     }
-    public static func buildStream(itemType: Resource.ItemType, json: JSON) -> FeedlyKit.Stream {
+    public static func buildStream(itemType: Resource.ItemType, json: JSON) -> FeedlyKit.Stream? {
         switch itemType {
         case .journal:
             return Journal(json: json)
@@ -142,6 +154,8 @@ public enum ResourceItem {
             return FeedlyKit.Category(json: json)
         case .globalTag:
             return Tag(json: json)
+        default:
+            return nil
         }
     }
     public static func buildMixPeriod(json: JSON) -> MixPeriod {
