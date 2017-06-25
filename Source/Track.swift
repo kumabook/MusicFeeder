@@ -142,14 +142,14 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         }
     }
     public var thumbnailURL: URL? {
-        return thumbnailUrl
+        return thumbnailUrl ?? artworkUrl
     }
     public var artworkURL: URL? {
         switch self.provider {
         case .appleMusic:
-            return thumbnailUrl
+            return artworkUrl ?? thumbnailUrl
         case .spotify:
-            return thumbnailUrl
+            return artworkUrl ?? thumbnailUrl
         case .youTube:
             let url = youtubeVideo?.largeThumbnailURL ?? youtubeVideo?.mediumThumbnailURL ?? youtubeVideo?.smallThumbnailURL
             return url ?? thumbnailUrl
