@@ -302,7 +302,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
             return nil
         }
         id           = dic["id"].flatMap { $0 } ?? ""
-        provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.youTube
+        provider     = dic["provider"].flatMap { Provider(rawValue: $0) } ?? Provider.raw
         identifier   = dic["identifier"] ?? ""
         url          = dic["url"] ?? urlString
         title        = dic["title"]
