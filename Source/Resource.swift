@@ -73,12 +73,16 @@ public struct Resource: ResponseObjectSerializable {
         self.init(json: json)
     }
     public init(json: JSON) {
-        resourceId   = json["resource_id"].stringValue
-        resourceType = ResourceType(rawValue : json["resource_type"].stringValue) ?? .custom
+        self.init(json: json, itemJson: json["item"], optionsJson: json["options"])
+    }
+    public init(json: JSON, itemJson: JSON, optionsJson: JSON) {
+        let id       = json["resource_id"].stringValue
+        resourceId   = id
+        resourceType = ResourceType(rawValue : json["resource_type"].stringValue) ?? Resource.resourceType(resourceId: id)
         engagement   = json["engagement"].intValue
         itemType     = ItemType(rawValue: json["item_type"].stringValue)
-        item         = ResourceItem(resourceType: resourceType, itemType: itemType, item: json["item"], options: json["options"])
-        options      = json["options"].dictionaryObject
+        item         = ResourceItem(resourceType: resourceType, itemType: itemType, item: itemJson, options: optionsJson)
+        options      = optionsJson.dictionaryObject
     }
 }
 
