@@ -84,6 +84,39 @@ public struct Resource: ResponseObjectSerializable {
         item         = ResourceItem(resourceType: resourceType, itemType: itemType, item: itemJson, options: optionsJson)
         options      = optionsJson.dictionaryObject
     }
+    public func fetchItem() -> SignalProducer<Resource, NSError> {
+        switch resourceType {
+        case .stream, .trackStream, .albumStream, .playlistStream,
+             .mix, .trackMix, .albumMix, .playlistMix:
+            return SignalProducer(value: self)
+        case .entry:
+            return CloudAPIClient.shared.fetchEntry(entryId: itemId()).map {
+                var resource = self
+                resource.item = ResourceItem.entry($0)
+                return resource
+            }
+        case .track:
+            return CloudAPIClient.shared.fetchTrack(itemId()).map {
+                var resource = self
+                resource.item = ResourceItem.track($0)
+                return resource
+            }
+        case .album:
+            return CloudAPIClient.shared.fetchAlbum(itemId()).map {
+                var resource = self
+                resource.item = ResourceItem.album($0)
+                return resource
+            }
+        case .playlist:
+            return CloudAPIClient.shared.fetchPlaylist(itemId()).map {
+                var resource = self
+                resource.item = ResourceItem.playlist($0)
+                return resource
+            }
+        default:
+            return SignalProducer(value: self)
+        }
+    }
 }
 
 public enum ResourceItem {
