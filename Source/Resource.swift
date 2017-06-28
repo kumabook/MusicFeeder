@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 import FeedlyKit
+import ReactiveSwift
 
 public struct Resource: ResponseObjectSerializable {
     public enum ResourceType: String {
@@ -44,6 +45,21 @@ public struct Resource: ResponseObjectSerializable {
     public var itemType:     ItemType?
     public var item:         ResourceItem?
     public var options:      [String:Any]?
+
+    public func itemId() -> String {
+        switch resourceType {
+        case .entry:
+            return resourceId.replace("entry/", withString: "")
+        case .track:
+            return resourceId.replace("track/", withString: "")
+        case .album:
+            return resourceId.replace("album/", withString: "")
+        case .playlist:
+            return resourceId.replace("playlist/", withString: "")
+        default:
+            return resourceId
+        }
+    }
     public init(resourceId: String, resourceType: ResourceType, engagement: Int, itemType: ItemType? = nil, item: ResourceItem? = nil, options: [String:Any]? = nil) {
         self.resourceId   = resourceId
         self.resourceType = resourceType
