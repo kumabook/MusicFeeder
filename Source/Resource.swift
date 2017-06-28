@@ -46,6 +46,27 @@ public struct Resource: ResponseObjectSerializable {
     public var item:         ResourceItem?
     public var options:      [String:Any]?
 
+    public static let defaultResourceTypes: [String: ResourceType] = [
+        "journal":  .stream,
+        "topic":    .stream,
+        "keyword":  .stream,
+        "tag":      .stream,
+        "category": .stream,
+        "entry":    .entry,
+        "track":    .track,
+        "album":    .album,
+        "playlist": .playlist
+    ]
+
+    public static func resourceType(resourceId: String) -> ResourceType {
+        for key in defaultResourceTypes.keys {
+            if resourceId.hasPrefix(key), let type = defaultResourceTypes[key] {
+                return type
+            }
+        }
+        return .custom
+    }
+
     public func itemId() -> String {
         switch resourceType {
         case .entry:
