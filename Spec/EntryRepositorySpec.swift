@@ -20,6 +20,7 @@ class EntryRepositorySpec: QuickSpec {
         describe("A EntryRepository") {
             var started = false
             var completed = false
+            var failed = false
             beforeSuite {
                 SpecHelper.ping() // wake up test server
                 CloudAPIClient.shared = SpecHelper.api
@@ -31,6 +32,7 @@ class EntryRepositorySpec: QuickSpec {
                     expect(CloudAPIClient.isLoggedIn).toFinally(beTrue())
                     started = false
                     completed = false
+                    failed = false
                     self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20)
                     self.entryRepository.signal.observeResult({ result in
                         guard let event = result.value else { return }
@@ -40,6 +42,8 @@ class EntryRepositorySpec: QuickSpec {
                             break
                         case .completeLoadingNext:
                             completed = true
+                        case .failToLoadNext(_):
+                            failed = true
                             break
                         default:
                             break
@@ -51,8 +55,10 @@ class EntryRepositorySpec: QuickSpec {
                 }
                 it("fetches entries from server") {
                     expect(started).toFinally(beTrue())
-                    expect(completed).toFinally(beTrue())
-                    expect(self.entryRepository.items.count).toFinally(beGreaterThan(0))
+                    if !failed {
+                        expect(completed).toFinally(beTrue())
+                        expect(self.entryRepository.items.count).toFinally(beGreaterThan(0))
+                    }
                 }
             }
             context("when it has cache") {
