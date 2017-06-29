@@ -28,6 +28,7 @@ public struct Resource: ResponseObjectSerializable {
         case playlistMix    = "playlist_mix"
     }
     public enum ItemType: String {
+        case feed      = "feed"
         case journal   = "journal"
         case topic     = "topic"
         case keyword   = "keyword"
@@ -67,6 +68,28 @@ public struct Resource: ResponseObjectSerializable {
         return .custom
     }
 
+    public static let defaultItemTypes: [String: ItemType] = [
+        "feed":     .feed,
+        "journal":  .journal,
+        "topic":    .topic,
+        "keyword":  .keyword,
+        "tag":      .tag,
+        "category": .category,
+        "entry":    .entry,
+        "track":    .track,
+        "album":    .album,
+        "playlist": .playlist
+    ]
+
+    public static func itemType(resourceId: String) -> ItemType? {
+        for key in defaultItemTypes.keys {
+            if resourceId.hasPrefix(key), let type = defaultItemTypes[key] {
+                return type
+            }
+        }
+        return nil
+    }
+
     public func itemId() -> String {
         switch resourceType {
         case .entry:
@@ -101,14 +124,41 @@ public struct Resource: ResponseObjectSerializable {
         resourceId   = id
         resourceType = ResourceType(rawValue : json["resource_type"].stringValue) ?? Resource.resourceType(resourceId: id)
         engagement   = json["engagement"].intValue
-        itemType     = ItemType(rawValue: json["item_type"].stringValue)
+        itemType     = ItemType(rawValue: json["item_type"].stringValue) ?? Resource.itemType(resourceId: id)
         item         = ResourceItem(resourceType: resourceType, itemType: itemType, item: itemJson, options: optionsJson)
         options      = optionsJson.dictionaryObject
     }
     public func fetchItem() -> SignalProducer<Resource, NSError> {
-        switch resourceType {
-        case .stream, .trackStream, .albumStream, .playlistStream,
-             .mix, .trackMix, .albumMix, .playlistMix:
+        guard let itemType = itemType else { return SignalProducer.empty }
+        switch itemType {
+        case .feed:
+            return CloudAPIClient.shared.fetchFeed(feedId: resourceId).map {
+                var resource = self
+                resource.item = ResourceItem.stream($0, MixPeriod.default)
+                return resource
+                }
+        case .journal:
+            var resource = self
+            if resource.item == nil {
+                resource.item = ResourceItem.stream(Journal(label: resourceId.replace("journal/", withString: "")), MixPeriod.default)
+            }
+            return SignalProducer(value: resource)
+        case .topic:
+            var resource = self
+            if resource.item == nil {
+                resource.item = ResourceItem.stream(Topic(label: resourceId.replace("topic/", withString: "")), MixPeriod.default)
+            }
+            return SignalProducer(value: resource)
+        case .keyword:
+            var resource = self
+            if resource.item == nil {
+                resource.item = ResourceItem.stream(Feed(id: resourceId,
+                                                      title: resourceId.replace("keyword/", withString: ""),
+                                                description: "",
+                                                subscribers: 0), MixPeriod.default)
+            }
+            return SignalProducer(value: resource)
+        case .category, .tag, .globalTag:
             return SignalProducer(value: self)
         case .entry:
             return CloudAPIClient.shared.fetchEntry(entryId: itemId()).map {
@@ -134,8 +184,6 @@ public struct Resource: ResponseObjectSerializable {
                 resource.item = ResourceItem.playlist($0)
                 return resource
             }
-        default:
-            return SignalProducer(value: self)
         }
     }
 }

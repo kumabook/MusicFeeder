@@ -126,6 +126,22 @@ extension CloudAPIClient {
         }
     }
 
+    public func fetchFeed(feedId: String) -> SignalProducer<Feed, NSError> {
+        return SignalProducer { (observer, disposable) in
+            let req = self.fetchFeed(feedId, completionHandler: { response in
+                if let e = response.result.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
+                } else if let feed = response.result.value {
+                    observer.send(value: feed)
+                    observer.sendCompleted()
+                } else {
+                    observer.send(error: self.buildError(error: NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
+                }
+            })
+            disposable.add({ req.cancel() })
+        }
+    }
+
     public func fetchSubscriptions() -> SignalProducer<[Subscription], NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchSubscriptions({ response in
