@@ -112,7 +112,7 @@ extension CloudAPIClient {
         }
     }
 
-    public func updateProfile(params: [String:AnyObject]) -> SignalProducer<Profile, NSError>{
+    public func updateProfile(params: [String:Any]) -> SignalProducer<Profile, NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.updateProfile(params) { response -> Void in
                 if let e = response.result.error {
