@@ -129,7 +129,7 @@ public struct Resource: ResponseObjectSerializable {
         options      = optionsJson.dictionaryObject
     }
     public func fetchItem() -> SignalProducer<Resource, NSError> {
-        guard let itemType = itemType else { return SignalProducer.empty }
+        guard let itemType = itemType else { return SignalProducer(value: self) }
         switch itemType {
         case .feed:
             return CloudAPIClient.shared.fetchFeed(feedId: resourceId).map {
