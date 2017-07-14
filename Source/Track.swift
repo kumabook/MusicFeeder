@@ -169,7 +169,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public var isVideo: Bool {
         switch provider {
         case .youTube: return Track.youTubeVideoQuality != YouTubeVideoQuality.audioOnly
-        case .raw:     return (self.audioUrl?.pathExtension.lowercased()).flatMap { Track.isExtVideo(ext: $0) } ?? false
+        case .custom, .raw:
+            return (self.audioUrl?.pathExtension.lowercased()).flatMap { Track.isExtVideo(ext: $0) } ?? false
         default:       return false
         }
     }
