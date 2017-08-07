@@ -25,7 +25,7 @@ class EntryRepositorySpec: QuickSpec {
                 SpecHelper.ping() // wake up test server
                 CloudAPIClient.shared = SpecHelper.api
                 SpecHelper.login()
-                EntryCacheList.deleteAllItems()
+                JSONCache.shared.clear()
             }
             context("when it has no cache") {
                 beforeEach {

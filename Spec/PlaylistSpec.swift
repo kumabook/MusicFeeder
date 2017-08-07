@@ -15,7 +15,7 @@ class PlaylistSpec: QuickSpec {
     override func spec() {
         var playlist: Playlist!
         beforeSuite {
-            TrackCacheSet.deleteAllItems()
+            JSONCache.shared.clear()
         }
         beforeEach {
             let json = JSON(SpecHelper.fixtureJSONObject(fixtureNamed: "playlist")!)

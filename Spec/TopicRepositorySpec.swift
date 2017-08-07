@@ -21,7 +21,7 @@ class TopicRepositorySpec: QuickSpec {
             beforeSuite {
                 CloudAPIClient.shared = SpecHelper.api
                 SpecHelper.login()
-                TopicCacheList.deleteAllItems()
+                JSONCache.shared.clear()
             }
             context("when it has no cache") {
                 beforeEach {

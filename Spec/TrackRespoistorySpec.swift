@@ -22,8 +22,7 @@ class TrackRespoistorySpec: QuickSpec {
             beforeSuite {
                 CloudAPIClient.shared = SpecHelper.api
                 SpecHelper.login()
-                EntryCacheList.deleteAllItems()
-                TrackCacheSet.deleteAllItems()
+                JSONCache.shared.clear()
             }
             context("when it has no cache") {
                 beforeEach {
