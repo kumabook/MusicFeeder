@@ -313,13 +313,30 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchTopics() -> SignalProducer<[Topic], NSError> {
+    public func fetchTopics(useCache: Bool = false) -> SignalProducer<[Topic], NSError> {
         let route = Router.api(FetchTopicsAPI())
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().responseCollection() { (r: DataResponse<[Topic]>) -> Void in
-                if let e = r.result.error {
-                    observer.send(error: self.buildError(error: e as NSError, response: r.response))
-                } else if let topics = r.result.value {
+            var urlRequest = try! route.asURLRequest()
+            if useCache {
+                if let url = urlRequest.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
+                    let topics = JSON.parse(json).arrayValue.map({ Topic(json: $0) })
+                    observer.send(value: topics)
+                } else {
+                    observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
+                }
+                return
+            }
+            let req = self.manager.request(route).validate().responseJSON() { response -> Void in
+                if let e = response.result.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: response.response))
+                } else if let value = response.result.value {
+                    let json = JSON(json: value)
+                    if let url = route.urlRequest?.url?.absoluteString {
+                        if let str = json.rawString() {
+                            let _ = try? JSONCache.shared.add(str, forKey: url)
+                        }
+                    }
+                    let topics = json.arrayValue.map() { Topic(json: $0) }
                     observer.send(value: topics)
                     observer.sendCompleted()
                 }
@@ -408,14 +425,29 @@ extension CloudAPIClient {
         return fetchEnclosures(ids)
     }
 
-    public func fetchEnclosuresOf<T: Enclosure>(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
+    public func fetchEnclosuresOf<T: Enclosure>(_ streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
         let route = Router.api(FetchEnclosuresOfStreamAPI<T>(streamId: streamId, params: paginationParams))
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<PaginatedEnclosureCollection<T>>) -> Void in
+            if useCache {
+                if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
+                    let v = PaginatedEnclosureCollection<T>(json: JSON.parse(json))
+                    observer.send(value: v)
+                } else {
+                    observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
+                }
+                return
+            }
+            let req = self.manager.request(route).validate().responseJSON() { r in
                 if let e = r.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
-                } else if let items = r.result.value {
-                    observer.send(value: items)
+                } else if let value = r.result.value {
+                    let json = JSON(json: value)
+                    if let url = route.urlRequest?.url?.absoluteString {
+                        if let str = json.rawString() {
+                            let _ = try? JSONCache.shared.add(str, forKey: url)
+                        }
+                    }
+                    observer.send(value: PaginatedEnclosureCollection<T>(json: json))
                     observer.sendCompleted()
                 }
             }
@@ -423,14 +455,29 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchEnclosureMixOf<T: Enclosure>(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
+    public func fetchEnclosureMixOf<T: Enclosure>(_ streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
         let route = Router.api(FetchEnclosuresOfMixAPI<T>(streamId: streamId, params: paginationParams))
         return SignalProducer { (observer, disposable) in
-            let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<PaginatedEnclosureCollection<T>>) -> Void in
+            if useCache {
+                if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
+                    let v = PaginatedEnclosureCollection<T>(json: JSON.parse(json))
+                    observer.send(value: v)
+                } else {
+                    observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
+                }
+                return
+            }
+            let req = self.manager.request(route).validate().responseJSON() { r in
                 if let e = r.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
-                } else if let items = r.result.value {
-                    observer.send(value: items)
+                } else if let value = r.result.value {
+                    let json = JSON(json: value)
+                    if let url = route.urlRequest?.url?.absoluteString {
+                        if let str = json.rawString() {
+                            let _ = try? JSONCache.shared.add(str, forKey: url)
+                        }
+                    }
+                    observer.send(value: PaginatedEnclosureCollection(json: json))
                     observer.sendCompleted()
                 }
             }
@@ -438,28 +485,28 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchTracksOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
-        return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
+    public func fetchTracksOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedTrackCollection, NSError> {
+        return fetchEnclosuresOf(streamId, paginationParams: paginationParams, useCache: useCache)
     }
 
-    public func fetchAlbumsOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedAlbumCollection, NSError> {
-        return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
+    public func fetchAlbumsOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedAlbumCollection, NSError> {
+        return fetchEnclosuresOf(streamId, paginationParams: paginationParams, useCache: useCache)
     }
 
-    public func fetchPlaylistsOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
-        return fetchEnclosuresOf(streamId, paginationParams: paginationParams)
+    public func fetchPlaylistsOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
+        return fetchEnclosuresOf(streamId, paginationParams: paginationParams, useCache: useCache)
     }
 
-    public func fetchTrackMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedTrackCollection, NSError> {
-        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams)
+    public func fetchTrackMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedTrackCollection, NSError> {
+        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams, useCache: useCache)
     }
 
-    public func fetchAlbumMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedAlbumCollection, NSError> {
-        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams)
+    public func fetchAlbumMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedAlbumCollection, NSError> {
+        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams, useCache: useCache)
     }
 
-    public func fetchPlaylistMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
-        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams)
+    public func fetchPlaylistMixOf(_ streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedPlaylistCollection, NSError> {
+        return fetchEnclosureMixOf(streamId, paginationParams: paginationParams, useCache: useCache)
     }
 
     public func markEntriesAs(_ action: MarkerAction, items: [Entry]) -> SignalProducer<Void, NSError> {
@@ -506,7 +553,7 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             var urlRequest = try! route.asURLRequest()
             if useCache {
-                if let url = urlRequest.url?.absoluteString, let json = JSONCacheSet.get(url)?.item?.value {
+                if let url = urlRequest.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
                     let wall = Wall(json: JSON.parse(json))
                     observer.send(value: wall)
                 } else {
@@ -521,7 +568,7 @@ extension CloudAPIClient {
                     let json = JSON(value)
                     if let url = r.request?.url?.absoluteString {
                         if let str = json.rawString() {
-                            let _ = JSONCacheSet.set(url, item: JSONItem(id: url, value: str))
+                            let _ = try? JSONCache.shared.add(str, forKey: url)
                         }
                     }
                     let wall = Wall(json: json)

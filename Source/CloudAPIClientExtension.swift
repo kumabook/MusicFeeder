@@ -11,6 +11,7 @@ import ReactiveSwift
 import Result
 import FeedlyKit
 import Alamofire
+import Cache
 #if os(iOS)
     import UIKit
 #endif
@@ -172,34 +173,66 @@ extension CloudAPIClient {
         return fetchEntries(streamId: streamId, paginationParams: paginationParams)
     }
 
-    public func fetchEntries(streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchEntries(streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedEntryCollection, NSError> {
+        let route = Router.fetchContents(target, streamId, paginationParams)
         return SignalProducer { (observer, disposable) in
-            let req = self.fetchContents(streamId, paginationParams: paginationParams, completionHandler: { response in
+            if useCache {
+                if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
+                    let v = PaginatedEntryCollection(json: JSON.parse(json))
+                    observer.send(value: v)
+                } else {
+                    observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
+                }
+                return
+            }
+            let req = self.manager.request(route).validate().responseJSON() { response in
                 if let e = response.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: response.response))
-                } else if let entries = response.result.value {
-                    observer.send(value: entries)
+                } else if let value = response.result.value {
+                    let json = JSON(json: value)
+                    if let url = route.urlRequest?.url?.absoluteString {
+                        if let str = json.rawString() {
+                            let _ = try? JSONCache.shared.add(str, forKey: url)
+                        }
+                    }
+                    observer.send(value: PaginatedEntryCollection(json: json))
                     observer.sendCompleted()
                 } else {
                     observer.send(error: self.buildError(error: NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
                 }
-            })
+            }
             disposable.add({ req.cancel() })
         }
     }
 
-    public func fetchMix(streamId: String, paginationParams: MixParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    public func fetchMix(streamId: String, paginationParams: MixParams, useCache: Bool = false) -> SignalProducer<PaginatedEntryCollection, NSError> {
+        let route = Router.fetchMix(target, streamId, paginationParams)
         return SignalProducer { (observer, disposable) in
-            let req = self.fetchMix(streamId, paginationParams: paginationParams, completionHandler: { response in
+            if useCache {
+                if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
+                    let v = PaginatedEntryCollection(json: JSON.parse(json))
+                    observer.send(value: v)
+                } else {
+                    observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
+                }
+                return
+            }
+            let req = self.manager.request(route).validate().responseJSON() { response in
                 if let e = response.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: response.response))
-                } else if let entries = response.result.value {
-                    observer.send(value: entries)
+                } else if let value = response.result.value {
+                    let json = JSON(json: value)
+                    if let url = route.urlRequest?.url?.absoluteString {
+                        if let str = json.rawString() {
+                            let _ = try? JSONCache.shared.add(str, forKey: url)
+                        }
+                    }
+                    observer.send(value: PaginatedEntryCollection(json: json))
                     observer.sendCompleted()
                 } else {
                     observer.send(error: self.buildError(error: NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
                 }
-            })
+            }
             disposable.add({ req.cancel() })
         }
     }
@@ -232,18 +265,33 @@ extension CloudAPIClient {
         }
     }
 
-    public func searchFeeds(query: SearchQueryOfFeed) -> SignalProducer<[Feed], NSError> {
+    public func searchFeeds(query: SearchQueryOfFeed, useCache: Bool = false) -> SignalProducer<[Feed], NSError> {
+        let route = Router.searchFeeds(target, query)
         return SignalProducer { (observer, disposable) in
-            let req = self.searchFeeds(query, completionHandler: { response in
+            if useCache {
+                if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
+                    let feeds = JSON.parse(json).arrayValue.map({ Feed(json: $0) })
+                    observer.send(value: feeds)
+                } else {
+                    observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
+                }
+                return
+            }
+            let req = self.manager.request(route).responseJSON() {response in
                 if let e = response.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: response.response))
-                } else {
-                    if let feedResults = response.result.value {
-                        observer.send(value: feedResults.results)
-                        observer.sendCompleted()
+                } else if let value = response.result.value {
+                    let json = JSON(json: value)
+                    if let url = route.urlRequest?.url?.absoluteString {
+                        if let str = json.rawString() {
+                            let _ = try? JSONCache.shared.add(str, forKey: url)
+                        }
                     }
+                    let feedResults = SearchResultFeeds(json: json)
+                    observer.send(value: feedResults.results)
+                    observer.sendCompleted()
                 }
-            })
+            }
             disposable.add({ req.cancel() })
         }
     }
