@@ -30,6 +30,10 @@ public final class JSONCache {
         return cache.object(forKey: forKey)
     }
 
+    public func clear() {
+        try? cache.clear()
+    }
+
     public func clearExpired() {
         try? cache.clearExpired()
     }
