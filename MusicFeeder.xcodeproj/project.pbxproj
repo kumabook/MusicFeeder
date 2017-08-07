@@ -257,7 +257,6 @@
 		678024751F3826200056CB91 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024741F3826200056CB91 /* Cache.framework */; };
 		678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
 		678305851B9897A000A83F52 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
-		6783B6751E271917004B6B23 /* CacheableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6783B6741E271917004B6B23 /* CacheableSpec.swift */; };
 		678E3B5B1EDEEC26001E9F3D /* EntryMixRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678E3B5A1EDEEC26001E9F3D /* EntryMixRepository.swift */; };
 		678E3B5C1EDEEC26001E9F3D /* EntryMixRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678E3B5A1EDEEC26001E9F3D /* EntryMixRepository.swift */; };
 		678E3B5D1EDEEC26001E9F3D /* EntryMixRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678E3B5A1EDEEC26001E9F3D /* EntryMixRepository.swift */; };
@@ -341,6 +340,18 @@
 		67E1F3831E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */; };
 		67E315761DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */; };
 		67E315781DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */; };
+		67FD16FC1F38437B006805E9 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024701F38260E0056CB91 /* Cache.framework */; };
+		67FD16FD1F38437B006805E9 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246E1F3826070056CB91 /* SwiftHash.framework */; };
+		67FD16FE1F384384006805E9 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246C1F3825F80056CB91 /* Cache.framework */; };
+		67FD16FF1F384384006805E9 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246A1F3825EB0056CB91 /* SwiftHash.framework */; };
+		67FD17001F3843B8006805E9 /* Cache.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 678024701F38260E0056CB91 /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67FD17011F3843B8006805E9 /* SwiftHash.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6780246E1F3826070056CB91 /* SwiftHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67FD17021F3843C2006805E9 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024741F3826200056CB91 /* Cache.framework */; };
+		67FD17031F3843C2006805E9 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024721F3826190056CB91 /* SwiftHash.framework */; };
+		67FD17041F3843C5006805E9 /* Cache.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 678024741F3826200056CB91 /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67FD17051F3843C5006805E9 /* SwiftHash.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 678024721F3826190056CB91 /* SwiftHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67FD17061F3843CE006805E9 /* Cache.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6780246C1F3825F80056CB91 /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		67FD17071F3843CE006805E9 /* SwiftHash.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6780246A1F3825EB0056CB91 /* SwiftHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -389,6 +400,8 @@
 				67156F161DCB7A6E007DC6F1 /* SnapKit.framework in CopyFiles */,
 				67156F171DCB7A6E007DC6F1 /* SoundCloudKit.framework in CopyFiles */,
 				67156F181DCB7A6E007DC6F1 /* SwiftyJSON.framework in CopyFiles */,
+				67FD17001F3843B8006805E9 /* Cache.framework in CopyFiles */,
+				67FD17011F3843B8006805E9 /* SwiftHash.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +426,8 @@
 				67156F3E1DCB7ACD007DC6F1 /* SnapKit.framework in CopyFiles */,
 				67156F3F1DCB7ACD007DC6F1 /* SoundCloudKit.framework in CopyFiles */,
 				67156F401DCB7ACD007DC6F1 /* SwiftyJSON.framework in CopyFiles */,
+				67FD17041F3843C5006805E9 /* Cache.framework in CopyFiles */,
+				67FD17051F3843C5006805E9 /* SwiftHash.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,6 +452,8 @@
 				67156DDF1DCB6F06007DC6F1 /* SDWebImage.framework in CopyFiles */,
 				67916DBD1BAEB768004419B0 /* Alamofire.framework in CopyFiles */,
 				67156DDE1DCB6EB9007DC6F1 /* ReactiveSwift.framework in CopyFiles */,
+				67FD17061F3843CE006805E9 /* Cache.framework in CopyFiles */,
+				67FD17071F3843CE006805E9 /* SwiftHash.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -550,7 +567,6 @@
 		678024741F3826200056CB91 /* Cache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cache.framework; path = Carthage/Build/tvOS/Cache.framework; sourceTree = "<group>"; };
 		678305821B987B9600A83F52 /* SubscriptionStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionStore.swift; path = Source/SubscriptionStore.swift; sourceTree = SOURCE_ROOT; };
 		678305841B9897A000A83F52 /* CategoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryStore.swift; path = Source/CategoryStore.swift; sourceTree = SOURCE_ROOT; };
-		6783B6741E271917004B6B23 /* CacheableSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheableSpec.swift; path = Spec/CacheableSpec.swift; sourceTree = SOURCE_ROOT; };
 		678E3B5A1EDEEC26001E9F3D /* EntryMixRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryMixRepository.swift; path = Source/EntryMixRepository.swift; sourceTree = SOURCE_ROOT; };
 		678E3B5E1EDFCAFB001E9F3D /* TrackMixRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackMixRepository.swift; path = Source/TrackMixRepository.swift; sourceTree = SOURCE_ROOT; };
 		678E3B641EDFDEA8001E9F3D /* TimeSpecifiedAlbumRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSpecifiedAlbumRepository.swift; path = Source/TimeSpecifiedAlbumRepository.swift; sourceTree = SOURCE_ROOT; };
@@ -628,6 +644,8 @@
 				67156F061DCB7A4D007DC6F1 /* SDWebImage.framework in Frameworks */,
 				67156F071DCB7A4D007DC6F1 /* SnapKit.framework in Frameworks */,
 				67156F081DCB7A4D007DC6F1 /* SoundCloudKit.framework in Frameworks */,
+				67FD16FC1F38437B006805E9 /* Cache.framework in Frameworks */,
+				67FD16FD1F38437B006805E9 /* SwiftHash.framework in Frameworks */,
 				67156F091DCB7A4D007DC6F1 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,6 +689,8 @@
 				67156F261DCB7A96007DC6F1 /* SoundCloudKit.framework in Frameworks */,
 				67156F271DCB7A96007DC6F1 /* SwiftyJSON.framework in Frameworks */,
 				67156E0B1DCB748A007DC6F1 /* MusicFeeder.framework in Frameworks */,
+				67FD17021F3843C2006805E9 /* Cache.framework in Frameworks */,
+				67FD17031F3843C2006805E9 /* SwiftHash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,6 +734,8 @@
 				67D2657A1BACE16A000240FB /* Result.framework in Frameworks */,
 				67D2657B1BACE16A000240FB /* SoundCloudKit.framework in Frameworks */,
 				67D2657C1BACE16A000240FB /* SwiftyJSON.framework in Frameworks */,
+				67FD16FE1F384384006805E9 /* Cache.framework in Frameworks */,
+				67FD16FF1F384384006805E9 /* SwiftHash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -750,6 +772,8 @@
 		67156E571DCB763C007DC6F1 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				6780246C1F3825F80056CB91 /* Cache.framework */,
+				6780246A1F3825EB0056CB91 /* SwiftHash.framework */,
 				673841E61EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework */,
 				6777921C1E7566B000ACC53D /* MediaPlayer.framework */,
 				6777921E1E7566B600ACC53D /* StoreKit.framework */,
@@ -774,6 +798,8 @@
 		67156E581DCB7646007DC6F1 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				678024701F38260E0056CB91 /* Cache.framework */,
+				6780246E1F3826070056CB91 /* SwiftHash.framework */,
 				675120F01E782AD100489729 /* StoreKit.framework */,
 				673B94091E978725004F0C22 /* YouTubeKit.framework */,
 				67156E591DCB7672007DC6F1 /* Alamofire.framework */,
@@ -796,6 +822,8 @@
 		67156EB81DCB76BC007DC6F1 /* tvOS */ = {
 			isa = PBXGroup;
 			children = (
+				678024741F3826200056CB91 /* Cache.framework */,
+				678024721F3826190056CB91 /* SwiftHash.framework */,
 				675120F21E782ADA00489729 /* StoreKit.framework */,
 				673B940B1E97873A004F0C22 /* YouTubeKit.framework */,
 				67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */,
@@ -922,12 +950,6 @@
 		679C52751B70F16800BE6614 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				678024741F3826200056CB91 /* Cache.framework */,
-				678024721F3826190056CB91 /* SwiftHash.framework */,
-				678024701F38260E0056CB91 /* Cache.framework */,
-				6780246E1F3826070056CB91 /* SwiftHash.framework */,
-				6780246C1F3825F80056CB91 /* Cache.framework */,
-				6780246A1F3825EB0056CB91 /* SwiftHash.framework */,
 				67156E571DCB763C007DC6F1 /* iOS */,
 				67156E581DCB7646007DC6F1 /* macOS */,
 				67156EB81DCB76BC007DC6F1 /* tvOS */,
@@ -1017,7 +1039,6 @@
 				6709D4041DAD4B68004DE304 /* TopicRepositorySpec.swift */,
 				674804911DB4087100D6FD33 /* EntryRepositorySpec.swift */,
 				674804931DB5896700D6FD33 /* TrackRespoistorySpec.swift */,
-				6783B6741E271917004B6B23 /* CacheableSpec.swift */,
 			);
 			name = Spec;
 			path = FeedlyClientTests;
@@ -1492,7 +1513,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				674804941DB5896700D6FD33 /* TrackRespoistorySpec.swift in Sources */,
-				6783B6751E271917004B6B23 /* CacheableSpec.swift in Sources */,
 				6748048E1DB2715C00D6FD33 /* TopicRepositorySpec.swift in Sources */,
 				674804921DB4087100D6FD33 /* EntryRepositorySpec.swift in Sources */,
 				679C532F1B70F6A900BE6614 /* PlaylistSpec.swift in Sources */,
