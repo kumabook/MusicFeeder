@@ -30,7 +30,6 @@ open class TopicRepository {
     open static var shared: TopicRepository = TopicRepository(cloudApiClient: CloudAPIClient.shared)
     open fileprivate(set) var items:      [Topic] = []
     open fileprivate(set) var cacheItems: [Topic] = []
-    fileprivate var cacheList: TopicCacheList
     open var cloudApiClient: CloudAPIClient
     
     open var state:                State
@@ -42,7 +41,6 @@ open class TopicRepository {
         self.cloudApiClient = cloudApiClient
         signal              = pipe.0
         observer            = pipe.1
-        cacheList           = TopicCacheList.findOrCreate(KEY)
         state               = .cacheOnly
         loadCacheItems()
     }
@@ -73,14 +71,15 @@ open class TopicRepository {
             self.state = .normal
             self.observer.send(value: .completeLoading)
         }, value: { topics in
-            let _ = self.cacheList.clear()
-            self.cacheList = TopicCacheList.findOrCreate(self.KEY)
-            let _ = self.cacheList.add(topics)
             self.items = topics
         }
         ).start()
     }
     open func loadCacheItems() {
-        cacheItems = realize(cacheList.items).map { Topic(store: $0 as! TopicStore) }
+        cloudApiClient.fetchTopics(useCache: true).on(failed: { error in
+            print("No cache")
+        }, value: { topics in
+            self.cacheItems = topics
+        }).start()
     }
 }

@@ -113,7 +113,7 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
         }
     }
 
-    open func fetchCollection(streamId: String, paginationParams: FeedlyKit.PaginationParams) -> SignalProducer<C, NSError> {
+    open func fetchCollection(streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<C, NSError> {
         return SignalProducer<C, NSError>.empty
     }
 
@@ -121,18 +121,6 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
         lastUpdated = Int64(NSDate().timeIntervalSince1970 * 1000)
     }
 
-    open func fetchCacheItems() {
-        state = .fetchingCache
-        DispatchQueue.main.async() {
-            self.observer.send(value: .startLoadingCache)
-            self.loadCacheItems()
-            self.state = .cacheOnly
-            DispatchQueue.main.async() {
-                self.observer.send(value: .completeLoadingCache)
-            }
-        }
-    }
-    
     open func fetchLatestItems() {
         if state != .init && state != .cacheOnly && state != .normal && state != .error {
             return
@@ -157,11 +145,6 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
                     let latestItems = paginatedCollection.items
                     self.items.insert(contentsOf: latestItems, at: 0)
                     self.updateLastUpdated()
-                    if latestItems.count > 0 {
-                        self.clearCacheItems()
-                    }
-                    self.addCacheItems(self.items)
-                    self.loadCacheItems()
                     UIScheduler().schedule {
                         DispatchQueue.main.async() {
                             self.observer.send(value: .completeLoadingLatest) // First reload tableView,
@@ -206,11 +189,6 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
                     if self.lastUpdated == nil {
                         self.updateLastUpdated()
                     }
-                    if self.items.count > 0 {
-                        self.clearCacheItems() // need to be optimized: append new items only
-                        self.addCacheItems(self.items)
-                    }
-                    self.loadCacheItems()
                     UIScheduler().schedule {
                         DispatchQueue.main.async() {
                             self.observer.send(value: .completeLoadingNext)
@@ -223,8 +201,23 @@ open class PaginatedCollectionRepository<C: PaginatedCollection, I> where C.Item
                     }
             }).start()
     }
-    open var cacheKey: String { return stream.streamId }
-    open func addCacheItems(_ items: [C.ItemType]) {}
-    open func loadCacheItems() {}
-    open func clearCacheItems() {}
+    public func fetchCacheItems() {
+        state = .fetchingCache
+        fetchCollection(streamId: stream.streamId, paginationParams: paginationParams, useCache: true).on(failed: {_ in
+            self.state = .cacheOnly
+            UIScheduler().schedule {
+                DispatchQueue.main.async() {
+                    self.observer.send(value: .completeLoadingCache)
+                }
+            }
+        }, value: { paginatedCollection in
+            self.cacheItems = paginatedCollection.items
+            self.state = .cacheOnly
+            UIScheduler().schedule {
+                DispatchQueue.main.async() {
+                    self.observer.send(value: .completeLoadingCache)
+                }
+            }
+        }).start()
+    }
 }

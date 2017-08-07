@@ -24,20 +24,8 @@ open class TrackStreamRepository: EnclosureStreamRepository<Track> {
 
     // MARK: - PaginatedCollectionRepository protocol
     
-    open override func addCacheItems(_ items: [Track]) {
-        let _ = TrackCacheList.findOrCreate(cacheKey).add(items)
-    }
-    open override func loadCacheItems() {
-        cacheItems = realize(TrackCacheList.findOrCreate(cacheKey).items).map { Track(store: $0 as! TrackStore) }
-    }
-    open override func clearCacheItems() {
-        let _ = TrackCacheList.findOrCreate(cacheKey).clear()
-    }
     open override func cacheItemsUpdated() {
         QueueScheduler().schedule() {
-            self.cacheItems.forEach {
-                $0.loadPropertiesFromCache(false)
-            }
             UIScheduler().schedule() {
                 self.observer.send(value: .completeLoadingNext)
             }
@@ -47,9 +35,6 @@ open class TrackStreamRepository: EnclosureStreamRepository<Track> {
         detailLoader?.dispose()
         self.playlistQueue = PlaylistQueue(playlists: [])
         QueueScheduler().schedule() {
-            self.items.forEach {
-                $0.loadPropertiesFromCache(true)
-            }
             UIScheduler().schedule() {
                 self.observer.send(value: .completeLoadingNext)
             }

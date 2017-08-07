@@ -26,8 +26,8 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
     open internal(set) var feedlyClient        = CloudAPIClient.shared
     open internal(set) var pinkspiderClient    = PinkSpiderAPIClient.shared
 
-    open override func fetchCollection(streamId: String, paginationParams paginatedParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
-        return feedlyClient.fetchEntries(streamId: streamId, paginationParams: paginatedParams)
+    open override func fetchCollection(streamId: String, paginationParams paginatedParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedEntryCollection, NSError> {
+        return feedlyClient.fetchEntries(streamId: streamId, paginationParams: paginatedParams, useCache: useCache)
     }
 
     open override func dispose() {
@@ -107,17 +107,6 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
                     .map { $0! }
     }
 
-    // MARK: - PaginatedCollectionRepository protocol
-
-    open override func addCacheItems(_ items: [Entry]) {
-        let _ = EntryCacheList.findOrCreate(cacheKey).add(items)
-    }
-    open override func loadCacheItems() {
-        cacheItems = realize(EntryCacheList.findOrCreate(cacheKey).items).map { Entry(store: $0 as! EntryStore) }
-    }
-    open override func clearCacheItems() {
-        let _ = EntryCacheList.findOrCreate(cacheKey).clear()
-    }
     open override func itemsUpdated() {
         fetchAllPlaylists()
     }

@@ -17,8 +17,8 @@ open class EnclosureStreamRepository<T: Enclosure>: PaginatedCollectionRepositor
     open fileprivate(set) var feedlyClient = CloudAPIClient.shared
     open var sharedObserver: Disposable?
 
-    open override func fetchCollection(streamId: String, paginationParams: FeedlyKit.PaginationParams)-> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
-        return feedlyClient.fetchEnclosuresOf(streamId, paginationParams: paginationParams)
+    open override func fetchCollection(streamId: String, paginationParams: FeedlyKit.PaginationParams, useCache: Bool = false)-> SignalProducer<PaginatedEnclosureCollection<T>, NSError> {
+        return feedlyClient.fetchEnclosuresOf(streamId, paginationParams: paginationParams, useCache: useCache)
     }
 
     deinit {
@@ -42,16 +42,7 @@ open class EnclosureStreamRepository<T: Enclosure>: PaginatedCollectionRepositor
     }
 
     // MARK: - PaginatedCollectionRepository protocol
-    
-    open override func addCacheItems(_ items: [T]) {
-        // not support
-    }
-    open override func loadCacheItems() {
-        // not support
-    }
-    open override func clearCacheItems() {
-        // not support
-    }
+
     open override func cacheItemsUpdated() {
         // not support
     }

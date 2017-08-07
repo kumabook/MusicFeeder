@@ -17,10 +17,6 @@ open class EntryMixRepository: EntryRepository {
     var name:      String
     var type:      MixType
     
-    override open var cacheKey: String {
-        return "\(stream.streamId)-\(name)-\(type.rawValue)"
-    }
-    
     public init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int, name: String, type: MixType, newerThan: Int64?, olderThan: Int64?) {
         self.newerThan = newerThan
         self.olderThan = olderThan
@@ -50,9 +46,9 @@ open class EntryMixRepository: EntryRepository {
         return params
     }
 
-    open override func fetchCollection(streamId: String, paginationParams paginatedParams: FeedlyKit.PaginationParams) -> SignalProducer<PaginatedEntryCollection, NSError> {
+    open override func fetchCollection(streamId: String, paginationParams paginatedParams: FeedlyKit.PaginationParams, useCache: Bool = false) -> SignalProducer<PaginatedEntryCollection, NSError> {
         if let mixParams = paginationParams as? MixParams {
-            return feedlyClient.fetchMix(streamId: streamId, paginationParams: mixParams)
+            return feedlyClient.fetchMix(streamId: streamId, paginationParams: mixParams, useCache: useCache)
         } else {
             fatalError("Invalid params")
         }

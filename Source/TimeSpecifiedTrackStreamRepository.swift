@@ -14,10 +14,6 @@ open class TimeSpecifiedTrackStreamRepository: TrackStreamRepository {
     var olderThan: Int64?
     var name: String
 
-    override open var cacheKey: String {
-        return "\(stream.streamId)-\(name)"
-    }
-
     public init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int, newerThan: Int64?, olderThan: Int64?, name: String) {
         self.newerThan = newerThan
         self.olderThan = olderThan
