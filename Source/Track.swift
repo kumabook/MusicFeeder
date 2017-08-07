@@ -364,22 +364,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         return TrackStore.save(self)
     }
 
-    fileprivate func cacheProperties() {
-        QueueScheduler().schedule {
-            TrackRepository.sharedInstance.cacheTrack(self)
-        }
-    }
-
-    public func loadPropertiesFromCache(_ providerOnly: Bool = false) {
-        if let store = TrackRepository.sharedInstance.getCacheTrackStore(id) {
-            if !providerOnly {
-                self.updateProperties(store)
-            }
-            self.updateProviderProperties(store)
-            status = .cache
-        }
-    }
-
     public func updateProperties(_ track: SoundCloudKit.Track) {
         soundcloudTrack = track
         title           = track.title
@@ -460,7 +444,6 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public func fetchDetail() -> SignalProducer<Track, NSError> {
         if CloudAPIClient.includesTrack {
             return fetchTrack().combineLatest(with: fetchPropertiesFromProviderIfNeed()).map {_,_ in
-                self.cacheProperties()
                 return self
             }
         } else {
