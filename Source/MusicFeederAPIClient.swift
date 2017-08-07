@@ -263,8 +263,11 @@ open class PaginatedEnclosureCollection<T: Enclosure>: ResponseObjectSerializabl
     open let direction:    String?
     open let alternate:    Link?
     open let items:        [T]
-    required public init?(response: HTTPURLResponse, representation: Any) {
+    required public convenience init?(response: HTTPURLResponse, representation: Any) {
         let json     = JSON(representation)
+        self.init(json: json)
+    }
+    public init(json: JSON) {
         id           = json["id"].stringValue
         updated      = json["updated"].int64
         continuation = json["continuation"].string
