@@ -39,20 +39,6 @@ open class RealmMigration {
         UserDefaults.standard.setValue(schemaVersion, forKey: key)
     }
 
-    open class func deleteAllCacheItems() {
-        TopicCacheList.deleteAllItems()
-        EntryCacheList.deleteAllItems()
-        TrackCacheList.deleteAllItems()
-        TrackCacheSet.deleteAllItems()
-    }
-    
-    open class func deleteOldCacheItems(before: Int64) {
-        TopicCacheList.deleteOldItems(before: before)
-        EntryCacheList.deleteOldItems(before: before)
-        TrackCacheList.deleteOldItems(before: before)
-        TrackCacheSet.deleteOldItems(before: before)
-    }
-
     open class func mainConfiguration() -> RLMRealmConfiguration {
         let config = RLMRealmConfiguration.default()
         config.schemaVersion = schemaVersion
@@ -142,11 +128,7 @@ open class RealmMigration {
          (TagStore.className(),          TagStore.requiredProperties()),
          (EntryStore.className(),        EntryStore.requiredProperties()),
          (ProfileStore.className(),      ProfileStore.requiredProperties()),
-         (EntryCacheList.className(),    EntryCacheList.requiredProperties()),
-         (TopicCacheList.className(),    TopicCacheList.requiredProperties()),
-         (TrackCacheList.className(),    TrackCacheList.requiredProperties()),
-         (TrackCacheSet.className(),     TrackCacheSet.requiredProperties()),
-         (TrackCacheEntity.className(),  TrackCacheEntity.requiredProperties())]
+         ]
         objects.forEach {
             let className = $0.0
             let props     = $0.1
@@ -171,7 +153,6 @@ open class RealmMigration {
                 return path.appendingPathComponent("db.realm")
             }
         #endif
-        print("path : \(RLMRealmConfiguration.default().fileURL!.path)")
         return RLMRealmConfiguration.default().fileURL!.path
     }
     open class func migrateListenItLater() {
@@ -255,10 +236,11 @@ open class RealmMigration {
     }
 
     open class func migrateCache() {
-        try? RLMRealm.performMigration(for: RealmMigration.configurationOf(RealmMigration.cacheListPath))
-        try? RLMRealm.performMigration(for: RealmMigration.configurationOf(RealmMigration.cacheSetPath))
-        let _ = EntryCacheList.realm
-        let _ = TrackCacheSet.realm
+        let fm = FileManager()
+        if fm.fileExists(atPath: RealmMigration.cacheListPath) {
+            try? fm.removeItem(atPath: RealmMigration.cacheListPath)
+            try? fm.removeItem(atPath: RealmMigration.cacheSetPath)
+        }
     }
 
 
