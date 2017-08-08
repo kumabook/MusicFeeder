@@ -92,10 +92,10 @@ extension Entry {
         }
     }
 
-    public var url: NSURL? {
+    public var url: URL? {
         if let alternate = self.alternate {
             if alternate.count > 0 {
-                return NSURL(string: alternate[0].href)
+                return URL(string: alternate[0].href)
             }
         }
         return nil
