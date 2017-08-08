@@ -42,7 +42,7 @@ public struct PlaylistifiedEntry: Equatable, Hashable, ResponseObjectSerializabl
         url         = json["url"].stringValue
         title       = json["title"].string
         description = json["description"].string
-        visualUrl   = json["thumbnail_url"].string.flatMap { URL(string: $0) }
+        visualUrl   = json["visual_url"].string.flatMap { URL(string: $0) }
         locale      = json["locale"].string
         updatedAt   = json["updated_at"].string?.dateFromISO8601?.timestamp ?? 0
         createdAt   = json["created_at"].string?.dateFromISO8601?.timestamp ?? 0
