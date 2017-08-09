@@ -18,7 +18,7 @@ open class PinkSpiderAPIClient {
     open static var shared = PinkSpiderAPIClient()
     static var sharedManager: Alamofire.SessionManager! = Alamofire.SessionManager()
 
-    open func playlistify(_ targetUrl: URL, errorOnFailure: Bool) -> SignalProducer<PlaylistifiedEntry, NSError> {
+    open func playlistify(_ targetUrl: URL, errorOnFailure: Bool = true) -> SignalProducer<PlaylistifiedEntry, NSError> {
         return SignalProducer { (observer, disposable) in
             let url = String(format: "%@/v1/playlistify", PinkSpiderAPIClient.baseUrl)
             let request = PinkSpiderAPIClient.sharedManager.request(url, parameters: ["url": targetUrl], encoding: URLEncoding.default)
