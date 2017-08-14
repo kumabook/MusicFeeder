@@ -269,6 +269,40 @@ public enum ResourceItem {
         default: return [:]
         }
     }
+    public var thumbnailURL: URL? {
+        switch self {
+        case .entry(let e):    return e.thumbnailURL
+        case .track(let t):    return t.thumbnailURL
+        case .album(let a):    return a.artworkUrl
+        case .playlist(let p): return p.artworkUrl
+        case .stream(let s, _),
+             .trackStream(let s, _),
+             .albumStream(let s, _),
+             .playlistStream(let s, _),
+             .mix(let s, _, _),
+             .trackMix(let s, _, _),
+             .albumMix(let s, _, _),
+             .playlistMix(let s, _, _):
+            return s.thumbnailURL
+        }
+    }
+    public var title: String? {
+        switch self {
+        case .entry(let e):    return e.title
+        case .track(let t):    return t.title
+        case .album(let a):    return a.title
+        case .playlist(let p): return p.title
+        case .stream(let s, _),
+             .trackStream(let s, _),
+             .albumStream(let s, _),
+             .playlistStream(let s, _),
+             .mix(let s, _, _),
+             .trackMix(let s, _, _),
+             .albumMix(let s, _, _),
+             .playlistMix(let s, _, _):
+            return s.streamTitle
+        }
+    }
     public var stream: FeedlyKit.Stream? {
         switch self {
         case .stream(let stream, _):         return stream
