@@ -214,4 +214,90 @@ extension Entry {
         savedCount = entry.savedCount
         readCount  = entry.readCount
     }
+    open func toJSON() -> [String: Any?] {
+        return [
+        "id":              id,
+        "title":           title,
+        "content":         content?.toJSON(),
+        "summary":         summary?.toJSON(),
+        "author":          author,
+        "crawled":         crawled,
+        "recrawled":       recrawled,
+        "published":       published,
+        "updated":         updated,
+        "alternate":       alternate?.map { $0.toJSON() },
+        "origin":          origin.map { $0.toJSON() },
+        "keywords":        keywords,
+        "visual":          visual?.toJSON(),
+        "unread":          unread,
+        "tags":            tags?.map { $0.toJSON() },
+        "categories":      categories.map { $0.toJSON() },
+        "engagement":      engagement,
+        "actionTimestamp": actionTimestamp,
+        "enclosure":       enclosure?.map { $0.toJSON() },
+        "fingerprint":     fingerprint,
+        "originId":        originId,
+        "sid":             sid,
+        ]
+    }
+}
+
+extension Content {
+    public func toJSON() -> [String: Any] {
+        return [
+            "direction": direction,
+            "content":   content,
+        ]
+    }
+}
+
+extension Tag {
+    public func toJSON() -> [String: Any?] {
+        return [
+            "id":          id,
+            "label":       label,
+            "description": description,
+        ]
+    }
+}
+
+extension FeedlyKit.Category {
+    public func toJSON() -> [String: Any?] {
+        return [
+            "id":          id,
+            "label":       label,
+            "description": description,
+        ]
+    }
+}
+
+extension Link {
+    public func toJSON() -> [String: Any?] {
+        return [
+            "href":   href,
+            "type":   type,
+            "length": length,
+        ]
+    }
+}
+
+extension Origin {
+    public func toJSON() -> [String: Any?] {
+        return [
+            "streamId": streamId,
+            "title":    title,
+            "htmlUrl":  htmlUrl,
+        ]
+    }
+}
+
+extension Visual {
+    public func toJSON() -> [String: Any?] {
+        return [
+            "url":         url,
+            "width":       width,
+            "height":      height,
+            "contentType": contentType,
+        ]
+    }
 }
