@@ -131,7 +131,7 @@ public final class Album: Equatable, Hashable, Enclosure {
         savedCount   = json["saved_count"].int64
         playCount    = json["play_count"].int64
         entries      = json["entries"].array?.map { Entry(json: $0) }
-        entriesCount = json["likes_count"].int64
+        entriesCount = json["entries_count"].int64
 
         isLiked      = json["is_liked"].bool
         isSaved      = json["is_saved"].bool
