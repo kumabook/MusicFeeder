@@ -128,6 +128,20 @@ public struct Resource: ResponseObjectSerializable {
         item         = ResourceItem(resourceType: resourceType, itemType: itemType, item: itemJson, options: optionsJson)
         options      = optionsJson.dictionaryObject
     }
+    public init(dictionary: [String:Any?]) {
+        self.init(json: JSON(dictionary))
+    }
+    public func toJSON() -> [String:Any] {
+        var v: [String:Any] = [
+            "resource_id": resourceId,
+            "resource_type": resourceType.rawValue
+        ]
+        if let itemType = itemType, let item = item {
+            v["item_type"] = itemType.rawValue
+            v["item"] = item.toJSON()
+        }
+        return v
+    }
     public func fetchItem() -> SignalProducer<Resource, NSError> {
         guard let itemType = itemType else { return SignalProducer(value: self) }
         switch itemType {
@@ -247,6 +261,12 @@ public enum ResourceItem {
             self = .playlist(ServicePlaylist(json: item))
         case .custom:
             return nil
+        }
+    }
+    public func toJSON() -> [String: Any?] {
+        switch self {
+        case .entry(let entry): return entry.toJSON()
+        default: return [:]
         }
     }
     public var stream: FeedlyKit.Stream? {
