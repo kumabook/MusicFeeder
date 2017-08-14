@@ -265,7 +265,10 @@ public enum ResourceItem {
     }
     public func toJSON() -> [String: Any?] {
         switch self {
-        case .entry(let entry): return entry.toJSON()
+        case .entry(let entry):       return entry.toJSON()
+        case .track(let track):       return track.toJSON()
+        case .album(let album):       return album.toJSON()
+        case .playlist(let playlist): return playlist.toJSON()
         default: return [:]
         }
     }
