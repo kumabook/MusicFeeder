@@ -159,7 +159,7 @@ public final class Album: Equatable, Hashable, Enclosure {
             "saved_count":   savedCount,
             "play_count":    playCount,
             "entries":       entries?.map { $0.toJSON() },
-            "entriesCount":  entriesCount,
+            "entries_count": entriesCount,
             "is_liked":      isLiked,
             "is_saved":      isSaved,
             "is_played":     isPlayed,
