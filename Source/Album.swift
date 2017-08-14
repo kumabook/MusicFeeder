@@ -138,6 +138,34 @@ public final class Album: Equatable, Hashable, Enclosure {
         isPlayed     = json["is_played"].bool
     }
 
+    public func toJSON() -> [String: Any?] {
+        return [
+            "id":           id,
+            "provider":      provider.rawValue,
+            "identifier":    identifier,
+            "owner_id":      owner_id,
+            "owner_name":    owner_name,
+            "url":           url,
+            "title":         title,
+            "description":   description,
+            "thumbnail_url": thumbnailUrl?.absoluteString,
+            "artwork_url":   artworkUrl?.absoluteString,
+            "state":         state.rawValue,
+            "published_at":  publishedAt,
+            "updated_at":    updatedAt,
+            "created_at":    createdAt,
+//            "likers":        likers,
+            "likes_count":   likesCount,
+            "saved_count":   savedCount,
+            "play_count":    playCount,
+            "entries":       entries?.map { $0.toJSON() },
+            "entriesCount":  entriesCount,
+            "is_liked":      isLiked,
+            "is_saved":      isSaved,
+            "is_played":     isPlayed,
+        ]
+    }
+
     public func updateMarkProperties(item: Album) {
         isLiked      = item.isLiked
         isSaved      = item.isSaved
