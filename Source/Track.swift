@@ -433,6 +433,32 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         return store
     }
 
+    public func toJSON() -> [String: Any?] {
+        return [
+            "id":           id,
+            "provider":     provider.rawValue,
+            "identifier":   identifier,
+            "url":          url,
+            "entries":      entries?.map { $0.toJSON() },
+            "entriesCount": entriesCount,
+            "title":        title,
+            "thumbnailUrl": thumbnailURL?.absoluteString,
+            "artworkUrl":   artworkURL?.absoluteString,
+            "audioUrl":     audioUrl?.absoluteString,
+            "duration":     duration,
+            "likesCount":   likesCount,
+//            "likers": likers,
+            "savedCount":   savedCount,
+            "playCount":    playCount,
+            "expiresAt":    expiresAt,
+            "artist":       artist,
+            "publishedAt":  publishedAt,
+            "updatedAt":    updatedAt,
+            "createdAt":    createdAt,
+            "state":        state.rawValue,
+        ]
+    }
+
     #if os(iOS)
     public func open() {
         if let url = URL(string: url) {
