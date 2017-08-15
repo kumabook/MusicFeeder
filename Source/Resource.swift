@@ -104,11 +104,11 @@ public struct Resource: ResponseObjectSerializable {
             return resourceId
         }
     }
-    public init(resourceId: String, resourceType: ResourceType, engagement: Int, itemType: ItemType? = nil, item: ResourceItem? = nil, options: [String:Any]? = nil) {
+    public init(resourceId: String, resourceType: ResourceType? = nil, engagement: Int = 0, itemType: ItemType? = nil, item: ResourceItem? = nil, options: [String:Any]? = nil) {
         self.resourceId   = resourceId
-        self.resourceType = resourceType
+        self.resourceType = resourceType ?? Resource.resourceType(resourceId: resourceId)
         self.engagement   = engagement
-        self.itemType     = itemType
+        self.itemType     = itemType ?? Resource.itemType(resourceId: resourceId)
         self.item         = item
         self.options      = options
     }
