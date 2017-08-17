@@ -22,7 +22,7 @@ open class TrackStore: RLMObject {
     dynamic var likesCount:   Int64  = 0
     dynamic var entriesCount: Int64  = 0
     dynamic var expiresAt:    Int64  = 0
-    dynamic var artist:       String = ""
+    dynamic var artist:       String = "" // FIXME
 
 
     dynamic var entries              = RLMArray(objectClassName: EntryStore.className())

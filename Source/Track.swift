@@ -66,7 +66,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public fileprivate(set) var savedCount:   Int64?
     public fileprivate(set) var playCount:    Int64?
     public fileprivate(set) var expiresAt:    Int64
-    public fileprivate(set) var artist:       String?
+    public fileprivate(set) var ownerId:      String?
+    public fileprivate(set) var ownerName:    String?
+    
     public fileprivate(set) var publishedAt:  Int64
     public fileprivate(set) var updatedAt:    Int64
     public fileprivate(set) var createdAt:    Int64
@@ -183,18 +185,11 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public internal(set) var soundcloudTrack: SoundCloudKit.Track?
 
     public var subtitle: String? {
-        switch provider {
-        case .appleMusic:
-            return artist
-        case .spotify:
-            return artist
-        case .youTube:
-            return artist
-        case .soundCloud:
-            return soundcloudTrack?.user.username
-        default:
-            return nil
-        }
+        return artist
+    }
+
+    public var artist: String? {
+        return ownerName ?? ownerId
     }
 
     public var hashValue: Int {
@@ -214,7 +209,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public init(id: String, provider: Provider, url: String, identifier: String,
                 title: String? = nil, duration: TimeInterval = 0,
                 thumbnailUrl: URL? = nil, artworkUrl: URL? = nil, audioUrl: URL? = nil,
-                artist: String? = nil, status: Status = .init,
+                ownerId: String? = nil, ownerName: String? = nil, status: Status = .init,
                 expiresAt: Int64 = Int64.max, publishedAt: Int64 = 0, createdAt: Int64 = 0, updatedAt: Int64 = 0, state: EnclosureState = .alive,
                 isLiked: Bool? = nil, isSaved: Bool? = nil, isPlayed: Bool? = nil) {
         self.id           = id
@@ -226,7 +221,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         self.artworkUrl   = artworkUrl
         self.audioUrl     = audioUrl
         self.duration     = duration
-        self.artist       = artist
+        self.ownerId      = ownerId
+        self.ownerName    = ownerName
         self.status       = .init
         self.expiresAt    = Int64.max
         self.publishedAt  = publishedAt
@@ -259,7 +255,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         playCount    = json["play_count"].int64
         entriesCount = json["entries_count"].int64
         entries      = json["entries"].array?.map { Entry(json: $0) }
-        artist       = json["owner_name"].string
+        ownerId      = json["owner_id"].string
+        ownerName    = json["owner_name"].string
         publishedAt  = json["published_at"].string.flatMap { $0.dateFromISO8601?.timestamp } ?? 0
         createdAt    = json["updated_at"].string.flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
         updatedAt    = json["created_at"].string.flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
@@ -317,8 +314,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         createdAt    = dic["updated_at"].flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
         updatedAt    = dic["created_at"].flatMap { $0.dateFromISO8601?.timestamp }   ?? 0
         state        = dic["state"].flatMap { EnclosureState(rawValue: $0) } ?? EnclosureState.alive
-        artist       = dic["owner_name"] ?? dic["owner_id"]
-
+        ownerName    = dic["owner_name"]
+        ownerId      = dic["owner_id"]
         likesCount   = dic["likes_count"].flatMap { Int64($0) }
         playCount    = dic["play_count"].flatMap { Int64($0) }
         entriesCount = dic["entries_count"].flatMap { Int64($0) }
@@ -369,7 +366,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         title           = track.title
         duration        = TimeInterval(track.duration / 1000)
         audioUrl        = URL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
-        artist          = soundcloudTrack?.user.username
+        ownerId         = String(soundcloudTrack?.user.id ?? 0)
+        ownerName       = soundcloudTrack?.user.username
         status          = .available
 
         if let url = track.thumbnailURL {
@@ -396,7 +394,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         if let url = URL(string: store.streamUrl), !store.streamUrl.isEmpty, audioUrl == nil {
             audioUrl = url
         }
-        artist = store.artist
+        ownerName = store.artist
         switch provider {
         case .youTube:
             expiresAt = store.expiresAt
@@ -429,7 +427,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         store.entriesCount   = entriesCount ?? 0
         // entries and likers are not neccesary, depends on the store
         store.expiresAt      = expiresAt
-        store.artist         = artist ?? ""
+        store.artist         = ownerName ?? ownerId ?? ""
         return store
     }
 
@@ -451,7 +449,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
             "saved_count":   savedCount,
             "play_count":    playCount,
             "expires_at":    expiresAt,
-            "artist":        artist,
+            "owner_id":       ownerId,
+            "owner_name":     ownerName,
             "published_at":  publishedAt,
             "updated_at":    updatedAt,
             "created_at":    createdAt,
