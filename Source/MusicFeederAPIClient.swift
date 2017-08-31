@@ -45,6 +45,47 @@ struct CreateProfileAPI: API {
     }
 }
 
+struct EditProfileAPI: API {
+    var url:    String  { return "\(CloudAPIClient.shared.target.baseUrl)/v3/profile/edit" }
+    var method: Alamofire.HTTPMethod { return .get }
+    func asURLRequest() throws -> URLRequest {
+        return try URLRequest(url: URL(string: url)!, method: method)
+    }
+}
+
+public struct EditProfileResponse: ResponseObjectSerializable {
+    public var picturePutUrl: String
+    public var pictureUrl:    String
+    public var profile:       Profile
+    public init?(response: HTTPURLResponse, representation: Any) {
+        let json = JSON(representation)
+        self.init(json: json)
+    }
+
+    init(json: JSON) {
+        self.picturePutUrl = json["picture_put_url"].stringValue
+        self.pictureUrl    = json["picture_url"].stringValue
+        self.profile       = Profile(json: json)
+    }
+
+    public func uploadPicture(imageData: Data) -> SignalProducer<Void, NSError> {
+        guard let url = URL(string: picturePutUrl) else { return SignalProducer(error: NSError(domain: "MusicFeeder", code: 0, userInfo: ["message":"invalid picture put url"]))}
+        return SignalProducer { (observer, disposable) in
+            let req: Alamofire.UploadRequest = Alamofire.upload(imageData, to: url, method: .put)
+            req.response(completionHandler: {
+                if let error = $0.error {
+                    observer.send(error: error as NSError)
+                } else {
+                    observer.send(value: ())
+                }
+            })
+            disposable.add {
+                req.cancel()
+            }
+        }
+    }
+}
+
 struct FetchAccessTokenAPI: API {
     var email:        String
     var password:     String
@@ -287,6 +328,21 @@ extension CloudAPIClient {
         let route = Router.api(CreateProfileAPI(email: email, password: password))
         return SignalProducer { (observer, disposable) in
             let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<Profile>) -> Void in
+                if let e = r.result.error {
+                    observer.send(error: self.buildError(error: e as NSError, response: r.response))
+                } else if let profile = r.result.value {
+                    observer.send(value: profile)
+                    observer.sendCompleted()
+                }
+            }
+            disposable.add({ req.cancel() })
+        }
+    }
+
+    public func editProfile() -> SignalProducer<EditProfileResponse, NSError> {
+        let route = Router.api(EditProfileAPI())
+        return SignalProducer{ (observer, disposable) in
+            let req = self.manager.request(route).validate().responseObject() { (r: DataResponse<EditProfileResponse>) -> Void in
                 if let e = r.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: r.response))
                 } else if let profile = r.result.value {
