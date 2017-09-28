@@ -31,7 +31,7 @@ open class PinkSpiderAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() {
+            disposable.observeEnded {
                 request.cancel()
             }
         }

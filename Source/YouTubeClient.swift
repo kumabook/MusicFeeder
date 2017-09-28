@@ -105,7 +105,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }
@@ -121,7 +121,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }
@@ -137,7 +137,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }
@@ -153,7 +153,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }
@@ -169,7 +169,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }
@@ -185,7 +185,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }
@@ -201,7 +201,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }
@@ -217,7 +217,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }
@@ -233,7 +233,7 @@ extension YouTubeKit.APIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add {
+            disposable.observeEnded {
                 request.cancel()
             }
         }

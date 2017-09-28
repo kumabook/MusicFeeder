@@ -532,7 +532,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
                         observer.send(value: self)
                         observer.sendCompleted()
                     }).start()
-                disposable.add {
+                disposable.observeEnded {
                     disp.dispose()
                 }
             case .soundCloud:

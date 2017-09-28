@@ -79,7 +79,7 @@ public struct EditProfileResponse: ResponseObjectSerializable {
                     observer.send(value: ())
                 }
             })
-            disposable.add {
+            disposable.observeEnded {
                 req.cancel()
             }
         }
@@ -335,7 +335,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -350,7 +350,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -365,7 +365,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -397,7 +397,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -412,7 +412,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -427,7 +427,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -442,7 +442,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -467,7 +467,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -507,7 +507,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -537,7 +537,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -576,7 +576,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -591,7 +591,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -632,7 +632,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 }

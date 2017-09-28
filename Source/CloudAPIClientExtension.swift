@@ -109,7 +109,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             })
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -123,7 +123,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -139,7 +139,7 @@ extension CloudAPIClient {
                     observer.send(error: self.buildError(error: NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
                 }
             })
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -153,7 +153,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             })
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -201,7 +201,7 @@ extension CloudAPIClient {
                     observer.send(error: self.buildError(error: NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -233,7 +233,7 @@ extension CloudAPIClient {
                     observer.send(error: self.buildError(error: NSError(domain: "MusicFeeder", code: 0, userInfo: [:]), response: response.response))
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -247,7 +247,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             })
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -261,7 +261,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             })
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -292,7 +292,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -308,7 +308,7 @@ extension CloudAPIClient {
                     }
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -324,7 +324,7 @@ extension CloudAPIClient {
                     }
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
@@ -338,7 +338,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add({ req.cancel() })
+            disposable.observeEnded({ req.cancel() })
         }
     }
 
@@ -352,7 +352,7 @@ extension CloudAPIClient {
                     observer.sendCompleted()
                 }
             }
-            disposable.add() { req.cancel() }
+            disposable.observeEnded() { req.cancel() }
         }
     }
 
