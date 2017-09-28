@@ -23,7 +23,7 @@ extension RLMResults: Sequence {
 }
 */
 
-func realize<O: RLMObject>(_ array: RLMArray<O>) -> [O] {
+func realize<O>(_ array: RLMArray<O>) -> [O] {
     var items: [O] = []
     for i in 0..<array.count {
         items.append(array.object(at: i))
@@ -31,7 +31,7 @@ func realize<O: RLMObject>(_ array: RLMArray<O>) -> [O] {
     return items
 }
 
-func realizeResults<O: RLMObject>(_ results: RLMResults<O>) -> [O] {
+func realizeResults<O>(_ results: RLMResults<O>) -> [O] {
     var items: [O] = []
     for i in 0..<results.count {
         items.append(results.object(at: i))
