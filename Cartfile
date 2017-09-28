@@ -1,4 +1,4 @@
-github "ReactiveCocoa/ReactiveSwift"
+github "ReactiveCocoa/ReactiveSwift" "2.1.0-alpha.2"
 github "kumabook/FeedlyKit"
 github "kumabook/PlayerKit"
 github "SwiftyJSON/SwiftyJSON"
