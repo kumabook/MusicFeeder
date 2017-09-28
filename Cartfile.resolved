@@ -1,5 +1,4 @@
 github "Alamofire/Alamofire" "4.5.1"
-github "Flipboard/FLAnimatedImage" "1.0.14"
 github "Quick/Nimble" "v7.0.2"
 github "Quick/Quick" "v1.2.0"
 github "ReactiveCocoa/ReactiveSwift" "2.1.0-alpha.2"
