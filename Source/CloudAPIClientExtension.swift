@@ -296,7 +296,7 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchEntry(entryId: String) -> SignalProducer<Entry, NSError> {
+    public func fetchEntry(entryId: String) -> SignalProducer<FeedlyKit.Entry, NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchEntry(entryId) { response in
                 if let e = response.result.error {
@@ -312,7 +312,7 @@ extension CloudAPIClient {
         }
     }
 
-    public func fetchEntries(entryIds: [String]) -> SignalProducer<[Entry], NSError> {
+    public func fetchEntries(entryIds: [String]) -> SignalProducer<[FeedlyKit.Entry], NSError> {
         return SignalProducer { (observer, disposable) in
             let req = self.fetchEntries(entryIds) { response in
                 if let e = response.result.error {
