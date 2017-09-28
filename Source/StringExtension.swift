@@ -32,8 +32,8 @@ extension String {
         let results = regex.matches(in: self, options: [], range: NSMakeRange(0, string.length))
         return results.map { result in
             (0..<result.numberOfRanges).map {
-                result.rangeAt($0).location != NSNotFound ?
-                    string.substring(with: result.rangeAt($0)) : ""
+                result.range(at: $0).location != NSNotFound ?
+                    string.substring(with: result.range(at: $0)) : ""
             }
         }
     }
