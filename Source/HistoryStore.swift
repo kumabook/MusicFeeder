@@ -27,9 +27,9 @@ open class HistoryStore: RLMObject {
         return ["id", "type"]
     }
 
-    open dynamic var id:        String = ""
-    open dynamic var type:      String = ""
-    open dynamic var timestamp: Int64  = 0
+    @objc open dynamic var id:        String = ""
+    @objc open dynamic var type:      String = ""
+    @objc open dynamic var timestamp: Int64  = 0
 
     open var entry: EntryStore? {
         if type == HistoryType.Entry.rawValue {

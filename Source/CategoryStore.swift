@@ -34,8 +34,8 @@ extension FeedlyKit.Category {
 }
 
 open class CategoryStore: RLMObject {
-    dynamic var id:        String = ""
-    dynamic var label:     String = ""
+    @objc dynamic var id:        String = ""
+    @objc dynamic var label:     String = ""
     open override class func primaryKey() -> String {
         return "id"
     }

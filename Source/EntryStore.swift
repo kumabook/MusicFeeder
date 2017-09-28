@@ -142,29 +142,29 @@ extension Visual {
 }
 
 public class ContentStore: RLMObject {
-    public dynamic var direction: String = ""
-    public dynamic var content:   String = ""
-    public override class func requiredProperties() -> [String] {
+    @objc public dynamic var direction: String = ""
+    @objc public dynamic var content:   String = ""
+    @objc public override class func requiredProperties() -> [String] {
         return ["direction", "content"]
     }
 }
 public class LinkStore: RLMObject {
-    public dynamic var href:   String = ""
-    public dynamic var type:   String = ""
-    public dynamic var length: Int    = 0
+    @objc public dynamic var href:   String = ""
+    @objc public dynamic var type:   String = ""
+    @objc public dynamic var length: Int    = 0
     public override class func requiredProperties() -> [String] {
         return ["href", "type"]
     }
 }
 public class TagStore:      RLMObject {
-    public dynamic var id:    String = ""
-    public dynamic var label: String = ""
+    @objc public dynamic var id:    String = ""
+    @objc public dynamic var label: String = ""
     public override class func requiredProperties() -> [String] {
         return ["id", "label"]
     }
 }
 public class KeywordStore:  RLMObject {
-    public dynamic var name: String = ""
+    @objc public dynamic var name: String = ""
     public override init() {
         super.init()
     }
@@ -178,46 +178,46 @@ public class KeywordStore:  RLMObject {
 }
 
 public class OriginStore: RLMObject {
-    public dynamic var streamId: String = ""
-    public dynamic var title:    String = ""
-    public dynamic var htmlUrl:  String = ""
+    @objc public dynamic var streamId: String = ""
+    @objc public dynamic var title:    String = ""
+    @objc public dynamic var htmlUrl:  String = ""
     public override class func requiredProperties() -> [String] {
         return ["streamId", "title", "htmlUrl"]
     }
 }
 public class VisualStore: RLMObject {
-    public dynamic var url:         String = ""
-    public dynamic var width:       Int    = 0
-    public dynamic var height:      Int    = 0
-    public dynamic var contentType: String = ""
+    @objc public dynamic var url:         String = ""
+    @objc public dynamic var width:       Int    = 0
+    @objc public dynamic var height:      Int    = 0
+    @objc public dynamic var contentType: String = ""
     public override class func requiredProperties() -> [String] {
         return ["url", "contentType"]
     }
 }
 
 open class EntryStore: RLMObject {
-    public dynamic var id:              String = ""
-    public dynamic var title:           String?
-    public dynamic var author:          String?
-    public dynamic var crawled:         Int64         = 0
-    public dynamic var recrawled:       Int64         = 0
-    public dynamic var published:       Int64         = 0
-    public dynamic var updated:         Int64         = 0
-    public dynamic var unread:          Bool          = false
-    public dynamic var engagement:      Int           = 0
-    public dynamic var actionTimestamp: Int64         = 0
-    public dynamic var fingerprint:     String?
-    public dynamic var originId:        String?
-    public dynamic var sid:             String?
-    public dynamic var content:         ContentStore?
-    public dynamic var summary:         ContentStore?
-    public dynamic var origin:          OriginStore?
-    public dynamic var visual:          VisualStore?
-    public dynamic var alternate  = RLMArray(objectClassName: LinkStore.className())
-    public dynamic var keywords   = RLMArray(objectClassName: KeywordStore.className())
-    public dynamic var tags       = RLMArray(objectClassName: TagStore.className())
-    public dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
-    public dynamic var enclusure  = RLMArray(objectClassName: LinkStore.className())
+    @objc public dynamic var id:              String = ""
+    @objc public dynamic var title:           String?
+    @objc public dynamic var author:          String?
+    @objc public dynamic var crawled:         Int64         = 0
+    @objc public dynamic var recrawled:       Int64         = 0
+    @objc public dynamic var published:       Int64         = 0
+    @objc public dynamic var updated:         Int64         = 0
+    @objc public dynamic var unread:          Bool          = false
+    @objc public dynamic var engagement:      Int           = 0
+    @objc public dynamic var actionTimestamp: Int64         = 0
+    @objc public dynamic var fingerprint:     String?
+    @objc public dynamic var originId:        String?
+    @objc public dynamic var sid:             String?
+    @objc public dynamic var content:         ContentStore?
+    @objc public dynamic var summary:         ContentStore?
+    @objc public dynamic var origin:          OriginStore?
+    @objc public dynamic var visual:          VisualStore?
+    @objc public dynamic var alternate  = RLMArray(objectClassName: LinkStore.className())
+    @objc public dynamic var keywords   = RLMArray(objectClassName: KeywordStore.className())
+    @objc public dynamic var tags       = RLMArray(objectClassName: TagStore.className())
+    @objc public dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
+    @objc public dynamic var enclusure  = RLMArray(objectClassName: LinkStore.className())
 
     class var realm: RLMRealm {
         get {

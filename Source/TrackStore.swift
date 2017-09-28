@@ -11,22 +11,22 @@ import Realm
 import FeedlyKit
 
 open class TrackStore: RLMObject {
-    dynamic var id:           String = ""
-    dynamic var url:          String = ""
-    dynamic var providerRaw:  String = ""
-    dynamic var identifier:   String = ""
-    dynamic var title:        String = ""
-    dynamic var streamUrl:    String = ""
-    dynamic var thumbnailUrl: String = ""
-    dynamic var duration:     Int    = 0
-    dynamic var likesCount:   Int64  = 0
-    dynamic var entriesCount: Int64  = 0
-    dynamic var expiresAt:    Int64  = 0
-    dynamic var artist:       String = "" // FIXME
+    @objc dynamic var id:           String = ""
+    @objc dynamic var url:          String = ""
+    @objc dynamic var providerRaw:  String = ""
+    @objc dynamic var identifier:   String = ""
+    @objc dynamic var title:        String = ""
+    @objc dynamic var streamUrl:    String = ""
+    @objc dynamic var thumbnailUrl: String = ""
+    @objc dynamic var duration:     Int    = 0
+    @objc dynamic var likesCount:   Int64  = 0
+    @objc dynamic var entriesCount: Int64  = 0
+    @objc dynamic var expiresAt:    Int64  = 0
+    @objc dynamic var artist:       String = "" // FIXME
 
 
-    dynamic var entries              = RLMArray(objectClassName: EntryStore.className())
-    dynamic var likers               = RLMArray(objectClassName: ProfileStore.className())
+    @objc dynamic var entries              = RLMArray(objectClassName: EntryStore.className())
+    @objc dynamic var likers               = RLMArray(objectClassName: ProfileStore.className())
 
     class var realm: RLMRealm {
         return RLMRealm.default()

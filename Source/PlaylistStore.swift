@@ -74,12 +74,12 @@ public enum OrderBy {
 }
 
 open class PlaylistStore: RLMObject {
-    dynamic var id:        String = ""
-    dynamic var title:     String = ""
-    dynamic var createdAt: Int64  = 0
-    dynamic var updatedAt: Int64  = 0
-    dynamic var number:    Float  = 0
-    dynamic var tracks = RLMArray(objectClassName: TrackStore.className())
+    @objc dynamic var id:        String = ""
+    @objc dynamic var title:     String = ""
+    @objc dynamic var createdAt: Int64  = 0
+    @objc dynamic var updatedAt: Int64  = 0
+    @objc dynamic var number:    Float  = 0
+    @objc dynamic var tracks = RLMArray(objectClassName: TrackStore.className())
 
     open override class func primaryKey() -> String {
         return "id"

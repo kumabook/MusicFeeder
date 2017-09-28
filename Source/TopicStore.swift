@@ -10,9 +10,9 @@ import Foundation
 import Realm
 
 open class TopicStore: RLMObject {
-    open dynamic var id:          String = ""
-    open dynamic var label:       String = ""
-    open dynamic var desc:        String = ""
+    @objc open dynamic var id:          String = ""
+    @objc open dynamic var label:       String = ""
+    @objc open dynamic var desc:        String = ""
     open override class func primaryKey() -> String {
         return "id"
     }

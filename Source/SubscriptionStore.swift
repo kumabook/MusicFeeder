@@ -40,14 +40,14 @@ extension Subscription {
 
 open class SubscriptionStore: RLMObject {
     static var sharedOrderBy: OrderBy = OrderBy.number(.desc)
-    open dynamic var id:         String = ""
-    open dynamic var title:      String = ""
-    open dynamic var visualUrl:  String?
-    open dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
-    open dynamic var createdAt:  Int64  = 0
-    open dynamic var updatedAt:  Int64  = 0
-    open dynamic var lastReadAt: Int64  = 0
-    open dynamic var number:     Float  = 0
+    @objc open dynamic var id:         String = ""
+    @objc open dynamic var title:      String = ""
+    @objc open dynamic var visualUrl:  String?
+    @objc open dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
+    @objc open dynamic var createdAt:  Int64  = 0
+    @objc open dynamic var updatedAt:  Int64  = 0
+    @objc open dynamic var lastReadAt: Int64  = 0
+    @objc open dynamic var number:     Float  = 0
     open override class func primaryKey() -> String {
         return "id"
     }

@@ -46,18 +46,18 @@ extension Profile {
 }
 
 open class ProfileStore: RLMObject {
-    dynamic var id:         String = ""
-    dynamic var email:      String = ""
-    dynamic var reader:     String = ""
-    dynamic var gender:     String = ""
-    dynamic var wave:       String = ""
-    dynamic var google:     String = ""
-    dynamic var facebook:   String = ""
-    dynamic var familyName: String = ""
-    dynamic var picture:    String = ""
-    dynamic var twitter:    String = ""
-    dynamic var givenName:  String = ""
-    dynamic var locale:     String = ""
+    @objc dynamic var id:         String = ""
+    @objc dynamic var email:      String = ""
+    @objc dynamic var reader:     String = ""
+    @objc dynamic var gender:     String = ""
+    @objc dynamic var wave:       String = ""
+    @objc dynamic var google:     String = ""
+    @objc dynamic var facebook:   String = ""
+    @objc dynamic var familyName: String = ""
+    @objc dynamic var picture:    String = ""
+    @objc dynamic var twitter:    String = ""
+    @objc dynamic var givenName:  String = ""
+    @objc dynamic var locale:     String = ""
     
 
     class var realm: RLMRealm {
