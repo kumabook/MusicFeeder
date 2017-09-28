@@ -375,7 +375,7 @@ extension CloudAPIClient {
             var urlRequest = try! route.asURLRequest()
             if useCache {
                 if let url = urlRequest.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
-                    let topics = JSON.parse(json).arrayValue.map({ Topic(json: $0) })
+                    let topics = JSON(parseJSON: json).arrayValue.map({ Topic(json: $0) })
                     observer.send(value: topics)
                 } else {
                     observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
@@ -486,7 +486,7 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             if useCache {
                 if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
-                    let v = PaginatedEnclosureCollection<T>(json: JSON.parse(json))
+                    let v = PaginatedEnclosureCollection<T>(json: JSON(parseJSON: json))
                     observer.send(value: v)
                 } else {
                     observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
@@ -516,7 +516,7 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             if useCache {
                 if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
-                    let v = PaginatedEnclosureCollection<T>(json: JSON.parse(json))
+                    let v = PaginatedEnclosureCollection<T>(json: JSON(parseJSON: json))
                     observer.send(value: v)
                 } else {
                     observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
@@ -610,7 +610,7 @@ extension CloudAPIClient {
             var urlRequest = try! route.asURLRequest()
             if useCache {
                 if let url = urlRequest.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
-                    let wall = Wall(json: JSON.parse(json))
+                    let wall = Wall(json: JSON(parseJSON: json))
                     observer.send(value: wall)
                 } else {
                     observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))

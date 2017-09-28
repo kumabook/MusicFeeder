@@ -178,7 +178,7 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             if useCache {
                 if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
-                    let v = PaginatedEntryCollection(json: JSON.parse(json))
+                    let v = PaginatedEntryCollection(json: JSON(parseJSON: json))
                     observer.send(value: v)
                 } else {
                     observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
@@ -210,7 +210,7 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             if useCache {
                 if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
-                    let v = PaginatedEntryCollection(json: JSON.parse(json))
+                    let v = PaginatedEntryCollection(json: JSON(parseJSON: json))
                     observer.send(value: v)
                 } else {
                     observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
@@ -270,7 +270,7 @@ extension CloudAPIClient {
         return SignalProducer { (observer, disposable) in
             if useCache {
                 if let url = route.urlRequest?.url?.absoluteString, let json = JSONCache.shared.get(forKey: url) {
-                    let feeds = JSON.parse(json).arrayValue.map({ Feed(json: $0) })
+                    let feeds = JSON(parseJSON: json).arrayValue.map({ Feed(json: $0) })
                     observer.send(value: feeds)
                 } else {
                     observer.send(error: NSError(domain: "music_feeder", code: -1, userInfo: ["message": "no cache"]))
