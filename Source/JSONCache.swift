@@ -14,7 +14,7 @@ import Cache
 
 public final class JSONCache {
     public var cacheLifetimeSec: TimeInterval
-    let cache = SpecializedCache<String>(name: "JSONCache")
+    let storage = try? Storage(diskConfig: DiskConfig(name: "JSONCache"))
 
     public static var shared: JSONCache = JSONCache()
 
@@ -23,22 +23,19 @@ public final class JSONCache {
     }
 
     public func add(_ jsonString: String, forKey: String) throws {
-        try cache.addObject(jsonString, forKey: forKey, expiry: Expiry.seconds(cacheLifetimeSec))
+        try storage?.setObject(jsonString, forKey: forKey, expiry: Expiry.seconds(cacheLifetimeSec))
     }
 
     public func get(forKey: String) -> String? {
-        return cache.object(forKey: forKey)
+        return (try? storage?.object(ofType: String.self, forKey: forKey))?.flatMap { $0 }
     }
 
     public func clear() {
-        try? cache.clear()
+        try? storage?.removeAll()
     }
 
     public func clearExpired() {
-        try? cache.clearExpired()
-    }
+        try? storage?.removeExpiredObjects()
 
-    public func cachedDiskSize() -> UInt64 {
-        return (try? cache.totalDiskSize()) ?? 0
     }
 }
