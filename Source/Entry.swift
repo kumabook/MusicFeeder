@@ -195,9 +195,6 @@ extension Entry {
             }
         } ?? []
     }
-    public var passedTime: String {
-        return published.date.passedTime
-    }
 
     public func toPlaylist() -> Playlist {
         if let t = title {
