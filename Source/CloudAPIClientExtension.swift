@@ -189,7 +189,7 @@ extension CloudAPIClient {
                 if let e = response.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let value = response.result.value {
-                    let json = JSON(json: value)
+                    let json = JSON(value)
                     if let url = route.urlRequest?.url?.absoluteString {
                         if let str = json.rawString() {
                             let _ = try? JSONCache.shared.add(str, forKey: url)
@@ -221,7 +221,7 @@ extension CloudAPIClient {
                 if let e = response.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let value = response.result.value {
-                    let json = JSON(json: value)
+                    let json = JSON(value)
                     if let url = route.urlRequest?.url?.absoluteString {
                         if let str = json.rawString() {
                             let _ = try? JSONCache.shared.add(str, forKey: url)
@@ -281,7 +281,7 @@ extension CloudAPIClient {
                 if let e = response.result.error {
                     observer.send(error: self.buildError(error: e as NSError, response: response.response))
                 } else if let value = response.result.value {
-                    let json = JSON(json: value)
+                    let json = JSON(value)
                     if let url = route.urlRequest?.url?.absoluteString {
                         if let str = json.rawString() {
                             let _ = try? JSONCache.shared.add(str, forKey: url)
