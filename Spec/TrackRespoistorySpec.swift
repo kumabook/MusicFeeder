@@ -24,7 +24,7 @@ class TrackRespoistorySpec: QuickSpec {
                 SpecHelper.login()
                 JSONCache.shared.clear()
             }
-            context("when it has no cache") {
+            context("1 when it has no cache") {
                 beforeEach {
                     expect(CloudAPIClient.isLoggedIn).toFinally(beTrue())
                     started = false
@@ -61,7 +61,7 @@ class TrackRespoistorySpec: QuickSpec {
                     }
                 }
             }
-            context("when it has cache") {
+            context("2 when it has cache") {
                 beforeEach {
                     self.entryRepository = EntryRepository(stream: self.stream, unreadOnly: false, perPage: 20)
                 }

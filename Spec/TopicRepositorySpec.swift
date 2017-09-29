@@ -23,7 +23,7 @@ class TopicRepositorySpec: QuickSpec {
                 SpecHelper.login()
                 JSONCache.shared.clear()
             }
-            context("when it has no cache") {
+            context("1 when it has no cache") {
                 beforeEach {
                     expect(CloudAPIClient.isLoggedIn).toFinally(beTrue())
                     started = false
@@ -48,7 +48,7 @@ class TopicRepositorySpec: QuickSpec {
                     expect(self.topicRepository.items.count).toFinally(beGreaterThan(0))
                 }
             }
-            context("when it has cache") {
+            context("2 when it has cache") {
                 beforeEach {
                     self.topicRepository = TopicRepository(cloudApiClient: CloudAPIClient.shared)
                 }
