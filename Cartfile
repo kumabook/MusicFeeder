@@ -1,7 +1,7 @@
 github "ReactiveCocoa/ReactiveSwift" "2.1.0-alpha.2"
 github "kumabook/FeedlyKit"
 github "kumabook/PlayerKit"
-github "SwiftyJSON/SwiftyJSON"
+github "SwiftyJSON/SwiftyJSON" "4.0.0-alpha.1"
 github "Alamofire/Alamofire"
 github "realm/realm-cocoa"
 github "kumabook/Breit"
