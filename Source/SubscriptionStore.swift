@@ -24,9 +24,7 @@ extension Subscription {
         var categories: [FeedlyKit.Category] = []
         for store in realizeResults(SubscriptionStore.findAll(orderBy)) {
             for c in realize(store.categories) {
-                if let categoryStore: CategoryStore = c as? CategoryStore {
-                    categories.append(FeedlyKit.Category(id: categoryStore.id, label: categoryStore.label))
-                }
+                categories.append(FeedlyKit.Category(id: c.id, label: c.label))
             }
             let subscription: Subscription = Subscription(id: store.id,
                                                        title: store.title,
@@ -43,7 +41,7 @@ open class SubscriptionStore: RLMObject {
     @objc open dynamic var id:         String = ""
     @objc open dynamic var title:      String = ""
     @objc open dynamic var visualUrl:  String?
-    @objc open dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
+    @objc open dynamic var categories = RLMArray<CategoryStore>(objectClassName: CategoryStore.className())
     @objc open dynamic var createdAt:  Int64  = 0
     @objc open dynamic var updatedAt:  Int64  = 0
     @objc open dynamic var lastReadAt: Int64  = 0

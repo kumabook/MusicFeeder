@@ -32,11 +32,11 @@ extension Entry {
         visual          = store.visual.map  { Visual(store: $0) }
         summary         = store.summary.map { Content(store: $0) }
 
-        alternate  = realize(store.alternate).map  { return Link(store: $0 as! LinkStore) }
-        keywords   = realize(store.keywords).map   { return ($0 as! KeywordStore).name }
-        tags       = realize(store.tags).map       { return Tag(store: $0 as! TagStore) }
-        categories = realize(store.categories).map { return Category(store: $0 as! CategoryStore) }
-        enclosure  = realize(store.enclusure).map  { return Link(store: $0 as! LinkStore) }
+        alternate  = realize(store.alternate).map  { return Link(store: $0) }
+        keywords   = realize(store.keywords).map   { return ($0).name }
+        tags       = realize(store.tags).map       { return Tag(store: $0) }
+        categories = realize(store.categories).map { return Category(store: $0) }
+        enclosure  = realize(store.enclusure).map  { return Link(store: $0) }
     }
     public func toStoreObject() -> EntryStore {
         let store = EntryStore()
@@ -213,11 +213,11 @@ open class EntryStore: RLMObject {
     @objc public dynamic var summary:         ContentStore?
     @objc public dynamic var origin:          OriginStore?
     @objc public dynamic var visual:          VisualStore?
-    @objc public dynamic var alternate  = RLMArray(objectClassName: LinkStore.className())
-    @objc public dynamic var keywords   = RLMArray(objectClassName: KeywordStore.className())
-    @objc public dynamic var tags       = RLMArray(objectClassName: TagStore.className())
-    @objc public dynamic var categories = RLMArray(objectClassName: CategoryStore.className())
-    @objc public dynamic var enclusure  = RLMArray(objectClassName: LinkStore.className())
+    @objc public dynamic var alternate  = RLMArray<LinkStore>(objectClassName: LinkStore.className())
+    @objc public dynamic var keywords   = RLMArray<KeywordStore>(objectClassName: KeywordStore.className())
+    @objc public dynamic var tags       = RLMArray<TagStore>(objectClassName: TagStore.className())
+    @objc public dynamic var categories = RLMArray<CategoryStore>(objectClassName: CategoryStore.className())
+    @objc public dynamic var enclusure  = RLMArray<LinkStore>(objectClassName: LinkStore.className())
 
     class var realm: RLMRealm {
         get {

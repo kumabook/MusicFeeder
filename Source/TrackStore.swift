@@ -25,8 +25,8 @@ open class TrackStore: RLMObject {
     @objc dynamic var artist:       String = "" // FIXME
 
 
-    @objc dynamic var entries              = RLMArray(objectClassName: EntryStore.className())
-    @objc dynamic var likers               = RLMArray(objectClassName: ProfileStore.className())
+    @objc dynamic var entries              = RLMArray<EntryStore>(objectClassName: EntryStore.className())
+    @objc dynamic var likers               = RLMArray<ProfileStore>(objectClassName: ProfileStore.className())
 
     class var realm: RLMRealm {
         return RLMRealm.default()

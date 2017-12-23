@@ -139,7 +139,7 @@ open class Playlist: PlayerKit.Playlist, Equatable, Hashable {
         updatedAt = store.updatedAt
         number    = store.number
         for trackStore in realize(store.tracks) {
-            _tracks.append(Track(store:trackStore as! TrackStore))
+            _tracks.append(Track(store:trackStore))
         }
         let pipe      = Signal<PlaylistEvent, NSError>.pipe()
         self.signal   = pipe.0
@@ -246,7 +246,7 @@ open class Playlist: PlayerKit.Playlist, Equatable, Hashable {
     open class func findAll(_ orderBy: OrderBy = .number(.desc)) -> [Playlist] {
         var playlists: [Playlist] = []
         for store in realizeResults(PlaylistStore.findAll(orderBy)) {
-            playlists.append(Playlist(store: store as! PlaylistStore))
+            playlists.append(Playlist(store: store))
         }
         return playlists
     }

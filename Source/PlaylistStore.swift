@@ -79,7 +79,7 @@ open class PlaylistStore: RLMObject {
     @objc dynamic var createdAt: Int64  = 0
     @objc dynamic var updatedAt: Int64  = 0
     @objc dynamic var number:    Float  = 0
-    @objc dynamic var tracks = RLMArray(objectClassName: TrackStore.className())
+    @objc dynamic var tracks = RLMArray<TrackStore>(objectClassName: TrackStore.className())
 
     open override class func primaryKey() -> String {
         return "id"
@@ -181,8 +181,8 @@ open class PlaylistStore: RLMObject {
         }
     }
 
-    internal class func findAll(_ orderBy: OrderBy = OrderBy.number(.desc)) -> RLMResults<RLMObject> {
-        return PlaylistStore.allObjects(in: realm).sortedResults(usingKeyPath: orderBy.name, ascending: orderBy.ascending)
+    internal class func findAll(_ orderBy: OrderBy = OrderBy.number(.desc)) -> RLMResults<PlaylistStore> {
+        return PlaylistStore.allObjects(in: realm).sortedResults(usingKeyPath: orderBy.name, ascending: orderBy.ascending) as! RLMResults<PlaylistStore>
     }
 
     internal class func findBy(id: String) -> PlaylistStore? {

@@ -275,9 +275,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         duration     = TimeInterval(store.duration)
         status       = .init
         likesCount   = store.likesCount
-        likers       = realize(store.likers).map  { Profile(store: $0 as! ProfileStore) }
+        likers       = realize(store.likers).map  { Profile(store: $0) }
         playCount    = nil
-        entries      = realize(store.entries).map { Entry(store: $0 as! EntryStore) }
+        entries      = realize(store.entries).map { Entry(store: $0) }
         entriesCount = store.entriesCount
         expiresAt    = store.expiresAt
         if let u = URL(string: store.thumbnailUrl), !store.thumbnailUrl.isEmpty {
@@ -409,8 +409,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         url          = store.url
         likesCount   = store.likesCount
         entriesCount = store.entriesCount
-        likers       = realize(store.likers).map  { Profile(store: $0 as! ProfileStore) }
-        entries      = realize(store.entries).map { Entry(store: $0 as! EntryStore) }
+        likers       = realize(store.likers).map  { Profile(store: $0) }
+        entries      = realize(store.entries).map { Entry(store: $0) }
     }
 
     internal func toStoreObject() -> TrackStore {
