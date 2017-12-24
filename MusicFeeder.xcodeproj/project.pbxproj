@@ -195,7 +195,6 @@
 		673293E41E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673293E31E96267F00A06FE9 /* SoundCloudAPIClientExtension.swift */; };
 		673672C51D1F918C006259F9 /* PlaylistQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673672C41D1F918C006259F9 /* PlaylistQueue.swift */; };
 		673841E71EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673841E61EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework */; };
-		673841E81EA9BA3B00436285 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 675120F01E782AD100489729 /* StoreKit.framework */; };
 		673841E91EA9BA7000436285 /* YouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 673B94091E978725004F0C22 /* YouTubeKit.framework */; };
 		673841EA1EA9BA8200436285 /* YouTubeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 673B94091E978725004F0C22 /* YouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		673841EB1EA9BD5C00436285 /* YouTubeiOSPlayerHelper.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 673841E61EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -249,11 +248,8 @@
 		677792291E757B8E00ACC53D /* PlaylistifiedEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792281E757B8E00ACC53D /* PlaylistifiedEntry.swift */; };
 		6777922A1E757B8E00ACC53D /* PlaylistifiedEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792281E757B8E00ACC53D /* PlaylistifiedEntry.swift */; };
 		6777922B1E757B8E00ACC53D /* PlaylistifiedEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677792281E757B8E00ACC53D /* PlaylistifiedEntry.swift */; };
-		6780246B1F3825EB0056CB91 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246A1F3825EB0056CB91 /* SwiftHash.framework */; };
 		6780246D1F3825F80056CB91 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246C1F3825F80056CB91 /* Cache.framework */; };
-		6780246F1F3826070056CB91 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246E1F3826070056CB91 /* SwiftHash.framework */; };
 		678024711F38260E0056CB91 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024701F38260E0056CB91 /* Cache.framework */; };
-		678024731F3826190056CB91 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024721F3826190056CB91 /* SwiftHash.framework */; };
 		678024751F3826200056CB91 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024741F3826200056CB91 /* Cache.framework */; };
 		678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
 		678305851B9897A000A83F52 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
@@ -341,17 +337,11 @@
 		67E315761DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */; };
 		67E315781DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */; };
 		67FD16FC1F38437B006805E9 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024701F38260E0056CB91 /* Cache.framework */; };
-		67FD16FD1F38437B006805E9 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246E1F3826070056CB91 /* SwiftHash.framework */; };
 		67FD16FE1F384384006805E9 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246C1F3825F80056CB91 /* Cache.framework */; };
-		67FD16FF1F384384006805E9 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6780246A1F3825EB0056CB91 /* SwiftHash.framework */; };
 		67FD17001F3843B8006805E9 /* Cache.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 678024701F38260E0056CB91 /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		67FD17011F3843B8006805E9 /* SwiftHash.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6780246E1F3826070056CB91 /* SwiftHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67FD17021F3843C2006805E9 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024741F3826200056CB91 /* Cache.framework */; };
-		67FD17031F3843C2006805E9 /* SwiftHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024721F3826190056CB91 /* SwiftHash.framework */; };
 		67FD17041F3843C5006805E9 /* Cache.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 678024741F3826200056CB91 /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		67FD17051F3843C5006805E9 /* SwiftHash.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 678024721F3826190056CB91 /* SwiftHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67FD17061F3843CE006805E9 /* Cache.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6780246C1F3825F80056CB91 /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		67FD17071F3843CE006805E9 /* SwiftHash.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6780246A1F3825EB0056CB91 /* SwiftHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -401,7 +391,6 @@
 				67156F171DCB7A6E007DC6F1 /* SoundCloudKit.framework in CopyFiles */,
 				67156F181DCB7A6E007DC6F1 /* SwiftyJSON.framework in CopyFiles */,
 				67FD17001F3843B8006805E9 /* Cache.framework in CopyFiles */,
-				67FD17011F3843B8006805E9 /* SwiftHash.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,7 +416,6 @@
 				67156F3F1DCB7ACD007DC6F1 /* SoundCloudKit.framework in CopyFiles */,
 				67156F401DCB7ACD007DC6F1 /* SwiftyJSON.framework in CopyFiles */,
 				67FD17041F3843C5006805E9 /* Cache.framework in CopyFiles */,
-				67FD17051F3843C5006805E9 /* SwiftHash.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,7 +441,6 @@
 				67916DBD1BAEB768004419B0 /* Alamofire.framework in CopyFiles */,
 				67156DDE1DCB6EB9007DC6F1 /* ReactiveSwift.framework in CopyFiles */,
 				67FD17061F3843CE006805E9 /* Cache.framework in CopyFiles */,
-				67FD17071F3843CE006805E9 /* SwiftHash.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,7 +607,6 @@
 				67156E711DCB7672007DC6F1 /* SnapKit.framework in Frameworks */,
 				67156E721DCB7672007DC6F1 /* SoundCloudKit.framework in Frameworks */,
 				67156E731DCB7672007DC6F1 /* SwiftyJSON.framework in Frameworks */,
-				6780246F1F3826070056CB91 /* SwiftHash.framework in Frameworks */,
 				678024711F38260E0056CB91 /* Cache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -630,7 +616,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				673841E91EA9BA7000436285 /* YouTubeKit.framework in Frameworks */,
-				673841E81EA9BA3B00436285 /* StoreKit.framework in Frameworks */,
 				67156DEF1DCB744F007DC6F1 /* MusicFeeder.framework in Frameworks */,
 				67156EFD1DCB7A4D007DC6F1 /* Alamofire.framework in Frameworks */,
 				67156EFE1DCB7A4D007DC6F1 /* Breit.framework in Frameworks */,
@@ -645,7 +630,6 @@
 				67156F071DCB7A4D007DC6F1 /* SnapKit.framework in Frameworks */,
 				67156F081DCB7A4D007DC6F1 /* SoundCloudKit.framework in Frameworks */,
 				67FD16FC1F38437B006805E9 /* Cache.framework in Frameworks */,
-				67FD16FD1F38437B006805E9 /* SwiftHash.framework in Frameworks */,
 				67156F091DCB7A4D007DC6F1 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -667,7 +651,6 @@
 				67156EB51DCB76B3007DC6F1 /* SoundCloudKit.framework in Frameworks */,
 				67156EB61DCB76B3007DC6F1 /* SwiftyJSON.framework in Frameworks */,
 				678024751F3826200056CB91 /* Cache.framework in Frameworks */,
-				678024731F3826190056CB91 /* SwiftHash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -690,7 +673,6 @@
 				67156F271DCB7A96007DC6F1 /* SwiftyJSON.framework in Frameworks */,
 				67156E0B1DCB748A007DC6F1 /* MusicFeeder.framework in Frameworks */,
 				67FD17021F3843C2006805E9 /* Cache.framework in Frameworks */,
-				67FD17031F3843C2006805E9 /* SwiftHash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,7 +681,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6780246D1F3825F80056CB91 /* Cache.framework in Frameworks */,
-				6780246B1F3825EB0056CB91 /* SwiftHash.framework in Frameworks */,
 				673841E71EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework in Frameworks */,
 				673B94121E978D24004F0C22 /* YouTubeKit.framework in Frameworks */,
 				6777921F1E7566B600ACC53D /* StoreKit.framework in Frameworks */,
@@ -735,7 +716,6 @@
 				67D2657B1BACE16A000240FB /* SoundCloudKit.framework in Frameworks */,
 				67D2657C1BACE16A000240FB /* SwiftyJSON.framework in Frameworks */,
 				67FD16FE1F384384006805E9 /* Cache.framework in Frameworks */,
-				67FD16FF1F384384006805E9 /* SwiftHash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
