@@ -76,7 +76,7 @@ class TrackRespoistorySpec: QuickSpec {
                         if let track = entry.tracks.get(0) {
                             expect(track.status).toFinally(equal(Track.Status.init))
                             expect(track.entries).to(beNil())
-                            expect(track.title?.characters.count ?? 0).to(beGreaterThan(0))
+                            expect(track.title?.count ?? 0).to(beGreaterThan(0))
                             expect(track.thumbnailUrl).notTo(beNil())
                         }
                     }
