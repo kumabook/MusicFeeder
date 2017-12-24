@@ -48,7 +48,7 @@ public class AppleMusicClient {
                     observer.send(error: error)
                 } else {
                     observer.send(value: identifier.flatMap {
-                        $0.characters.split(separator: "-").first
+                        $0.split(separator: "-").first
                     }.flatMap {
                         StoreFrontIDs[String($0)]
                     })
