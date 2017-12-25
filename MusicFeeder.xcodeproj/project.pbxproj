@@ -334,6 +334,8 @@
 		67E1F3811E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */; };
 		67E1F3821E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */; };
 		67E1F3831E8257F4003A8080 /* PlaylistStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */; };
+		67E2FD841FF11DFD0045D6DB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E2FD831FF11DFD0045D6DB /* StoreKit.framework */; };
+		67E2FD861FF11E040045D6DB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E2FD851FF11E040045D6DB /* StoreKit.framework */; };
 		67E315761DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */; };
 		67E315781DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */; };
 		67FD16FC1F38437B006805E9 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024701F38260E0056CB91 /* Cache.framework */; };
@@ -533,8 +535,6 @@
 		674804951DB6176E00D6FD33 /* account.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = account.json; path = Fixtures/account.json; sourceTree = SOURCE_ROOT; };
 		674DA6D61F0DE76D00E2BEE0 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Profile.swift; path = Source/Profile.swift; sourceTree = SOURCE_ROOT; };
 		675120E91E76F11B00489729 /* Enclosure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Enclosure.swift; path = Source/Enclosure.swift; sourceTree = SOURCE_ROOT; };
-		675120F01E782AD100489729 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
-		675120F21E782ADA00489729 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS10.1.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		675F8AA91ECC380D00C09EBE /* Wall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wall.swift; path = Source/Wall.swift; sourceTree = SOURCE_ROOT; };
 		675F8AAD1ECC38CE00C09EBE /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Resource.swift; path = Source/Resource.swift; sourceTree = SOURCE_ROOT; };
 		675F8AB71ECD929700C09EBE /* WallRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WallRepository.swift; path = Source/WallRepository.swift; sourceTree = SOURCE_ROOT; };
@@ -546,11 +546,8 @@
 		677792201E7573D500ACC53D /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Album.swift; path = Source/Album.swift; sourceTree = SOURCE_ROOT; };
 		677792241E7574EE00ACC53D /* EnclosureState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnclosureState.swift; path = Source/EnclosureState.swift; sourceTree = SOURCE_ROOT; };
 		677792281E757B8E00ACC53D /* PlaylistifiedEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistifiedEntry.swift; path = Source/PlaylistifiedEntry.swift; sourceTree = SOURCE_ROOT; };
-		6780246A1F3825EB0056CB91 /* SwiftHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftHash.framework; path = Carthage/Build/iOS/SwiftHash.framework; sourceTree = "<group>"; };
 		6780246C1F3825F80056CB91 /* Cache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cache.framework; path = Carthage/Build/iOS/Cache.framework; sourceTree = "<group>"; };
-		6780246E1F3826070056CB91 /* SwiftHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftHash.framework; path = Carthage/Build/Mac/SwiftHash.framework; sourceTree = "<group>"; };
 		678024701F38260E0056CB91 /* Cache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cache.framework; path = Carthage/Build/Mac/Cache.framework; sourceTree = "<group>"; };
-		678024721F3826190056CB91 /* SwiftHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftHash.framework; path = Carthage/Build/tvOS/SwiftHash.framework; sourceTree = "<group>"; };
 		678024741F3826200056CB91 /* Cache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cache.framework; path = Carthage/Build/tvOS/Cache.framework; sourceTree = "<group>"; };
 		678305821B987B9600A83F52 /* SubscriptionStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionStore.swift; path = Source/SubscriptionStore.swift; sourceTree = SOURCE_ROOT; };
 		678305841B9897A000A83F52 /* CategoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryStore.swift; path = Source/CategoryStore.swift; sourceTree = SOURCE_ROOT; };
@@ -579,6 +576,8 @@
 		67E1F3771E82554D003A8080 /* EnclosureStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnclosureStreamRepository.swift; path = Source/EnclosureStreamRepository.swift; sourceTree = SOURCE_ROOT; };
 		67E1F37C1E8257C1003A8080 /* AlbumStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlbumStreamRepository.swift; path = Source/AlbumStreamRepository.swift; sourceTree = SOURCE_ROOT; };
 		67E1F3801E8257F4003A8080 /* PlaylistStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistStreamRepository.swift; path = Source/PlaylistStreamRepository.swift; sourceTree = SOURCE_ROOT; };
+		67E2FD831FF11DFD0045D6DB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		67E2FD851FF11E040045D6DB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS11.2.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		67E315751DC5BA4400735D3B /* TimeSpecifiedEntryRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSpecifiedEntryRepository.swift; path = Source/TimeSpecifiedEntryRepository.swift; sourceTree = SOURCE_ROOT; };
 		67E315771DC5BA5600735D3B /* TimeSpecifiedTrackStreamRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSpecifiedTrackStreamRepository.swift; path = Source/TimeSpecifiedTrackStreamRepository.swift; sourceTree = SOURCE_ROOT; };
 		67FBBE271B6CE4EF00B567CB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Spec/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -595,6 +594,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67E2FD841FF11DFD0045D6DB /* StoreKit.framework in Frameworks */,
 				673B94111E978D1E004F0C22 /* YouTubeKit.framework in Frameworks */,
 				67156E671DCB7672007DC6F1 /* Alamofire.framework in Frameworks */,
 				67156E681DCB7672007DC6F1 /* Breit.framework in Frameworks */,
@@ -638,6 +638,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67E2FD861FF11E040045D6DB /* StoreKit.framework in Frameworks */,
 				673B94101E978D1B004F0C22 /* YouTubeKit.framework in Frameworks */,
 				67156EAA1DCB76B3007DC6F1 /* Alamofire.framework in Frameworks */,
 				67156EAB1DCB76B3007DC6F1 /* Breit.framework in Frameworks */,
@@ -680,10 +681,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6777921F1E7566B600ACC53D /* StoreKit.framework in Frameworks */,
 				6780246D1F3825F80056CB91 /* Cache.framework in Frameworks */,
 				673841E71EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework in Frameworks */,
 				673B94121E978D24004F0C22 /* YouTubeKit.framework in Frameworks */,
-				6777921F1E7566B600ACC53D /* StoreKit.framework in Frameworks */,
 				6777921D1E7566B000ACC53D /* MediaPlayer.framework in Frameworks */,
 				67D265841BACE17B000240FB /* Alamofire.framework in Frameworks */,
 				67D265851BACE17B000240FB /* Breit.framework in Frameworks */,
@@ -753,7 +754,6 @@
 			isa = PBXGroup;
 			children = (
 				6780246C1F3825F80056CB91 /* Cache.framework */,
-				6780246A1F3825EB0056CB91 /* SwiftHash.framework */,
 				673841E61EA9B99F00436285 /* YouTubeiOSPlayerHelper.framework */,
 				6777921C1E7566B000ACC53D /* MediaPlayer.framework */,
 				6777921E1E7566B600ACC53D /* StoreKit.framework */,
@@ -779,8 +779,6 @@
 			isa = PBXGroup;
 			children = (
 				678024701F38260E0056CB91 /* Cache.framework */,
-				6780246E1F3826070056CB91 /* SwiftHash.framework */,
-				675120F01E782AD100489729 /* StoreKit.framework */,
 				673B94091E978725004F0C22 /* YouTubeKit.framework */,
 				67156E591DCB7672007DC6F1 /* Alamofire.framework */,
 				67156E5A1DCB7672007DC6F1 /* Breit.framework */,
@@ -803,8 +801,6 @@
 			isa = PBXGroup;
 			children = (
 				678024741F3826200056CB91 /* Cache.framework */,
-				678024721F3826190056CB91 /* SwiftHash.framework */,
-				675120F21E782ADA00489729 /* StoreKit.framework */,
 				673B940B1E97873A004F0C22 /* YouTubeKit.framework */,
 				67156E9C1DCB76B2007DC6F1 /* Alamofire.framework */,
 				67156E9D1DCB76B2007DC6F1 /* Breit.framework */,
@@ -930,6 +926,8 @@
 		679C52751B70F16800BE6614 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				67E2FD831FF11DFD0045D6DB /* StoreKit.framework */,
+				67E2FD851FF11E040045D6DB /* StoreKit.framework */,
 				67156E571DCB763C007DC6F1 /* iOS */,
 				67156E581DCB7646007DC6F1 /* macOS */,
 				67156EB81DCB76BC007DC6F1 /* tvOS */,
