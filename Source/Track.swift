@@ -379,7 +379,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         youtubeVideo = video
         title        = video.title
         duration     = video.duration
-        thumbnailUrl = video.mediumThumbnailURL
+        if thumbnailUrl == nil {
+            thumbnailUrl = video.mediumThumbnailURL ?? video.smallThumbnailURL
+        }
         audioUrl     = youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] // for cache
         expiresAt    = youtubeVideo?.expirationDate?.timestamp ?? Int64.max
         status       = .available
