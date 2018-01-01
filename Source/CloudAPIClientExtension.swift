@@ -61,11 +61,9 @@ extension CloudAPIClient {
     }
     #endif
 
-    public class func setAccessToken(_ token: String) {
-        CloudAPIClient.shared.setAccessToken(token)
-        let configuration = CloudAPIClient.shared.manager.session.configuration
-        configuration.httpAdditionalHeaders?["X-Api-Version"] = "1"
-        CloudAPIClient.shared.manager = Alamofire.SessionManager(configuration: configuration)
+    public func updateAccessToken(_ token: String) {
+        setAccessToken(token)
+        manager.adapter = ApiRequestAdapter(apiVersion: "1", accessToken: token)
     }
 
     public class var isLoggedIn: Bool {
@@ -74,13 +72,14 @@ extension CloudAPIClient {
 
     public class func login(profile: Profile, token: String) {
         _profile = profile
-        setAccessToken(token)
+        shared.updateAccessToken(token)
         sharedPipe.1.send(value: AccountEvent.Login(profile))
     }
 
     public class func logout() {
         _profile = nil
-        setAccessToken("")
+        shared.setAccessToken("")
+        shared.manager.adapter = ApiRequestAdapter(apiVersion: "1", accessToken: nil)
         sharedPipe.1.send(value: AccountEvent.Logout)
     }
 

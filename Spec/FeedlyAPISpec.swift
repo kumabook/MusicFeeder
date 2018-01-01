@@ -34,7 +34,9 @@ class FeedlyAPISpec: QuickSpec {
             SpecHelper.setupAPI()
         }
         beforeEach {
-            CloudAPIClient.shared.setAccessToken(self.accessToken?.accessToken)
+            if let token = self.accessToken?.accessToken {
+                self.client.updateAccessToken(token)
+            }
         }
         describe("PUT /v3/profile") {
             beforeEach {
@@ -74,8 +76,10 @@ class FeedlyAPISpec: QuickSpec {
             }
             it("should fetch a user") {
                 expect(_profile).toFinallyNot(beNil())
-                expect(_profile!.id).to(equal(self.profile!.id))
-                expect(_profile!.email!).to(equal(self.profile!.email))
+                if let p = _profile {
+                    expect(p.id).to(equal(self.profile!.id))
+                    expect(p.email!).to(equal(self.profile!.email))
+                }
             }
         }
 
@@ -103,18 +107,19 @@ class FeedlyAPISpec: QuickSpec {
             }
             it("should fetch entries") {
                 expect(self.entries).toFinallyNot(beNil())
-                expect(self.entries!.count).to(beGreaterThan(0))
-                expect(self.entries![0].engagement).notTo(beNil())
-                expect(self.entries![0].enclosure).notTo(beNil())
+                guard let entries = self.entries else { return }
+                expect(entries.count).to(beGreaterThan(0))
+                expect(entries[0].engagement).notTo(beNil())
+                expect(entries[0].enclosure).notTo(beNil())
 
-                for e in self.entries! {
+                for e in entries {
                     for enc in e.enclosure! {
                         expect(enc.type).notTo(beNil())
                         expect(enc.href).notTo(beNil())
                     }
                 }
 
-                self.tracks = self.entries.flatMap { $0.map { $0.tracks }.flatMap { $0 } }.map { Array($0.prefix(1)) }
+                self.tracks = entries.map { $0.tracks }.flatMap { Array($0.prefix(1)) }
                 for t in self.tracks! {
                     expect(t.id).notTo(beNil())
                     expect(t.likesCount).notTo(beNil())

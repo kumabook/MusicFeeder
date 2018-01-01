@@ -57,7 +57,7 @@ open class SpecHelper {
         setupAPI()
         api.fetchAccessToken(self.email, password: self.password, clientId: CloudAPIClient.clientId, clientSecret: CloudAPIClient.clientSecret)
             .on(value: {
-                CloudAPIClient.setAccessToken($0.accessToken)
+                CloudAPIClient.shared.updateAccessToken($0.accessToken)
                 api.fetchProfile().on(value: { CloudAPIClient._profile = $0 }).start()
             }).start()
     }

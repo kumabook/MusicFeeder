@@ -253,6 +253,9 @@
 		678024751F3826200056CB91 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 678024741F3826200056CB91 /* Cache.framework */; };
 		678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305821B987B9600A83F52 /* SubscriptionStore.swift */; };
 		678305851B9897A000A83F52 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678305841B9897A000A83F52 /* CategoryStore.swift */; };
+		678D62501FFA2B3D00CEC41C /* ApiRequestAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678D624F1FFA2B3D00CEC41C /* ApiRequestAdapter.swift */; };
+		678D62511FFA2B3D00CEC41C /* ApiRequestAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678D624F1FFA2B3D00CEC41C /* ApiRequestAdapter.swift */; };
+		678D62521FFA2B3D00CEC41C /* ApiRequestAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678D624F1FFA2B3D00CEC41C /* ApiRequestAdapter.swift */; };
 		678E3B5B1EDEEC26001E9F3D /* EntryMixRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678E3B5A1EDEEC26001E9F3D /* EntryMixRepository.swift */; };
 		678E3B5C1EDEEC26001E9F3D /* EntryMixRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678E3B5A1EDEEC26001E9F3D /* EntryMixRepository.swift */; };
 		678E3B5D1EDEEC26001E9F3D /* EntryMixRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678E3B5A1EDEEC26001E9F3D /* EntryMixRepository.swift */; };
@@ -551,6 +554,7 @@
 		678024741F3826200056CB91 /* Cache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cache.framework; path = Carthage/Build/tvOS/Cache.framework; sourceTree = "<group>"; };
 		678305821B987B9600A83F52 /* SubscriptionStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SubscriptionStore.swift; path = Source/SubscriptionStore.swift; sourceTree = SOURCE_ROOT; };
 		678305841B9897A000A83F52 /* CategoryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryStore.swift; path = Source/CategoryStore.swift; sourceTree = SOURCE_ROOT; };
+		678D624F1FFA2B3D00CEC41C /* ApiRequestAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ApiRequestAdapter.swift; path = Source/ApiRequestAdapter.swift; sourceTree = SOURCE_ROOT; };
 		678E3B5A1EDEEC26001E9F3D /* EntryMixRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryMixRepository.swift; path = Source/EntryMixRepository.swift; sourceTree = SOURCE_ROOT; };
 		678E3B5E1EDFCAFB001E9F3D /* TrackMixRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackMixRepository.swift; path = Source/TrackMixRepository.swift; sourceTree = SOURCE_ROOT; };
 		678E3B641EDFDEA8001E9F3D /* TimeSpecifiedAlbumRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSpecifiedAlbumRepository.swift; path = Source/TimeSpecifiedAlbumRepository.swift; sourceTree = SOURCE_ROOT; };
@@ -871,6 +875,7 @@
 				670110CF1C955FED00ECC79F /* MusicFeederAPIClient.swift */,
 				677792181E75645000ACC53D /* AppleMusicClient.swift */,
 				673B94051E978425004F0C22 /* YouTubeClient.swift */,
+				678D624F1FFA2B3D00CEC41C /* ApiRequestAdapter.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -1327,6 +1332,7 @@
 				67156E551DCB762D007DC6F1 /* MusicFeederAPIClient.swift in Sources */,
 				678E3B661EDFDEA8001E9F3D /* TimeSpecifiedAlbumRepository.swift in Sources */,
 				678E3B601EDFCAFB001E9F3D /* TrackMixRepository.swift in Sources */,
+				678D62511FFA2B3D00CEC41C /* ApiRequestAdapter.swift in Sources */,
 				677792261E7574EE00ACC53D /* EnclosureState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1403,6 +1409,7 @@
 				67156E9A1DCB768E007DC6F1 /* MusicFeederAPIClient.swift in Sources */,
 				678E3B671EDFDEA8001E9F3D /* TimeSpecifiedAlbumRepository.swift in Sources */,
 				678E3B611EDFCAFB001E9F3D /* TrackMixRepository.swift in Sources */,
+				678D62521FFA2B3D00CEC41C /* ApiRequestAdapter.swift in Sources */,
 				677792271E7574EE00ACC53D /* EnclosureState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1443,6 +1450,7 @@
 				6709D4071DAD4C20004DE304 /* TopicStore.swift in Sources */,
 				678305831B987B9600A83F52 /* SubscriptionStore.swift in Sources */,
 				678E3B5B1EDEEC26001E9F3D /* EntryMixRepository.swift in Sources */,
+				678D62501FFA2B3D00CEC41C /* ApiRequestAdapter.swift in Sources */,
 				679C52DB1B70F3DD00BE6614 /* Track.swift in Sources */,
 				6726A7FE1DA13F6400FDF28F /* Journal.swift in Sources */,
 				675120EA1E76F11B00489729 /* Enclosure.swift in Sources */,
