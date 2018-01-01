@@ -122,8 +122,8 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         case .youTube:
             return youtubeVideo?.streamURLs[Track.youTubeVideoQuality.key] ?? audioUrl
         case .soundCloud:
-            return soundcloudTrack.flatMap { URL(string: $0.streamUrl + "?client_id=" + APIClient.clientId) } ??
-                audioUrl.flatMap { URL(string: $0.absoluteString + "?client_id=" + APIClient.clientId) }
+            return soundcloudTrack.flatMap { URL(string: $0.streamUrl + "?client_id=" + APIClient.shared.clientId) } ??
+                audioUrl.flatMap { URL(string: $0.absoluteString + "?client_id=" + APIClient.shared.clientId) }
         case .custom:
             return audioUrl
         case .raw:
@@ -365,7 +365,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         soundcloudTrack = track
         title           = track.title
         duration        = TimeInterval(track.duration / 1000)
-        audioUrl        = URL(string: track.streamUrl + "?client_id=" + APIClient.clientId)
+        audioUrl        = URL(string: track.streamUrl + "?client_id=" + APIClient.shared.clientId)
         ownerId         = String(soundcloudTrack?.user.id ?? 0)
         ownerName       = soundcloudTrack?.user.username
         status          = .available
