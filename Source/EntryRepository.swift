@@ -39,7 +39,6 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
         dispose()
     }
 
-    open fileprivate(set) var playlistsOfEntry:            [Entry:Playlist]
     open fileprivate(set) var playlistifiedEntriesOfEntry: [Entry:PlaylistifiedEntry]
     open fileprivate(set) var playlistQueue:               PlaylistQueue
     open var playlistifier:      Disposable?
@@ -48,7 +47,6 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
     open var playlistObserver:   Disposable?
 
     public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
-        playlistsOfEntry            = [:]
         playlistifiedEntriesOfEntry = [:]
         playlistQueue               = PlaylistQueue(playlists: [])
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
@@ -102,7 +100,7 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
     }
 
     open var playlists: [Playlist] {
-        return items.map { self.playlistsOfEntry[$0] }
+        return items.map { $0.playlist }
                     .filter { $0 != nil && $0!.validTracksCount > 0 }
                     .map { $0! }
     }
@@ -116,24 +114,22 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
     open func playlistify(_ entry: Entry) -> SignalProducer<(Track, Playlist), NSError> {
         guard let url = entry.url else { return SignalProducer<(Track, Playlist), NSError>.empty }
 
-        if let playlist = self.playlistsOfEntry[entry] {
+        if let playlist = entry.playlist {
             return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(playlist)
                                                                     .map { _, t in (t, playlist) })
         }
         if CloudAPIClient.includesTrack {
             let playlist = entry.toPlaylist()
-            self.playlistsOfEntry[entry] = playlist
-//            self.playlistifiedEntriesOfEntry[entry] = playlistifiedEntry TODO
+            entry.playlist = playlist
             self.playlistQueue.enqueue(playlist)
-            return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(playlist)
-                                                                           .map { _, t in (t, playlist) })
+            return SignalProducer<(Track, Playlist), NSError>.empty.concat(fetchTracks(playlist).map { _, t in (t, playlist) })
         }
         typealias S = SignalProducer<SignalProducer<(Track, Playlist), NSError>, NSError>
         let signal: S = pinkspiderClient.playlistify(url, errorOnFailure: false).map { en in
             var tracks = entry.audioTracks
             tracks.append(contentsOf: en.tracks)
             let playlist = Playlist(id: en.id, title: entry.title ?? en.title ?? "", tracks: tracks)
-            self.playlistsOfEntry[entry] = playlist
+            entry.storedPlaylist = playlist
             self.playlistifiedEntriesOfEntry[entry] = en
             self.playlistQueue.enqueue(playlist)
             UIScheduler().schedule { self.observer.send(value: .completeLoadingPlaylist(playlist, entry)) }
