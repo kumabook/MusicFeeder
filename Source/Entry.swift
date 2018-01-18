@@ -236,6 +236,13 @@ extension Entry {
         }
     }
 
+    public func updateWithPlaylistifiedEntry(_ playlistifiedEntry: PlaylistifiedEntry) {
+        tracks                  = playlistifiedEntry.tracks
+        albums                  = playlistifiedEntry.albums
+        playlists               = playlistifiedEntry.playlists
+        title                   = title ?? playlistifiedEntry.title
+        self.playlistifiedEntry = playlistifiedEntry
+    }
 
     internal var storedPlaylistifiedEntry: PlaylistifiedEntry? {
         get {

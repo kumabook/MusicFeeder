@@ -128,7 +128,7 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
             tracks.append(contentsOf: en.tracks)
             let playlist = Playlist(id: en.id, title: entry.title ?? en.title ?? "", tracks: tracks)
             entry.storedPlaylist = playlist
-            entry.playlistifiedEntry = en
+            entry.updateWithPlaylistifiedEntry(en)
             self.playlistQueue.enqueue(playlist)
             UIScheduler().schedule { self.observer.send(value: .completeLoadingPlaylist(playlist, entry)) }
             return SignalProducer<(Track, Playlist), NSError>.empty.concat(self.fetchTracks(playlist)
