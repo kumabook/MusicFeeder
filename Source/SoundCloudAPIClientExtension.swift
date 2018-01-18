@@ -48,7 +48,7 @@ extension Track {
 extension SoundCloudKit.APIClient {
     public func fetchItem<T: JSONInitializable>(_ route: Router) -> SignalProducer<T, NSError> {
         return SignalProducer { observer, disposable in
-            self.fetchItem(route, callback: { (req: URLRequest?, res: HTTPURLResponse?, result: Result<T>) in
+            let req = self.fetchItem(route, callback: { (req: URLRequest?, res: HTTPURLResponse?, result: Result<T>) in
                 switch result {
                 case .success(let value):
                     observer.send(value: value)
@@ -57,11 +57,14 @@ extension SoundCloudKit.APIClient {
                     observer.send(error: error as NSError)
                 }
             })
+            disposable.observeEnded {
+                req.cancel()
+            }
         }
     }
     public func fetchItems<T: JSONInitializable>(_ route: Router) -> SignalProducer<[T], NSError> {
         return SignalProducer { observer, disposable in
-            self.fetchItems(route, callback: { (req: URLRequest?, res: HTTPURLResponse?, result: Result<[T]>) in
+            let req = self.fetchItems(route, callback: { (req: URLRequest?, res: HTTPURLResponse?, result: Result<[T]>) in
                 switch result {
                 case .success(let value):
                     observer.send(value: value)
@@ -70,6 +73,9 @@ extension SoundCloudKit.APIClient {
                     observer.send(error: error as NSError)
                 }
             })
+            disposable.observeEnded {
+                req.cancel()
+            }
         }
     }
     public func fetchUsers(_ query: String) -> SignalProducer<[User], NSError> {
