@@ -22,7 +22,8 @@ var StoredPropertyKeyForSavedCount: UInt8 = 7
 var StoredPropertyKeyForLikesCount: UInt8 = 8
 var StoredPropertyKeyForReadCount:  UInt8 = 9
 
-var StoredPropertyKeyForPlaylist: UInt8 = 10
+var StoredPropertyKeyForPlaylist:           UInt8 = 10
+var StoredPropertyKeyForPlaylistifiedEntry: UInt8 = 11
 
 extension Entry {
     public static func setupHookFunctions() {
@@ -223,6 +224,28 @@ extension Entry {
         }
         set {
             objc_setAssociatedObject(self, &StoredPropertyKeyForPlaylist, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+    }
+
+    public var playlistifiedEntry: PlaylistifiedEntry? {
+        get {
+            return storedPlaylistifiedEntry
+        }
+        set {
+            storedPlaylistifiedEntry = newValue
+        }
+    }
+
+
+    internal var storedPlaylistifiedEntry: PlaylistifiedEntry? {
+        get {
+            guard let playlistifiedEntry = objc_getAssociatedObject(self, &StoredPropertyKeyForPlaylistifiedEntry) as? PlaylistifiedEntry else {
+                return nil
+            }
+            return playlistifiedEntry
+        }
+        set {
+            objc_setAssociatedObject(self, &StoredPropertyKeyForPlaylistifiedEntry, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
 

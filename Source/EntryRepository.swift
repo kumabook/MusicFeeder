@@ -39,7 +39,6 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
         dispose()
     }
 
-    open fileprivate(set) var playlistifiedEntriesOfEntry: [Entry:PlaylistifiedEntry]
     open fileprivate(set) var playlistQueue:               PlaylistQueue
     open var playlistifier:      Disposable?
     open var trackObserver:      Disposable?
@@ -47,7 +46,6 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
     open var playlistObserver:   Disposable?
 
     public override init(stream: FeedlyKit.Stream, unreadOnly: Bool, perPage: Int) {
-        playlistifiedEntriesOfEntry = [:]
         playlistQueue               = PlaylistQueue(playlists: [])
         super.init(stream: stream, unreadOnly: unreadOnly, perPage: perPage)
         observe()
@@ -130,7 +128,7 @@ open class EntryRepository: PaginatedCollectionRepository<PaginatedEntryCollecti
             tracks.append(contentsOf: en.tracks)
             let playlist = Playlist(id: en.id, title: entry.title ?? en.title ?? "", tracks: tracks)
             entry.storedPlaylist = playlist
-            self.playlistifiedEntriesOfEntry[entry] = en
+            entry.playlistifiedEntry = en
             self.playlistQueue.enqueue(playlist)
             UIScheduler().schedule { self.observer.send(value: .completeLoadingPlaylist(playlist, entry)) }
             return SignalProducer<(Track, Playlist), NSError>.empty.concat(self.fetchTracks(playlist)
