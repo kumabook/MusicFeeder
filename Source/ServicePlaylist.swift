@@ -175,6 +175,22 @@ public final class ServicePlaylist: Equatable, Hashable, Enclosure {
         playCount    = item.playCount
     }
 
+    public var permalinkUrl: URL? {
+        switch self.provider {
+        case .appleMusic:
+            return URL(string: url)
+        case .spotify:
+            let arr  = url.components(separatedBy: ":")
+            return URL(string: "http://open.spotify.com/\(arr[1])/\(arr[2])/\(arr[3])/\(arr[4])")
+        case .soundCloud:
+            return URL(string: url)
+        case .youTube:
+            return URL(string: url)
+        default:
+            return nil
+        }
+    }
+
     #if os(iOS)
     public func open() {
         if let url = URL(string: url) {
