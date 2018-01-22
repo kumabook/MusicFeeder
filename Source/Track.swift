@@ -335,6 +335,22 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         playCount  = item.playCount
     }
 
+    public var permalinkUrl: URL? {
+        switch self.provider {
+        case .youTube:
+            return URL(string: "https://www.youtube.com/watch?v=\(self.identifier)")
+        case .soundCloud:
+            return URL(string: url)
+        case .appleMusic:
+            return URL(string: url)
+        case .spotify:
+            let arr  = url.components(separatedBy: ":")
+            return URL(string: "http://open.spotify.com/\(arr[1])/\(arr[2])")
+        default:
+            return URL(string: url)
+        }
+    }
+
     public func fetchPropertiesFromProviderIfNeed() -> SignalProducer<Track, NSError> {
         switch provider {
         case .youTube:
