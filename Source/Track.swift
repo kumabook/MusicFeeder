@@ -478,7 +478,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
 
     #if os(iOS)
     public func open() {
-        if let url = URL(string: url) {
+        if let url = permalinkUrl {
             UIApplication.shared.openURL(url)
         }
     }
