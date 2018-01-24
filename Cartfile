@@ -1,4 +1,5 @@
 github "ReactiveCocoa/ReactiveSwift"
+github "rs/SDWebImage"
 github "kumabook/FeedlyKit"
 github "kumabook/PlayerKit"
 github "SwiftyJSON/SwiftyJSON"
