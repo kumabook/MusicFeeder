@@ -14,8 +14,15 @@ import Breit
 import SoundCloudKit
 import Alamofire
 import FeedlyKit
+import SDWebImage
+#if os(iOS)
+import UIKit
+import MediaPlayer
+#endif
 
 final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
+    public static var thumbnailImageSize: CGSize = CGSize(width: 128, height: 128)
+    public static var artworkImageSize: CGSize = CGSize(width: 512, height: 512)
     public static var resourceName: String = "tracks"
     public static var idListKey:    String = "trackIds"
     fileprivate static let userDefaults = UserDefaults.standard
@@ -76,6 +83,9 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     public                  var isLiked:      Bool?
     public                  var isSaved:      Bool?
     public                  var isPlayed:     Bool?
+    #if os(iOS)
+    public var mediaItem: MPMediaItem?
+    #endif
     public var playerType: PlayerType {
         switch provider {
         case .appleMusic:
@@ -93,7 +103,7 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
         case .youTube:
             return true
         case .appleMusic:
-            return country == Track.appleMusicCurrentCountry || audioUrl != nil
+            return country?.localize() == Track.appleMusicCurrentCountry?.localize() || audioUrl != nil
         case .spotify:
             return spotifyURI != nil
         default:
@@ -593,6 +603,33 @@ final public class Track: PlayerKit.Track, Equatable, Hashable, Enclosure {
     open func sendToSharedPipe() {
         TrackStreamRepository.sharedPipe.1.send(value: self)
     }
+    #if os(iOS)
+    fileprivate func loadImage(imageURL: URL?, completeHandler: @escaping (UIImage?) -> Void) {
+        if let url = imageURL {
+            SDWebImageManager.shared().loadImage(with: url,
+                                              options: .highPriority,
+                                             progress: {receivedSize, expectedSize, url in }) { (image, data, error, cacheType, finished, url) -> Void in
+                                                completeHandler(image)
+            }
+        } else {
+            completeHandler(nil)
+        }
+    }
+    public func loadThumbnailImage(completeHandler: @escaping (UIImage?) -> Void) {
+        if let image = mediaItem?.artwork?.image(at: Track.thumbnailImageSize) {
+            completeHandler(image)
+            return
+        }
+        loadImage(imageURL: thumbnailURL, completeHandler: completeHandler)
+    }
+    public func loadArtworkImage(completeHandler: @escaping (UIImage?) -> Void) {
+        if let image = mediaItem?.artwork?.image(at: Track.artworkImageSize) {
+            completeHandler(image)
+            return
+        }
+        loadImage(imageURL: artworkURL, completeHandler: completeHandler)
+    }
+    #endif
 }
 
 public func ==(lhs: Track, rhs: Track) -> Bool {
