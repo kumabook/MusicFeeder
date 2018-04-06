@@ -46,6 +46,3 @@
 [submodule "Carthage/Checkouts/Cache"]
 	path = Carthage/Checkouts/Cache
 	url = https://github.com/hyperoslo/Cache.git
-[submodule "Carthage/Checkouts/SwiftHash"]
-	path = Carthage/Checkouts/SwiftHash
-	url = https://github.com/onmyway133/SwiftHash.git
