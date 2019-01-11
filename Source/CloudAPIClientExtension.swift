@@ -51,11 +51,11 @@ extension CloudAPIClient {
     }
 
     #if os(iOS)
-    public class func alertController(error:Error, handler: @escaping (UIAlertAction!) -> Void) -> UIAlertController {
+    public class func alertController(error:Error, handler: @escaping (UIAlertAction?) -> Void) -> UIAlertController {
         let ac = UIAlertController(title: "Network error".localize(),
             message: "Sorry, network error occured.".localize(),
-            preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK".localize(), style: UIAlertActionStyle.default, handler: handler)
+            preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "OK".localize(), style: UIAlertAction.Style.default, handler: handler)
         ac.addAction(okAction)
         return ac
     }

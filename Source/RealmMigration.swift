@@ -10,9 +10,9 @@ import Foundation
 import Realm
 
 open class RealmMigration {
-    open static var groupIdentifier: String = "group.com.your.app"
-    open static var schemaVersion:    UInt64 = 13
-    open static var subSchemaVersion: UInt64 = 7
+    public static var groupIdentifier: String = "group.com.your.app"
+    public static var schemaVersion:    UInt64 = 13
+    public static var subSchemaVersion: UInt64 = 7
     open class func migrateAll() {
         migrateMain()
 //        migrateListenItLater()
@@ -146,7 +146,7 @@ open class RealmMigration {
         RLMRealmConfiguration.setDefault(mainConfiguration())
         try? RLMRealm.performMigration(for: mainConfiguration())
     }
-    open static var listenItLaterPath: String {
+    public static var listenItLaterPath: String {
         #if os(iOS)
             if let directory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier) {
                 let path: NSString = directory.path as NSString
@@ -158,7 +158,7 @@ open class RealmMigration {
     open class func migrateListenItLater() {
         try? RLMRealm.performMigration(for: RealmMigration.configurationOf(RealmMigration.listenItLaterPath))
     }
-    open static func realmPath(_ name: String) -> String {
+    public static func realmPath(_ name: String) -> String {
         var path: NSString = RLMRealmConfiguration.default().fileURL!.path as NSString
         path = path.deletingLastPathComponent as NSString
         path = path.appendingPathComponent(name) as NSString

@@ -14,7 +14,7 @@ import Cache
 
 public final class JSONCache {
     public var cacheLifetimeSec: TimeInterval
-    let storage = try? Storage(diskConfig: DiskConfig(name: "JSONCache"))
+    let storage = try? Storage(hybridStorage: DiskConfig(name: "JSONCache"))
 
     public static var shared: JSONCache = JSONCache()
 
