@@ -167,24 +167,25 @@ class FeedlyAPISpec: QuickSpec {
             it("should fetch a track") {
                 expect(track).toFinallyNot(beNil())
                 expect(track!.likesCount).notTo(beNil())
-                expect(track!.likers).notTo(beNil())
             }
         }
 
         describe("POST /v3/tracks/.mget") {
             var tracks: [Track]?
+            var ids: [String] = []
             beforeEach {
-                self.client.fetchTracks(self.tracks!.map { $0.id })
+                ids = self.tracks!.map { $0.id }.unique
+                self.client.fetchTracks(ids)
                     .on(value: {
                         tracks = $0
                     }).start()
             }
             it("should fetch a track") {
                 expect(tracks).toFinallyNot(beNil())
-                expect(tracks!.count).to(equal(self.tracks!.count))
+
+                expect(tracks!.count).to(equal(ids.count))
                 for track in tracks! {
                     expect(track.likesCount).notTo(beNil())
-                    expect(track.likers).notTo(beNil())
                 }
             }
         }

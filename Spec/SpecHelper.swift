@@ -98,3 +98,9 @@ extension Expectation {
         self.toEventuallyNot(predicate, timeout: 10)
     }
 }
+
+extension Array where Element: Equatable {
+    var unique: [Element] {
+        return reduce([]) { a, b in a.contains(b) ? a : a + [b] }
+    }
+}

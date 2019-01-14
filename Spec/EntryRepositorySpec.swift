@@ -26,6 +26,11 @@ class EntryRepositorySpec: QuickSpec {
                 CloudAPIClient.shared = SpecHelper.api
                 SpecHelper.login()
                 JSONCache.shared.clear()
+                guard let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else { return }
+                if !FileManager.default.fileExists(atPath: directory) {
+                    let _ = try? FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true, attributes: nil)
+                }
+
             }
             context("when it has no cache") {
                 beforeEach {
