@@ -1,7 +1,7 @@
 {
     "baseUrl":      "http://spread-beaver.herokuapp.com",
-    "clientId":     "68a819ba4c464fc5eee402427b4f876bbfc27e10d62f29960c17a5147e4af4e1",
-    "clientSecret": "4ee796a0ee39e4824d48d3c76f9d5c9023f2c8eb3ffda683afde284327e2d802",
+    "clientId":     "d608b11d3a2254b4e158e5466d9edd55c79dfec40928622617b2c99791585086",
+    "clientSecret": "a5ee5295bb1fe001232e5e134c2e8030aac6f153aa680b4ec674869955198983",
     "email":        "test_member@example.com",
     "password":     "test_memeber"
 }
