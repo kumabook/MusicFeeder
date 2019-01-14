@@ -14,7 +14,9 @@ import Cache
 
 public final class JSONCache {
     public var cacheLifetimeSec: TimeInterval
-    let storage = try? Storage(hybridStorage: DiskConfig(name: "JSONCache"))
+    let diskConfig = DiskConfig(name: "JSONCache")
+    let memoryConfig = MemoryConfig(expiry: .never, countLimit: 10, totalCostLimit: 10)
+    lazy var storage = try? Storage<String>.init(diskConfig: diskConfig, memoryConfig: memoryConfig, transformer: TransformerFactory.forCodable(ofType: String.self))
 
     public static var shared: JSONCache = JSONCache()
 
@@ -27,7 +29,7 @@ public final class JSONCache {
     }
 
     public func get(forKey: String) -> String? {
-        return (try? storage?.object(ofType: String.self, forKey: forKey))?.flatMap { $0 }
+        return (try? storage?.object(forKey: forKey))?.flatMap { $0 }
     }
 
     public func clear() {
